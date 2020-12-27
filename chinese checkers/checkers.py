@@ -1,5 +1,6 @@
-import pygame
+import pygame, copy
 from vakiot import *
+from gameover import *
 
 def pelaaja_tilanne(koordinaatit, vari):           
     pygame.draw.circle(naytto, vari, koordinaatit[0], P_KOKO)
@@ -20,11 +21,23 @@ def mika_paikka(x, y, koordinaatit):
             return i
         i += 1    
 
+def onko_voitto(mita_Verrataan, mihin_verrataan):   
+    sijainnit = []
+    for x, y in mita_Verrataan:
+        for  i in range(6):
+            if x > mihin_verrataan[i][0] - P_KOKO+2 and x < mihin_verrataan[i][0] + P_KOKO+2 and y > mihin_verrataan[i][1] - P_KOKO+2 and y < mihin_verrataan[i][1] + P_KOKO+2:
+                sijainnit.append(i)
+    print(sijainnit)
+    if len(set(sijainnit)) == 2:
+        return True
+    return False
 
 
 def silmukka():
     siirto = 0
     mika_pallo = 0,0
+    koordinaatit1 = copy.deepcopy(koordinaatit1_orig)
+    koordinaatit2 = copy.deepcopy(koordinaatit2_orig)
     while True:
         naytto.blit(lauta, (0,0))
         if siirto % 4 == 0 or siirto % 4 == 1: 
@@ -46,6 +59,9 @@ def silmukka():
                             mika_pallo = mika_paikka(x, y,koordinaatit1)                  
                     elif siirto % 4 == 2:  
                         koordinaatit1[mika_pallo] = x, y    # ...siirretään tänne
+                        if onko_voitto(koordinaatit1, koordinaatit2_orig):
+                            gameover(siirto // 4, naytto)
+                            silmukka()
                     elif siirto % 4 == 3:
                         mika_pallo = mika_paikka(x, y,koordinaatit2)      # pel2:n pallo...
                         if mika_pallo == None:
@@ -54,6 +70,9 @@ def silmukka():
                             mika_pallo = mika_paikka(x, y,koordinaatit2)       
                     elif siirto % 4 == 0:  
                         koordinaatit2[mika_pallo] = x, y    # ...siirretään tänne
+                        if onko_voitto(koordinaatit2, koordinaatit1_orig):
+                            gameover(siirto // 4, naytto)
+                            silmukka()
 
         
         pelaaja_tilanne(koordinaatit1, vihrea)
