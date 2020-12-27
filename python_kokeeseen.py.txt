@@ -1,0 +1,178 @@
+ # Attribuutti self.__muistiinpanot on yksityinen, eikä näy aliluokalle
+ # suojattu attribuutti näkyy aliluokalle self._muistiinpanot
+ 
+ return sorted(alkiot, key=lambda alkio: (alkio["kausia"], alkio["pisteet"]), reverse = True)
+ 
+ def hae(tuotteet: list, kriteeri: callable):								    # callable
+    return [tuote for tuote in tuotteet if kriteeri(tuote)]
+
+sorted(list(set(map(lambda suoritus : suoritus.kurssi, suoritukset))))          # map !!!
+	
+def kurssin_suorittajat(suoritukset: list, kurssi: str):
+    s =  filter(lambda s: s.arvosana > 0 and s.kurssi == kurssi, suoritukset)   # filter
+    return sorted(map(lambda suoritus : suoritus.opiskelijan_nimi, s))			# map
+
+lista = ["Crime", "Drama", "Mystery", "Thriller"]
+merkkijono = ", ".join(lista)
+######################################################################################################
+lista1 = [1, 2, 3]
+lista2 = [1, 2, 3]
+lista3 = lista1
+
+print(lista1 is lista2)   # False: eri oliot
+print(lista1 is lista3)    # True
+
+print(lista1 == lista2)  # True: sama sisältö
+
+##################	################################################################################
+
+class Henkilo:
+    def __init__(self, nimi: str, syntynyt: int):
+        self.nimi = nimi
+        self.syntynyt = syntynyt
+
+    # huomaa, että tyyppivihje pitää antaa hipsuissa jos parametri on saman luokan olio!
+    def vanhempi_kuin(self, toinen: "Henkilo"):  			# huom! hipsut tai tyyppivihje kokonaan pois
+        return self.syntynyt < toinen.syntynyt
+#########################################################################################################
+class Ennatystulos:
+
+    def __init__(self, pelaaja: str, paiva: int, kuukausi: int, vuosi: int, pisteet: int):
+        # Oletusarvot
+        self.pelaaja = ""
+        self.paivamaara = date(1900, 1, 1)
+        self.pisteet = 0
+
+        if self.nimi_ok(pelaaja):
+            self.pelaaja = pelaaja
+
+        if self.pvm_ok(paiva, kuukausi, vuosi):
+            self.paivamaara = date(vuosi, kuukausi, paiva)
+
+        if self.pisteet_ok(pisteet):
+            self.pisteet = pisteet
+
+    # Apumetodit, joilla tarkistetaan ovatko syötteet ok
+    def nimi_ok(self, nimi: str):
+        return len(nimi) >= 2 # Nimessä vähintään kaksi merkkiä
+
+    def pvm_ok(self, paiva, kuukausi, vuosi):
+        try:
+            date(vuosi, kuukausi, paiva)
+            return True
+        except:
+            # Poikkeus, jos yritetään muodostaa epäkelpo päivämäärä
+            return False	
+	
+######################  REKURSIO:   ########################################################################
+
+def laske_alaiset(tyontekija: Tyontekija):
+    #if tyontekija.alaiset == []:   tätä ei tarvitse
+    #    return 0
+    summa = len(tyontekija.alaiset)
+    for alainen in tyontekija.alaiset:
+        #print(alainen.nimi)
+        summa +=  laske_alaiset(alainen) 
+
+    return summa
+
+	
+	class Alkio:
+    """ Luokka mallintaa yhtä alkiota binääripuussa """
+    def __init__(self, arvo, vasen_lapsi:'Alkio' = None, oikea_lapsi:'Alkio' = None):
+        self.arvo = arvo
+        self.vasen_lapsi = vasen_lapsi
+        self.oikea_lapsi = oikea_lapsi
+
+def suurin_alkio(juuri: Alkio):
+    suurin = juuri.arvo
+
+    if juuri.vasen_lapsi is not None:
+        suurin = max(suurin, suurin_alkio(juuri.vasen_lapsi))
+
+    if juuri.oikea_lapsi is not None:
+        suurin = max(suurin, suurin_alkio(juuri.oikea_lapsi))
+
+    return suurin
+	
+def sulut_tasapainossa(merkkijono: str):
+    
+    if len(merkkijono) == 0:
+        return True    
+    
+    if merkkijono[0] in ")]" or merkkijono[-1] in "([" :
+        return False
+    if merkkijono[0] not in "([":
+        return sulut_tasapainossa(merkkijono[1:])
+    if merkkijono[-1] not in ")]":
+        return sulut_tasapainossa(merkkijono[:-1])
+    if (merkkijono[0]=="(" and merkkijono[-1]=="]") or (merkkijono[0]=="[" and merkkijono[-1]==")"):
+        return False    
+    return sulut_tasapainossa(merkkijono[1:-1])
+    
+#### END REKURSIO ###############################################################################
+#### property ja setter #########################################################################
+
+class Aanite:
+
+    def __init__(self, pituus):
+        if pituus >= 0:
+            self.__pituus = pituus
+        else:
+            raise ValueError("Pituus ei voi olla negatiivinen.")
+
+    @property
+    def pituus(self):
+        return self.__pituus
+
+    @pituus.setter
+    def pituus(self, pituus):
+        if pituus >= 0:
+            self.__pituus = pituus
+        else:
+            raise ValueError("Pituus ei voi olla negatiivinen.")
+
+			
+######### luokkametodi @classmethod, voidaan kutsua oliota luomatta ################################
+
+class Rekisteriote:
+    def __init__(self, omistaja: str, merkki: str, vuosi: int, rekisteritunnus: str):
+        self.__omistaja = omistaja
+        self.__merkki = merkki
+        self.__vuosi = vuosi
+
+        # Kutsutaan metodia rekisteritunnus.setter
+        self.rekisteritunnus = rekisteritunnus
+
+    @property
+    def rekisteritunnus(self):
+        return self.__rekisteritunnus
+
+    @rekisteritunnus.setter
+    def rekisteritunnus(self, tunnus):
+        if Rekisteriote.rekisteritunnus_kelpaa(tunnus):
+            self.__rekisteritunnus = tunnus
+        else:
+            raise ValueError("Rekisteritunnus ei kelpaa")
+
+    # Luokkametodi tunnuksen validoimiseksi
+    @classmethod
+    def rekisteritunnus_kelpaa(cls, tunnus: str):
+        if len(tunnus) < 3 or "-" not in tunnus:
+            return False
+
+        # Tarkastellaan alku- ja loppuosaa erikseen
+        alku, loppu = tunnus.split("-")
+
+        # Alkuosassa saa olla vain kirjaimia
+        for merkki in alku:
+            if merkki.lower() not in "abcdefghijklmnopqrstuvwxyzåäö":
+                return False
+
+        # Loppuosassa saa olla vain numeroita
+        for merkki in loppu:
+            if merkki not in "1234567890":
+                return False
+
+        return True
+########################################################################################################

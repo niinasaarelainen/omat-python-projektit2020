@@ -1,0 +1,6 @@
+a = {a, b, c, d}
+b = {e, b, c, d}
+c = {a, b, g, h}
+
+print(a & b)
+print(a | b)
