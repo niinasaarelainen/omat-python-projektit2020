@@ -26,15 +26,13 @@ def mitä_puuttuu(kerätään):
     for item in kerätään:
         y += 20
         teksti = fontti_pieni.render(f" - {item}", True, (0, 20, 20))
-        naytto.blit(teksti, (540, y))        
-
+        naytto.blit(teksti, (540, y))    
 
 
 def valitse_lukitsemattomat(heitto):  
     for noppa in heitto:
         if noppa.valittu == False:
-            r = random.randint(0, 5)
-            noppa.luku = r   
+            noppa.luku = random.randint(0, 5)
     return heitto
 
 
@@ -109,11 +107,9 @@ def piirra(heitto):
 
 
 def valintatekstit():
-    ohje = "Klikkaa mitkä nopat haluat säilyttää ja lopuksi  OK "
-    teksti = fontti.render(ohje, True, (0, 20, 20))    
+    teksti = fontti.render("Klikkaa mitkä nopat haluat säilyttää ja lopuksi  OK ", True, (0, 20, 20))    
     naytto.blit(teksti, (50, 40))
-    ohje = "tai  VALITSE KAIKKI"
-    teksti = fontti.render(ohje, True, (0, 20, 20))    
+    teksti = fontti.render("tai  VALITSE KAIKKI", True, (0, 20, 20))    
     naytto.blit(teksti, (50, 75))
     teksti = fontti.render(" VALITSE KAIKKI ", True, (0, 220, 220))
     naytto.blit(teksti, (80, HEIGHT // 2 + 50))
@@ -128,8 +124,6 @@ def toggle_valittu(klikkaus, heitto):
     if hiiri_x > EKA_NOPPA_X + (75*5):
         hiiri_x = EKA_NOPPA_X + (75*5) -2
 
-    print(hiiri_x, hiiri_y)
-
     nopan_nro = (hiiri_x - EKA_NOPPA_X) // 75
     heitto[nopan_nro].toggle_valittu()
     return heitto
@@ -138,6 +132,7 @@ def nollaa_valintakuvat(heitto):
     for noppa in heitto:
         noppa.valittu = False
     return heitto       
+
 
 def silmukka():                                                        
     kerätään = mitä_kerätään()    
@@ -188,6 +183,8 @@ def silmukka():
                         mika_tuli = tulos(heitto, kerätään)
                         teksti = fontti.render(mika_tuli, True, (40, 40, 220))
                         naytto.blit(teksti, (220, 300))
+                        if not "Et " in mika_tuli:
+                            naytto.blit(clap, (320, 300))
                         pygame.display.flip()   
                         pygame.time.delay(2000)  # 2 sekunnin viive
                         heitto_123 = 1
@@ -220,10 +217,15 @@ pygame.init()
 WIDTH = 780
 HEIGHT = 410
 EKA_NOPPA_X = 80
+
 naytto = pygame.display.set_mode((WIDTH, HEIGHT))
 kello = pygame.time.Clock()
+
 fontti = pygame.font.SysFont("Arial", 26)
 fontti_pieni = pygame.font.SysFont("Arial", 18)
+
+clap = pygame.image.load('img\clap_hands_animation.gif').convert_alpha()
+clap = pygame.transform.scale(clap, (100, 100) )
 
 alkunaytto()
 ei_valitut, valitut = nopat_listaan()

@@ -73,14 +73,21 @@ def onko_vapaa(x, y, koordinaatit1, koordinaatit2):
     return True   
 
 
+def onko_laillinen(x_valinta, x):
+    # suoraan ylös / alas laiton, pitää olla diagonaali
+    if x > x_valinta - P_KOKO+2 and x < x_valinta + P_KOKO+2 :
+        return False
+    return True
+
 def silmukka(kuulia):
     siirto = 0
-    mika_pallo = 0,0
+    mika_pallo = 0,0   # pelipaikan keskelle keskitetyt x ja y
     koordinaatit1 = copy.deepcopy(koordinaatit1_orig)
     koordinaatit2 = copy.deepcopy(koordinaatit2_orig)
     teksti = ""
     x_valinta = -30
     y_valinta = -30
+    
     while True:
         naytto.blit(lauta, (0,0))
         if siirto % 4 == 0 or siirto % 4 == 1: 
@@ -105,11 +112,14 @@ def silmukka(kuulia):
                             x_valinta, y_valinta = koordinaatit1[mika_pallo]              
                     elif siirto % 4 == 2:  
                         # ...siirretään tänne
-                        if onko_vapaa(x, y, koordinaatit1, koordinaatit2):
+                        if not onko_laillinen(x_valinta, x): # tsekataan vain x-sijaintai  TODO: muita tarkistuksia
+                            teksti = "Laiton siirto. Siirrä diagonaaviivoja pitkin."
+                            siirto -= 1
+                        elif onko_vapaa(x, y, koordinaatit1, koordinaatit2):
                             koordinaatit1[mika_pallo] = x, y
                             teksti = ""
                             x_valinta = -30
-                            y_valinta = -30
+                            y_valinta = -30                        
                         else:
                             teksti = "Kohteessa on jo pallo. Valitse kohde uudestaan."                            
                             siirto -= 1
@@ -127,7 +137,10 @@ def silmukka(kuulia):
                             x_valinta, y_valinta = koordinaatit2[mika_pallo]    
                     elif siirto % 4 == 0:  
                         # ...siirretään tänne
-                        if onko_vapaa(x, y, koordinaatit1, koordinaatit2):
+                        if not onko_laillinen(x_valinta, x): # tsekataan vain x-sijaintai  TODO: muita tarkistuksia
+                            teksti = "Laiton siirto. Siirrä diagonaaviivoja pitkin."
+                            siirto -= 1
+                        elif onko_vapaa(x, y, koordinaatit1, koordinaatit2):
                             koordinaatit2[mika_pallo] = x, y
                             teksti = ""
                             x_valinta = -30

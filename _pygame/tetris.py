@@ -152,7 +152,7 @@ class TetrisApp(object):
 	def center_msg(self, msg):
 		for i, line in enumerate(msg.splitlines()):
 			msg_image =  pygame.font.Font(
-				pygame.font.get_default_font(), 15).render(
+				pygame.font.get_default_font(), 20).render(
 					line, False, (255,255,255), (0,0,0))
 		
 			msgim_center_x, msgim_center_y = msg_image.get_size()
@@ -166,7 +166,7 @@ class TetrisApp(object):
 
 	def score_msg(self, msg):		
 		msg_image =  pygame.font.Font(
-			pygame.font.get_default_font(), 18).render(
+			pygame.font.get_default_font(), 20).render(
 				msg, False, (11,255,11), (0,0,0))
 		
 				
@@ -249,7 +249,7 @@ class TetrisApp(object):
 		if self.gameover:
 			self.init_game()
 			self.gameover = False
-			self.eka_kerta = True
+			#self.eka_kerta = True
 	
 	def top5_read(self):
 		hi = []
@@ -291,7 +291,7 @@ class TetrisApp(object):
 		
 		self.gameover = False
 		self.paused = False
-		self.eka_kerta = True
+		#self.eka_kerta = True
 		top = "\n\n Top 5 scores: \n"
 		self.hi = self.top5_read()
 		
@@ -300,13 +300,11 @@ class TetrisApp(object):
 		while 1:
 			self.screen.fill((0,0,0))
 			if self.gameover:
-				if self.eka_kerta:
-					lista, self.hi = self.top5_uusi(self.score, self.hi)
-					self.top5_write(self.hi)
-					self.eka_kerta = False
-				else:					
-					self.center_msg("""Game Over!""" + top + lista +"""\nPress space to continue""")
-
+				#if self.eka_kerta:
+				lista, self.hi = self.top5_uusi(self.score, self.hi)
+				self.top5_write(self.hi)
+				#self.eka_kerta = False
+				self.center_msg("""Game Over!""" + top + lista +"""\nPress space to continue""")
 			else:
 				if self.paused:
 					self.center_msg("Paused")

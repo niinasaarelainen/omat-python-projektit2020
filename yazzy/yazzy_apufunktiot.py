@@ -2,6 +2,7 @@ import pygame, random
 from noppa import *
 
 
+
 def nopat_listaan():
     KUVAN_KOKO = 70
 
@@ -83,11 +84,10 @@ def alkuohjeet():
     
 
 
-def valitse_5_randomia(nopat):    # 5kpl
+def valitse_5_randomia(nopat):    
     heitto = nopat
     for i in range(5):
-        r = random.randint(0, 5)    
-        heitto[i].luku = r
+        heitto[i].luku = random.randint(0, 5)    
         heitto[i].valittu = False
     return heitto
 
