@@ -13,6 +13,7 @@ class RoboNolla:
         self.skaala = self.kuvat[0].get_width()
         self.alkupiste = (0, 0)
         self.loppupiste = (0, 0)
+        self.viivansuunta = "" 
 
         nayton_korkeus = self.skaala * self.korkeus
         nayton_leveys = self.skaala * self.leveys
@@ -50,12 +51,13 @@ class RoboNolla:
                 y = tapahtuma.pos[1]
                 self.sarake  = x // self.skaala
                 self.rivi  = y // self.skaala
-                if self.vuorossa == "robo":
-                    self.kartta[self.rivi][self.sarake] = 1   # ["tyhja", "robo", "nolla"]
-                    self.vuorossa = "nolla"
-                else:
-                    self.kartta[self.rivi][self.sarake] = 2
-                    self.vuorossa = "robo"
+                if self.kartta[self.rivi][self.sarake] == 0:
+                    if self.vuorossa == "robo":
+                        self.kartta[self.rivi][self.sarake] = 1   # ["tyhja", "robo", "nolla"]
+                        self.vuorossa = "nolla"
+                    else:
+                        self.kartta[self.rivi][self.sarake] = 2
+                        self.vuorossa = "robo"
 
             elif tapahtuma.type == pygame.KEYDOWN:
                 if tapahtuma.key == pygame.K_F2:
@@ -74,13 +76,13 @@ class RoboNolla:
                 self.naytto.blit(self.kuvat[ruutu], (x * self.skaala, y * self.skaala))
 
         teksti = self.fontti_pieni.render("Neljä samaa voittaa", True, (65, 200, 55))
-        self.naytto.blit(teksti, (85, self.korkeus * self.skaala + 20))
+        self.naytto.blit(teksti, (85, self.korkeus * self.skaala + 25))
 
         teksti = self.fontti_pieni.render(f"Vuoro: {self.vuorossa}", True, (255, 0, 0))
-        self.naytto.blit(teksti, (25, self.korkeus * self.skaala + 60))
+        self.naytto.blit(teksti, (35, self.korkeus * self.skaala + 60))
 
         teksti = self.fontti_pieni.render("F2 = uusi peli", True, (255, 0, 0))
-        self.naytto.blit(teksti, (199, self.korkeus * self.skaala + 60))
+        self.naytto.blit(teksti, (229, self.korkeus * self.skaala + 60))
 
         lapi, lapi_teksti = self.peli_lapi()
         if lapi:
@@ -90,11 +92,25 @@ class RoboNolla:
             pygame.draw.rect(self.naytto, (0, 0, 0), (teksti_x, teksti_y, teksti.get_width(), teksti.get_height()))
             self.naytto.blit(teksti, (teksti_x, teksti_y))
 
-            alku_x = self.alkupiste[0] * self.skaala
-            alku_y = self.alkupiste[1] * self.skaala + (self.skaala//2)
-            loppu_x = self.loppupiste[0] * self.skaala + self.skaala 
-            loppu_y = self.loppupiste[1] * self.skaala + (self.skaala//2)
-            pygame.draw.line(self.naytto, (0, 0, 0), (alku_x, alku_y ), (loppu_x, loppu_y), 4)
+            if self.viivansuunta == "vaaka":
+                alku_x = self.alkupiste[0] * self.skaala
+                alku_y = self.alkupiste[1] * self.skaala + (self.skaala//2)
+                loppu_x = self.loppupiste[0] * self.skaala + self.skaala 
+                loppu_y = self.loppupiste[1] * self.skaala + (self.skaala//2)
+                pygame.draw.line(self.naytto, (0, 0, 0), (alku_x, alku_y ), (loppu_x, loppu_y), 4)
+            elif self.viivansuunta == "pysty":
+                alku_x = self.alkupiste[0] * self.skaala + (self.skaala//2)
+                alku_y = self.alkupiste[1] * self.skaala 
+                loppu_x = self.loppupiste[0] * self.skaala + (self.skaala//2)
+                loppu_y = self.loppupiste[1] * self.skaala + self.skaala
+                pygame.draw.line(self.naytto, (0, 0, 0), (alku_x, alku_y ), (loppu_x, loppu_y), 4)
+            elif self.viivansuunta == "diagonaali":
+                alku_x = self.alkupiste[0] * self.skaala 
+                alku_y = self.alkupiste[1] * self.skaala 
+                loppu_x = self.loppupiste[0] * self.skaala + self.skaala
+                loppu_y = self.loppupiste[1] * self.skaala + self.skaala
+                pygame.draw.line(self.naytto, (0, 0, 0), (alku_x, alku_y ), (loppu_x, loppu_y), 4)
+            
 
         pygame.display.flip()
 
@@ -113,10 +129,12 @@ class RoboNolla:
                             alkupiste.append((x, y))
                         if perakkaisia == 4:
                             self.alkupiste = alkupiste[0]
-                            self.loppupiste = (x, y)                            
+                            self.loppupiste = (x, y)   
+                            self.viivansuunta = "vaaka"                         
                             return True
                     else:
-                        perakkaisia = 0    
+                        perakkaisia = 0   
+                        alkupiste = []   
             return False    
 
         def onko_pysty(pelaaja):
@@ -130,10 +148,12 @@ class RoboNolla:
                             alkupiste.append((y, x))
                         if perakkaisia == 4:
                             self.alkupiste = alkupiste[0]
-                            self.loppupiste = (y, x)   
+                            self.loppupiste = (y, x) 
+                            self.viivansuunta = "pysty"  
                             return True
                     else:
                         perakkaisia = 0    
+                        alkupiste = []  
             return False    
 
         def onko_diagonaali(pelaaja):
@@ -155,11 +175,13 @@ class RoboNolla:
                                     x_jatko += 1
                                 else:
                                     perakkaisia = 0   
+                                    alkupiste = []   
                                 if perakkaisia == 1:
                                     alkupiste.append((x, y))
                                 if perakkaisia == 3:
                                     self.alkupiste = alkupiste[0]
-                                    self.loppupiste = (x, y)   
+                                    self.loppupiste = (x_jatko, y_jatko)
+                                    self.viivansuunta = "diagonaali"     
                                     return True
 
                         y_jatko = y   # vas. alas
@@ -171,11 +193,14 @@ class RoboNolla:
                                 x_jatko -= 1
                             else:
                                 perakkaisia = 0   
+                                alkupiste = []   
                             if perakkaisia == 1:
                                 alkupiste.append((x, y))
                             if perakkaisia == 3:
-                                self.alkupiste = alkupiste[0]
-                                self.loppupiste = (x, y)   
+                                a_x, a_y = alkupiste[0]
+                                self.alkupiste = (a_x + 1, a_y)
+                                self.loppupiste = (x_jatko -1, y_jatko)   
+                                self.viivansuunta = "diagonaali"    
                                 return True
                     else:
                         perakkaisia = 0   
