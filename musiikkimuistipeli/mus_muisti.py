@@ -1,9 +1,14 @@
 import random, pygame.midi, pygame
 
 
+def alkuohjeet():
+    print("\nMelodia liikkuu sekstin alueella. Käytä näppäimiä:  z x c v b n")
+    print("Sama melodia uudestaan = ENTER")
+    print("Melodian pituus kasvaa ikuisesti. PElin voi keskeyttää Escillä\n")
+
 def generoi_melodia():
     aanet = "zxcvbn"  # näppäimistön alin rivi 6 ekaa
-    return [aanet[random.randint(0,5)]  for i in range(20)]
+    return [aanet[random.randint(0,5)]  for i in range(100)]
 
 
 def midi_play(n, edellinen, instrument):
@@ -18,24 +23,24 @@ def soita_melodia(melodia, montako):
     for i in range(montako):
         midi_play(melodia[i], edellinen, 2)
         edellinen = melodia[i]
-        pygame.time.delay(400)
+        pygame.time.delay(333)
         
    
 
 def mainloop():
     montako = 3
     edellinen = "z"
-    melodia = generoi_melodia()
     koneen_vuoro = True
     monesko_kayttajan_aani = 0
-    pisteet = 0
-
+    virheet = 0    
     while True:
-        naytto.fill(10, 10, 10)
-        teksti = fontti_keski.render(f"melodian pituus: {montako}", True, (0, 67, 67))  
-        naytto.blit(teksti, (25, 25))    
+        naytto.fill((10, 10, 10))        
+        
+        #teksti = fontti.render(f"melodian pituus: {montako}", True, (0, 67, 67))  
+        #naytto.blit(teksti, (25, 25))    
         if koneen_vuoro:
             pygame.time.delay(700)
+            print(f"melodian pituus: {montako}")
             soita_melodia(melodia, montako)
             koneen_vuoro = False
             montako += 1
@@ -45,34 +50,34 @@ def mainloop():
             if event.type == pygame.QUIT:
                 pygame.quit()
             if event.type == pygame.KEYDOWN:
-                midi_play(chr(event.key), edellinen, 6)
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                if event.key == pygame.K_RETURN:
+                    soita_melodia(melodia, montako -1) 
+                    break
+                if not melodia[monesko_kayttajan_aani] == chr(event.key):
+                    virheet += 1
+                    print("virheitä:",  virheet)
+                midi_play(chr(event.key), edellinen, 8)
                 edellinen = chr(event.key)
                 monesko_kayttajan_aani += 1
-                print(montako)
                 if monesko_kayttajan_aani == montako -1:
                     koneen_vuoro = True
-                    print("koneen_vuoro = True")
        
        
         kello.tick(40)
 
 
+
 pygame.midi.init()
+kello = pygame.time.Clock()
+naytto = pygame.display.set_mode((211, 211))
+#fontti = pygame.font.SysFont("Arial", 18) 
+
 port = pygame.midi.get_default_output_id()
 midi_out = pygame.midi.Output(port, 0)
 
-kello = pygame.time.Clock()
-naytto = pygame.display.set_mode((211, 211))
-fontti_keski = pygame.font.SysFont("Arial", 30)    
-
-if __name__ == "__main__":
+melodia = generoi_melodia()
     
-    mainloop()    
-
-
-
-
-
-
-
-
+alkuohjeet()
+mainloop()  
