@@ -85,14 +85,14 @@ class RoboNolla:
                 ruutu = self.kartta[y][x]
                 self.naytto.blit(self.kuvat[ruutu], (x * self.skaala, y * self.skaala))
 
-        teksti = self.fontti_pieni.render("Neljä samaa voittaa", True, (65, 200, 55))
-        self.naytto.blit(teksti, (85, self.korkeus * self.skaala + 25))
+        teksti = self.fontti_pieni.render("Viisi samaa voittaa", True, (65, 200, 55))
+        self.naytto.blit(teksti, (115, self.korkeus * self.skaala + 25))
 
         teksti = self.fontti_pieni.render(f"Vuoro: {self.vuorossa}", True, (255, 0, 0))
-        self.naytto.blit(teksti, (35, self.korkeus * self.skaala + 60))
+        self.naytto.blit(teksti, (55, self.korkeus * self.skaala + 60))
 
         teksti = self.fontti_pieni.render("F2 = uusi peli", True, (255, 0, 0))
-        self.naytto.blit(teksti, (229, self.korkeus * self.skaala + 60))
+        self.naytto.blit(teksti, (250, self.korkeus * self.skaala + 60))
 
         lapi, lapi_teksti = self.peli_lapi()
         if lapi:
@@ -172,12 +172,12 @@ class RoboNolla:
             alkupiste = []  
             x_jatko = 0
             y_jatko = 0
-            for y in range(self.korkeus - 3):   # 4 sarja vika mahdollisuus alkaa
+            for y in range(self.korkeus - 4):   # 5 sarja vika mahdollisuus alkaa
                 for x in range(self.leveys):
                     if self.kartta[y][x] == pelaaja:
                         x_jatko = x 
                         y_jatko = y      
-                        for i in range(3):   # oik. alas   
+                        for i in range(4):   # oik. alas   
                             if x_jatko < len(self.kartta) -1:                           
                                 if self.kartta[y_jatko+1][x_jatko+1] == pelaaja:         
                                     perakkaisia += 1
@@ -196,7 +196,7 @@ class RoboNolla:
 
                         y_jatko = y   # vas. alas
                         x_jatko = x
-                        for i in range(3):   
+                        for i in range(4):   
                             if self.kartta[y_jatko+1][x_jatko-1] == pelaaja:                                
                                 perakkaisia += 1        
                                 y_jatko += 1
