@@ -1,4 +1,5 @@
 import pygame
+from ai import *
 
 
 class RoboNolla:
@@ -15,6 +16,8 @@ class RoboNolla:
         self.loppupiste = (0, 0)
         self.viivansuunta = "" 
 
+        self.ai = Ai(self.korkeus, self.leveys, self.kartta)         # luodaan tekoäly
+
         nayton_korkeus = self.skaala * self.korkeus
         nayton_leveys = self.skaala * self.leveys
         self.naytto = pygame.display.set_mode((nayton_leveys, nayton_korkeus + self.skaala * 2))
@@ -23,6 +26,7 @@ class RoboNolla:
         self.fontti_pieni = pygame.font.SysFont("Arial", 22)
 
         pygame.display.set_caption("RoboNolla")
+       
         self.silmukka()
 
     def lataa_kuvat(self):
@@ -36,15 +40,23 @@ class RoboNolla:
         for i in range(8):
             self.kartta.append([0, 0, 0, 0, 0, 0, 0, 0])
         self.siirrot = 0
-        self.vuorossa = "robo"
+        self.kartta[3][3] = 1
+        self.vuorossa = "nolla"
+
+        
 
     def silmukka(self):
         while True:
-            self.tutki_tapahtumat()
+            if self.vuorossa == "robo":
+                self.ai.tutki()
+                self.vuorossa = "nolla"
+            else:
+                self.tutki_tapahtumat()
             self.piirra_naytto()
 
 
     def tutki_tapahtumat(self):
+        
         for tapahtuma in pygame.event.get():
             if tapahtuma.type == pygame.MOUSEBUTTONDOWN:
                 x = tapahtuma.pos[0]
@@ -52,12 +64,8 @@ class RoboNolla:
                 self.sarake  = x // self.skaala
                 self.rivi  = y // self.skaala
                 if self.kartta[self.rivi][self.sarake] == 0:
-                    if self.vuorossa == "robo":
-                        self.kartta[self.rivi][self.sarake] = 1   # ["tyhja", "robo", "nolla"]
-                        self.vuorossa = "nolla"
-                    else:
-                        self.kartta[self.rivi][self.sarake] = 2
-                        self.vuorossa = "robo"
+                    self.kartta[self.rivi][self.sarake] = 2
+                    self.vuorossa = "robo"
 
             elif tapahtuma.type == pygame.KEYDOWN:
                 if tapahtuma.key == pygame.K_F2:
@@ -114,6 +122,7 @@ class RoboNolla:
 
         pygame.display.flip()
 
+    
 
     def peli_lapi(self):
         alkupiste = []     # piirretään voittoviiva
