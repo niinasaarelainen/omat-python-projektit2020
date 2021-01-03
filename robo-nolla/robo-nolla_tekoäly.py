@@ -4,11 +4,11 @@ from ai import *
 
 class RoboNolla:
     def __init__(self):
-        pygame.init()
+        pygame.init()                
         
         self.lataa_kuvat()
-        self.uusi_peli()
-        
+        self.uusi_peli()      
+
         self.korkeus = len(self.kartta)
         self.leveys = len(self.kartta[0])
         self.skaala = self.kuvat[0].get_width()
@@ -16,7 +16,8 @@ class RoboNolla:
         self.loppupiste = (0, 0)
         self.viivansuunta = "" 
 
-        self.ai = Ai(self.korkeus, self.leveys, self.kartta)         # luodaan tekoäly
+        self.ai = Ai(self.korkeus, self.leveys)         # luodaan tekoäly
+  
 
         nayton_korkeus = self.skaala * self.korkeus
         nayton_leveys = self.skaala * self.leveys
@@ -37,10 +38,10 @@ class RoboNolla:
 
     def uusi_peli(self):
         self.kartta = []
-        for i in range(8):
-            self.kartta.append([0, 0, 0, 0, 0, 0, 0, 0])
+        for i in range(10):
+            self.kartta.append([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
         self.siirrot = 0
-        self.kartta[3][3] = 1
+        self.kartta[4][4] = 1
         self.vuorossa = "nolla"
 
         
@@ -48,7 +49,7 @@ class RoboNolla:
     def silmukka(self):
         while True:
             if self.vuorossa == "robo":
-                self.ai.tutki()
+                self.ai.tutki(self.kartta)
                 self.vuorossa = "nolla"
             else:
                 self.tutki_tapahtumat()
@@ -69,7 +70,8 @@ class RoboNolla:
 
             elif tapahtuma.type == pygame.KEYDOWN:
                 if tapahtuma.key == pygame.K_F2:
-                    self.uusi_peli()
+                    self.uusi_peli()                    
+                    self.ai.nollaa()
 
             if tapahtuma.type == pygame.QUIT:
                 exit()
@@ -136,7 +138,7 @@ class RoboNolla:
                         perakkaisia += 1
                         if perakkaisia == 1:
                             alkupiste.append((x, y))
-                        if perakkaisia == 4:
+                        if perakkaisia == 5:
                             self.alkupiste = alkupiste[0]
                             self.loppupiste = (x, y)   
                             self.viivansuunta = "vaaka"                         
@@ -155,7 +157,7 @@ class RoboNolla:
                         perakkaisia += 1
                         if perakkaisia == 1:
                             alkupiste.append((y, x))
-                        if perakkaisia == 4:
+                        if perakkaisia == 5:
                             self.alkupiste = alkupiste[0]
                             self.loppupiste = (y, x) 
                             self.viivansuunta = "pysty"  
@@ -186,7 +188,7 @@ class RoboNolla:
                                     alkupiste = []   
                                 if perakkaisia == 1:
                                     alkupiste.append((x, y))
-                                if perakkaisia == 3:
+                                if perakkaisia == 4:
                                     self.alkupiste = alkupiste[0]
                                     self.loppupiste = (x_jatko, y_jatko)
                                     self.viivansuunta = "diagonaali"     
@@ -204,7 +206,7 @@ class RoboNolla:
                                 alkupiste = []   
                             if perakkaisia == 1:
                                 alkupiste.append((x, y))
-                            if perakkaisia == 3:
+                            if perakkaisia == 4:
                                 a_x, a_y = alkupiste[0]
                                 self.alkupiste = (a_x + 1, a_y)
                                 self.loppupiste = (x_jatko -1, y_jatko)   
