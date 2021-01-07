@@ -18,25 +18,28 @@ class Ai:
         if alkup[1] == loppup[1]:
             y = alkup[1]            # molemmissa sama y
             x_alku = alkup[0] - 1
-            print("x_alku" , x_alku )
             x_loppu = loppup[0] + 1
-            if self.kartta[y][x_alku] == 0:
-                self.kartta[y][x_alku] = 1     # huom!  [y][x]
-                return True
-            elif self.kartta[y][x_loppu] == 0:
-                self.kartta[y][x_loppu] = 1     # huom!  [y][x]
-                return True
+            if y >= 0 and y < self.korkeus and x_alku >= 0 and x_alku < self.korkeus:
+                if self.kartta[y][x_alku] == 0:
+                    self.kartta[y][x_alku] = 1     # huom!  [y][x]
+                    return True
+            if y >= 0 and y < self.korkeus and x_loppu >= 0 and x_loppu < self.korkeus:
+                if self.kartta[y][x_loppu] == 0:
+                    self.kartta[y][x_loppu] = 1     # huom!  [y][x]
+                    return True
         # pysty:
         if alkup[0] == loppup[0]:
             x = alkup[0]            # molemmissa sama x
             y_alku = alkup[1] - 1
             y_loppu = loppup[1] + 1
-            if self.kartta[y_alku][x] == 0:
-                self.kartta[y_alku][x] = 1     # huom!  [y][x]
-                return True
-            elif self.kartta[y_loppu][x] == 0:
-                self.kartta[y_loppu][x] = 1     # huom!  [y][x]
-                return True
+            if y_alku >= 0 and y_alku < self.korkeus and x >= 0 and x < self.korkeus:
+                if self.kartta[y_alku][x] == 0:
+                    self.kartta[y_alku][x] = 1     # huom!  [y][x]
+                    return True
+            if y_loppu >= 0 and y_loppu < self.korkeus and x >= 0 and x < self.korkeus:
+                if self.kartta[y_loppu][x] == 0:
+                    self.kartta[y_loppu][x] = 1     # huom!  [y][x]
+                    return True
         return False
             
 

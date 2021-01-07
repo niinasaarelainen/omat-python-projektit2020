@@ -135,7 +135,7 @@ class RoboNolla:
         teksti = self.fontti_pieni.render("F2 = uusi peli", True, (255, 0, 0))
         self.naytto.blit(teksti, (250, self.korkeus * self.skaala + 60))
 
-        """
+        
         lapi, lapi_teksti = self.peli_lapi(self.montako_kerataan)
         if lapi:
             teksti = self.fontti_iso.render(lapi_teksti, True, (255, 0, 0))
@@ -162,7 +162,7 @@ class RoboNolla:
                 loppu_x = self.loppupiste[0] * self.skaala + self.skaala
                 loppu_y = self.loppupiste[1] * self.skaala + self.skaala
                 pygame.draw.line(self.naytto, (0, 0, 0), (alku_x, alku_y ), (loppu_x, loppu_y), 4)
-        """
+        
 
         pygame.display.flip()
 
@@ -194,6 +194,7 @@ class RoboNolla:
                     else:
                         perakkaisia = 0   
                         alkupiste = []   
+                perakkaisia = 0    # muuten vaakasuora voi jatkua riviltä toiselle !
             return False    
 
         def onko_pysty(pelaaja):
@@ -219,6 +220,7 @@ class RoboNolla:
                     else:
                         perakkaisia = 0    
                         alkupiste = []  
+                perakkaisia = 0
             return False    
 
         def onko_diagonaali(pelaaja):
@@ -280,6 +282,7 @@ class RoboNolla:
                                     perakkaisia = 0  
                     else:
                         perakkaisia = 0   
+                perakkaisia = 0
             return False  
 
         if onko_vaaka(2) or onko_pysty(2) or onko_diagonaali(2):   # ["tyhja", "robo", "nolla"]
