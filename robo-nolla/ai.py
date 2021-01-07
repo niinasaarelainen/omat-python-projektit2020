@@ -18,6 +18,7 @@ class Ai:
         if alkup[1] == loppup[1]:
             y = alkup[1]            # molemmissa sama y
             x_alku = alkup[0] - 1
+            print("x_alku" , x_alku )
             x_loppu = loppup[0] + 1
             if self.kartta[y][x_alku] == 0:
                 self.kartta[y][x_alku] = 1     # huom!  [y][x]

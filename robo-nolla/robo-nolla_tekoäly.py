@@ -14,6 +14,7 @@ class RoboNolla:
         self.skaala = self.kuvat[0].get_width()
         self.alkupiste = (0, 0)
         self.loppupiste = (0, 0)
+        self.pisteet = []
         self.viivansuunta = "" 
         self.montako_kerataan  = 5
 
@@ -57,20 +58,35 @@ class RoboNolla:
 
         if self.vuorossa == "robo":
             self.vuorossa = "nolla"
-            lapi4, lapi_teksti = self.peli_lapi(4)            
-            # estetään nollan neljän suora....
-            if lapi4 and lapi_teksti == "Nolla voitti":
-                print("4")
-                if self.ai.esta_4_tai_3(self.alkupiste, self.loppupiste):     # TODO laittaa robon päälle !!!
+
+            # estetään nollan neljän suorat....
+            self.pisteet = []
+            lapi4, lapi_teksti = self.peli_lapi(4)    
+            print(self.pisteet)
+
+            for piste in self.pisteet:
+                self.alkupiste = piste[0]
+                self.loppupiste = piste[1]
+                if not self.pisteet == [] :
                     print("4")
-                    return
-            # estetään nollan kolmen suora....
+                    if self.ai.esta_4_tai_3(self.alkupiste, self.loppupiste):    
+                        print("4")
+                        return
+            
+            # estetään nollan kolmen suorat....
+            self.pisteet = []
             lapi3, lapi_teksti = self.peli_lapi(3)    
-            if lapi3 and lapi_teksti == "Nolla voitti":
-                print("3")
-                if self.ai.esta_4_tai_3(self.alkupiste, self.loppupiste):     # TODO diagonaali                    
+            print(self.pisteet, "lapi_teksti:", lapi_teksti)
+                
+            for piste in self.pisteet:
+                self.alkupiste = piste[0]
+                self.loppupiste = piste[1]       
+                print("self.alkupiste", self.alkupiste, "self.loppupiste", self.loppupiste )         
+                if not self.pisteet == [] :
                     print("3")
-                    return 
+                    if self.ai.esta_4_tai_3(self.alkupiste, self.loppupiste):     # TODO diagonaali                    
+                        print("3")
+                        return 
 
             # ... tai laitetaan robo parhaimpaan paikkaan
             print( " se on moro = tutki seuraavana\n")
@@ -167,8 +183,14 @@ class RoboNolla:
                         if perakkaisia == montako:
                             self.alkupiste = alkupiste[0]
                             self.loppupiste = (x, y)   
-                            self.viivansuunta = "vaaka"                         
-                            return True
+                            if montako == self.montako_kerataan :
+                                self.viivansuunta = "vaaka"                         
+                                return True
+                            else:
+                                self.pisteet.append([self.alkupiste, self.loppupiste])
+                                self.alkupiste = (0, 0)
+                                self.loppupiste = (0, 0)
+                                perakkaisia = 0  
                     else:
                         perakkaisia = 0   
                         alkupiste = []   
@@ -186,8 +208,14 @@ class RoboNolla:
                         if perakkaisia == montako:
                             self.alkupiste = alkupiste[0]
                             self.loppupiste = (y, x) 
-                            self.viivansuunta = "pysty"  
-                            return True
+                            if montako == self.montako_kerataan :
+                                self.viivansuunta = "pysty"  
+                                return True
+                            else:
+                                self.pisteet.append([self.alkupiste, self.loppupiste])
+                                self.alkupiste = (0, 0)
+                                self.loppupiste = (0, 0)
+                                perakkaisia = 0  
                     else:
                         perakkaisia = 0    
                         alkupiste = []  
@@ -217,8 +245,14 @@ class RoboNolla:
                                 if perakkaisia == montako -1:
                                     self.alkupiste = alkupiste[0]
                                     self.loppupiste = (x_jatko, y_jatko)
-                                    self.viivansuunta = "diagonaali"     
-                                    return True
+                                    if montako == self.montako_kerataan :
+                                        self.viivansuunta = "diagonaali"     
+                                        return True
+                                    else:
+                                        self.pisteet.append([self.alkupiste, self.loppupiste])
+                                        self.alkupiste = (0, 0)
+                                        self.loppupiste = (0, 0)
+                                        perakkaisia = 0  
 
                         y_jatko = y   # vas. alas
                         x_jatko = x
@@ -236,8 +270,14 @@ class RoboNolla:
                                 a_x, a_y = alkupiste[0]
                                 self.alkupiste = (a_x + 1, a_y)
                                 self.loppupiste = (x_jatko -1, y_jatko)   
-                                self.viivansuunta = "diagonaali"    
-                                return True
+                                if montako == self.montako_kerataan :
+                                    self.viivansuunta = "diagonaali"    
+                                    return True
+                                else:
+                                    self.pisteet.append([self.alkupiste, self.loppupiste])
+                                    self.alkupiste = (0, 0)
+                                    self.loppupiste = (0, 0)
+                                    perakkaisia = 0  
                     else:
                         perakkaisia = 0   
             return False  
@@ -245,7 +285,7 @@ class RoboNolla:
         if onko_vaaka(2) or onko_pysty(2) or onko_diagonaali(2):   # ["tyhja", "robo", "nolla"]
             return True, "Nolla voitti"
 
-        if onko_vaaka(1) or onko_pysty(1) or onko_diagonaali(1):   # ["tyhja", "robo", "nolla"]
+        if montako == self.montako_kerataan and (onko_vaaka(1) or onko_pysty(1) or onko_diagonaali(1)):   # ["tyhja", "robo", "nolla"]
             return True, "Robo voitti"
         
         
