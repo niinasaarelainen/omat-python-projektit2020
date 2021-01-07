@@ -12,17 +12,45 @@ class Ai:
         self.pisin_suora = []
 
 
+    def esta_4_tai_3(self, alkup, loppup):
+        print(alkup, loppup)        # huom! molemmat x, y  EI  y, x !!!!!!!!!
+        # vaaka:
+        if alkup[1] == loppup[1]:
+            y = alkup[1]            # molemmissa sama y
+            x_alku = alkup[0] - 1
+            x_loppu = loppup[0] + 1
+            if self.kartta[y][x_alku] == 0:
+                self.kartta[y][x_alku] = 1     # huom!  [y][x]
+                return True
+            elif self.kartta[y][x_loppu] == 0:
+                self.kartta[y][x_loppu] = 1     # huom!  [y][x]
+                return True
+        # pysty:
+        if alkup[0] == loppup[0]:
+            x = alkup[0]            # molemmissa sama x
+            y_alku = alkup[1] - 1
+            y_loppu = loppup[1] + 1
+            if self.kartta[y_alku][x] == 0:
+                self.kartta[y_alku][x] = 1     # huom!  [y][x]
+                return True
+            elif self.kartta[y_loppu][x] == 0:
+                self.kartta[y_loppu][x] = 1     # huom!  [y][x]
+                return True
+        return False
+            
+
+
     def tutki(self, kartta):        
         self.kartta = kartta
         self.vaaka()
         self.pysty()
         self.loytyi_paikka = False
         s = sorted(self.pisin_suora, key=lambda x: x[0], reverse = True)         
-        print(s)
+        #print(s)
 
         for i in range(len(s)):
             kokelas = s[i]   
-            print(kokelas)
+            #print(kokelas)
             if not kokelas == []:
                 y = kokelas[2][0]   # loppupiste
                 x = kokelas[2][1]
@@ -55,7 +83,7 @@ class Ai:
 
     def mahtuuko_5_vaaka(self, perakkaisia, alkupiste, loppupiste):   
             x_raja = 4 - perakkaisia
-            print(alkupiste[1], x_raja, self.leveys - loppupiste[1])   
+            #print(alkupiste[1], x_raja, self.leveys - loppupiste[1])   
 
             if alkupiste[1] < x_raja or self.leveys - loppupiste[1] < x_raja :
                 return False
@@ -87,7 +115,7 @@ class Ai:
 
     def mahtuuko_5_pysty(self, perakkaisia, alkupiste, loppupiste):   
             y_raja = 4 - perakkaisia
-            print(alkupiste[0], y_raja, self.leveys - loppupiste[0])   
+            #print(alkupiste[0], y_raja, self.leveys - loppupiste[0])   
 
             if alkupiste[0] < y_raja or self.leveys - loppupiste[0] < y_raja :
                 return False

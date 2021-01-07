@@ -15,6 +15,7 @@ class RoboNolla:
         self.alkupiste = (0, 0)
         self.loppupiste = (0, 0)
         self.viivansuunta = "" 
+        self.montako_kerataan  = 5
 
         self.ai = Ai(self.korkeus, self.leveys)         # luodaan tekoäly
   
@@ -48,12 +49,33 @@ class RoboNolla:
 
     def silmukka(self):
         while True:
-            if self.vuorossa == "robo":
-                self.ai.tutki(self.kartta)
-                self.vuorossa = "nolla"
-            else:
-                self.tutki_tapahtumat()
+            self.tutki_tilanne()            
             self.piirra_naytto()
+
+
+    def tutki_tilanne(self):          
+
+        if self.vuorossa == "robo":
+            self.vuorossa = "nolla"
+            lapi4, lapi_teksti = self.peli_lapi(4)            
+            # estetään nollan neljän suora....
+            if lapi4 and lapi_teksti == "Nolla voitti":
+                print("4")
+                if self.ai.esta_4_tai_3(self.alkupiste, self.loppupiste):     # TODO laittaa robon päälle !!!
+                    return
+            # estetään nollan kolmen suora....
+            lapi3, lapi_teksti = self.peli_lapi(3)    
+            if lapi3 and lapi_teksti == "Nolla voitti":
+                if self.ai.esta_4_tai_3(self.alkupiste, self.loppupiste):     # TODO diagonaali
+                    return 
+
+            # ... tai laitetaan robo parhaimpaan paikkaan
+            print( " se on moro = tutki seuraavana")
+            self.ai.tutki(self.kartta)                    
+            
+
+        if self.vuorossa == "nolla":
+            self.tutki_tapahtumat()   # vain nollan vuorossa tutkitaan hiiren tapahtumat
 
 
     def tutki_tapahtumat(self):
@@ -94,7 +116,7 @@ class RoboNolla:
         teksti = self.fontti_pieni.render("F2 = uusi peli", True, (255, 0, 0))
         self.naytto.blit(teksti, (250, self.korkeus * self.skaala + 60))
 
-        lapi, lapi_teksti = self.peli_lapi()
+        lapi, lapi_teksti = self.peli_lapi(self.montako_kerataan)
         if lapi:
             teksti = self.fontti_iso.render(lapi_teksti, True, (255, 0, 0))
             teksti_x = self.skaala * self.leveys / 2 - teksti.get_width() / 2
@@ -126,7 +148,7 @@ class RoboNolla:
 
     
 
-    def peli_lapi(self):
+    def peli_lapi(self, montako):
         alkupiste = []     # piirretään voittoviiva
 
         def onko_vaaka(pelaaja):
@@ -138,7 +160,7 @@ class RoboNolla:
                         perakkaisia += 1
                         if perakkaisia == 1:
                             alkupiste.append((x, y))
-                        if perakkaisia == 5:
+                        if perakkaisia == montako:
                             self.alkupiste = alkupiste[0]
                             self.loppupiste = (x, y)   
                             self.viivansuunta = "vaaka"                         
@@ -157,7 +179,7 @@ class RoboNolla:
                         perakkaisia += 1
                         if perakkaisia == 1:
                             alkupiste.append((y, x))
-                        if perakkaisia == 5:
+                        if perakkaisia == montako:
                             self.alkupiste = alkupiste[0]
                             self.loppupiste = (y, x) 
                             self.viivansuunta = "pysty"  
@@ -188,7 +210,7 @@ class RoboNolla:
                                     alkupiste = []   
                                 if perakkaisia == 1:
                                     alkupiste.append((x, y))
-                                if perakkaisia == 4:
+                                if perakkaisia == montako -1:
                                     self.alkupiste = alkupiste[0]
                                     self.loppupiste = (x_jatko, y_jatko)
                                     self.viivansuunta = "diagonaali"     
@@ -206,7 +228,7 @@ class RoboNolla:
                                 alkupiste = []   
                             if perakkaisia == 1:
                                 alkupiste.append((x, y))
-                            if perakkaisia == 4:
+                            if perakkaisia == montako -1:
                                 a_x, a_y = alkupiste[0]
                                 self.alkupiste = (a_x + 1, a_y)
                                 self.loppupiste = (x_jatko -1, y_jatko)   
@@ -216,11 +238,12 @@ class RoboNolla:
                         perakkaisia = 0   
             return False  
 
-        if onko_vaaka(1) or onko_pysty(1) or onko_diagonaali(1):   # ["tyhja", "robo", "nolla"]
-            return True, "Robo voitti"
-
         if onko_vaaka(2) or onko_pysty(2) or onko_diagonaali(2):   # ["tyhja", "robo", "nolla"]
             return True, "Nolla voitti"
+
+        if onko_vaaka(1) or onko_pysty(1) or onko_diagonaali(1):   # ["tyhja", "robo", "nolla"]
+            return True, "Robo voitti"
+        
         
         return False, ""
 
