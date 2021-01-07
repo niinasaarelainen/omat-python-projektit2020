@@ -13,7 +13,7 @@ class Ai:
 
 
     def esta_4_tai_3(self, alkup, loppup):
-        print(alkup, loppup)        # huom! molemmat x, y  EI  y, x !!!!!!!!!
+        #print(alkup, loppup)        # huom! molemmat x, y  EI  y, x !!!!!!!!!
         # vaaka:
         if alkup[1] == loppup[1]:
             y = alkup[1]            # molemmissa sama y
@@ -107,8 +107,6 @@ class Ai:
                     if alku_x >= 0 or loppu_x < self.korkeus :
                         if self.mahtuuko_5_vaaka(perakkaisia, alkupiste, loppupiste) and self.mahtuuko_5_pysty(perakkaisia, alkupiste, loppupiste):   
                             self.pisin_suora.append([perakkaisia, alkupiste, loppupiste])
-                        else:
-                            print("ei lisätty")
                 else:
                     perakkaisia = 0 
 
@@ -139,8 +137,6 @@ class Ai:
                     if alku_y >= 0 or loppu_y < self.korkeus :
                         if self.mahtuuko_5_pysty(perakkaisia, alkupiste, loppupiste) and self.mahtuuko_5_pysty(perakkaisia, alkupiste, loppupiste):  
                             self.pisin_suora.append([perakkaisia, alkupiste, loppupiste])
-                        else:
-                            print("ei lisätty")
                 else:
                     perakkaisia = 0 
 

@@ -62,15 +62,18 @@ class RoboNolla:
             if lapi4 and lapi_teksti == "Nolla voitti":
                 print("4")
                 if self.ai.esta_4_tai_3(self.alkupiste, self.loppupiste):     # TODO laittaa robon päälle !!!
+                    print("4")
                     return
             # estetään nollan kolmen suora....
             lapi3, lapi_teksti = self.peli_lapi(3)    
             if lapi3 and lapi_teksti == "Nolla voitti":
-                if self.ai.esta_4_tai_3(self.alkupiste, self.loppupiste):     # TODO diagonaali
+                print("3")
+                if self.ai.esta_4_tai_3(self.alkupiste, self.loppupiste):     # TODO diagonaali                    
+                    print("3")
                     return 
 
             # ... tai laitetaan robo parhaimpaan paikkaan
-            print( " se on moro = tutki seuraavana")
+            print( " se on moro = tutki seuraavana\n")
             self.ai.tutki(self.kartta)                    
             
 
@@ -116,6 +119,7 @@ class RoboNolla:
         teksti = self.fontti_pieni.render("F2 = uusi peli", True, (255, 0, 0))
         self.naytto.blit(teksti, (250, self.korkeus * self.skaala + 60))
 
+        """
         lapi, lapi_teksti = self.peli_lapi(self.montako_kerataan)
         if lapi:
             teksti = self.fontti_iso.render(lapi_teksti, True, (255, 0, 0))
@@ -142,7 +146,7 @@ class RoboNolla:
                 loppu_x = self.loppupiste[0] * self.skaala + self.skaala
                 loppu_y = self.loppupiste[1] * self.skaala + self.skaala
                 pygame.draw.line(self.naytto, (0, 0, 0), (alku_x, alku_y ), (loppu_x, loppu_y), 4)
-            
+        """
 
         pygame.display.flip()
 
