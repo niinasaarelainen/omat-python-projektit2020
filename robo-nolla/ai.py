@@ -12,7 +12,8 @@ class Ai:
         self.pisin_suora = []
 
 
-    def esta_4_tai_3(self, alkup, loppup):
+    # tänne tulee nykyinen alku- ja loppupiste. Pitää ensin tutkia onko pysty-vai mikä
+    def esta_4_tai_3(self, alkup, loppup):   
         #print(alkup, loppup)        # huom! molemmat x, y  EI  y, x !!!!!!!!!
         # vaaka:
         if alkup[1] == loppup[1]:
@@ -40,10 +41,32 @@ class Ai:
                 if self.kartta[y_loppu][x] == 0:
                     self.kartta[y_loppu][x] = 1     # huom!  [y][x]
                     return True
+
+        # pakko olla diagonaali:
+        else:
+            y_alku = alkup[1] - 1   # huom! molemmat x, y  EI  y, x !!!!!!!!!
+            y_loppu = loppup[1] + 1
+            x_alku = alkup[0] 
+            x_loppu = loppup[0] 
+            if x_loppu - x_alku < 0:
+                x_alku = x_alku + 1
+                x_loppu = x_loppu - 1
+            else:
+                x_alku = x_alku - 1
+                x_loppu = x_loppu + 1
+            if y_alku >= 0 and y_alku < self.korkeus and x_alku >= 0 and x_alku < self.korkeus:
+                if self.kartta[y_alku][x_alku] == 0:
+                    self.kartta[y_alku][x_alku] = 1     # huom!  [y][x]
+                    return True
+            if y_loppu >= 0 and y_loppu < self.korkeus and x_loppu >= 0 and x_loppu < self.korkeus:
+                if self.kartta[y_loppu][x_loppu] == 0:
+                    self.kartta[y_loppu][x_loppu] = 1     # huom!  [y][x]
+                    return True
+
         return False
             
 
-
+    # tänne tulee valmiiksi potentiaaliset uudet pisteet
     def tutki(self, kartta):        
         self.kartta = kartta
         self.vaaka()

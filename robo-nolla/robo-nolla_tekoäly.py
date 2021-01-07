@@ -76,7 +76,7 @@ class RoboNolla:
             # estetään nollan kolmen suorat....
             self.pisteet = []
             lapi3, lapi_teksti = self.peli_lapi(3)    
-            print(self.pisteet, "lapi_teksti:", lapi_teksti)
+            print(self.pisteet)
                 
             for piste in self.pisteet:
                 self.alkupiste = piste[0]
@@ -169,11 +169,12 @@ class RoboNolla:
     
 
     def peli_lapi(self, montako):
-        alkupiste = []     # piirretään voittoviiva
+        self.alkupiste = (0, 0)
+        self.loppupiste = (0, 0)
 
         def onko_vaaka(pelaaja):
             perakkaisia = 0
-            alkupiste = []              
+            alkupiste = []        # piirretään voittoviiva        
             for y in range(self.korkeus):
                 for x in range(self.leveys):
                     if self.kartta[y][x] == pelaaja:
@@ -228,12 +229,12 @@ class RoboNolla:
             alkupiste = []  
             x_jatko = 0
             y_jatko = 0
-            for y in range(self.korkeus - 4):   # 5 sarja vika mahdollisuus alkaa
+            for y in range(self.korkeus - montako -1):   # 5 sarja vika mahdollisuus alkaa
                 for x in range(self.leveys):
                     if self.kartta[y][x] == pelaaja:
                         x_jatko = x 
                         y_jatko = y      
-                        for i in range(4):   # oik. alas   
+                        for i in range(montako -1):   # oik. alas   
                             if x_jatko < len(self.kartta) -1:                           
                                 if self.kartta[y_jatko+1][x_jatko+1] == pelaaja:         
                                     perakkaisia += 1
@@ -258,7 +259,7 @@ class RoboNolla:
 
                         y_jatko = y   # vas. alas
                         x_jatko = x
-                        for i in range(4):   
+                        for i in range(montako -1):   
                             if self.kartta[y_jatko+1][x_jatko-1] == pelaaja:                                
                                 perakkaisia += 1        
                                 y_jatko += 1
@@ -269,9 +270,8 @@ class RoboNolla:
                             if perakkaisia == 1:
                                 alkupiste.append((x, y))
                             if perakkaisia == montako -1:
-                                a_x, a_y = alkupiste[0]
-                                self.alkupiste = (a_x + 1, a_y)
-                                self.loppupiste = (x_jatko -1, y_jatko)   
+                                self.alkupiste = alkupiste[0]
+                                self.loppupiste = (x_jatko, y_jatko) 
                                 if montako == self.montako_kerataan :
                                     self.viivansuunta = "diagonaali"    
                                     return True
