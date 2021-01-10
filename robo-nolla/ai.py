@@ -77,6 +77,7 @@ class Ai:
         self.kartta = kartta
         self.vaaka()
         self.pysty()
+        self.diagonaali_oikealle()
         self.loytyi_paikka = False
         s = sorted(self.kaikki_suorat, key=lambda x: x[0], reverse = True)         
         #print(s)
@@ -112,8 +113,20 @@ class Ai:
                     self.kartta[y][x] = 1 
                     break
 
-
-
+    """   TODO
+    def onko_ykkosluokkaa_vaaka():
+            ykkosluokkaa = False
+            x_alku = self.alkupiste[0] -1
+            x_loppu = self.loppupiste[0] +1
+            y = self.alkupiste[1]
+            if x_alku >= 0 and x_loppu < self.korkeus:
+                if self.kartta[y][x_alku]  == 0 and self.kartta[y][x_loppu] == 0:
+                    print("x_alku", x_alku, "x_loppu", x_loppu, y)
+                    #print("kartta @ onko_ykkosluokkaa_vaaka:", self.kartta)
+                    #print("kartta:", self.kartta[x_alku][y], self.kartta[x_loppu][y])
+                    ykkosluokkaa = True
+            return ykkosluokkaa
+    """
     def mahtuuko_5_vaaka(self, perakkaisia, alkupiste, loppupiste):   
             x_raja = 4 - perakkaisia
             #print(alkupiste[1], x_raja, self.leveys - loppupiste[1])   
@@ -123,7 +136,6 @@ class Ai:
             return True     
 
     def vaaka(self):
-
         perakkaisia = 0  
         alkupiste = (4, 4)          # ekan robotin sijainti
         loppupiste = (4, 4)  
@@ -137,8 +149,8 @@ class Ai:
                     # lisätään potentiaaliset uudet sijainnit, jos kartalla:
                     alku_x = alkupiste[1]
                     loppu_x = loppupiste[1]
-                    if alku_x >= 0 or loppu_x < self.korkeus :
-                        if self.mahtuuko_5_vaaka(perakkaisia, alkupiste, loppupiste) and self.mahtuuko_5_pysty(perakkaisia, alkupiste, loppupiste):   
+                    if alku_x >= 0 or loppu_x < self.korkeus :                    # oli: and
+                        if self.mahtuuko_5_vaaka(perakkaisia, alkupiste, loppupiste) or self.mahtuuko_5_pysty(perakkaisia, alkupiste, loppupiste):   
                             self.kaikki_suorat.append([perakkaisia, alkupiste, loppupiste])
                 else:
                     perakkaisia = 0 
@@ -153,7 +165,6 @@ class Ai:
             return True
 
     def pysty(self):
-
         perakkaisia = 0  
         alkupiste = (4, 4)   
         loppupiste = (4, 4)  
@@ -167,10 +178,51 @@ class Ai:
                     # lisätään potentiaaliset uudet sijainnit, jos kartalla:
                     alku_y = alkupiste[0]
                     loppu_y = loppupiste[0]
-                    if alku_y >= 0 or loppu_y < self.korkeus :
-                        if self.mahtuuko_5_pysty(perakkaisia, alkupiste, loppupiste) and self.mahtuuko_5_pysty(perakkaisia, alkupiste, loppupiste):  
+                    if alku_y >= 0 or loppu_y < self.korkeus :                  # oli: and
+                        if self.mahtuuko_5_pysty(perakkaisia, alkupiste, loppupiste) or self.mahtuuko_5_vaaka(perakkaisia, alkupiste, loppupiste):  
                             self.kaikki_suorat.append([perakkaisia, alkupiste, loppupiste])
                 else:
                     perakkaisia = 0 
 
+    def mahtuuko_5_d_oik(self, perakkaisia, alkupiste, loppupiste):   
+            y_raja = 4 - perakkaisia
+            x_raja = 4 - perakkaisia
+            #print(alkupiste[0], y_raja, self.leveys - loppupiste[0])       # alkupiste = y, x
+
+            if (alkupiste[0] < y_raja or self.korkeus - loppupiste[0] < y_raja) and (alkupiste[1] < x_raja or self.leveys - loppupiste[1] < x_raja) :
+                return False
+            return True
+
+    def diagonaali_oikealle(self):
+        perakkaisia = 0  
+        x_jatko = 0 
+        y_jatko = 0     
+        alkupiste = (4, 4)          # ekan robotin sijainti
+        loppupiste = (4, 4)  
+        for y in range(self.korkeus):
+            for x in range(self.leveys):
+                if self.kartta[y][x] == 1:             # robotti = 1
+                    perakkaisia = 1
+                    alkupiste = (y -1 , x - 1)
+                    x_jatko = x 
+                    y_jatko = y      
+                    for i in range(3):   # oik. alas   
+                        if x_jatko + 1 < len(self.kartta) -1:                           
+                            if self.kartta[y_jatko+1][x_jatko+1] == 1:         
+                                perakkaisia += 1  
+                                loppupiste = (y + 1 , x + 1)
+                                # lisätään potentiaaliset uudet sijainnit, jos kartalla:
+                                alku_x = alkupiste[1]
+                                loppu_x = loppupiste[1]
+                                if alku_x >= 0 or loppu_x < self.korkeus :
+                                    if self.mahtuuko_5_d_oik(perakkaisia, alkupiste, loppupiste) :   
+                                        print(perakkaisia, alkupiste, loppupiste)
+                                        self.kaikki_suorat.append([perakkaisia, alkupiste, loppupiste])                             
+                                
+                            y_jatko += 1
+                            x_jatko += 1
+                    
+                    
+                else:
+                    perakkaisia = 0 
             

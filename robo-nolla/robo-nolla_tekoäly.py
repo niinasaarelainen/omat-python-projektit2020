@@ -59,11 +59,11 @@ class RoboNolla:
         if self.vuorossa == "robo":
             self.vuorossa = "nolla"
 
+            """
             # estetään nollan neljän suorat....
             self.pisteet = []
-            lapi4, lapi_teksti = self.peli_lapi(4)    
+            lapi4, lapi_teksti = self.peli_lapi(4)    # neljän suoria ei tartte sortata (jos useita, häviää joka tapauksessa)
             print(self.pisteet)
-
 
             for piste in self.pisteet:
                 self.alkupiste = piste[0]
@@ -75,15 +75,11 @@ class RoboNolla:
                         self.kartta = self.ai.anna_kartta()
                         return
             
-            # estetään nollan kolmen suorat....
+            # ...... estetään nollan kolmen suorat....
             self.pisteet = []
-            lapi3, lapi_teksti = self.peli_lapi(3)    
-
-
-            ### testing
-            self.pisteet = sorted(self.pisteet, key=lambda piste: piste[2])   # True / False
+            lapi3, lapi_teksti = self.peli_lapi(3)  
+            self.pisteet = sorted(self.pisteet, key=lambda piste: piste[2], reverse= True)   # Truet ekaksi
             print(self.pisteet)
-
 
             for piste in self.pisteet:
                 self.alkupiste = piste[0]
@@ -92,9 +88,9 @@ class RoboNolla:
                 if self.ai.esta_4_tai_3(self.alkupiste, self.loppupiste, self.kartta):                        
                     print("3 suoritettu")
                     self.kartta = self.ai.anna_kartta()
-                    print(self.kartta)
                     return 
 
+            """
             # ... tai laitetaan robo parhaimpaan paikkaan
             print( " ai.tutki \n")
             self.ai.tutki(self.kartta)                    
@@ -257,6 +253,18 @@ class RoboNolla:
                 alkupiste = []
             return False    
 
+
+        def onko_ykkosluokkaa_d_oik():
+            ykkosluokkaa = False
+            x_alku = self.alkupiste[0] -1
+            x_loppu = self.loppupiste[0] +1
+            y_alku = self.alkupiste[1] -1
+            y_loppu = self.loppupiste[1] +1
+            if x_alku >= 0 and x_loppu < self.korkeus and y_alku >= 0 and y_loppu < self.korkeus:
+                if self.kartta[y_alku][x_alku]  == 0 and self.kartta[y_loppu][x_loppu] == 0:
+                    ykkosluokkaa = True
+            return ykkosluokkaa
+
         def onko_diagonaali_oikealle(pelaaja):
             perakkaisia = 0
             alkupiste = []  
@@ -285,7 +293,7 @@ class RoboNolla:
                                         self.viivansuunta = "diagonaali"     
                                         return True
                                     else:
-                                        self.pisteet.append([self.alkupiste, self.loppupiste, False])    # TODO
+                                        self.pisteet.append([self.alkupiste, self.loppupiste, onko_ykkosluokkaa_d_oik()])    
                                         self.alkupiste = (0, 0)
                                         self.loppupiste = (0, 0)
                                         perakkaisia = 0  
@@ -297,6 +305,17 @@ class RoboNolla:
                 alkupiste = []
             return False  
 
+
+        def onko_ykkosluokkaa_d_vas():
+            ykkosluokkaa = False
+            x_alku = self.alkupiste[0] +1
+            x_loppu = self.loppupiste[0] -1
+            y_alku = self.alkupiste[1] -1
+            y_loppu = self.loppupiste[1] +1
+            if x_alku >= 0 and x_loppu < self.korkeus and y_alku >= 0 and y_loppu < self.korkeus:
+                if self.kartta[y_alku][x_alku]  == 0 and self.kartta[y_loppu][x_loppu] == 0:
+                    ykkosluokkaa = True
+            return ykkosluokkaa
 
         def onko_diagonaali_vasemmalle(pelaaja):
             perakkaisia = 0
@@ -325,7 +344,7 @@ class RoboNolla:
                                     self.viivansuunta = "diagonaali"    
                                     return True
                                 else:                                    
-                                    self.pisteet.append([self.alkupiste, self.loppupiste, False])   # TODO
+                                    self.pisteet.append([self.alkupiste, self.loppupiste, onko_ykkosluokkaa_d_vas()])   
                                     self.alkupiste = (0, 0)
                                     self.loppupiste = (0, 0)
                                     perakkaisia = 0 
