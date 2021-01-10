@@ -3,17 +3,22 @@ import random
 class Ai:
 
     def __init__(self, korkeus, leveys):
-        self.pisin_suora = []   # useita listoja, laitetaan aina kun perakkaisia_ennatys tulee
+        self.kaikki_suorat = []  
         self.korkeus = korkeus
         self.leveys = leveys
+        self.kartta = []
 
 
     def nollaa(self):
-        self.pisin_suora = []
+        self.kaikki_suorat = []
+
+    def anna_kartta(self):
+        return self.kartta
 
 
     # tänne tulee nykyinen alku- ja loppupiste. Pitää ensin tutkia onko pysty-vai mikä
-    def esta_4_tai_3(self, alkup, loppup):   
+    def esta_4_tai_3(self, alkup, loppup, kartta):   
+        self.kartta = kartta
         #print(alkup, loppup)        # huom! molemmat x, y  EI  y, x !!!!!!!!!
         # vaaka:
         if alkup[1] == loppup[1]:
@@ -28,6 +33,7 @@ class Ai:
                 if self.kartta[y][x_loppu] == 0:
                     self.kartta[y][x_loppu] = 1     # huom!  [y][x]
                     return True
+                    
         # pysty:
         if alkup[0] == loppup[0]:
             x = alkup[0]            # molemmissa sama x
@@ -42,8 +48,8 @@ class Ai:
                     self.kartta[y_loppu][x] = 1     # huom!  [y][x]
                     return True
 
-        # pakko olla diagonaali:
-        else:
+        # diagonaali:
+        if not alkup[1] == loppup[1] and not alkup[0] == loppup[0]:
             y_alku = alkup[1] - 1   # huom! molemmat x, y  EI  y, x !!!!!!!!!
             y_loppu = loppup[1] + 1
             x_alku = alkup[0] 
@@ -72,7 +78,7 @@ class Ai:
         self.vaaka()
         self.pysty()
         self.loytyi_paikka = False
-        s = sorted(self.pisin_suora, key=lambda x: x[0], reverse = True)         
+        s = sorted(self.kaikki_suorat, key=lambda x: x[0], reverse = True)         
         #print(s)
 
         for i in range(len(s)):
@@ -95,7 +101,7 @@ class Ai:
                         self.kartta[y2][x2] = 1 
                         self.loytyi_paikka = True
                         break                
-        self.pisin_suora = []
+        self.kaikki_suorat = []
 
         if not self.loytyi_paikka:
             while True:
@@ -133,7 +139,7 @@ class Ai:
                     loppu_x = loppupiste[1]
                     if alku_x >= 0 or loppu_x < self.korkeus :
                         if self.mahtuuko_5_vaaka(perakkaisia, alkupiste, loppupiste) and self.mahtuuko_5_pysty(perakkaisia, alkupiste, loppupiste):   
-                            self.pisin_suora.append([perakkaisia, alkupiste, loppupiste])
+                            self.kaikki_suorat.append([perakkaisia, alkupiste, loppupiste])
                 else:
                     perakkaisia = 0 
 
@@ -163,7 +169,7 @@ class Ai:
                     loppu_y = loppupiste[0]
                     if alku_y >= 0 or loppu_y < self.korkeus :
                         if self.mahtuuko_5_pysty(perakkaisia, alkupiste, loppupiste) and self.mahtuuko_5_pysty(perakkaisia, alkupiste, loppupiste):  
-                            self.pisin_suora.append([perakkaisia, alkupiste, loppupiste])
+                            self.kaikki_suorat.append([perakkaisia, alkupiste, loppupiste])
                 else:
                     perakkaisia = 0 
 

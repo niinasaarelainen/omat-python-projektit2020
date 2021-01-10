@@ -52,7 +52,7 @@ class RoboNolla:
         while True:
             self.tutki_tilanne()            
             self.piirra_naytto()
-
+    
 
     def tutki_tilanne(self):          
 
@@ -64,32 +64,39 @@ class RoboNolla:
             lapi4, lapi_teksti = self.peli_lapi(4)    
             print(self.pisteet)
 
+
             for piste in self.pisteet:
                 self.alkupiste = piste[0]
                 self.loppupiste = piste[1]
                 if not self.pisteet == [] :
-                    print("4")
-                    if self.ai.esta_4_tai_3(self.alkupiste, self.loppupiste):    
-                        print("4")
+                    print("  4:   self.alkupiste", self.alkupiste, "self.loppupiste", self.loppupiste )  
+                    if self.ai.esta_4_tai_3(self.alkupiste, self.loppupiste, self.kartta):    
+                        print("4 suoritettu")
+                        self.kartta = self.ai.anna_kartta()
                         return
             
             # estetään nollan kolmen suorat....
             self.pisteet = []
             lapi3, lapi_teksti = self.peli_lapi(3)    
+
+
+            ### testing
+            self.pisteet = sorted(self.pisteet, key=lambda piste: piste[2])   # True / False
             print(self.pisteet)
-                
+
+
             for piste in self.pisteet:
                 self.alkupiste = piste[0]
                 self.loppupiste = piste[1]       
-                print("self.alkupiste", self.alkupiste, "self.loppupiste", self.loppupiste )         
-                if not self.pisteet == [] :
-                    print("3")
-                    if self.ai.esta_4_tai_3(self.alkupiste, self.loppupiste):     # TODO diagonaali                    
-                        print("3")
-                        return 
+                print("      3 :self.alkupiste", self.alkupiste, "self.loppupiste", self.loppupiste )  
+                if self.ai.esta_4_tai_3(self.alkupiste, self.loppupiste, self.kartta):                        
+                    print("3 suoritettu")
+                    self.kartta = self.ai.anna_kartta()
+                    print(self.kartta)
+                    return 
 
             # ... tai laitetaan robo parhaimpaan paikkaan
-            print( " se on moro = tutki seuraavana\n")
+            print( " ai.tutki \n")
             self.ai.tutki(self.kartta)                    
             
 
@@ -135,7 +142,7 @@ class RoboNolla:
         teksti = self.fontti_pieni.render("F2 = uusi peli", True, (255, 0, 0))
         self.naytto.blit(teksti, (250, self.korkeus * self.skaala + 60))
 
-        
+        """
         lapi, lapi_teksti = self.peli_lapi(self.montako_kerataan)
         if lapi:
             teksti = self.fontti_iso.render(lapi_teksti, True, (255, 0, 0))
@@ -161,9 +168,8 @@ class RoboNolla:
                 alku_y = self.alkupiste[1] * self.skaala 
                 loppu_x = self.loppupiste[0] * self.skaala + self.skaala
                 loppu_y = self.loppupiste[1] * self.skaala + self.skaala
-                pygame.draw.line(self.naytto, (0, 0, 0), (alku_x, alku_y ), (loppu_x, loppu_y), 4)
-        
-
+                pygame.draw.line(self.naytto, (0, 0, 0), (alku_x, alku_y ), (loppu_x, loppu_y), 4)        
+        """
         pygame.display.flip()
 
     
@@ -171,6 +177,19 @@ class RoboNolla:
     def peli_lapi(self, montako):
         self.alkupiste = (0, 0)
         self.loppupiste = (0, 0)
+
+        def onko_ykkosluokkaa_vaaka():
+            ykkosluokkaa = False
+            x_alku = self.alkupiste[0] -1
+            x_loppu = self.loppupiste[0] +1
+            y = self.alkupiste[1]
+            if x_alku >= 0 and x_loppu < self.korkeus:
+                if self.kartta[y][x_alku]  == 0 and self.kartta[y][x_loppu] == 0:
+                    print("x_alku", x_alku, "x_loppu", x_loppu, y)
+                    #print("kartta @ onko_ykkosluokkaa_vaaka:", self.kartta)
+                    #print("kartta:", self.kartta[x_alku][y], self.kartta[x_loppu][y])
+                    ykkosluokkaa = True
+            return ykkosluokkaa
 
         def onko_vaaka(pelaaja):
             perakkaisia = 0
@@ -187,16 +206,28 @@ class RoboNolla:
                             if montako == self.montako_kerataan :
                                 self.viivansuunta = "vaaka"                         
                                 return True
-                            else:
-                                self.pisteet.append([self.alkupiste, self.loppupiste])
+                            else:     
+                                self.pisteet.append([self.alkupiste, self.loppupiste,  onko_ykkosluokkaa_vaaka()])    # !!!!!!
                                 self.alkupiste = (0, 0)
                                 self.loppupiste = (0, 0)
                                 perakkaisia = 0  
+                                alkupiste = []
                     else:
                         perakkaisia = 0   
                         alkupiste = []   
                 perakkaisia = 0    # muuten vaakasuora voi jatkua riviltä toiselle !
+                alkupiste = []
             return False    
+
+        def onko_ykkosluokkaa_pysty():
+            ykkosluokkaa = False
+            y_alku = self.alkupiste[1] -1
+            y_loppu = self.loppupiste[1] +1
+            x = self.alkupiste[0]
+            if y_alku >= 0 and y_alku < self.korkeus:
+                if self.kartta[y_alku][x]  == 0 and self.kartta[y_loppu][x] == 0:
+                    ykkosluokkaa = True
+            return ykkosluokkaa
 
         def onko_pysty(pelaaja):
             perakkaisia = 0
@@ -210,26 +241,28 @@ class RoboNolla:
                         if perakkaisia == montako:
                             self.alkupiste = alkupiste[0]
                             self.loppupiste = (y, x) 
-                            if montako == self.montako_kerataan :
+                            if montako == self.montako_kerataan :     
                                 self.viivansuunta = "pysty"  
                                 return True
                             else:
-                                self.pisteet.append([self.alkupiste, self.loppupiste])
+                                self.pisteet.append([self.alkupiste, self.loppupiste, onko_ykkosluokkaa_pysty()])
                                 self.alkupiste = (0, 0)
                                 self.loppupiste = (0, 0)
                                 perakkaisia = 0  
+                                alkupiste = []
                     else:
                         perakkaisia = 0    
                         alkupiste = []  
                 perakkaisia = 0
+                alkupiste = []
             return False    
 
-        def onko_diagonaali(pelaaja):
+        def onko_diagonaali_oikealle(pelaaja):
             perakkaisia = 0
             alkupiste = []  
             x_jatko = 0
             y_jatko = 0
-            for y in range(self.korkeus - montako -1):   # 5 sarja vika mahdollisuus alkaa
+            for y in range(self.korkeus - montako):       # oli -1
                 for x in range(self.leveys):
                     if self.kartta[y][x] == pelaaja:
                         x_jatko = x 
@@ -245,18 +278,34 @@ class RoboNolla:
                                     alkupiste = []   
                                 if perakkaisia == 1:
                                     alkupiste.append((x, y))
-                                if perakkaisia == montako -1:
+                                if perakkaisia == montako -1:  # -1 eri laskusysteemi kuin pysty-vaaka
                                     self.alkupiste = alkupiste[0]
                                     self.loppupiste = (x_jatko, y_jatko)
-                                    if montako == self.montako_kerataan :
+                                    if montako == self.montako_kerataan : 
                                         self.viivansuunta = "diagonaali"     
                                         return True
                                     else:
-                                        self.pisteet.append([self.alkupiste, self.loppupiste])
+                                        self.pisteet.append([self.alkupiste, self.loppupiste, False])    # TODO
                                         self.alkupiste = (0, 0)
                                         self.loppupiste = (0, 0)
                                         perakkaisia = 0  
+                                        alkupiste = []
+                    else:
+                        perakkaisia = 0   
+                        alkupiste = []
+                perakkaisia = 0
+                alkupiste = []
+            return False  
 
+
+        def onko_diagonaali_vasemmalle(pelaaja):
+            perakkaisia = 0
+            alkupiste = []  
+            x_jatko = 0
+            y_jatko = 0
+            for y in range(self.korkeus - montako):     # oli -1
+                for x in range(self.leveys):
+                    if self.kartta[y][x] == pelaaja:
                         y_jatko = y   # vas. alas
                         x_jatko = x
                         for i in range(montako -1):   
@@ -269,28 +318,31 @@ class RoboNolla:
                                 alkupiste = []   
                             if perakkaisia == 1:
                                 alkupiste.append((x, y))
-                            if perakkaisia == montako -1:
+                            if perakkaisia == montako -1:   # -1 eri laskusysteemi kuin pysty-vaaka
                                 self.alkupiste = alkupiste[0]
                                 self.loppupiste = (x_jatko, y_jatko) 
                                 if montako == self.montako_kerataan :
                                     self.viivansuunta = "diagonaali"    
                                     return True
-                                else:
-                                    self.pisteet.append([self.alkupiste, self.loppupiste])
+                                else:                                    
+                                    self.pisteet.append([self.alkupiste, self.loppupiste, False])   # TODO
                                     self.alkupiste = (0, 0)
                                     self.loppupiste = (0, 0)
-                                    perakkaisia = 0  
+                                    perakkaisia = 0 
+                                    alkupiste = [] 
                     else:
                         perakkaisia = 0   
+                        alkupiste = []
                 perakkaisia = 0
+                alkupiste = []
             return False  
 
-        if onko_vaaka(2) or onko_pysty(2) or onko_diagonaali(2):   # ["tyhja", "robo", "nolla"]
+        # ["tyhja", "robo", "nolla"]
+        if onko_vaaka(2) or onko_pysty(2) or onko_diagonaali_oikealle(2) or onko_diagonaali_vasemmalle(2):   
             return True, "Nolla voitti"
 
-        if montako == self.montako_kerataan and (onko_vaaka(1) or onko_pysty(1) or onko_diagonaali(1)):   # ["tyhja", "robo", "nolla"]
-            return True, "Robo voitti"
-        
+        if montako == self.montako_kerataan and (onko_vaaka(1) or onko_pysty(1) or onko_diagonaali_oikealle(1) or onko_diagonaali_vasemmalle(1)):  
+            return True, "Robo voitti"        
         
         return False, ""
 
