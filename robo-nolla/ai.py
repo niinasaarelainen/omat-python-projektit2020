@@ -199,7 +199,7 @@ class Ai:
         y_jatko = 0     
         alkupiste = (4, 4)          # ekan robotin sijainti
         loppupiste = (4, 4)  
-        for y in range(self.korkeus):
+        for y in range(self.korkeus -3):
             for x in range(self.leveys):
                 if self.kartta[y][x] == 1:             # robotti = 1
                     perakkaisia = 1
@@ -214,15 +214,15 @@ class Ai:
                                 # lisätään potentiaaliset uudet sijainnit, jos kartalla:
                                 alku_x = alkupiste[1]
                                 loppu_x = loppupiste[1]
-                                if alku_x >= 0 or loppu_x < self.korkeus :
+                                alku_y = alkupiste[0]
+                                loppu_y = loppupiste[0]
+                                if (alku_x >= 0 or loppu_x < self.korkeus) and (alku_y >= 0 or loppu_y < self.korkeus) :
                                     if self.mahtuuko_5_d_oik(perakkaisia, alkupiste, loppupiste) :   
                                         print(perakkaisia, alkupiste, loppupiste)
                                         self.kaikki_suorat.append([perakkaisia, alkupiste, loppupiste])                             
                                 
                             y_jatko += 1
-                            x_jatko += 1
-                    
-                    
+                            x_jatko += 1 
                 else:
                     perakkaisia = 0 
             
