@@ -81,6 +81,7 @@ class Ai:
         self.loytyi_paikka = False                                     
 
         kp = self.leveys // 2    # self.kaikki_suorat = [perakkaisia, alkupiste, loppupiste]
+        print(kp)
         s = sorted(self.kaikki_suorat, key=lambda x: (-x[0], abs(x[2][0] - kp) + abs(x[2][1] - kp)))  # 1) eniten perkäkkäisiä
                                                                                                      # 2) keskeisin loppup. sij. ryhmän sisällä 
         #sama_maara_perakkaisia = [piste for  piste in s if piste[0] == s[0][0] ]       
@@ -90,7 +91,7 @@ class Ai:
             kokelas = s[i]  
             print("kokelas", kokelas)
             if not kokelas == []:
-                print("abs", abs(kokelas[2][0] - kp) + abs(kokelas[2][1] - kp) ,  abs(kokelas[1][0] - kp) + abs(kokelas[1][1] - kp))
+                print("abs", abs(kokelas[1][0] - kp) , abs(kokelas[1][1] - kp) ,  abs(kokelas[2][0] - kp) , abs(kokelas[2][1] - kp))
                 if abs(kokelas[2][0] - kp) + abs(kokelas[2][1] - kp) < abs(kokelas[1][0] - kp) + abs(kokelas[1][1] - kp):
                     y = kokelas[2][0]   # loppupiste
                     x = kokelas[2][1]
@@ -249,8 +250,10 @@ class Ai:
                                     print(perakkaisia, alkupiste, loppupiste)
                                     self.kaikki_suorat.append([perakkaisia, alkupiste, loppupiste])                             
                                 
-                            y_jatko += 1
-                            x_jatko += 1 
+                                y_jatko += 1
+                                x_jatko += 1 
+                            else:
+                                perakkaisia = 0
                 else:
                     perakkaisia = 0 
             
