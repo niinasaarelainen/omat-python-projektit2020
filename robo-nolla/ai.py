@@ -75,8 +75,8 @@ class Ai:
     # tänne tulee valmiiksi potentiaaliset uudet pisteet
     def tutki(self, kartta):        
         self.kartta = kartta
-        self.vaaka()
-        self.pysty()
+        #self.vaaka()
+        #self.pysty()
         self.diagonaali_oikealle()
         self.diagonaali_vasemmalle()
         self.loytyi_paikka = False                                     
@@ -84,12 +84,10 @@ class Ai:
         kp = self.leveys // 2    # self.kaikki_suorat = [perakkaisia, alkupiste, loppupiste, onko_ykkösluokkaa]
         s = sorted(self.kaikki_suorat, key=lambda x: (-x[0], -x[3], abs(x[2][0] - kp) + abs(x[2][1] - kp)))  # 1) eniten perkäkkäisiä
                                                                                # 2) ykkösluokkaa  3) keskeisin loppup. sij. ryhmän sisällä 
-
-        print(s)
          
         for i in range(len(s)):
             kokelas = s[i]  
-            print("kokelas", kokelas)
+            #print(kokelas)
             if not kokelas == []:
                 #print("abs", abs(kokelas[1][0] - kp) , abs(kokelas[1][1] - kp) ,  abs(kokelas[2][0] - kp) , abs(kokelas[2][1] - kp))
                 if abs(kokelas[2][0] - kp) + abs(kokelas[2][1] - kp) < abs(kokelas[1][0] - kp) + abs(kokelas[1][1] - kp):
@@ -103,19 +101,15 @@ class Ai:
                     y2 = kokelas[2][0]   # loppupiste
                     x2 = kokelas[2][1]
 
-                if y >= 0 and y < self.korkeus and x >= 0 and x < self.korkeus:    # ensin loppupiste (yleensä)
-                    if self.kartta[y][x] == 0:
-                        print("x, y")
-                        self.kartta[y][x] = 1     # huom!  [y][x]
-                        self.loytyi_paikka = True
-                        break
+                if y >= 0 and y < self.korkeus and x >= 0 and x < self.korkeus and self.kartta[y][x] == 0:    # ensin loppupiste (yleensä)
+                    self.kartta[y][x] = 1     # huom!  [y][x]
+                    self.loytyi_paikka = True
+                    break
                     
-                if y2 >= 0 and y2 < self.korkeus and x2 >= 0 and x2 < self.korkeus:  # sitten alkupiste (yleensä)
-                    if self.kartta[y2][x2] == 0:
-                        print("x2, y2")
-                        self.kartta[y2][x2] = 1 
-                        self.loytyi_paikka = True
-                        break    
+                if y2 >= 0 and y2 < self.korkeus and x2 >= 0 and x2 < self.korkeus and self.kartta[y2][x2] == 0:  # sitten alkupiste (yleensä)
+                    self.kartta[y2][x2] = 1 
+                    self.loytyi_paikka = True
+                    break    
 
         self.kaikki_suorat = []
 
@@ -126,7 +120,9 @@ class Ai:
                 x = random.randint(1, self.leveys -2)
                 if self.kartta[y][x] == 0:
                     self.kartta[y][x] = 1 
+                    self.loytyi_paikka = True
                     break
+
         if not self.loytyi_paikka:
             while True:
                 # random reunat:
@@ -143,21 +139,20 @@ class Ai:
             x_loppu = loppupiste[0] +1
             y = alkupiste[1]
             if x_alku >= 0 and x_loppu < self.korkeus:
-                if self.kartta[y][x_alku]  == 0 and self.kartta[y][x_loppu] == 0:
-                    print("x_alku", x_alku, "x_loppu", x_loppu, y)
+                if self.kartta[y][x_alku]  == 0 and self.kartta[y][x_loppu] == 0 and y >= 0:
+                    #print("x_alku", x_alku, "x_loppu", x_loppu, y)
                     ykkosluokkaa = True
             return ykkosluokkaa
    
 
-    """ TODO:  nykyisin saattaa blokata ylh. alas / muun muodostuvan suoran
+    
     def mahtuuko_5_vaaka(self, perakkaisia, alkupiste, loppupiste):   
-            x_raja = 4 - perakkaisia
-            #print(alkupiste[1], x_raja, self.leveys - loppupiste[1])   
-
-            if alkupiste[1] < x_raja or self.leveys - loppupiste[1] < x_raja :
-                return False
-            return True     
-    """
+        x_raja = 4 - perakkaisia
+        if alkupiste[1] < x_raja or self.leveys - loppupiste[1] < x_raja :
+            print("mahtuuko_5_vaaka  EI", x_raja)
+            return False
+        return True     
+    
 
     def vaaka(self):
         perakkaisia = 0  
@@ -174,27 +169,26 @@ class Ai:
                     alku_x = alkupiste[1]
                     loppu_x = loppupiste[1]
                     if alku_x >= 0 or loppu_x < self.korkeus :                    # oli: and
-                        #if self.mahtuuko_5_vaaka(perakkaisia, alkupiste, loppupiste) or self.mahtuuko_5_pysty(perakkaisia, alkupiste, loppupiste):   
-                        self.kaikki_suorat.append([perakkaisia, alkupiste, loppupiste, self.onko_ykkosluokkaa_vaaka(alkupiste, loppupiste)])
+                        if self.mahtuuko_5_vaaka(perakkaisia, alkupiste, loppupiste): 
+                            self.kaikki_suorat.append([perakkaisia, alkupiste, loppupiste, self.onko_ykkosluokkaa_vaaka(alkupiste, loppupiste)])
                 else:
                     perakkaisia = 0 
 
-    """   TODO:  nykyisin saattaa blokata ylh. alas muodostuvan suoran
+   
     def mahtuuko_5_pysty(self, perakkaisia, alkupiste, loppupiste):   
-            y_raja = 4 - perakkaisia
-            #print(alkupiste[0], y_raja, self.leveys - loppupiste[0])   
-
-            if alkupiste[0] < y_raja or self.leveys - loppupiste[0] < y_raja :
-                return False
-            return True
-    """
+        y_raja = 4 - perakkaisia
+        if alkupiste[0] < y_raja or self.leveys - loppupiste[0] < y_raja :
+            print("mahtuuko_5_pysty  EI")
+            return False
+        return True
+    
 
     def onko_ykkosluokkaa_pysty(self, alkupiste, loppupiste):
             ykkosluokkaa = False
             y_alku = alkupiste[1] -1
             y_loppu = loppupiste[1] +1
             x = alkupiste[0]
-            if y_alku >= 0 and y_alku < self.korkeus:
+            if y_alku >= 0 and y_loppu < self.korkeus and x >= 0 :
                 if self.kartta[y_alku][x]  == 0 and self.kartta[y_loppu][x] == 0:
                     ykkosluokkaa = True
             return ykkosluokkaa
@@ -215,21 +209,20 @@ class Ai:
                     alku_y = alkupiste[0]
                     loppu_y = loppupiste[0]
                     if alku_y >= 0 or loppu_y < self.korkeus :                  # oli: and
-                    #    if self.mahtuuko_5_pysty(perakkaisia, alkupiste, loppupiste) or self.mahtuuko_5_vaaka(perakkaisia, alkupiste, loppupiste):  
-                        self.kaikki_suorat.append([perakkaisia, alkupiste, loppupiste, self.onko_ykkosluokkaa_pysty(alkupiste, loppupiste)])
+                        if self.mahtuuko_5_pysty(perakkaisia, alkupiste, loppupiste):  
+                            self.kaikki_suorat.append([perakkaisia, alkupiste, loppupiste, self.onko_ykkosluokkaa_pysty(alkupiste, loppupiste)])
                 else:
                     perakkaisia = 0 
 
-    """ TODO:  nykyisin saattaa blokata toisen suoran
-    def mahtuuko_5_d_oik(self, perakkaisia, alkupiste, loppupiste):   
+    
+    def mahtuuko_5_d(self, perakkaisia, alkupiste, loppupiste):   
             y_raja = 4 - perakkaisia
             x_raja = 4 - perakkaisia
-            #print(alkupiste[0], y_raja, self.leveys - loppupiste[0])       # alkupiste = y, x
-
-            if (alkupiste[0] < y_raja or self.korkeus - loppupiste[0] < y_raja) and (alkupiste[1] < x_raja or self.leveys - loppupiste[1] < x_raja) :
+            if (alkupiste[0] < y_raja or alkupiste[1] < x_raja or self.korkeus - loppupiste[0] < y_raja or self.leveys - loppupiste[1] < x_raja) :
+                #print("  NO DIAG.", y_raja, x_raja)
                 return False
             return True
-    """
+    
 
     def onko_ykkosluokkaa_d_oik(self, alkupiste, loppupiste):
             ykkosluokkaa = False
@@ -242,15 +235,17 @@ class Ai:
                     ykkosluokkaa = True
             return ykkosluokkaa
 
-    def diagonaali_oikealle(self):
+    def diagonaali_oikealle(self):  
+        print(self.kartta)
         perakkaisia = 0  
         x_jatko = 0 
         y_jatko = 0     
-        alkupiste = (4, 4)          # ekan robotin sijainti
+        alkupiste = (4, 4)          
         loppupiste = (4, 4)  
-        for y in range(self.korkeus -3):
+        for y in range(self.korkeus):     #  ÄLÄ  laita -3, koska esim oik. reuna voi olla diagonaalin _loppu_piste, ei vain alku-
             for x in range(self.leveys):
                 if self.kartta[y][x] == 1:             # robotti = 1
+                    print("diagonaali_oikealle", y, x)
                     perakkaisia = 1
                     alkupiste = (y -1 , x - 1)
                     x_jatko = x 
@@ -265,14 +260,25 @@ class Ai:
                                 loppu_x = loppupiste[1]
                                 alku_y = alkupiste[0]
                                 loppu_y = loppupiste[0]
+                                #print(alku_x, alku_y, "loppu:", loppu_x, loppu_y)
                                 if (alku_x >= 0 or loppu_x < self.korkeus) and (alku_y >= 0 or loppu_y < self.korkeus) :
-                                    #if self.mahtuuko_5_d_oik(perakkaisia, alkupiste, loppupiste) :   
-                                    print("oikealle", perakkaisia, alkupiste, loppupiste)
-                                    self.kaikki_suorat.append([perakkaisia, alkupiste, loppupiste, self.onko_ykkosluokkaa_d_oik(alkupiste, loppupiste)])        # TODO                       
+                                    if self.mahtuuko_5_d(perakkaisia, alkupiste, loppupiste) :   
+                                        self.kaikki_suorat.append([perakkaisia, alkupiste, loppupiste, self.onko_ykkosluokkaa_d_oik(alkupiste, loppupiste)])        # TODO                       
                                 
                                 y_jatko += 1
                                 x_jatko += 1 
                             else:
+                                loppupiste = (y_jatko + 1 , x_jatko + 1)
+                                # lisätään potentiaaliset uudet sijainnit, jos kartalla:
+                                alku_x = alkupiste[1]
+                                loppu_x = loppupiste[1]
+                                alku_y = alkupiste[0]
+                                loppu_y = loppupiste[0]
+                                #print(" ! else", alku_x, alku_y, "loppu:", loppu_x, loppu_y)
+                                if (alku_x >= 0 or loppu_x < self.korkeus) and (alku_y >= 0 or loppu_y < self.korkeus) :
+                                    if self.mahtuuko_5_d(perakkaisia, alkupiste, loppupiste) :   
+                                        self.kaikki_suorat.append([perakkaisia, alkupiste, loppupiste, self.onko_ykkosluokkaa_d_oik(alkupiste, loppupiste)])        # TODO                       
+                                
                                 perakkaisia = 0
                 else:
                     perakkaisia = 0 
@@ -314,9 +320,8 @@ class Ai:
                                 alku_y = alkupiste[0]
                                 loppu_y = loppupiste[0]
                                 if (alku_x >= 0 or loppu_x < self.korkeus) and (alku_y >= 0 or loppu_y < self.korkeus) :
-                                    #if self.mahtuuko_5_d_oik(perakkaisia, alkupiste, loppupiste) :   
-                                    print("vasemmalle", perakkaisia, alkupiste, loppupiste)
-                                    self.kaikki_suorat.append([perakkaisia, alkupiste, loppupiste, self.onko_ykkosluokkaa_d_vas(alkupiste, loppupiste)])        # TODO                      
+                                    if self.mahtuuko_5_d(perakkaisia, alkupiste, loppupiste) :  
+                                        self.kaikki_suorat.append([perakkaisia, alkupiste, loppupiste, self.onko_ykkosluokkaa_d_vas(alkupiste, loppupiste)])        # TODO                      
                                 
                                 y_jatko += 1
                                 x_jatko -= 1 

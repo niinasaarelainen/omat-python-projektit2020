@@ -92,7 +92,6 @@ class RoboNolla:
 
             """
             # ... tai laitetaan robo parhaimpaan paikkaan
-            print( " ai.tutki \n")
             self.ai.tutki(self.kartta)                    
             
 
