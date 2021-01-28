@@ -77,6 +77,7 @@ class Ai:
         self.kartta = kartta
         #self.vaaka()
         #self.pysty()
+        print()
         self.diagonaali_oikealle()
         self.diagonaali_vasemmalle()
         self.loytyi_paikka = False                                     
@@ -85,6 +86,8 @@ class Ai:
         s = sorted(self.kaikki_suorat, key=lambda x: (-x[0], -x[3], abs(x[2][0] - kp) + abs(x[2][1] - kp)))  # 1) eniten perkäkkäisiä
                                                                                # 2) ykkösluokkaa  3) keskeisin loppup. sij. ryhmän sisällä 
          
+        print(s)
+
         for i in range(len(s)):
             kokelas = s[i]  
             #print(kokelas)
@@ -215,28 +218,33 @@ class Ai:
                     perakkaisia = 0 
 
     
-    def mahtuuko_5_d(self, perakkaisia, alkupiste, loppupiste):   
-            y_raja = 4 - perakkaisia
-            x_raja = 4 - perakkaisia
-            if (alkupiste[0] < y_raja or alkupiste[1] < x_raja or self.korkeus - loppupiste[0] < y_raja or self.leveys - loppupiste[1] < x_raja) :
-                #print("  NO DIAG.", y_raja, x_raja)
-                return False
-            return True
+    def mahtuuko_5_d(self, perakkaisia, alkupiste, loppupiste):    # TODO check tyhjät !!!! mol. puolilta
+        y_raja = 4 - perakkaisia
+        x_raja = 4 - perakkaisia      # y, x !!!!!
+        if (alkupiste[0] < y_raja or alkupiste[1] < x_raja) and self.kartta[loppupiste[0]][loppupiste[1]] == 2:
+            print("  mahtuuko_5_d   eka if")
+            return False            
+            
+        if (self.korkeus - loppupiste[0] < y_raja or self.leveys - loppupiste[1] < x_raja) and self.kartta[alkupiste[0]][alkupiste[1]] == 2 :
+            print("  mahtuuko_5_d   toka if")
+            return False
+
+        print( perakkaisia, alkupiste, loppupiste)
+        return True
     
 
     def onko_ykkosluokkaa_d_oik(self, alkupiste, loppupiste):
             ykkosluokkaa = False
-            x_alku = alkupiste[0] -1
-            x_loppu = loppupiste[0] +1
-            y_alku = alkupiste[1] -1
-            y_loppu = loppupiste[1] +1
+            x_alku = alkupiste[1] -1
+            x_loppu = loppupiste[1] +1
+            y_alku = alkupiste[0] -1
+            y_loppu = loppupiste[0] +1
             if x_alku >= 0 and x_loppu < self.korkeus and y_alku >= 0 and y_loppu < self.korkeus:
                 if self.kartta[y_alku][x_alku]  == 0 and self.kartta[y_loppu][x_loppu] == 0:
                     ykkosluokkaa = True
             return ykkosluokkaa
 
     def diagonaali_oikealle(self):  
-        print(self.kartta)
         perakkaisia = 0  
         x_jatko = 0 
         y_jatko = 0     
@@ -245,7 +253,6 @@ class Ai:
         for y in range(self.korkeus):     #  ÄLÄ  laita -3, koska esim oik. reuna voi olla diagonaalin _loppu_piste, ei vain alku-
             for x in range(self.leveys):
                 if self.kartta[y][x] == 1:             # robotti = 1
-                    print("diagonaali_oikealle", y, x)
                     perakkaisia = 1
                     alkupiste = (y -1 , x - 1)
                     x_jatko = x 
@@ -275,7 +282,7 @@ class Ai:
                                 alku_y = alkupiste[0]
                                 loppu_y = loppupiste[0]
                                 #print(" ! else", alku_x, alku_y, "loppu:", loppu_x, loppu_y)
-                                if (alku_x >= 0 or loppu_x < self.korkeus) and (alku_y >= 0 or loppu_y < self.korkeus) :
+                                if (alku_x >= 0 or loppu_x < self.korkeus) and (alku_y >= 0 or loppu_y < self.korkeus) and perakkaisia > 0 :
                                     if self.mahtuuko_5_d(perakkaisia, alkupiste, loppupiste) :   
                                         self.kaikki_suorat.append([perakkaisia, alkupiste, loppupiste, self.onko_ykkosluokkaa_d_oik(alkupiste, loppupiste)])        # TODO                       
                                 
@@ -287,11 +294,11 @@ class Ai:
 
     def onko_ykkosluokkaa_d_vas(self, alkupiste, loppupiste):
             ykkosluokkaa = False
-            x_alku = alkupiste[0] +1
-            x_loppu = loppupiste[0] -1
-            y_alku = alkupiste[1] -1
-            y_loppu = loppupiste[1] +1
-            if x_alku >= 0 and x_loppu < self.korkeus and y_alku >= 0 and y_loppu < self.korkeus:
+            x_alku = alkupiste[1] +1
+            x_loppu = loppupiste[1] -1
+            y_alku = alkupiste[0] -1
+            y_loppu = loppupiste[0] +1
+            if x_alku >= 0 and x_loppu < self.korkeus and y_alku >= 0 and y_loppu < self.korkeus:    # TODO: ONKO OIKEIN  ??
                 if self.kartta[y_alku][x_alku]  == 0 and self.kartta[y_loppu][x_loppu] == 0:
                     ykkosluokkaa = True
             return ykkosluokkaa
@@ -302,7 +309,7 @@ class Ai:
         y_jatko = 0     
         alkupiste = (4, 4)          # ekan robotin sijainti
         loppupiste = (4, 4)  
-        for y in range(self.korkeus -3):
+        for y in range(self.korkeus):
             for x in range(self.leveys):
                 if self.kartta[y][x] == 1:             # robotti = 1
                     perakkaisia = 1
@@ -326,6 +333,17 @@ class Ai:
                                 y_jatko += 1
                                 x_jatko -= 1 
                             else:
+                                loppupiste = (y_jatko + 1 , x_jatko + 1)
+                                # lisätään potentiaaliset uudet sijainnit, jos kartalla:
+                                alku_x = alkupiste[1]
+                                loppu_x = loppupiste[1]
+                                alku_y = alkupiste[0]
+                                loppu_y = loppupiste[0]
+                                #print(" ! else", alku_x, alku_y, "loppu:", loppu_x, loppu_y)
+                                if (alku_x >= 0 or loppu_x < self.korkeus) and (alku_y >= 0 or loppu_y < self.korkeus) and perakkaisia > 0 :
+                                    if self.mahtuuko_5_d(perakkaisia, alkupiste, loppupiste) :   
+                                        self.kaikki_suorat.append([perakkaisia, alkupiste, loppupiste, self.onko_ykkosluokkaa_d_oik(alkupiste, loppupiste)])        # TODO                       
+                                
                                 perakkaisia = 0
                 else:
                     perakkaisia = 0 
