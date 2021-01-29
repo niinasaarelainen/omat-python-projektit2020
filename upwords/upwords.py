@@ -60,7 +60,7 @@ def tekstit():
             kirjain = ruudukko[rivi][sarake]
             if not kirjain == "":
                 kirjain = fontti.render(kirjain, True, WHITE)
-                SCREEN.blit(kirjain, ((sarake + 0.27) *blockSize , (rivi + 1.17) *blockSize)) 
+                SCREEN.blit(kirjain, ((sarake + 0.27) *blockSize , (rivi + 1.17) *blockSize))   
     
 
 def mika_kirjain(x):
@@ -90,25 +90,32 @@ def tutki_mouse(x, y, vuoro, kirjain):
     kirjain_ind = ""
     if vuoro % 4 == 1 and y < blockSize:
         kirjain_ind = mika_kirjain(x)
-        kirjain = sorted(pel1_7)[kirjain_ind]
+        kirjain = sorted(pel1_7)[kirjain_ind]       
     elif vuoro % 4 == 2 and y >= blockSize and y <= WINDOW_HEIGHT - blockSize:
         minne_kirjain(x, y, kirjain)
+        pel1_7.remove(kirjain)
+        if len(aakkoset) > 0:
+            pel1_7.append(uusi_nappi())
+
     elif vuoro % 4 == 3 and y > WINDOW_HEIGHT - blockSize:
         kirjain_ind = mika_kirjain(x)
         kirjain = sorted(pel2_7)[kirjain_ind]
     elif vuoro % 4 == 0 and y >= blockSize and y <= WINDOW_HEIGHT - blockSize:
         minne_kirjain(x, y, kirjain)
+        pel2_7.remove(kirjain)
+        if len(aakkoset) > 0:
+            pel2_7.append(uusi_nappi())
     return kirjain
 
 
 def main():
     pygame.init()    
-    SCREEN.fill(BLACK)
     tekstit()
     vuoro = 1
     kirjain = ""
 
-    while True:
+    while len(pel1_7) > 0 and len(pel2_7) > 0:        
+        SCREEN.fill(BLACK)
         drawGrid()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -119,20 +126,11 @@ def main():
                 kirjain = tutki_mouse(x, y, vuoro, kirjain)
                 vuoro += 1
             CLOCK.tick(1000)   
-            pygame.display.update()
             tekstit()
+            pygame.display.flip()
+            
         
-        """
-        if len(aakkoset) > 0:
-            if vuoro == 1:
-                pel1_7.append(uusi_nappi())
-                vuoro = 2
-            elif vuoro == 2:
-                pel2_7.append(uusi_nappi())
-                vuoro = 1
-        else:
-            print("napit loppu")
-        """
+    print("napit lopussa")
 
         
         
