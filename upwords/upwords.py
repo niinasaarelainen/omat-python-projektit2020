@@ -2,15 +2,18 @@ import pygame, random
 
 BLACK = (0, 0, 0)
 WHITE = (200, 200, 200)
-WINDOW_HEIGHT = 840
-WINDOW_WIDTH = 700
+GREEN = (0, 200, 20)
+WINDOW_HEIGHT = 910
+WINDOW_WIDTH = 770
 
 SCREEN = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 CLOCK = pygame.time.Clock()
 blockSize = 70 #Set the size of the grid block
-kirjainten_lkm = 10
+kirjainten_lkm = 11  # per rivi
 kirjainvali = 57
 
+pisteet_pel1 = 0
+pisteet_pel2 = 0
 aakkoset = list("AAAAABDEEEFGHHHIIIIIIIIIJJJKKKKKLLLLLMMMMNNNOOOOOOPPRRRSSSSTTTTUUUUUUUUVVVVVYYYÄÄÄÄÄÄÖÖÖÖ")
 #aakkoset = list("AAABDEEEFGHHIIIKLM")
 pel1_7 = []
@@ -69,13 +72,17 @@ def tekstit(vuoro):
     fontti = pygame.font.SysFont("FreeMono", 32)
     pel1_str = "  "
     pel1_str = pel1_str.join(sorted(pel1_7)) 
-    teksti = fontti.render(f"Pelaaja 1:   {pel1_str}", True, WHITE)
+    teksti = fontti.render(f"Pelaaja 1:   {pel1_str} ", True, WHITE)
+    pisteet = fontti.render(f"{pisteet_pel2}", True, GREEN)
     SCREEN.blit(teksti, (40, 20))
+    SCREEN.blit(pisteet, (WINDOW_WIDTH - 40, 20))
 
     pel2_str = "  "
     pel2_str = pel2_str.join(sorted(pel2_7)) 
     teksti = fontti.render(f"Pelaaja 2:   {pel2_str}", True, WHITE)
+    pisteet = fontti.render(f"{pisteet_pel2}", True, GREEN)
     SCREEN.blit(teksti, (40, WINDOW_HEIGHT - 50))
+    SCREEN.blit(pisteet, (WINDOW_WIDTH - 40, WINDOW_HEIGHT - 50))
 
     fontti = pygame.font.SysFont("FreeMono", 50)
     fontti_pieni = pygame.font.SysFont("FreeMono", 24)
@@ -101,7 +108,9 @@ def mika_kirjain(x):
     return indeksi
 
 
-def minne_kirjain(x, y, kirjain):
+def minne_kirjain(x, y, kirjain, vuoro):
+    global pisteet_pel1
+    global pisteet_pel2
     x_indeksi = 0
     y_indeksi = 0 
     for i in range(kirjainten_lkm):
@@ -112,11 +121,19 @@ def minne_kirjain(x, y, kirjain):
     if (x_indeksi, y_indeksi) not in kerrokset:
         kerrokset[x_indeksi, y_indeksi] = 1        
         ruudukko[y_indeksi][x_indeksi] = kirjain
+        if vuoro % 4 == 1 or vuoro % 4 == 2:
+            pisteet_pel1 += 2
+        else:
+            pisteet_pel2 += 2
     elif kerrokset[x_indeksi, y_indeksi] == 5:
         return False
     else:
         kerrokset[x_indeksi, y_indeksi] += 1        
         ruudukko[y_indeksi][x_indeksi] = kirjain
+        if vuoro % 4 == 1 or vuoro % 4 == 2:
+            pisteet_pel1 += 1
+        else:
+            pisteet_pel2 += 1
     return True
     
 
@@ -129,8 +146,9 @@ def tutki_mouse(x, y, vuoro, kirjain):
         vuoro += 1          
   
     elif vuoro % 4 == 2 and y >= blockSize and y <= WINDOW_HEIGHT - blockSize:
-        if minne_kirjain(x, y, kirjain):
-            pel1_7.remove(kirjain)
+        if minne_kirjain(x, y, kirjain, vuoro):
+            pel1_7.remove(kirjain)            
+            
         if len(aakkoset) > 0:
             pel1_7.append(uusi_nappi())
         vuoro -= 1   # oletus että lisätään useampi kuin 1 kirjain
@@ -141,7 +159,7 @@ def tutki_mouse(x, y, vuoro, kirjain):
         vuoro += 1 
 
     elif vuoro % 4 == 0 and y >= blockSize and y <= WINDOW_HEIGHT - blockSize:
-        if minne_kirjain(x, y, kirjain):
+        if minne_kirjain(x, y, kirjain, vuoro):
             pel2_7.remove(kirjain)
         if len(aakkoset) > 0:
             pel2_7.append(uusi_nappi())
