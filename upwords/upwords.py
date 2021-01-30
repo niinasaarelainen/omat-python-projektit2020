@@ -218,43 +218,60 @@ def tutki_edelliset_muuvit(edelliset_muuvit, pisteet):
         print("tuplapisteet")
         tuplapisteet = True
 
-    # tutkitaan vaakasuorassa sanan reunat   # TODO useampi nappi samassa suunnassa
+    # tutkitaan vaakasuorassa sanan reunat    # TODO entä jos vika nappi ei olekaan tupla ?? Annettu jo +2 edellisille !!!!
     x = x_t[0]
     while x > 0:
         if not ruudukko[y_t[0]][x - 1] == "":
             if kerrokset[x -1, y_t[0]] == 1 and tuplapisteet:   # 2 pistettä pohjakerroksesta, jos sana kokonaan 1-kerroksinen
                 pisteet += 2
+                print(" 1 tupla")
             else:
                 pisteet += kerrokset[x -1, y_t[0]]
                 print(" 1")
-        x -= 1 
-        print(x)
+            x -= 1 
+        else:
+            break
 
     x = x_t[-1] + 1
     while x < kirjainten_lkm :
-        print("x", x)
         if not ruudukko[y_t[-1]][x] == "":
             if kerrokset[x, y_t[-1]] == 1 and tuplapisteet:   # 2 pistettä pohjakerroksesta
                 pisteet += 2
+                print(" 2 tupla")
             else:
                 pisteet += kerrokset[x, y_t[-1]]
                 print(" 2")
-        x += 1 
+            x += 1
+        else:
+            break 
 
 
     # tutkitaan pystysuorassa sanan reunat
-    if y_t[0] > 0:
-        if not ruudukko[y_t[0] -1][x_t[0]] == "":
-            print(" 3")
-            pisteet += 1
-            if kerrokset[x_t[0], y_t[0] -1] == 1 and tuplapisteet:   # 2 pistettä pohjakerroksesta
-                pisteet += 1
-    if y_t[-1] < kirjainten_lkm -1:
-        if not ruudukko[y_t[-1] +1][x_t[0]] == "":
-            print(" 4")
-            pisteet += 1
-            if kerrokset[x_t[0], y_t[-1] +1] == 1 and tuplapisteet :   # 2 pistettä pohjakerroksesta
-                pisteet += 1
+    y = y_t[0]
+    while y > 0:
+        if not ruudukko[y -1][x_t[0]] == "":
+            if kerrokset[x_t[0], y -1] == 1 and tuplapisteet:   # 2 pistettä pohjakerroksesta, jos sana kokonaan 1-kerroksinen
+                pisteet += 2
+                print(" 3 tupla")
+            else:
+                pisteet += kerrokset[x_t[0], y -1]
+                print(" 3")
+            y -= 1 
+        else:
+            break
+
+    y = y_t[-1]
+    while y < kirjainten_lkm -1:
+        if not ruudukko[y +1][x_t[0]] == "":
+            if kerrokset[x_t[0], y +1] == 1 and tuplapisteet:   # 2 pistettä pohjakerroksesta, jos sana kokonaan 1-kerroksinen
+                pisteet += 2
+                print(" 4 tupla")
+            else:
+                pisteet += kerrokset[x_t[0], y +1]
+                print(" 3")
+            y += 1 
+        else:
+            break
         
             
     # sanan keskellä valmiina olleet napit
@@ -301,12 +318,10 @@ def main():
 
         # neliöidään valittu kirjain
         if kirjain_ind >= 0 and (vuoro % 4 == 1 or vuoro % 4 == 2):   #   -1 = ei tarvitse neliöidä
-            print("rect 1")
             rect = pygame.Rect(278 + kirjain_ind * kirjainvali , 19, blockSize // 2, blockSize // 2)
             pygame.draw.rect(SCREEN, WHITE, rect, 2)
             
         elif kirjain_ind >= 0 and (vuoro % 4 == 3 or vuoro % 4 == 0):
-            print("rect 2")
             rect = pygame.Rect(278 + kirjain_ind * kirjainvali , WINDOW_HEIGHT - 50, blockSize // 2, blockSize // 2)
             pygame.draw.rect(SCREEN, WHITE, rect, 2)
         CLOCK.tick(8000)   
