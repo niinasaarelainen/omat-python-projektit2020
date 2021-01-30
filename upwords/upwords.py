@@ -113,34 +113,6 @@ def minne_kirjain(x, y, kirjain, vuoro):
     x_indeksi = 0
     y_indeksi = 0 
 
-    """
-    def tutki_viereiset():
-        global pisteet_pel1
-        global pisteet_pel2
-        global edelliset_muuvit
-        def operoi(y, x):
-            global pisteet_pel1
-            global pisteet_pel2
-            if (x, y) in kerrokset and kerrokset[x, y] == 1:
-                if vuoro % 4 == 1 or vuoro % 4 == 2:
-                    pisteet_pel1 += 2
-                else:
-                    pisteet_pel2 += 2
-            else:
-                if vuoro % 4 == 3 or vuoro % 4 == 0:
-                    pisteet_pel1 += 1
-                else:
-                    pisteet_pel2 += 1
-        if not ruudukko[y_indeksi + 1][x_indeksi] == "":
-            operoi(y_indeksi + 1, x_indeksi)
-        if not ruudukko[y_indeksi - 1][x_indeksi] == "":
-            operoi(y_indeksi - 1, x_indeksi)
-        if not ruudukko[y_indeksi][x_indeksi + 1] == "":
-            operoi(y_indeksi, x_indeksi + 1)
-        if not ruudukko[y_indeksi][x_indeksi - 1] == "":
-            operoi(y_indeksi, x_indeksi - 1) """
-
-
     for i in range(kirjainten_lkm):
         if x > i * blockSize :
             x_indeksi = i
@@ -148,24 +120,13 @@ def minne_kirjain(x, y, kirjain, vuoro):
             y_indeksi = i
     if (x_indeksi, y_indeksi) not in kerrokset:
         kerrokset[x_indeksi, y_indeksi] = 1        
-        ruudukko[y_indeksi][x_indeksi] = kirjain
-        """
-        if vuoro % 4 == 1 or vuoro % 4 == 2:
-            pisteet_pel1 += 2
-        else:
-            pisteet_pel2 += 2"""
+        ruudukko[y_indeksi][x_indeksi] = kirjain        
     elif kerrokset[x_indeksi, y_indeksi] == 5:
         return False
     else:
         kerrokset[x_indeksi, y_indeksi] += 1        
-        ruudukko[y_indeksi][x_indeksi] = kirjain
-        """
-        if vuoro % 4 == 1 or vuoro % 4 == 2:
-            pisteet_pel1 += 1
-        else:
-            pisteet_pel2 += 1 """
+        ruudukko[y_indeksi][x_indeksi] = kirjain        
 
-    #tutki_viereiset()
     edelliset_muuvit.append([x_indeksi, y_indeksi])
     return True
     
@@ -297,6 +258,8 @@ def tutki_edelliset_muuvit_pysty(edelliset_muuvit):
     
     return pisteet_tama_kierros
 
+def vaihda_nappi():
+    kirjain_ind = mika_kirjain(x)
 
 
 def main():
@@ -333,6 +296,9 @@ def main():
                 else:
                     kirjain, kirjain_ind, vuoro_uusi = tutki_mouse(x, y, vuoro, kirjain)     
                     vuoro = vuoro_uusi  
+            if event.type == pygame.KEYDOWN: 
+                if chr(event.key) == "v":
+                    vaihda_nappi(x)
 
         # neliöidään valittu kirjain
         if kirjain_ind >= 0 and (vuoro % 4 == 1 or vuoro % 4 == 2):   #   -1 = ei tarvitse neliöidä
@@ -346,7 +312,15 @@ def main():
         pygame.display.flip()
             
         
-    print("napit lopussa")
+    SCREEN.fill(BLACK)
+    fontti_iso = pygame.font.SysFont("FreeMono", 56)
+    if pisteet_pel1 > pisteet_pel2:
+        teksti = fontti_iso.render(f"Pelaaja 1 voitti !!!", True, WHITE)
+        SCREEN.blit(teksti, (40, 20))
+    else:
+        teksti = fontti_iso.render(f"Pelaaja 2 voitti !!!", True, WHITE)
+        SCREEN.blit(teksti, (40, 20))
+    pygame.display.flip()
 
         
         
