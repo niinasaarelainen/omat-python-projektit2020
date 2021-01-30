@@ -204,17 +204,14 @@ def tutki_mouse(x, y, vuoro, kirjain):
     return kirjain, kirjain_ind, vuoro
 
 
-def tutki_edelliset_muuvit(edelliset_muuvit, pisteet):
+def tutki_edelliset_muuvit_vaaka(edelliset_muuvit):
     tuplapisteet = True
     pisteet_tama_kierros = 0
     x_t = [x for x, y in edelliset_muuvit]
     y_t = [y for x, y in edelliset_muuvit]
-    sanan_pituus = max(x_t[-1] - x_t[0] + 1, y_t[-1] - y_t[0] + 1)   # itse laitetut napi !!!!
-    print("sanan_pituus", sanan_pituus)
-    """
-    kerroksia_vain1 = [x for x, y in edelliset_muuvit if kerrokset[x, y] == 1]
-    print("kerroksia_vain1", kerroksia_vain1)
-    if len(kerroksia_vain1) == len(edelliset_muuvit):   # tuplapisteet """
+    sanan_pituus = x_t[-1] - x_t[0] + 1    # itse laitetut napi !!!!
+    print("sanan_pituus vaaka:", sanan_pituus)
+    
     for x, y in edelliset_muuvit:
         pisteet_tama_kierros += kerrokset[x, y]
         if kerrokset[x, y] > 1:
@@ -227,7 +224,8 @@ def tutki_edelliset_muuvit(edelliset_muuvit, pisteet):
             if kerrokset[x -1, y_t[0]] > 1 :   # 2 pistettä pohjakerroksesta, jos sana kokonaan 1-kerroksinen
                 tuplapisteet = False
             pisteet_tama_kierros += kerrokset[x -1, y_t[0]]
-            print(" 1")
+            sanan_pituus += 1
+            print(" vaaka vas")
             x -= 1 
         else:
             break
@@ -238,11 +236,34 @@ def tutki_edelliset_muuvit(edelliset_muuvit, pisteet):
             if kerrokset[x, y_t[-1]] > 1 :   # 2 pistettä pohjakerroksesta
                 tuplapisteet = False
             pisteet_tama_kierros += kerrokset[x, y_t[-1]]
-            print(" 2")
+            sanan_pituus += 1
+            print(" vaaka oik")
             x += 1
         else:
             break 
+        
+    if tuplapisteet:
+        pisteet_tama_kierros *= 2
+    
+    if sanan_pituus == 1:
+        return 0
+    
+    return pisteet_tama_kierros
 
+
+def tutki_edelliset_muuvit_pysty(edelliset_muuvit):
+    tuplapisteet = True
+    pisteet_tama_kierros = 0
+    x_t = [x for x, y in edelliset_muuvit]
+    y_t = [y for x, y in edelliset_muuvit]
+    sanan_pituus =  y_t[-1] - y_t[0] + 1   # itse laitetut napi !!!!
+    print("sanan_pituus", sanan_pituus)
+    
+    for x, y in edelliset_muuvit:
+        pisteet_tama_kierros += kerrokset[x, y]
+        if kerrokset[x, y] > 1:
+           tuplapisteet = False 
+    
     # tutkitaan pystysuorassa sanan reunat
     y = y_t[0]
     while y > 0:
@@ -250,7 +271,8 @@ def tutki_edelliset_muuvit(edelliset_muuvit, pisteet):
             if kerrokset[x_t[0], y -1] > 1 :   # 2 pistettä pohjakerroksesta, jos sana kokonaan 1-kerroksinen
                 tuplapisteet = False
             pisteet_tama_kierros += kerrokset[x_t[0], y -1]
-            print(" 3")
+            sanan_pituus += 1
+            print(" pysty ylä")
             y -= 1 
         else:
             break
@@ -261,7 +283,8 @@ def tutki_edelliset_muuvit(edelliset_muuvit, pisteet):
             if kerrokset[x_t[0], y +1] > 1 :   # 2 pistettä pohjakerroksesta, jos sana kokonaan 1-kerroksinen
                 tuplapisteet = False
             pisteet_tama_kierros += kerrokset[x_t[0], y +1]
-            print(" 3")
+            sanan_pituus += 1
+            print(" pysty ala")
             y += 1 
         else:
             break
@@ -269,8 +292,10 @@ def tutki_edelliset_muuvit(edelliset_muuvit, pisteet):
     if tuplapisteet:
         pisteet_tama_kierros *= 2
 
+    if sanan_pituus == 1:
+        return 0
     
-    return pisteet + pisteet_tama_kierros
+    return pisteet_tama_kierros
 
 
 
@@ -296,12 +321,14 @@ def main():
                 # vuoronvaihto
                 if  15 <= x <= 45  and  30 <= y <= 50:                    
                     vuoro += 2
-                    pisteet_pel1 = tutki_edelliset_muuvit(sorted(edelliset_muuvit), pisteet_pel1)
+                    pisteet_pel1 += tutki_edelliset_muuvit_vaaka(sorted(edelliset_muuvit))
+                    pisteet_pel1 += tutki_edelliset_muuvit_pysty(sorted(edelliset_muuvit))
                     edelliset_muuvit = []
                 elif 15 <= x <= 45  and  WINDOW_HEIGHT - 40 <= y <= WINDOW_HEIGHT - 10:
                     vuoro += 2
                     print(vuoro)
-                    pisteet_pel2 = tutki_edelliset_muuvit(sorted(edelliset_muuvit), pisteet_pel2)
+                    pisteet_pel2 += tutki_edelliset_muuvit_vaaka(sorted(edelliset_muuvit))
+                    pisteet_pel2 += tutki_edelliset_muuvit_pysty(sorted(edelliset_muuvit))
                     edelliset_muuvit = []
                 else:
                     kirjain, kirjain_ind, vuoro_uusi = tutki_mouse(x, y, vuoro, kirjain)     
