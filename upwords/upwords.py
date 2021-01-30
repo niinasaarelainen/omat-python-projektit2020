@@ -205,29 +205,29 @@ def tutki_mouse(x, y, vuoro, kirjain):
 
 
 def tutki_edelliset_muuvit(edelliset_muuvit, pisteet):
-    tuplapisteet = False
+    tuplapisteet = True
+    pisteet_tama_kierros = 0
     x_t = [x for x, y in edelliset_muuvit]
     y_t = [y for x, y in edelliset_muuvit]
     sanan_pituus = max(x_t[-1] - x_t[0] + 1, y_t[-1] - y_t[0] + 1)   # itse laitetut napi !!!!
     print("sanan_pituus", sanan_pituus)
-    pisteet += sanan_pituus
+    """
     kerroksia_vain1 = [x for x, y in edelliset_muuvit if kerrokset[x, y] == 1]
     print("kerroksia_vain1", kerroksia_vain1)
-    if len(kerroksia_vain1) == len(edelliset_muuvit):
-        pisteet += sanan_pituus   # tuplapisteet
-        print("tuplapisteet")
-        tuplapisteet = True
+    if len(kerroksia_vain1) == len(edelliset_muuvit):   # tuplapisteet """
+    for x, y in edelliset_muuvit:
+        pisteet_tama_kierros += kerrokset[x, y]
+        if kerrokset[x, y] > 1:
+           tuplapisteet = False 
 
-    # tutkitaan vaakasuorassa sanan reunat    # TODO entä jos vika nappi ei olekaan tupla ?? Annettu jo +2 edellisille !!!!
+    # tutkitaan vaakasuorassa sanan reunat   
     x = x_t[0]
     while x > 0:
         if not ruudukko[y_t[0]][x - 1] == "":
-            if kerrokset[x -1, y_t[0]] == 1 and tuplapisteet:   # 2 pistettä pohjakerroksesta, jos sana kokonaan 1-kerroksinen
-                pisteet += 2
-                print(" 1 tupla")
-            else:
-                pisteet += kerrokset[x -1, y_t[0]]
-                print(" 1")
+            if kerrokset[x -1, y_t[0]] > 1 :   # 2 pistettä pohjakerroksesta, jos sana kokonaan 1-kerroksinen
+                tuplapisteet = False
+            pisteet_tama_kierros += kerrokset[x -1, y_t[0]]
+            print(" 1")
             x -= 1 
         else:
             break
@@ -235,27 +235,22 @@ def tutki_edelliset_muuvit(edelliset_muuvit, pisteet):
     x = x_t[-1] + 1
     while x < kirjainten_lkm :
         if not ruudukko[y_t[-1]][x] == "":
-            if kerrokset[x, y_t[-1]] == 1 and tuplapisteet:   # 2 pistettä pohjakerroksesta
-                pisteet += 2
-                print(" 2 tupla")
-            else:
-                pisteet += kerrokset[x, y_t[-1]]
-                print(" 2")
+            if kerrokset[x, y_t[-1]] > 1 :   # 2 pistettä pohjakerroksesta
+                tuplapisteet = False
+            pisteet_tama_kierros += kerrokset[x, y_t[-1]]
+            print(" 2")
             x += 1
         else:
             break 
-
 
     # tutkitaan pystysuorassa sanan reunat
     y = y_t[0]
     while y > 0:
         if not ruudukko[y -1][x_t[0]] == "":
-            if kerrokset[x_t[0], y -1] == 1 and tuplapisteet:   # 2 pistettä pohjakerroksesta, jos sana kokonaan 1-kerroksinen
-                pisteet += 2
-                print(" 3 tupla")
-            else:
-                pisteet += kerrokset[x_t[0], y -1]
-                print(" 3")
+            if kerrokset[x_t[0], y -1] > 1 :   # 2 pistettä pohjakerroksesta, jos sana kokonaan 1-kerroksinen
+                tuplapisteet = False
+            pisteet_tama_kierros += kerrokset[x_t[0], y -1]
+            print(" 3")
             y -= 1 
         else:
             break
@@ -263,22 +258,19 @@ def tutki_edelliset_muuvit(edelliset_muuvit, pisteet):
     y = y_t[-1]
     while y < kirjainten_lkm -1:
         if not ruudukko[y +1][x_t[0]] == "":
-            if kerrokset[x_t[0], y +1] == 1 and tuplapisteet:   # 2 pistettä pohjakerroksesta, jos sana kokonaan 1-kerroksinen
-                pisteet += 2
-                print(" 4 tupla")
-            else:
-                pisteet += kerrokset[x_t[0], y +1]
-                print(" 3")
+            if kerrokset[x_t[0], y +1] > 1 :   # 2 pistettä pohjakerroksesta, jos sana kokonaan 1-kerroksinen
+                tuplapisteet = False
+            pisteet_tama_kierros += kerrokset[x_t[0], y +1]
+            print(" 3")
             y += 1 
         else:
             break
         
-            
-    # sanan keskellä valmiina olleet napit
-    if len(y_t) > 1 and not y_t[0] == y_t[-1]:     # TODO
-        pass
+    if tuplapisteet:
+        pisteet_tama_kierros *= 2
+
     
-    return pisteet
+    return pisteet + pisteet_tama_kierros
 
 
 
@@ -314,7 +306,6 @@ def main():
                 else:
                     kirjain, kirjain_ind, vuoro_uusi = tutki_mouse(x, y, vuoro, kirjain)     
                     vuoro = vuoro_uusi  
-                    print("vuoro", vuoro, "kirjain_ind", kirjain_ind)
 
         # neliöidään valittu kirjain
         if kirjain_ind >= 0 and (vuoro % 4 == 1 or vuoro % 4 == 2):   #   -1 = ei tarvitse neliöidä
