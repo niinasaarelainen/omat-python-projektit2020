@@ -20,6 +20,7 @@ pel1_7 = []
 pel2_7 = []
 ruudukko = []
 kerrokset = {}
+edelliset_muuvit = []
 
 
 def jaa_napit_aloitus():
@@ -38,14 +39,9 @@ def alusta_ruudukko():
     ruudukko[4][5] = "M"  
     ruudukko[4][6] = "E"  
     ruudukko[4][7] = "L"
-    ruudukko[4][8] = "I"    
-    kerrokset[2, 4] = 1
-    kerrokset[3, 4] = 1
-    kerrokset[4, 4] = 1
-    kerrokset[5, 4] = 1
-    kerrokset[6, 4] = 1
-    kerrokset[7, 4] = 1
-    kerrokset[8, 4] = 1
+    ruudukko[4][8] = "I"  
+    for x in range (2, 9):
+        kerrokset[x, 4] = 1
 
 
 def uusi_nappi():    
@@ -70,19 +66,20 @@ def tekstit(vuoro):
     pygame.draw.rect(SCREEN, WHITE, rect, 0)    # 0 = kokovalkoinen
 
     fontti = pygame.font.SysFont("FreeMono", 32)
+    fontti_pieni = pygame.font.SysFont("FreeMono", 26)
     pel1_str = "  "
     pel1_str = pel1_str.join(sorted(pel1_7)) 
     teksti = fontti.render(f"Pelaaja 1:   {pel1_str} ", True, WHITE)
-    pisteet = fontti.render(f"{pisteet_pel2}", True, GREEN)
+    pisteet = fontti_pieni.render(f"{pisteet_pel1}", True, GREEN)
     SCREEN.blit(teksti, (40, 20))
-    SCREEN.blit(pisteet, (WINDOW_WIDTH - 40, 20))
+    SCREEN.blit(pisteet, (WINDOW_WIDTH - 52, 23))
 
     pel2_str = "  "
     pel2_str = pel2_str.join(sorted(pel2_7)) 
     teksti = fontti.render(f"Pelaaja 2:   {pel2_str}", True, WHITE)
-    pisteet = fontti.render(f"{pisteet_pel2}", True, GREEN)
+    pisteet = fontti_pieni.render(f"{pisteet_pel2}", True, GREEN)
     SCREEN.blit(teksti, (40, WINDOW_HEIGHT - 50))
-    SCREEN.blit(pisteet, (WINDOW_WIDTH - 40, WINDOW_HEIGHT - 50))
+    SCREEN.blit(pisteet, (WINDOW_WIDTH - 52, WINDOW_HEIGHT - 47))
 
     fontti = pygame.font.SysFont("FreeMono", 50)
     fontti_pieni = pygame.font.SysFont("FreeMono", 24)
@@ -109,10 +106,42 @@ def mika_kirjain(x):
 
 
 def minne_kirjain(x, y, kirjain, vuoro):
+
     global pisteet_pel1
     global pisteet_pel2
     x_indeksi = 0
     y_indeksi = 0 
+
+    """
+    def tutki_viereiset():
+        global pisteet_pel1
+        global pisteet_pel2
+        global edelliset_muuvit
+
+        def operoi(y, x):
+            global pisteet_pel1
+            global pisteet_pel2
+            if (x, y) in kerrokset and kerrokset[x, y] == 1:
+                if vuoro % 4 == 1 or vuoro % 4 == 2:
+                    pisteet_pel1 += 2
+                else:
+                    pisteet_pel2 += 2
+            else:
+                if vuoro % 4 == 3 or vuoro % 4 == 0:
+                    pisteet_pel1 += 1
+                else:
+                    pisteet_pel2 += 1
+
+        if not ruudukko[y_indeksi + 1][x_indeksi] == "":
+            operoi(y_indeksi + 1, x_indeksi)
+        if not ruudukko[y_indeksi - 1][x_indeksi] == "":
+            operoi(y_indeksi - 1, x_indeksi)
+        if not ruudukko[y_indeksi][x_indeksi + 1] == "":
+            operoi(y_indeksi, x_indeksi + 1)
+        if not ruudukko[y_indeksi][x_indeksi - 1] == "":
+            operoi(y_indeksi, x_indeksi - 1) """
+
+
     for i in range(kirjainten_lkm):
         if x > i * blockSize :
             x_indeksi = i
@@ -134,10 +163,14 @@ def minne_kirjain(x, y, kirjain, vuoro):
             pisteet_pel1 += 1
         else:
             pisteet_pel2 += 1
+
+    #tutki_viereiset()
+    edelliset_muuvit.append([x_indeksi, y_indeksi])
     return True
     
 
 def tutki_mouse(x, y, vuoro, kirjain):
+    global edelliset_muuvit
     kirjain_ind = -1
 
     if vuoro % 4 == 1 and y < blockSize:
@@ -145,27 +178,72 @@ def tutki_mouse(x, y, vuoro, kirjain):
         kirjain = sorted(pel1_7)[kirjain_ind]   
         vuoro += 1          
   
-    elif vuoro % 4 == 2 and y >= blockSize and y <= WINDOW_HEIGHT - blockSize:
+    elif vuoro % 4 == 2 and y >= blockSize and y <= WINDOW_HEIGHT - blockSize:    
         if minne_kirjain(x, y, kirjain, vuoro):
-            pel1_7.remove(kirjain)            
+            pel1_7.remove(kirjain)    
+            print(sorted(edelliset_muuvit))
             
         if len(aakkoset) > 0:
             pel1_7.append(uusi_nappi())
         vuoro -= 1   # oletus että lisätään useampi kuin 1 kirjain
 
-    elif vuoro % 4 == 3 and y > WINDOW_HEIGHT - blockSize:
+    elif vuoro % 4 == 3 and y > WINDOW_HEIGHT - blockSize:        
         kirjain_ind = mika_kirjain(x)
         kirjain = sorted(pel2_7)[kirjain_ind]
         vuoro += 1 
 
-    elif vuoro % 4 == 0 and y >= blockSize and y <= WINDOW_HEIGHT - blockSize:
+    elif vuoro % 4 == 0 and y >= blockSize and y <= WINDOW_HEIGHT - blockSize:    
         if minne_kirjain(x, y, kirjain, vuoro):
             pel2_7.remove(kirjain)
+            print(sorted(edelliset_muuvit))
         if len(aakkoset) > 0:
             pel2_7.append(uusi_nappi())
         vuoro -= 1 
 
     return kirjain, kirjain_ind, vuoro
+
+
+def tutki_edelliset_muuvit(edelliset_muuvit, pisteet):
+    x_t = [x for x, y in edelliset_muuvit]
+    y_t = [y for x, y in edelliset_muuvit]
+    sanan_pituus = max(x_t[-1] - x_t[0] + 1, y_t[-1] - y_t[0] + 1)   # itse laitetut napi !!!!
+    print("sanan_pituus", sanan_pituus)
+
+    # tutkitaan vaakasuorassa sanan reunat
+    if x_t[0] > 0:
+        if not ruudukko[y_t[0]][x_t[0] - 1] == "":
+            print(" 1")
+            pisteet += 1
+            if (x_t[0] - 1, y_t[0]) not in kerrokset:   # 2 pistettä pohjakerroksesta
+                pisteet += 1
+    if x_t[-1] < kirjainten_lkm -1:
+        if not ruudukko[y_t[-1]][x_t[0] + 1] == "":
+            print(" 2")
+            pisteet += 1
+            if (x_t[0] + 1, y_t[-1]) not in kerrokset:   # 2 pistettä pohjakerroksesta
+                pisteet += 1
+
+    # tutkitaan pystysuorassa sanan reunat
+    if y_t[0] > 0:
+        if not ruudukko[y_t[0] -1][x_t[0]] == "":
+            print(" 3")
+            pisteet += 1
+            if (x_t[0], y_t[0] -1) not in kerrokset:   # 2 pistettä pohjakerroksesta
+                pisteet += 1
+    if y_t[-1] < kirjainten_lkm -1:
+        if not ruudukko[y_t[-1] +1][x_t[0]] == "":
+            print(" 4")
+            pisteet += 1
+            if (x_t[0], y_t[-1] +1) not in kerrokset:   # 2 pistettä pohjakerroksesta
+                pisteet += 1
+        
+            
+    # sanan keskellä valmiina olleet napit
+    if len(y_t) > 1 and not y_t[0] == y_t[-1]:     # TODO
+        pass
+    
+    return pisteet
+
 
 
 def main():
@@ -174,6 +252,7 @@ def main():
     vuoro = 1
     kirjain = ""
     kirjain_ind = -1
+    global edelliset_muuvit, pisteet_pel1, pisteet_pel2
 
     while len(pel1_7) > 0 and len(pel2_7) > 0:        
         SCREEN.fill(BLACK)
@@ -186,17 +265,26 @@ def main():
                 x = event.pos[0]
                 y = event.pos[1]  
                 
-                if  (15 <= x <= 45  and  30 <= y <= 50) or (15 <= x <= 45  and  WINDOW_HEIGHT - 40 <= y <= WINDOW_HEIGHT - 10) :
+                # vuoronvaihto
+                if  15 <= x <= 45  and  30 <= y <= 50:                    
+                    vuoro += 2
+                    pisteet_pel1 = tutki_edelliset_muuvit(sorted(edelliset_muuvit), pisteet_pel1)
+                    edelliset_muuvit = []
+                elif (15 <= x <= 45  and  WINDOW_HEIGHT - 40 <= y <= WINDOW_HEIGHT - 10):
                     vuoro += 2
                     print(vuoro)
+                    pisteet_pel2 = tutki_edelliset_muuvit(sorted(edelliset_muuvit), pisteet_pel2)
+                    edelliset_muuvit = []
                 else:
                     kirjain, kirjain_ind, vuoro_uusi = tutki_mouse(x, y, vuoro, kirjain)     
                     vuoro = vuoro_uusi  
                     print(vuoro)
-        
+
+        # neliöidään valittu kirjain
         if kirjain_ind > 0 and (vuoro % 4 == 1 or vuoro % 4 == 2):   #   -1 = ei tarvitse neliöidä
             rect = pygame.Rect(278 + kirjain_ind * kirjainvali , 19, blockSize // 2, blockSize // 2)
             pygame.draw.rect(SCREEN, WHITE, rect, 2)
+            
         elif kirjain_ind > 0 and (vuoro % 4 == 3 or vuoro % 4 == 0):
             rect = pygame.Rect(278 + kirjain_ind * kirjainvali , WINDOW_HEIGHT - 50, blockSize // 2, blockSize // 2)
             pygame.draw.rect(SCREEN, WHITE, rect, 2)
