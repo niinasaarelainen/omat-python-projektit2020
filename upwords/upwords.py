@@ -107,8 +107,8 @@ def mika_kirjain(x):
 
 def minne_kirjain(x, y, kirjain, vuoro):
 
-    global pisteet_pel1
-    global pisteet_pel2
+    #global pisteet_pel1
+    #global pisteet_pel2
     x_indeksi = 0
     y_indeksi = 0 
 
@@ -150,19 +150,21 @@ def minne_kirjain(x, y, kirjain, vuoro):
     if (x_indeksi, y_indeksi) not in kerrokset:
         kerrokset[x_indeksi, y_indeksi] = 1        
         ruudukko[y_indeksi][x_indeksi] = kirjain
+        """
         if vuoro % 4 == 1 or vuoro % 4 == 2:
             pisteet_pel1 += 2
         else:
-            pisteet_pel2 += 2
+            pisteet_pel2 += 2"""
     elif kerrokset[x_indeksi, y_indeksi] == 5:
         return False
     else:
         kerrokset[x_indeksi, y_indeksi] += 1        
         ruudukko[y_indeksi][x_indeksi] = kirjain
+        """
         if vuoro % 4 == 1 or vuoro % 4 == 2:
             pisteet_pel1 += 1
         else:
-            pisteet_pel2 += 1
+            pisteet_pel2 += 1 """
 
     #tutki_viereiset()
     edelliset_muuvit.append([x_indeksi, y_indeksi])
@@ -204,23 +206,31 @@ def tutki_mouse(x, y, vuoro, kirjain):
 
 
 def tutki_edelliset_muuvit(edelliset_muuvit, pisteet):
+    tuplapisteet = False
     x_t = [x for x, y in edelliset_muuvit]
     y_t = [y for x, y in edelliset_muuvit]
     sanan_pituus = max(x_t[-1] - x_t[0] + 1, y_t[-1] - y_t[0] + 1)   # itse laitetut napi !!!!
     print("sanan_pituus", sanan_pituus)
+    pisteet += sanan_pituus
+    kerroksia_vain1 = [x for x, y in edelliset_muuvit if kerrokset[x, y] == 1]
+    print("kerroksia_vain1", kerroksia_vain1)
+    if len(kerroksia_vain1) == len(edelliset_muuvit):
+        pisteet += sanan_pituus   # tuplapisteet
+        print("tuplapisteet")
+        tuplapisteet = True
 
-    # tutkitaan vaakasuorassa sanan reunat
+    # tutkitaan vaakasuorassa sanan reunat   # TODO useampi nappi samassa suunnassa
     if x_t[0] > 0:
         if not ruudukko[y_t[0]][x_t[0] - 1] == "":
             print(" 1")
             pisteet += 1
-            if (x_t[0] - 1, y_t[0]) not in kerrokset:   # 2 pistettä pohjakerroksesta
+            if kerrokset[x_t[0] -1, y_t[0]] == 1 and tuplapisteet:   # 2 pistettä pohjakerroksesta, jos sana kokonaan 1-kerroksinen
                 pisteet += 1
     if x_t[-1] < kirjainten_lkm -1:
         if not ruudukko[y_t[-1]][x_t[0] + 1] == "":
             print(" 2")
             pisteet += 1
-            if (x_t[0] + 1, y_t[-1]) not in kerrokset:   # 2 pistettä pohjakerroksesta
+            if kerrokset[x_t[0] +1, y_t[-1]] == 1 and tuplapisteet:   # 2 pistettä pohjakerroksesta
                 pisteet += 1
 
     # tutkitaan pystysuorassa sanan reunat
@@ -228,13 +238,13 @@ def tutki_edelliset_muuvit(edelliset_muuvit, pisteet):
         if not ruudukko[y_t[0] -1][x_t[0]] == "":
             print(" 3")
             pisteet += 1
-            if (x_t[0], y_t[0] -1) not in kerrokset:   # 2 pistettä pohjakerroksesta
+            if kerrokset[x_t[0], y_t[0] -1] == 1 and tuplapisteet:   # 2 pistettä pohjakerroksesta
                 pisteet += 1
     if y_t[-1] < kirjainten_lkm -1:
         if not ruudukko[y_t[-1] +1][x_t[0]] == "":
             print(" 4")
             pisteet += 1
-            if (x_t[0], y_t[-1] +1) not in kerrokset:   # 2 pistettä pohjakerroksesta
+            if kerrokset[x_t[0], y_t[-1] +1] == 1 and tuplapisteet :   # 2 pistettä pohjakerroksesta
                 pisteet += 1
         
             
