@@ -1,4 +1,4 @@
-import pygame, random
+import pygame, random, os
 
 BLACK = (0, 0, 0)
 WHITE = (200, 200, 200)
@@ -7,6 +7,7 @@ WINDOW_HEIGHT = 910
 WINDOW_WIDTH = 770
 
 SCREEN = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+os.environ['SDL_VIDEO_WINDOW_POS']='{},{}'.format(10,20)     # ????
 CLOCK = pygame.time.Clock()
 blockSize = 70 #Set the size of the grid block
 kirjainten_lkm = 11  # per rivi
@@ -117,7 +118,6 @@ def minne_kirjain(x, y, kirjain, vuoro):
         global pisteet_pel1
         global pisteet_pel2
         global edelliset_muuvit
-
         def operoi(y, x):
             global pisteet_pel1
             global pisteet_pel2
@@ -131,7 +131,6 @@ def minne_kirjain(x, y, kirjain, vuoro):
                     pisteet_pel1 += 1
                 else:
                     pisteet_pel2 += 1
-
         if not ruudukko[y_indeksi + 1][x_indeksi] == "":
             operoi(y_indeksi + 1, x_indeksi)
         if not ruudukko[y_indeksi - 1][x_indeksi] == "":
@@ -220,18 +219,28 @@ def tutki_edelliset_muuvit(edelliset_muuvit, pisteet):
         tuplapisteet = True
 
     # tutkitaan vaakasuorassa sanan reunat   # TODO useampi nappi samassa suunnassa
-    if x_t[0] > 0:
-        if not ruudukko[y_t[0]][x_t[0] - 1] == "":
-            print(" 1")
-            pisteet += 1
-            if kerrokset[x_t[0] -1, y_t[0]] == 1 and tuplapisteet:   # 2 pistettä pohjakerroksesta, jos sana kokonaan 1-kerroksinen
-                pisteet += 1
-    if x_t[-1] < kirjainten_lkm -1:
-        if not ruudukko[y_t[-1]][x_t[0] + 1] == "":
-            print(" 2")
-            pisteet += 1
-            if kerrokset[x_t[0] +1, y_t[-1]] == 1 and tuplapisteet:   # 2 pistettä pohjakerroksesta
-                pisteet += 1
+    x = x_t[0]
+    while x > 0:
+        if not ruudukko[y_t[0]][x - 1] == "":
+            if kerrokset[x -1, y_t[0]] == 1 and tuplapisteet:   # 2 pistettä pohjakerroksesta, jos sana kokonaan 1-kerroksinen
+                pisteet += 2
+            else:
+                pisteet += kerrokset[x -1, y_t[0]]
+                print(" 1")
+        x -= 1 
+        print(x)
+
+    x = x_t[-1] + 1
+    while x < kirjainten_lkm :
+        print("x", x)
+        if not ruudukko[y_t[-1]][x] == "":
+            if kerrokset[x, y_t[-1]] == 1 and tuplapisteet:   # 2 pistettä pohjakerroksesta
+                pisteet += 2
+            else:
+                pisteet += kerrokset[x, y_t[-1]]
+                print(" 2")
+        x += 1 
+
 
     # tutkitaan pystysuorassa sanan reunat
     if y_t[0] > 0:
@@ -271,7 +280,7 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-            if event.type == pygame.MOUSEBUTTONDOWN:   
+            if event.type == pygame.MOUSEBUTTONDOWN: 
                 x = event.pos[0]
                 y = event.pos[1]  
                 
@@ -280,7 +289,7 @@ def main():
                     vuoro += 2
                     pisteet_pel1 = tutki_edelliset_muuvit(sorted(edelliset_muuvit), pisteet_pel1)
                     edelliset_muuvit = []
-                elif (15 <= x <= 45  and  WINDOW_HEIGHT - 40 <= y <= WINDOW_HEIGHT - 10):
+                elif 15 <= x <= 45  and  WINDOW_HEIGHT - 40 <= y <= WINDOW_HEIGHT - 10:
                     vuoro += 2
                     print(vuoro)
                     pisteet_pel2 = tutki_edelliset_muuvit(sorted(edelliset_muuvit), pisteet_pel2)
@@ -288,17 +297,19 @@ def main():
                 else:
                     kirjain, kirjain_ind, vuoro_uusi = tutki_mouse(x, y, vuoro, kirjain)     
                     vuoro = vuoro_uusi  
-                    print(vuoro)
+                    print("vuoro", vuoro, "kirjain_ind", kirjain_ind)
 
         # neliöidään valittu kirjain
-        if kirjain_ind > 0 and (vuoro % 4 == 1 or vuoro % 4 == 2):   #   -1 = ei tarvitse neliöidä
+        if kirjain_ind >= 0 and (vuoro % 4 == 1 or vuoro % 4 == 2):   #   -1 = ei tarvitse neliöidä
+            print("rect 1")
             rect = pygame.Rect(278 + kirjain_ind * kirjainvali , 19, blockSize // 2, blockSize // 2)
             pygame.draw.rect(SCREEN, WHITE, rect, 2)
             
-        elif kirjain_ind > 0 and (vuoro % 4 == 3 or vuoro % 4 == 0):
+        elif kirjain_ind >= 0 and (vuoro % 4 == 3 or vuoro % 4 == 0):
+            print("rect 2")
             rect = pygame.Rect(278 + kirjain_ind * kirjainvali , WINDOW_HEIGHT - 50, blockSize // 2, blockSize // 2)
             pygame.draw.rect(SCREEN, WHITE, rect, 2)
-        CLOCK.tick(1000)   
+        CLOCK.tick(8000)   
         pygame.display.flip()
             
         
