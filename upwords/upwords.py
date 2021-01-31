@@ -3,6 +3,7 @@ import pygame, random, os
 BLACK = (0, 0, 0)
 WHITE = (200, 200, 200)
 GREEN = (0, 200, 20)
+YELLOW = (200, 200, 20)
 WINDOW_HEIGHT = 910
 WINDOW_WIDTH = 770
 
@@ -15,8 +16,8 @@ kirjainvali = 57
 
 pisteet_pel1 = 0
 pisteet_pel2 = 0
-aakkoset = list("AAAAABDEEEFGHHHIIIIIIIIIJJJKKKKKLLLLLMMMMNNNOOOOOOPPRRRSSSSTTTTUUUUUUUUVVVVVYYYÄÄÄÄÄÄÖÖÖÖ")
-#aakkoset = list("AAABDEEEFGHHIIIKLM")
+#aakkoset = list("AAAAAABDEEEFGHHHIIIIIIIIIJJJKKKKKLLLLLMMMMNNNOOOOOOPPRRRSSSSTTTTUUUUUUUUVVVVVYYYÄÄÄÄÄÖÖÖÖ")
+aakkoset = list("AABDEEFGHHIIKLMUOV")
 pel1_7 = []
 pel2_7 = []
 ruudukko = []
@@ -61,26 +62,31 @@ def drawGrid():
 def tekstit(vuoro):
    
     if vuoro % 4 == 1 or vuoro % 4 == 2:        
-        rect = pygame.Rect(15, 30, blockSize // 4, blockSize // 4)
+        rect = pygame.Rect(15, 34, blockSize // 4, blockSize // 4)
     else:
         rect = pygame.Rect(15, WINDOW_HEIGHT - 40, blockSize // 4, blockSize // 4)
     pygame.draw.rect(SCREEN, WHITE, rect, 0)    # 0 = kokovalkoinen
 
+    #pisteet:
     fontti = pygame.font.SysFont("FreeMono", 32)
     fontti_pieni = pygame.font.SysFont("FreeMono", 26)
     pel1_str = "  "
     pel1_str = pel1_str.join(sorted(pel1_7)) 
     teksti = fontti.render(f"Pelaaja 1:   {pel1_str} ", True, WHITE)
     pisteet = fontti_pieni.render(f"{pisteet_pel1}", True, GREEN)
-    SCREEN.blit(teksti, (40, 20))
-    SCREEN.blit(pisteet, (WINDOW_WIDTH - 52, 23))
-
+    SCREEN.blit(teksti, (40, 24))
+    SCREEN.blit(pisteet, (WINDOW_WIDTH - 52, 27))
     pel2_str = "  "
     pel2_str = pel2_str.join(sorted(pel2_7)) 
     teksti = fontti.render(f"Pelaaja 2:   {pel2_str}", True, WHITE)
     pisteet = fontti_pieni.render(f"{pisteet_pel2}", True, GREEN)
     SCREEN.blit(teksti, (40, WINDOW_HEIGHT - 50))
     SCREEN.blit(pisteet, (WINDOW_WIDTH - 52, WINDOW_HEIGHT - 47))
+
+    # näppäinkomennot:
+    fontti_pieni = pygame.font.SysFont("FreeMono", 15)
+    nappaink = fontti_pieni.render(f"ENTER = VUORONVAIHTO,  V = VAIHDA KIRJAIN,  L = LOPETA (KUMPIKAAN EI VOI SIIRTÄÄ)", True, YELLOW)
+    SCREEN.blit(nappaink, (40, 4))
 
     fontti = pygame.font.SysFont("FreeMono", 50)
     fontti_pieni = pygame.font.SysFont("FreeMono", 24)
@@ -143,10 +149,8 @@ def tutki_mouse(x, y, vuoro, kirjain):
     elif vuoro % 4 == 2 and y >= blockSize and y <= WINDOW_HEIGHT - blockSize:    
         if minne_kirjain(x, y, kirjain, vuoro):
             pel1_7.remove(kirjain)    
-            print(sorted(edelliset_muuvit))
-            
-        if len(aakkoset) > 0:
-            pel1_7.append(uusi_nappi())
+            print(sorted(edelliset_muuvit))            
+        
         vuoro -= 1   # oletus että lisätään useampi kuin 1 kirjain
 
     elif vuoro % 4 == 3 and y > WINDOW_HEIGHT - blockSize:        
@@ -158,8 +162,6 @@ def tutki_mouse(x, y, vuoro, kirjain):
         if minne_kirjain(x, y, kirjain, vuoro):
             pel2_7.remove(kirjain)
             print(sorted(edelliset_muuvit))
-        if len(aakkoset) > 0:
-            pel2_7.append(uusi_nappi())
         vuoro -= 1 
 
     return kirjain, kirjain_ind, vuoro
@@ -171,7 +173,6 @@ def tutki_edelliset_muuvit_vaaka(edelliset_muuvit):
     x_t = [x for x, y in edelliset_muuvit]
     y_t = [y for x, y in edelliset_muuvit]
     sanan_pituus = x_t[-1] - x_t[0] + 1    # itse laitetut napi !!!!
-    print("sanan_pituus vaaka:", sanan_pituus)
     
     # itse laitetut napit
     for x, y in edelliset_muuvit:
@@ -183,7 +184,6 @@ def tutki_edelliset_muuvit_vaaka(edelliset_muuvit):
     muistiin = []  
     if len(x_t) > 1:        
         for x in range (x_t[0], x_t[-1]):
-            print("x", x)
             if not x in x_t:
                 muistiin.append(x)
     for x in muistiin:
@@ -230,7 +230,6 @@ def tutki_edelliset_muuvit_pysty(edelliset_muuvit):
     x_t = [x for x, y in edelliset_muuvit]
     y_t = [y for x, y in edelliset_muuvit]
     sanan_pituus =  y_t[-1] - y_t[0] + 1   # itse laitetut napi !!!!
-    print("sanan_pituus", sanan_pituus)
     
     #itse laitetut napit
     for x, y in edelliset_muuvit:
@@ -280,9 +279,45 @@ def tutki_edelliset_muuvit_pysty(edelliset_muuvit):
     
     return pisteet_tama_kierros
 
-def vaihda_nappi():
+def vaihda_nappi(x):             # TODO
     kirjain_ind = mika_kirjain(x)
 
+
+def lopputeksti(vuoro):   # vuoro voi olla myös -1, jos ei painettiin "L"
+    global pisteet_pel1, pisteet_pel2
+    if vuoro > 0 and (vuoro % 4 == 1 or vuoro % 4 == 2):
+        pisteet_pel1 += tutki_edelliset_muuvit_vaaka(sorted(edelliset_muuvit))
+        pisteet_pel1 += tutki_edelliset_muuvit_pysty(sorted(edelliset_muuvit))  
+    elif vuoro > 0 and (vuoro % 4 == 3 or vuoro % 4 == 4):
+        pisteet_pel2 += tutki_edelliset_muuvit_vaaka(sorted(edelliset_muuvit))
+        pisteet_pel2 += tutki_edelliset_muuvit_pysty(sorted(edelliset_muuvit))  
+
+    SCREEN.fill(BLACK)
+    while True:
+        fontti_iso = pygame.font.SysFont("FreeMono", 62)
+        if pisteet_pel1 == pisteet_pel2:
+            teksti = fontti_iso.render(f"Tasapeli", True, WHITE)
+            SCREEN.blit(teksti, (30, 90))
+        elif pisteet_pel1 > pisteet_pel2:
+            teksti = fontti_iso.render(f"Pelaaja 1 voitti !!", True, WHITE)
+            SCREEN.blit(teksti, (30, 90))
+        else:
+            teksti = fontti_iso.render(f"Pelaaja 2 voitti !!", True, WHITE)
+            SCREEN.blit(teksti, (30, 90))
+
+        teksti = fontti_iso.render(f"{pisteet_pel1} - {pisteet_pel2}", True, WHITE)
+        SCREEN.blit(teksti, (230, 290))    
+        pygame.display.flip()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+
+
+def vuoronvaihto(vuoro, edelliset_muuvit):
+    global pisteet_pel1, pisteet_pel2
+    
+    return vuoro
 
 def main():
     pygame.init()    
@@ -292,7 +327,7 @@ def main():
     kirjain_ind = -1
     global edelliset_muuvit, pisteet_pel1, pisteet_pel2
 
-    while len(pel1_7) > 0 and len(pel2_7) > 0:        
+    while len(pel1_7) > 0 and len(pel2_7) > 0:        # TODO: mitä jos ei käy kaikki !!!
         SCREEN.fill(BLACK)
         tekstit(vuoro)
         drawGrid()
@@ -301,48 +336,47 @@ def main():
                 pygame.quit()
             if event.type == pygame.MOUSEBUTTONDOWN: 
                 x = event.pos[0]
-                y = event.pos[1]  
-                
-                # vuoronvaihto
-                if  15 <= x <= 45  and  30 <= y <= 50:                    
+                y = event.pos[1]                  
+                kirjain, kirjain_ind, vuoro_uusi = tutki_mouse(x, y, vuoro, kirjain)     
+                vuoro = vuoro_uusi  
+            if event.type == pygame.KEYDOWN:   
+                #vuoronvaihto
+                if event.key == pygame.K_RETURN:
+                    if vuoro % 4 == 1 or vuoro % 4 == 2:
+                        pisteet_pel1 += tutki_edelliset_muuvit_vaaka(sorted(edelliset_muuvit))
+                        pisteet_pel1 += tutki_edelliset_muuvit_pysty(sorted(edelliset_muuvit))                    
+                        for muuvi in edelliset_muuvit:
+                            if len(aakkoset) > 0:
+                                pel1_7.append(uusi_nappi())
+                    else: 
+                        pisteet_pel2 += tutki_edelliset_muuvit_vaaka(sorted(edelliset_muuvit))
+                        pisteet_pel2 += tutki_edelliset_muuvit_pysty(sorted(edelliset_muuvit))
+                        for muuvi in edelliset_muuvit:
+                            if len(aakkoset) > 0:
+                                pel2_7.append(uusi_nappi())                    
                     vuoro += 2
-                    pisteet_pel1 += tutki_edelliset_muuvit_vaaka(sorted(edelliset_muuvit))
-                    pisteet_pel1 += tutki_edelliset_muuvit_pysty(sorted(edelliset_muuvit))
                     edelliset_muuvit = []
-                elif 15 <= x <= 45  and  WINDOW_HEIGHT - 40 <= y <= WINDOW_HEIGHT - 10:
-                    vuoro += 2
-                    print(vuoro)
-                    pisteet_pel2 += tutki_edelliset_muuvit_vaaka(sorted(edelliset_muuvit))
-                    pisteet_pel2 += tutki_edelliset_muuvit_pysty(sorted(edelliset_muuvit))
-                    edelliset_muuvit = []
-                else:
-                    kirjain, kirjain_ind, vuoro_uusi = tutki_mouse(x, y, vuoro, kirjain)     
-                    vuoro = vuoro_uusi  
-            if event.type == pygame.KEYDOWN: 
+                #vaihda nappi
                 if chr(event.key) == "v":
-                    vaihda_nappi(x)
+                    vaihda_nappi(x)        # TODO 
+                # lopetus
+                if chr(event.key) == "l":
+                    lopputeksti(-1)
 
         # neliöidään valittu kirjain
         if kirjain_ind >= 0 and (vuoro % 4 == 1 or vuoro % 4 == 2):   #   -1 = ei tarvitse neliöidä
-            rect = pygame.Rect(278 + kirjain_ind * kirjainvali , 19, blockSize // 2, blockSize // 2)
+            rect = pygame.Rect(278 + kirjain_ind * kirjainvali , 23, blockSize // 2 + 2, blockSize // 2 + 2)
             pygame.draw.rect(SCREEN, WHITE, rect, 2)
             
         elif kirjain_ind >= 0 and (vuoro % 4 == 3 or vuoro % 4 == 0):
-            rect = pygame.Rect(278 + kirjain_ind * kirjainvali , WINDOW_HEIGHT - 50, blockSize // 2, blockSize // 2)
+            rect = pygame.Rect(278 + kirjain_ind * kirjainvali , WINDOW_HEIGHT - 52, blockSize // 2 + 2, blockSize // 2 + 2)
             pygame.draw.rect(SCREEN, WHITE, rect, 2)
+        
         CLOCK.tick(8000)   
         pygame.display.flip()
             
-        
-    SCREEN.fill(BLACK)
-    fontti_iso = pygame.font.SysFont("FreeMono", 56)
-    if pisteet_pel1 > pisteet_pel2:
-        teksti = fontti_iso.render(f"Pelaaja 1 voitti !!!", True, WHITE)
-        SCREEN.blit(teksti, (40, 20))
-    else:
-        teksti = fontti_iso.render(f"Pelaaja 2 voitti !!!", True, WHITE)
-        SCREEN.blit(teksti, (40, 20))
-    pygame.display.flip()
+    lopputeksti(vuoro)
+    
 
         
         
