@@ -165,7 +165,7 @@ def tutki_mouse(x, y, vuoro, kirjain):
     return kirjain, kirjain_ind, vuoro
 
 
-def tutki_edelliset_muuvit_vaaka(edelliset_muuvit):
+def tutki_edelliset_muuvit_vaaka(edelliset_muuvit):    
     tuplapisteet = True
     pisteet_tama_kierros = 0
     x_t = [x for x, y in edelliset_muuvit]
@@ -173,10 +173,22 @@ def tutki_edelliset_muuvit_vaaka(edelliset_muuvit):
     sanan_pituus = x_t[-1] - x_t[0] + 1    # itse laitetut napi !!!!
     print("sanan_pituus vaaka:", sanan_pituus)
     
+    # itse laitetut napit
     for x, y in edelliset_muuvit:
         pisteet_tama_kierros += kerrokset[x, y]
         if kerrokset[x, y] > 1:
            tuplapisteet = False 
+
+    # sanan välissä oleva(t) valmis kirjain  
+    muistiin = []  
+    if len(x_t) > 1:        
+        for x in range (x_t[0], x_t[-1]):
+            print("x", x)
+            if not x in x_t:
+                muistiin.append(x)
+    for x in muistiin:
+        pisteet_tama_kierros += kerrokset[x, y_t[0]]   # kaikilla sama y
+
 
     # tutkitaan vaakasuorassa sanan reunat   
     x = x_t[0]
@@ -220,10 +232,20 @@ def tutki_edelliset_muuvit_pysty(edelliset_muuvit):
     sanan_pituus =  y_t[-1] - y_t[0] + 1   # itse laitetut napi !!!!
     print("sanan_pituus", sanan_pituus)
     
+    #itse laitetut napit
     for x, y in edelliset_muuvit:
         pisteet_tama_kierros += kerrokset[x, y]
         if kerrokset[x, y] > 1:
            tuplapisteet = False 
+
+    # sanan välissä oleva(t) valmis kirjain  
+    muistiin = []  
+    if len(y_t) > 1:        
+        for y in range (y_t[0], y_t[-1]):
+            if not y in y_t:
+                muistiin.append(y)
+    for y in muistiin:
+        pisteet_tama_kierros += kerrokset[x_t[0], y]   # kaikilla sama y
     
     # tutkitaan pystysuorassa sanan reunat
     y = y_t[0]
