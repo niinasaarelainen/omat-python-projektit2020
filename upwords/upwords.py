@@ -172,6 +172,9 @@ def tutki_edelliset_muuvit_vaaka(edelliset_muuvit):
     x_t = [x for x, y in edelliset_muuvit]
     y_t = [y for x, y in edelliset_muuvit]
     sanan_pituus = x_t[-1] - x_t[0] + 1    # itse laitetut napi !!!!
+    if sanan_pituus == 1:
+        print("  return 0 ")
+        return 0   
     
     # itse laitetut napit
     for x, y in edelliset_muuvit:
@@ -215,8 +218,30 @@ def tutki_edelliset_muuvit_vaaka(edelliset_muuvit):
         
     if tuplapisteet:
         pisteet_tama_kierros *= 2    
-    if sanan_pituus == 1:
-        return 0    
+     
+    return pisteet_tama_kierros
+
+
+def tutki_vaaka_additional(x_orig, y):  
+    pisteet_tama_kierros = 0
+    x = x_orig
+    while x > 0:
+        if not ruudukko[y][x - 1] == "":
+            pisteet_tama_kierros += kerrokset[x - 1, y]
+            print(ruudukko[y][x - 1])
+            x -= 1 
+        else:
+            break
+    x = x_orig
+    while x < kirjainten_lkm :
+        if not ruudukko[y][x + 1] == "":
+            pisteet_tama_kierros += kerrokset[x + 1, y]
+            print(ruudukko[y][x + 1])
+            x += 1    
+        else:
+            if pisteet_tama_kierros > 0:
+                pisteet_tama_kierros += kerrokset[x_orig, y]
+            break
     return pisteet_tama_kierros
 
 
@@ -363,8 +388,12 @@ def main():
                 if event.key == pygame.K_RETURN:
                     if (vuoro % 4 == 1 or vuoro % 4 == 2) and len(edelliset_muuvit) > 0:
                         pisteet_pel1 += tutki_edelliset_muuvit_vaaka(sorted(edelliset_muuvit))
+                        print("tutki_edelliset_muuvit_vaaka", pisteet_pel1)  
                         pisteet_pel1 += tutki_edelliset_muuvit_pysty(sorted(edelliset_muuvit)) 
-                        for muuvi in edelliset_muuvit:                            
+                        print("tutki_edelliset_muuvit_pysty", pisteet_pel1)  
+                        for muuvi in edelliset_muuvit:      
+                            pisteet_pel1 += tutki_vaaka_additional(muuvi[0], muuvi[1])   # x, y
+                            print("tutki_vaaka_additional", pisteet_pel1)                 
                             if len(aakkoset) > 0:
                                 pel1_7.append(uusi_nappi())
                     elif len(edelliset_muuvit) > 0: 
