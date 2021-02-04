@@ -439,7 +439,7 @@ def main():
                     if (vuoro % 4 == 1 or vuoro % 4 == 2) and len(edelliset_muuvit) > 0:
                         valitus = fontti.render(f"", True, YELLOW)
                         #oikeellisuus:
-                        if oikeellisuus.tarkista(ruudukko, kerrokset, edelliset_muuvit):   # laittomasta siirrosta ei pisteitä
+                        if oikeellisuus.tarkista(ruudukko, edelliset_muuvit):   # laittomasta siirrosta ei pisteitä
                             print("truuuuuuuu")
                             y_t = [y for x, y in edelliset_muuvit]
                             x_t = [x for x, y in edelliset_muuvit]
@@ -477,7 +477,7 @@ def main():
                     elif len(edelliset_muuvit) > 0:    # TODO pel2 vasta kun pel1 VARMASTI toimii
                         valitus = fontti.render(f"", True, YELLOW)
                         #oikeellisuus:
-                        if oikeellisuus.tarkista(ruudukko, kerrokset, edelliset_muuvit):   # laittomasta siirrosta ei pisteitä
+                        if oikeellisuus.tarkista(ruudukko, edelliset_muuvit):   # laittomasta siirrosta ei pisteitä
                             pisteet_pel2 += tutki_edelliset_muuvit_vaaka(sorted(edelliset_muuvit))
                             pisteet_pel2 += tutki_edelliset_muuvit_pysty(sorted(edelliset_muuvit))
 
