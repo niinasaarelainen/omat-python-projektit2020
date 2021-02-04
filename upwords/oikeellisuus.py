@@ -14,14 +14,18 @@ class Oikeellisuus:
 
     def ymparilla_ei_tyhjaa(self):
         for x, y in self.edelliset_muuvit:           
-            if not self.ruudukko[max(y - 1, 0)][x] == "":
-                 return True 
-            if not self.ruudukko[y][max(x - 1, 0)] == "":
-                return True 
-            if not self.ruudukko[y][min(x + 1, self.vika_indeksi)] == "":
-                return True 
-            if not self.ruudukko[min(y  + 1, self.vika_indeksi)][x] == "":
-                return True 
+            if y - 1 > 0:
+                if not self.ruudukko[y - 1][x] == "":
+                    return True 
+            if x - 1 > 0: 
+                if not self.ruudukko[y][x - 1] == "":
+                    return True 
+            if x + 1 < self.vika_indeksi:
+                if not self.ruudukko[y][x + 1] == "":
+                    return True 
+            if y + 1 < self.vika_indeksi:
+                if not self.ruudukko[y  + 1 ][x] == "":
+                    return True 
         return False
         
 
