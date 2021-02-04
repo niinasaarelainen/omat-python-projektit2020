@@ -173,8 +173,6 @@ def tutki_edelliset_muuvit_vaaka(edelliset_muuvit):
     y_t = [y for x, y in edelliset_muuvit]
     sanan_pituus = x_t[-1] - x_t[0] + 1    # itse laitetut napit !!!!
     
-    
-    
     # itse laitetut napit
     for x, y in edelliset_muuvit:
         pisteet_tama_kierros += kerrokset[x, y]
@@ -192,31 +190,31 @@ def tutki_edelliset_muuvit_vaaka(edelliset_muuvit):
         if kerrokset[x, y_t[0]] > 1:
            tuplapisteet = False 
 
-    # tutkitaan vaakasuorassa sanan reunat   
-    if not x_t[0] == x_t[-1]:
-        x = x_t[0]
-        while x > 0:
-            if not ruudukko[y_t[0]][x - 1] == "":
-                print(ruudukko[y_t[0]][x - 1])
-                if kerrokset[x -1, y_t[0]] > 1 :   # 2 pistettä pohjakerroksesta, jos sana kokonaan 1-kerroksinen
-                    tuplapisteet = False
-                pisteet_tama_kierros += kerrokset[x -1, y_t[0]]
-                sanan_pituus += 1
-                x -= 1 
-            else:
-                break
+    # tutkitaan vaakasuorassa sanan reunat      
+    # ei voi laittaa:  if not x_t[0] == x_t[-1]: sanan vikaksi T --> sanan_pituus jää 1:ksi
+    x = x_t[0]
+    while x > 0:
+        if not ruudukko[y_t[0]][x - 1] == "":
+            print(ruudukko[y_t[0]][x - 1])
+            if kerrokset[x -1, y_t[0]] > 1 :   # 2 pistettä pohjakerroksesta, jos sana kokonaan 1-kerroksinen
+                tuplapisteet = False
+            pisteet_tama_kierros += kerrokset[x -1, y_t[0]]
+            sanan_pituus += 1
+            x -= 1 
+        else:
+            break
 
-        x = x_t[-1] + 1
-        while x < kirjainten_lkm :
-            if not ruudukko[y_t[-1]][x] == "":
-                print(ruudukko[y_t[-1]][x])
-                if kerrokset[x, y_t[-1]] > 1 :   # 2 pistettä pohjakerroksesta
-                    tuplapisteet = False
-                pisteet_tama_kierros += kerrokset[x, y_t[-1]]
-                sanan_pituus += 1
-                x += 1
-            else:
-                break 
+    x = x_t[-1] + 1
+    while x < kirjainten_lkm :
+        if not ruudukko[y_t[-1]][x] == "":
+            print(ruudukko[y_t[-1]][x])
+            if kerrokset[x, y_t[-1]] > 1 :   # 2 pistettä pohjakerroksesta
+                tuplapisteet = False
+            pisteet_tama_kierros += kerrokset[x, y_t[-1]]
+            sanan_pituus += 1
+            x += 1
+        else:
+            break 
 
     if sanan_pituus == 1:
         print("  vaaka  sanan_pituus == 1 ")
@@ -228,48 +226,68 @@ def tutki_edelliset_muuvit_vaaka(edelliset_muuvit):
 
 
 def tutki_vaaka_additional(x_orig, y):  
+    tuplapisteet = True
     pisteet_tama_kierros = 0
     x = x_orig
     while x > 0:
         if not ruudukko[y][x - 1] == "":
             pisteet_tama_kierros += kerrokset[x - 1, y]
+            if kerrokset[x - 1, y] > 1 :   # 2 pistettä pohjakerroksesta
+                tuplapisteet = False
             print("tutki_vaaka_additional", ruudukko[y][x - 1])
             x -= 1 
         else:
             break
     x = x_orig
-    while x < kirjainten_lkm :
+    while x < kirjainten_lkm - 1 :
         if not ruudukko[y][x + 1] == "":
             pisteet_tama_kierros += kerrokset[x + 1, y]
+            if kerrokset[x + 1, y] > 1 :   # 2 pistettä pohjakerroksesta
+                tuplapisteet = False
             print("tutki_vaaka_additional", ruudukko[y][x + 1])
             x += 1    
         else:
             if pisteet_tama_kierros > 0:
                 pisteet_tama_kierros += kerrokset[x_orig, y]
+                if kerrokset[x_orig, y] > 1 :   # 2 pistettä pohjakerroksesta
+                    tuplapisteet = False
             break
+
+    if tuplapisteet:
+        pisteet_tama_kierros *= 2    
     return pisteet_tama_kierros
 
 
-def tutki_pysty_additional(x, y_orig):      # TODO
+def tutki_pysty_additional(x, y_orig):     
+    tuplapisteet = True
     pisteet_tama_kierros = 0
     y = y_orig
     while y > 0:
         if not ruudukko[y - 1][x] == "":
             pisteet_tama_kierros += kerrokset[x, y - 1]
+            if kerrokset[x, y - 1] > 1 :   # 2 pistettä pohjakerroksesta
+                tuplapisteet = False
             print(ruudukko[y - 1][x])
             y -= 1 
         else:
             break
     y = y_orig
-    while x < kirjainten_lkm :
+    while x < kirjainten_lkm - 1:
         if not ruudukko[y + 1][x] == "":
             pisteet_tama_kierros += kerrokset[x, y + 1]
+            if kerrokset[x, y + 1] > 1 :   # 2 pistettä pohjakerroksesta
+                tuplapisteet = False
             print("tutki_pysty_additional", ruudukko[y + 1][x])
             y += 1    
         else:
             if pisteet_tama_kierros > 0:
                 pisteet_tama_kierros += kerrokset[x, y_orig]
+                if kerrokset[x, y_orig] > 1 :   # 2 pistettä pohjakerroksesta
+                    tuplapisteet = False
             break
+
+    if tuplapisteet:
+        pisteet_tama_kierros *= 2    
     return pisteet_tama_kierros
 
 
@@ -279,6 +297,7 @@ def tutki_edelliset_muuvit_pysty(edelliset_muuvit):
     x_t = [x for x, y in edelliset_muuvit]
     y_t = [y for x, y in edelliset_muuvit]
     sanan_pituus =  y_t[-1] - y_t[0] + 1   # itse laitetut napi !!!!
+   
     
     #itse laitetut napit
     for x, y in edelliset_muuvit:
@@ -298,28 +317,27 @@ def tutki_edelliset_muuvit_pysty(edelliset_muuvit):
            tuplapisteet = False 
     
     # tutkitaan pystysuorassa sanan reunat
-    if not y_t[0] == y_t[-1]:
-        y = y_t[0]
-        while y > 0:
-            if not ruudukko[y -1][x_t[0]] == "":
-                if kerrokset[x_t[0], y -1] > 1 :   # 2 pistettä pohjakerroksesta, jos sana kokonaan 1-kerroksinen
-                    tuplapisteet = False
-                pisteet_tama_kierros += kerrokset[x_t[0], y -1]
-                sanan_pituus += 1
-                y -= 1 
-            else:
-                break
+    y = y_t[0]
+    while y > 0:
+        if not ruudukko[y -1][x_t[0]] == "":
+            if kerrokset[x_t[0], y -1] > 1 :   # 2 pistettä pohjakerroksesta, jos sana kokonaan 1-kerroksinen
+                tuplapisteet = False
+            pisteet_tama_kierros += kerrokset[x_t[0], y -1]
+            sanan_pituus += 1
+            y -= 1 
+        else:
+            break
 
-        y = y_t[-1]
-        while y < kirjainten_lkm -1:
-            if not ruudukko[y +1][x_t[0]] == "":
-                if kerrokset[x_t[0], y +1] > 1 :   # 2 pistettä pohjakerroksesta, jos sana kokonaan 1-kerroksinen
-                    tuplapisteet = False
-                pisteet_tama_kierros += kerrokset[x_t[0], y +1]
-                sanan_pituus += 1
-                y += 1 
-            else:
-                break
+    y = y_t[-1]
+    while y < kirjainten_lkm -1:
+        if not ruudukko[y +1][x_t[0]] == "":
+            if kerrokset[x_t[0], y +1] > 1 :   # 2 pistettä pohjakerroksesta, jos sana kokonaan 1-kerroksinen
+                tuplapisteet = False
+            pisteet_tama_kierros += kerrokset[x_t[0], y +1]
+            sanan_pituus += 1
+            y += 1 
+        else:
+            break
         
     if sanan_pituus == 1:   
         return 0
@@ -419,24 +437,32 @@ def main():
                 # ENTER = vuoronvaihto
                 if event.key == pygame.K_RETURN:
                     if (vuoro % 4 == 1 or vuoro % 4 == 2) and len(edelliset_muuvit) > 0:
-                        # pelaaja1, vaaka
-                        p = tutki_edelliset_muuvit_vaaka(sorted(edelliset_muuvit))
-                        if p == 0:      # TODO ei nåin, voi olla päävaaka ja apuvaaka !! pitääkö additional kutsua tutki_edelliset_muuvit_vaaka:llä
-                            for muuvi in edelliset_muuvit:   
-                                pisteet_pel1 += tutki_vaaka_additional(muuvi[0], muuvi[1])   # x, y     
-                            print("tutki_vaaka_additional", pisteet_pel1)  
+                        y_t = [y for x, y in edelliset_muuvit]
+                        x_t = [x for x, y in edelliset_muuvit]
+                        # pelaaja1, vaaka pitkä, pysty vain additional : 
+                        if y_t[0] == y_t[-1]:
+                            pisteet_pel1 += tutki_edelliset_muuvit_vaaka(sorted(edelliset_muuvit))
+                            print("tutki_edelliset_muuvit_vaaka", pisteet_pel1 )
+                            if len(y_t) == 1:
+                                pisteet_pel1 += tutki_edelliset_muuvit_pysty(sorted(edelliset_muuvit))
+                                print("tutki_edelliset_muuvit_pysty", pisteet_pel1 )
+                            else:
+                                for muuvi in edelliset_muuvit:   
+                                    pisteet_pel1 += tutki_pysty_additional(muuvi[0], muuvi[1])   # x, y     
+                                print("tutki_pysty_additional", pisteet_pel1)                         
+                          
+                        # pelaaja1, pysty pitkä, vaaka vain additional
                         else:
-                            pisteet_pel1 += p    
-                            print("tutki_edelliset_muuvit_vaaka", pisteet_pel1)     
-                        # pelaaja1, pysty
-                        p = tutki_edelliset_muuvit_pysty(sorted(edelliset_muuvit))                         
-                        if p == 0:
-                            for muuvi in edelliset_muuvit:   
-                                pisteet_pel1 += tutki_pysty_additional(muuvi[0], muuvi[1])   # x, y     
-                            print("tutki_pysty_additional", pisteet_pel1)  
-                        else:
-                            pisteet_pel1 += p    
-                            print("tutki_edelliset_muuvit_pysty", pisteet_pel1)       
+                            pisteet_pel1 += tutki_edelliset_muuvit_pysty(sorted(edelliset_muuvit))
+                            print("tutki_edelliset_muuvit_pysty", pisteet_pel1 )
+                            if len(x_t) == 1:
+                                pisteet_pel1 += tutki_edelliset_muuvit_vaaka(sorted(edelliset_muuvit))
+                                print("tutki_edelliset_muuvit_vaaka", pisteet_pel1 )
+                            else:
+                                for muuvi in edelliset_muuvit:   
+                                    pisteet_pel1 += tutki_vaaka_additional(muuvi[0], muuvi[1])   # x, y     
+                                print("tutki_vaaka_additional", pisteet_pel1)   
+
                         # uudet napit
                         for muuvi in edelliset_muuvit:                                                   
                             if len(aakkoset) > 0:
