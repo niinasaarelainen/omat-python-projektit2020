@@ -421,9 +421,7 @@ def main():
     while len(pel1_7) > 0 and len(pel2_7) > 0:       
         SCREEN.fill(BLACK)
         drawGrid()
-        tekstit(vuoro)
-        #valitusteksti        
-        SCREEN.blit(valitus, (30, 71))        
+        tekstit(vuoro)          
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -439,34 +437,37 @@ def main():
                 # ENTER = vuoronvaihto
                 if event.key == pygame.K_RETURN:
                     if (vuoro % 4 == 1 or vuoro % 4 == 2) and len(edelliset_muuvit) > 0:
+                        valitus = fontti.render(f"", True, YELLOW)
                         #oikeellisuus:
-                        if oikeellisuus.tarkista(ruudukko, kerrokset, edelliset_muuvit):
+                        if oikeellisuus.tarkista(ruudukko, kerrokset, edelliset_muuvit):   # laittomasta siirrosta ei pisteitä
                             print("truuuuuuuu")
-                        y_t = [y for x, y in edelliset_muuvit]
-                        x_t = [x for x, y in edelliset_muuvit]
-                        # pelaaja1, vaaka pitkä, pysty vain additional : 
-                        if y_t[0] == y_t[-1]:
-                            pisteet_pel1 += tutki_edelliset_muuvit_vaaka(sorted(edelliset_muuvit))
-                            print("tutki_edelliset_muuvit_vaaka", pisteet_pel1 )
-                            if len(y_t) == 1:
-                                pisteet_pel1 += tutki_edelliset_muuvit_pysty(sorted(edelliset_muuvit))
-                                print("tutki_edelliset_muuvit_pysty", pisteet_pel1 )
-                            else:
-                                for muuvi in edelliset_muuvit:   
-                                    pisteet_pel1 += tutki_pysty_additional(muuvi[0], muuvi[1])   # x, y     
-                                print("tutki_pysty_additional", pisteet_pel1)                         
-                          
-                        # pelaaja1, pysty pitkä, vaaka vain additional
-                        else:
-                            pisteet_pel1 += tutki_edelliset_muuvit_pysty(sorted(edelliset_muuvit))
-                            print("tutki_edelliset_muuvit_pysty", pisteet_pel1 )
-                            if len(x_t) == 1:
+                            y_t = [y for x, y in edelliset_muuvit]
+                            x_t = [x for x, y in edelliset_muuvit]
+                            # pelaaja1, vaaka pitkä, pysty vain additional : 
+                            if y_t[0] == y_t[-1]:
                                 pisteet_pel1 += tutki_edelliset_muuvit_vaaka(sorted(edelliset_muuvit))
                                 print("tutki_edelliset_muuvit_vaaka", pisteet_pel1 )
+                                if len(y_t) == 1:
+                                    pisteet_pel1 += tutki_edelliset_muuvit_pysty(sorted(edelliset_muuvit))
+                                    print("tutki_edelliset_muuvit_pysty", pisteet_pel1 )
+                                else:
+                                    for muuvi in edelliset_muuvit:   
+                                        pisteet_pel1 += tutki_pysty_additional(muuvi[0], muuvi[1])   # x, y     
+                                    print("tutki_pysty_additional", pisteet_pel1)                         
+                            
+                            # pelaaja1, pysty pitkä, vaaka vain additional
                             else:
-                                for muuvi in edelliset_muuvit:   
-                                    pisteet_pel1 += tutki_vaaka_additional(muuvi[0], muuvi[1])   # x, y     
-                                print("tutki_vaaka_additional", pisteet_pel1)   
+                                pisteet_pel1 += tutki_edelliset_muuvit_pysty(sorted(edelliset_muuvit))
+                                print("tutki_edelliset_muuvit_pysty", pisteet_pel1 )
+                                if len(x_t) == 1:
+                                    pisteet_pel1 += tutki_edelliset_muuvit_vaaka(sorted(edelliset_muuvit))
+                                    print("tutki_edelliset_muuvit_vaaka", pisteet_pel1 )
+                                else:
+                                    for muuvi in edelliset_muuvit:   
+                                        pisteet_pel1 += tutki_vaaka_additional(muuvi[0], muuvi[1])   # x, y     
+                                    print("tutki_vaaka_additional", pisteet_pel1)   
+                        else:
+                            valitus = fontti.render(f"Laiton siirto, ei pisteitä", True, YELLOW)
 
                         # uudet napit
                         for muuvi in edelliset_muuvit:                                                   
@@ -474,11 +475,20 @@ def main():
                                 pel1_7.append(uusi_nappi())
 
                     elif len(edelliset_muuvit) > 0:    # TODO pel2 vasta kun pel1 VARMASTI toimii
-                        pisteet_pel2 += tutki_edelliset_muuvit_vaaka(sorted(edelliset_muuvit))
-                        pisteet_pel2 += tutki_edelliset_muuvit_pysty(sorted(edelliset_muuvit))
+                        valitus = fontti.render(f"", True, YELLOW)
+                        #oikeellisuus:
+                        if oikeellisuus.tarkista(ruudukko, kerrokset, edelliset_muuvit):   # laittomasta siirrosta ei pisteitä
+                            pisteet_pel2 += tutki_edelliset_muuvit_vaaka(sorted(edelliset_muuvit))
+                            pisteet_pel2 += tutki_edelliset_muuvit_pysty(sorted(edelliset_muuvit))
+
+                        else:
+                            valitus = fontti.render(f"Laiton siirto, ei pisteitä", True, YELLOW)
+
+                        # uudet napit
                         for muuvi in edelliset_muuvit:
                             if len(aakkoset) > 0:
-                                pel2_7.append(uusi_nappi())                    
+                                pel2_7.append(uusi_nappi())    
+
                     vuoro += 2
                     edelliset_muuvit = []
                 #vaihda nappi
@@ -490,7 +500,6 @@ def main():
                             SCREEN.blit(valitus, (30, 71))     
                             pygame.display.flip()
                             vuoro, kirjain, valivali = vaihda_nappi(vuoro, kirjain) 
-                        valitus = fontti.render("", True, YELLOW)
                     else:
                         valitus = fontti.render(f"Ei enää uusia aakkosia, ei voi vaihtaa", True, YELLOW)
 
@@ -506,6 +515,9 @@ def main():
         elif kirjain_ind >= 0 and (vuoro % 4 == 3 or vuoro % 4 == 0):
             rect = pygame.Rect(278 + kirjain_ind * kirjainvali , WINDOW_HEIGHT - 52, blockSize // 2 + 2, blockSize // 2 + 2)
             pygame.draw.rect(SCREEN, WHITE, rect, 2)
+
+        #valitusteksti        
+        SCREEN.blit(valitus, (30, 71))      
 
         CLOCK.tick(8000)   
         pygame.display.flip()
