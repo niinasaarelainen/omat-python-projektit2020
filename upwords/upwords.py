@@ -1,4 +1,5 @@
 import pygame, random, os
+from oikeellisuus import Oikeellisuus    # toimii vaikka alleviivaus !!!!!!!!
 
 BLACK = (0, 0, 0)
 WHITE = (200, 200, 200)
@@ -23,6 +24,7 @@ pel2_7 = []
 ruudukko = []
 kerrokset = {}
 edelliset_muuvit = []
+oikeellisuus = Oikeellisuus()
 
 
 def jaa_napit_aloitus():
@@ -75,13 +77,13 @@ def tekstit(vuoro):
     teksti = fontti.render(f"Pelaaja 1:   {pel1_str} ", True, WHITE)
     pisteet = fontti_pieni.render(f"{pisteet_pel1}", True, GREEN)
     SCREEN.blit(teksti, (40, 24))
-    SCREEN.blit(pisteet, (WINDOW_WIDTH - 52, 27))
+    SCREEN.blit(pisteet, (WINDOW_WIDTH - 53, 29))
     pel2_str = "  "
     pel2_str = pel2_str.join(sorted(pel2_7)) 
     teksti = fontti.render(f"Pelaaja 2:   {pel2_str}", True, WHITE)
     pisteet = fontti_pieni.render(f"{pisteet_pel2}", True, GREEN)
     SCREEN.blit(teksti, (40, WINDOW_HEIGHT - 50))
-    SCREEN.blit(pisteet, (WINDOW_WIDTH - 52, WINDOW_HEIGHT - 47))
+    SCREEN.blit(pisteet, (WINDOW_WIDTH - 50, WINDOW_HEIGHT - 49))
 
     # näppäinkomennot:
     fontti_pieni = pygame.font.SysFont("FreeMono", 15)
@@ -140,7 +142,7 @@ def tutki_mouse(x, y, vuoro, kirjain):
     global edelliset_muuvit
     kirjain_ind = -1
 
-    if vuoro % 4 == 1 and y < blockSize:    # TODO sittenkin toinen kirjain ennen laittoa ?!?
+    if vuoro % 4 == 1 and y < blockSize:    # TODO sittenkin muu kirjain ennen laittoa ?!? = UNDO !!  kirjain_ind ja minne_kirjain talteen
         kirjain_ind = mika_kirjain(x)
         kirjain = sorted(pel1_7)[kirjain_ind]   
         vuoro += 1          
@@ -346,7 +348,7 @@ def tutki_edelliset_muuvit_pysty(edelliset_muuvit):
     return pisteet_tama_kierros
 
 
-def vaihda_nappi(vuoro, kirjain):             # TODO
+def vaihda_nappi(vuoro, kirjain):            
     pyorii = True
     valitus = ""
     while pyorii:
@@ -437,6 +439,9 @@ def main():
                 # ENTER = vuoronvaihto
                 if event.key == pygame.K_RETURN:
                     if (vuoro % 4 == 1 or vuoro % 4 == 2) and len(edelliset_muuvit) > 0:
+                        #oikeellisuus:
+                        if oikeellisuus.tarkista(ruudukko, kerrokset, edelliset_muuvit):
+                            print("truuuuuuuu")
                         y_t = [y for x, y in edelliset_muuvit]
                         x_t = [x for x, y in edelliset_muuvit]
                         # pelaaja1, vaaka pitkä, pysty vain additional : 
@@ -468,7 +473,7 @@ def main():
                             if len(aakkoset) > 0:
                                 pel1_7.append(uusi_nappi())
 
-                    elif len(edelliset_muuvit) > 0: 
+                    elif len(edelliset_muuvit) > 0:    # TODO pel2 vasta kun pel1 VARMASTI toimii
                         pisteet_pel2 += tutki_edelliset_muuvit_vaaka(sorted(edelliset_muuvit))
                         pisteet_pel2 += tutki_edelliset_muuvit_pysty(sorted(edelliset_muuvit))
                         for muuvi in edelliset_muuvit:
