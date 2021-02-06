@@ -440,7 +440,7 @@ def main():
                         valitus = fontti.render(f"", True, YELLOW)
                         #oikeellisuus:
                         if oikeellisuus.tarkista(ruudukko, edelliset_muuvit):   # laittomasta siirrosta ei pisteitä
-                            print("truuuuuuuu")
+                            print("truuuuuuuu 1")
                             y_t = [y for x, y in edelliset_muuvit]
                             x_t = [x for x, y in edelliset_muuvit]
                             # pelaaja1, vaaka pitkä, pysty vain additional : 
@@ -465,7 +465,7 @@ def main():
                                 else:
                                     for muuvi in edelliset_muuvit:   
                                         pisteet_pel1 += tutki_vaaka_additional(muuvi[0], muuvi[1])   # x, y     
-                                    print("tutki_vaaka_additional", pisteet_pel1)   
+                                        print("tutki_vaaka_additional", pisteet_pel1)   
                         else:
                             valitus = fontti.render(f"Laiton siirto, ei pisteitä", True, YELLOW)
 
@@ -478,9 +478,32 @@ def main():
                         valitus = fontti.render(f"", True, YELLOW)
                         #oikeellisuus:
                         if oikeellisuus.tarkista(ruudukko, edelliset_muuvit):   # laittomasta siirrosta ei pisteitä
-                            pisteet_pel2 += tutki_edelliset_muuvit_vaaka(sorted(edelliset_muuvit))
-                            pisteet_pel2 += tutki_edelliset_muuvit_pysty(sorted(edelliset_muuvit))
-
+                            print("truuuuuuuu 2")
+                            y_t = [y for x, y in edelliset_muuvit]
+                            x_t = [x for x, y in edelliset_muuvit]
+                            # pelaaja1, vaaka pitkä, pysty vain additional : 
+                            if y_t[0] == y_t[-1]:
+                                pisteet_pel2 += tutki_edelliset_muuvit_vaaka(sorted(edelliset_muuvit))
+                                print("tutki_edelliset_muuvit_vaaka", pisteet_pel2 )
+                                if len(y_t) == 1:
+                                    pisteet_pel2 += tutki_edelliset_muuvit_pysty(sorted(edelliset_muuvit))
+                                    print("tutki_edelliset_muuvit_pysty", pisteet_pel2 )
+                                else:
+                                    for muuvi in edelliset_muuvit:   
+                                        pisteet_pel2 += tutki_pysty_additional(muuvi[0], muuvi[1])   # x, y     
+                                    print("tutki_pysty_additional", pisteet_pel2)                         
+                            
+                            # pelaaja1, pysty pitkä, vaaka vain additional
+                            else:
+                                pisteet_pel2 += tutki_edelliset_muuvit_pysty(sorted(edelliset_muuvit))
+                                print("tutki_edelliset_muuvit_pysty", pisteet_pel2 )
+                                if len(x_t) == 1:
+                                    pisteet_pel2 += tutki_edelliset_muuvit_vaaka(sorted(edelliset_muuvit))
+                                    print("tutki_edelliset_muuvit_vaaka", pisteet_pel2 )
+                                else:
+                                    for muuvi in edelliset_muuvit:   
+                                        pisteet_pel2 += tutki_vaaka_additional(muuvi[0], muuvi[1])   # x, y     
+                                        print("tutki_vaaka_additional", pisteet_pel2)   
                         else:
                             valitus = fontti.render(f"Laiton siirto, ei pisteitä", True, YELLOW)
 
