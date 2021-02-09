@@ -1,4 +1,4 @@
-import pygame, random, os
+import pygame, random, os, copy
 from oikeellisuus import Oikeellisuus    # toimii vaikka alleviivaus !!!!!!!!
 
 BLACK = (0, 0, 0)
@@ -23,7 +23,8 @@ pel1_7 = []
 pel2_7 = []
 ruudukko = []
 kerrokset = {}
-edelliset_muuvit = []
+edelliset_muuvit = []     # yhden siirron ajan
+kaikki_muuvit_talteen = []   # koko pelin ajan --> UNDO
 oikeellisuus = Oikeellisuus()
 
 
@@ -46,6 +47,7 @@ def alusta_ruudukko():
     ruudukko[4][8] = "I"  
     for x in range (2, 9):
         kerrokset[x, 4] = 1
+    kaikki_muuvit_talteen.append(copy.deepcopy(ruudukko))
 
 
 def uusi_nappi():    
@@ -114,9 +116,6 @@ def mika_kirjain(x):
 
 
 def minne_kirjain(x, y, kirjain, vuoro):
-
-    #global pisteet_pel1
-    #global pisteet_pel2
     x_indeksi = 0
     y_indeksi = 0 
 
@@ -135,6 +134,7 @@ def minne_kirjain(x, y, kirjain, vuoro):
         ruudukko[y_indeksi][x_indeksi] = kirjain        
 
     edelliset_muuvit.append([x_indeksi, y_indeksi])
+    kaikki_muuvit_talteen.append(copy.deepcopy(ruudukko))
     return True
     
 
@@ -377,6 +377,16 @@ def vaihda_nappi(vuoro, kirjain):
     return vuoro, kirjain, valitus   
 
 
+def laitetut_laittomat_napit_pois():
+    global kaikki_muuvit_talteen
+    kaikki_muuvit_talteen = copy.deepcopy(kaikki_muuvit_talteen[:-1])
+    tokavika = copy.deepcopy(kaikki_muuvit_talteen[-1])    
+    print(tokavika)
+    for x, y in edelliset_muuvit:
+        kerrokset(x, y) -= 1
+    return tokavika
+
+
 def lopputeksti(vuoro):   # vuoro voi olla myös -1, jos ei painettiin "L"
     global pisteet_pel1, pisteet_pel2
     if vuoro > 0 and (vuoro % 4 == 1 or vuoro % 4 == 2):
@@ -416,7 +426,7 @@ def main():
     fontti = pygame.font.SysFont("Arial", 30)
     valitus = fontti.render(f"", True, GREEN)
     kirjain_ind = -1    
-    global edelliset_muuvit, pisteet_pel1, pisteet_pel2
+    global edelliset_muuvit, pisteet_pel1, pisteet_pel2, ruudukko
 
     while len(pel1_7) > 0 and len(pel2_7) > 0:       
         SCREEN.fill(BLACK)
@@ -468,6 +478,7 @@ def main():
                                         print("tutki_vaaka_additional", pisteet_pel1)   
                         else:
                             valitus = fontti.render(f"Laiton siirto, ei pisteitä", True, YELLOW)
+                            ruudukko = laitetut_laittomat_napit_pois()
 
                         # uudet napit
                         for muuvi in edelliset_muuvit:                                                   
