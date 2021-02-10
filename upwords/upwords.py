@@ -142,7 +142,8 @@ def tutki_mouse(x, y, vuoro, kirjain):
     global edelliset_muuvit
     kirjain_ind = -1
 
-    if vuoro % 4 == 1 and y < blockSize:    # TODO sittenkin muu kirjain ennen laittoa ?!? = UNDO !!  kirjain_ind ja minne_kirjain talteen
+    # pelaaja 1
+    if vuoro % 4 == 1 and y < blockSize:    
         kirjain_ind = mika_kirjain(x)
         kirjain = sorted(pel1_7)[kirjain_ind]   
         vuoro += 1          
@@ -150,10 +151,15 @@ def tutki_mouse(x, y, vuoro, kirjain):
     elif vuoro % 4 == 2 and y >= blockSize and y <= WINDOW_HEIGHT - blockSize:    
         if minne_kirjain(x, y, kirjain, vuoro):
             pel1_7.remove(kirjain)    
-            print(sorted(edelliset_muuvit))            
-        
+            print(sorted(edelliset_muuvit))                    
         vuoro -= 1   # oletus että lisätään useampi kuin 1 kirjain
 
+    elif vuoro % 4 == 2 and y < blockSize:   # TODO sittenkin muu kirjain ennen laittoa
+        kirjain_ind = mika_kirjain(x)
+        kirjain = sorted(pel1_7)[kirjain_ind]   
+
+    
+    # pelaaja 2
     elif vuoro % 4 == 3 and y > WINDOW_HEIGHT - blockSize:        
         kirjain_ind = mika_kirjain(x)
         kirjain = sorted(pel2_7)[kirjain_ind]
@@ -164,6 +170,10 @@ def tutki_mouse(x, y, vuoro, kirjain):
             pel2_7.remove(kirjain)
             print(sorted(edelliset_muuvit))
         vuoro -= 1 
+
+    elif vuoro % 4 == 0 and  y > WINDOW_HEIGHT - blockSize:
+        kirjain_ind = mika_kirjain(x)
+        kirjain = sorted(pel2_7)[kirjain_ind]
 
     return kirjain, kirjain_ind, vuoro
 
@@ -460,8 +470,6 @@ def pelaaja_1(fontti):
         valitus = fontti.render(f"Laiton siirto, ei pisteitä", True, YELLOW)
         ruudukko = laitetut_laittomat_napit_pois()
 
-    
-
     return valitus
 
 
@@ -503,9 +511,10 @@ def pelaaja_2(fontti):
                 pel2_7.append(uusi_nappi())    
             
     else: # laiton siirto
+        for x,y in edelliset_muuvit:   
+            pel1_7.append(ruudukko[y][x])
         valitus = fontti.render(f"Laiton siirto, ei pisteitä", True, YELLOW)
         ruudukko = laitetut_laittomat_napit_pois()
-        # TODO laittomat napit takaisin
 
     return valitus
 
