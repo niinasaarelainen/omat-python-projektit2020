@@ -144,9 +144,9 @@ def tutki_mouse(x, y, vuoro, kirjain):
             kirjain = sorted(pel1_7)[kirjain_ind]  
     
         elif y >= blockSize and y <= WINDOW_HEIGHT - blockSize:    
-            if minne_kirjain(x, y, kirjain, vuoro):
-                pel1_7.remove(kirjain)    
-                print(sorted(edelliset_muuvit))      
+            if minne_kirjain(x, y, kirjain, vuoro):   # False jos kerroksia jo 5
+                pel1_7.remove(kirjain)                  # TODO list.remove(x): x not in list
+                print(sorted(edelliset_muuvit))         # jos klikkasi 2 krt pelilautaa
     
     # pelaaja 2
     elif vuoro % 4 == 3 or vuoro % 4 == 0:
@@ -191,7 +191,6 @@ def tutki_edelliset_muuvit_vaaka(edelliset_muuvit):
     x = x_t[0]
     while x > 0:
         if not ruudukko[y_t[0]][x - 1] == "":
-            print(ruudukko[y_t[0]][x - 1])
             if kerrokset[x -1, y_t[0]] > 1 :   # 2 pistettä pohjakerroksesta, jos sana kokonaan 1-kerroksinen
                 tuplapisteet = False
             pisteet_tama_kierros += kerrokset[x -1, y_t[0]]
@@ -203,7 +202,6 @@ def tutki_edelliset_muuvit_vaaka(edelliset_muuvit):
     x = x_t[-1] + 1
     while x < kirjainten_lkm :
         if not ruudukko[y_t[-1]][x] == "":
-            print(ruudukko[y_t[-1]][x])
             if kerrokset[x, y_t[-1]] > 1 :   # 2 pistettä pohjakerroksesta
                 tuplapisteet = False
             pisteet_tama_kierros += kerrokset[x, y_t[-1]]
@@ -213,7 +211,6 @@ def tutki_edelliset_muuvit_vaaka(edelliset_muuvit):
             break 
 
     if sanan_pituus == 1:
-        print("  vaaka  sanan_pituus == 1 ")
         return 0      
     if tuplapisteet:
         pisteet_tama_kierros *= 2    
@@ -229,7 +226,6 @@ def tutki_vaaka_additional(x_orig, y):
             pisteet_tama_kierros += kerrokset[x - 1, y]
             if kerrokset[x - 1, y] > 1 :   # 2 pistettä pohjakerroksesta
                 tuplapisteet = False
-            print("tutki_vaaka_additional", ruudukko[y][x - 1])
             x -= 1 
         else:
             break
@@ -239,7 +235,6 @@ def tutki_vaaka_additional(x_orig, y):
             pisteet_tama_kierros += kerrokset[x + 1, y]
             if kerrokset[x + 1, y] > 1 :   # 2 pistettä pohjakerroksesta
                 tuplapisteet = False
-            print("tutki_vaaka_additional", ruudukko[y][x + 1])
             x += 1    
         else:
             if pisteet_tama_kierros > 0:
@@ -261,7 +256,6 @@ def tutki_pysty_additional(x, y_orig):
             pisteet_tama_kierros += kerrokset[x, y - 1]
             if kerrokset[x, y - 1] > 1 :   # 2 pistettä pohjakerroksesta
                 tuplapisteet = False
-            print(ruudukko[y - 1][x])
             y -= 1 
         else:
             break
@@ -271,7 +265,6 @@ def tutki_pysty_additional(x, y_orig):
             pisteet_tama_kierros += kerrokset[x, y + 1]
             if kerrokset[x, y + 1] > 1 :   # 2 pistettä pohjakerroksesta
                 tuplapisteet = False
-            print("tutki_pysty_additional", ruudukko[y + 1][x])
             y += 1    
         else:
             if pisteet_tama_kierros > 0:
@@ -369,8 +362,7 @@ def vaihda_nappi(vuoro, kirjain):
 def laitetut_laittomat_napit_pois():
     global kaikki_muuvit_talteen
     kaikki_muuvit_talteen = copy.deepcopy(kaikki_muuvit_talteen[:-1])
-    tokavika = copy.deepcopy(kaikki_muuvit_talteen[-1])    
-    print(tokavika)
+    tokavika = copy.deepcopy(kaikki_muuvit_talteen[-1]) 
     for x, y in edelliset_muuvit:
         kerrokset[x, y] -= 1
     return tokavika
@@ -410,7 +402,6 @@ def pelaaja_1(fontti):
     valitus = fontti.render(f"", True, YELLOW)
     #oikeellisuus:
     if oikeellisuus.tarkista(ruudukko, edelliset_muuvit):   # laittomasta siirrosta ei pisteitä
-        print("truuuuuuuu 1")
         y_t = [y for x, y in edelliset_muuvit]
         x_t = [x for x, y in edelliset_muuvit]
         # pelaaja1, vaaka pitkä, pysty vain additional : 
@@ -455,7 +446,6 @@ def pelaaja_2(fontti):
     valitus = fontti.render(f"", True, YELLOW)
     #oikeellisuus:
     if oikeellisuus.tarkista(ruudukko, edelliset_muuvit):   # laittomasta siirrosta ei pisteitä
-        print("truuuuuuuu 2")
         y_t = [y for x, y in edelliset_muuvit]
         x_t = [x for x, y in edelliset_muuvit]
         # pelaaja1, vaaka pitkä, pysty vain additional : 
@@ -489,7 +479,7 @@ def pelaaja_2(fontti):
             
     else: # laiton siirto
         for x,y in edelliset_muuvit:   
-            pel1_7.append(ruudukko[y][x])
+            pel2_7.append(ruudukko[y][x])
         valitus = fontti.render(f"Laiton siirto, ei pisteitä", True, YELLOW)
         ruudukko = laitetut_laittomat_napit_pois()
 
