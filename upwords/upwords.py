@@ -49,13 +49,11 @@ def alusta_ruudukko():
         kerrokset[x, 4] = 1
     kaikki_muuvit_talteen.append(copy.deepcopy(ruudukko))
 
-
 def uusi_nappi():    
     r = random.randint(0, len(aakkoset) - 1)    
     valittu = aakkoset[r]
     aakkoset.remove(valittu)
     return valittu
-
 
 def drawGrid():    
     for x in range(kirjainten_lkm):
@@ -103,8 +101,7 @@ def tekstit(vuoro):
                 kerros_lkm = kerrokset[sarake, rivi]    
                 if kerros_lkm > 1:
                     kerros = fontti_pieni.render(str(kerros_lkm), True, WHITE)
-                    SCREEN.blit(kerros, (sarake * blockSize , (rivi + 1) * blockSize))    
-    
+                    SCREEN.blit(kerros, (sarake * blockSize , (rivi + 1) * blockSize))      
 
 def mika_kirjain(x):
     # 297, 353, 412, 466, 525, 580, 638    kirjainten keskipisteet
@@ -113,7 +110,6 @@ def mika_kirjain(x):
         if x > 297 - (kirjainvali // 2) + i * kirjainvali:
             indeksi = i
     return indeksi
-
 
 def minne_kirjain(x, y, kirjain, vuoro):
     x_indeksi = 0
@@ -137,7 +133,6 @@ def minne_kirjain(x, y, kirjain, vuoro):
     kaikki_muuvit_talteen.append(copy.deepcopy(ruudukko))
     return True
     
-
 def tutki_mouse(x, y, vuoro, kirjain):
     global edelliset_muuvit
     kirjain_ind = -1
@@ -146,18 +141,17 @@ def tutki_mouse(x, y, vuoro, kirjain):
     if vuoro % 4 == 1 and y < blockSize:    
         kirjain_ind = mika_kirjain(x)
         kirjain = sorted(pel1_7)[kirjain_ind]   
-        vuoro += 1          
+        vuoro += 1        
+
+    elif vuoro % 4 == 2 and y < blockSize:   #  sittenkin muu kirjain ennen laittoa
+        kirjain_ind = mika_kirjain(x)
+        kirjain = sorted(pel1_7)[kirjain_ind]     
   
     elif vuoro % 4 == 2 and y >= blockSize and y <= WINDOW_HEIGHT - blockSize:    
         if minne_kirjain(x, y, kirjain, vuoro):
             pel1_7.remove(kirjain)    
             print(sorted(edelliset_muuvit))                    
         vuoro -= 1   # oletus että lisätään useampi kuin 1 kirjain
-
-    elif vuoro % 4 == 2 and y < blockSize:   # TODO sittenkin muu kirjain ennen laittoa
-        kirjain_ind = mika_kirjain(x)
-        kirjain = sorted(pel1_7)[kirjain_ind]   
-
     
     # pelaaja 2
     elif vuoro % 4 == 3 and y > WINDOW_HEIGHT - blockSize:        
@@ -165,18 +159,17 @@ def tutki_mouse(x, y, vuoro, kirjain):
         kirjain = sorted(pel2_7)[kirjain_ind]
         vuoro += 1 
 
+    elif vuoro % 4 == 0 and  y > WINDOW_HEIGHT - blockSize:   #  sittenkin muu kirjain ennen laittoa
+        kirjain_ind = mika_kirjain(x)
+        kirjain = sorted(pel2_7)[kirjain_ind]
+
     elif vuoro % 4 == 0 and y >= blockSize and y <= WINDOW_HEIGHT - blockSize:    
         if minne_kirjain(x, y, kirjain, vuoro):
             pel2_7.remove(kirjain)
             print(sorted(edelliset_muuvit))
         vuoro -= 1 
 
-    elif vuoro % 4 == 0 and  y > WINDOW_HEIGHT - blockSize:
-        kirjain_ind = mika_kirjain(x)
-        kirjain = sorted(pel2_7)[kirjain_ind]
-
     return kirjain, kirjain_ind, vuoro
-
 
 def tutki_edelliset_muuvit_vaaka(edelliset_muuvit):    
     tuplapisteet = True
@@ -236,7 +229,6 @@ def tutki_edelliset_muuvit_vaaka(edelliset_muuvit):
      
     return pisteet_tama_kierros
 
-
 def tutki_vaaka_additional(x_orig, y):  
     tuplapisteet = True
     pisteet_tama_kierros = 0
@@ -269,7 +261,6 @@ def tutki_vaaka_additional(x_orig, y):
         pisteet_tama_kierros *= 2    
     return pisteet_tama_kierros
 
-
 def tutki_pysty_additional(x, y_orig):     
     tuplapisteet = True
     pisteet_tama_kierros = 0
@@ -301,7 +292,6 @@ def tutki_pysty_additional(x, y_orig):
     if tuplapisteet:
         pisteet_tama_kierros *= 2    
     return pisteet_tama_kierros
-
 
 def tutki_edelliset_muuvit_pysty(edelliset_muuvit):
     tuplapisteet = True
@@ -357,7 +347,6 @@ def tutki_edelliset_muuvit_pysty(edelliset_muuvit):
         pisteet_tama_kierros *= 2        
     return pisteet_tama_kierros
 
-
 def vaihda_nappi(vuoro, kirjain):            
     pyorii = True
     valitus = ""
@@ -386,7 +375,6 @@ def vaihda_nappi(vuoro, kirjain):
            
     return vuoro, kirjain, valitus   
 
-
 def laitetut_laittomat_napit_pois():
     global kaikki_muuvit_talteen
     kaikki_muuvit_talteen = copy.deepcopy(kaikki_muuvit_talteen[:-1])
@@ -395,7 +383,6 @@ def laitetut_laittomat_napit_pois():
     for x, y in edelliset_muuvit:
         kerrokset[x, y] -= 1
     return tokavika
-
 
 def lopputeksti(vuoro):   # vuoro voi olla myös -1, jos ei painettiin "L"
     global pisteet_pel1, pisteet_pel2
@@ -472,7 +459,6 @@ def pelaaja_1(fontti):
 
     return valitus
 
-
 def pelaaja_2(fontti):
     global ruudukko, pisteet_pel2
     valitus = fontti.render(f"", True, YELLOW)
@@ -517,8 +503,6 @@ def pelaaja_2(fontti):
         ruudukko = laitetut_laittomat_napit_pois()
 
     return valitus
-
-
 
 def main():
     pygame.init()    
