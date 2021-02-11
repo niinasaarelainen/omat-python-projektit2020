@@ -138,38 +138,29 @@ def tutki_mouse(x, y, vuoro, kirjain):
     kirjain_ind = -1
 
     # pelaaja 1
-    if vuoro % 4 == 1 and y < blockSize:    
-        kirjain_ind = mika_kirjain(x)
-        kirjain = sorted(pel1_7)[kirjain_ind]   
-        vuoro += 1        
-
-    elif vuoro % 4 == 2 and y < blockSize:   #  sittenkin muu kirjain ennen laittoa
-        kirjain_ind = mika_kirjain(x)
-        kirjain = sorted(pel1_7)[kirjain_ind]     
-  
-    elif vuoro % 4 == 2 and y >= blockSize and y <= WINDOW_HEIGHT - blockSize:    
-        if minne_kirjain(x, y, kirjain, vuoro):
-            pel1_7.remove(kirjain)    
-            print(sorted(edelliset_muuvit))                    
-        vuoro -= 1   # oletus että lisätään useampi kuin 1 kirjain
+    if vuoro % 4 == 1 or vuoro % 4 == 2:
+        if y < blockSize:    
+            kirjain_ind = mika_kirjain(x)
+            kirjain = sorted(pel1_7)[kirjain_ind]  
+    
+        elif y >= blockSize and y <= WINDOW_HEIGHT - blockSize:    
+            if minne_kirjain(x, y, kirjain, vuoro):
+                pel1_7.remove(kirjain)    
+                print(sorted(edelliset_muuvit))      
     
     # pelaaja 2
-    elif vuoro % 4 == 3 and y > WINDOW_HEIGHT - blockSize:        
-        kirjain_ind = mika_kirjain(x)
-        kirjain = sorted(pel2_7)[kirjain_ind]
-        vuoro += 1 
+    elif vuoro % 4 == 3 or vuoro % 4 == 0:
+        if y > WINDOW_HEIGHT - blockSize:        
+            kirjain_ind = mika_kirjain(x)
+            kirjain = sorted(pel2_7)[kirjain_ind]
 
-    elif vuoro % 4 == 0 and  y > WINDOW_HEIGHT - blockSize:   #  sittenkin muu kirjain ennen laittoa
-        kirjain_ind = mika_kirjain(x)
-        kirjain = sorted(pel2_7)[kirjain_ind]
-
-    elif vuoro % 4 == 0 and y >= blockSize and y <= WINDOW_HEIGHT - blockSize:    
-        if minne_kirjain(x, y, kirjain, vuoro):
-            pel2_7.remove(kirjain)
-            print(sorted(edelliset_muuvit))
-        vuoro -= 1 
+        elif y >= blockSize and y <= WINDOW_HEIGHT - blockSize:    
+            if minne_kirjain(x, y, kirjain, vuoro):
+                pel2_7.remove(kirjain)
+                print(sorted(edelliset_muuvit))
 
     return kirjain, kirjain_ind, vuoro
+
 
 def tutki_edelliset_muuvit_vaaka(edelliset_muuvit):    
     tuplapisteet = True
