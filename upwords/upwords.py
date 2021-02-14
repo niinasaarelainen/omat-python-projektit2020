@@ -39,16 +39,7 @@ def alusta_ruudukko():
     for rivi in range(kirjainten_lkm):
         ruudukko.append([])
         for sarake in range(kirjainten_lkm):
-            ruudukko[rivi].append("")     
-    ruudukko[4][2] = "M"  
-    ruudukko[4][3] = "U"  
-    ruudukko[4][4] = "R"  
-    ruudukko[4][5] = "M"  
-    ruudukko[4][6] = "E"  
-    ruudukko[4][7] = "L"
-    ruudukko[4][8] = "I"  
-    for x in range (2, 9):
-        kerrokset[x, 4] = 1
+            ruudukko[rivi].append("") 
     kaikki_muuvit_talteen.append(copy.deepcopy(ruudukko))
 
 def uusi_nappi():    
@@ -73,24 +64,24 @@ def tekstit(vuoro):
 
     #pisteet:
     fontti = pygame.font.SysFont("FreeMono", 32)
-    fontti_pieni = pygame.font.SysFont("FreeMono", 26)
+    fontti_pieni = pygame.font.SysFont("FreeMono", 27)
     pel1_str = "  "
     pel1_str = pel1_str.join(sorted(pel1_7)) 
     teksti = fontti.render(f"Pelaaja 1:   {pel1_str} ", True, WHITE)
     pisteet = fontti_pieni.render(f"{pisteet_pel1}", True, GREEN)
-    SCREEN.blit(teksti, (40, 24))
-    SCREEN.blit(pisteet, (WINDOW_WIDTH - 53, 29))
+    SCREEN.blit(teksti, (40, 26))
+    SCREEN.blit(pisteet, (WINDOW_WIDTH - 51, 31))
     pel2_str = "  "
     pel2_str = pel2_str.join(sorted(pel2_7)) 
     teksti = fontti.render(f"Pelaaja 2:   {pel2_str}", True, WHITE)
     pisteet = fontti_pieni.render(f"{pisteet_pel2}", True, GREEN)
     SCREEN.blit(teksti, (40, WINDOW_HEIGHT - 50))
-    SCREEN.blit(pisteet, (WINDOW_WIDTH - 50, WINDOW_HEIGHT - 49))
+    SCREEN.blit(pisteet, (WINDOW_WIDTH - 51, WINDOW_HEIGHT - 46))
 
     # näppäinkomennot:
-    fontti_pieni = pygame.font.SysFont("FreeMono", 15)
-    nappaink = fontti_pieni.render(f"F2 = UNDO   ENTER = VUORONVAIHTO  V = VAIHDA KIRJAIN  L = LOPETA (KUMPIKAAN EI VOI SIIRTÄÄ)", True, YELLOW)
-    SCREEN.blit(nappaink, (20, 4))
+    fontti_pieni = pygame.font.SysFont("FreeMono", 17, bold=True)
+    nappaink = fontti_pieni.render(f"F2 = UNDO   ENTER = VUORONVAIHTO   V = KIRJAIMENVAIHTO   L = LOPETUS", True, YELLOW)
+    SCREEN.blit(nappaink, (40, 2))
 
     fontti = pygame.font.SysFont("FreeMono", 50)
     fontti_pieni = pygame.font.SysFont("FreeMono", 24)
@@ -162,7 +153,6 @@ def tutki_mouse(x, y, vuoro, kirjain):
                 print(sorted(edelliset_muuvit))
 
     return kirjain, kirjain_ind, vuoro
-
 
 def tutki_edelliset_muuvit_vaaka(edelliset_muuvit):    
     tuplapisteet = True
@@ -369,16 +359,21 @@ def laitetut_laittomat_napit_pois():
         kerrokset[x, y] -= 1
     return tokavika
 
-def lopputeksti(vuoro):   # vuoro voi olla myös -1, jos ei painettiin "L"
+def lopputeksti(vuoro):   # vuoro voi olla myös -1, jos painettiin "L"
     global pisteet_pel1, pisteet_pel2
+
+    # käyttämättöät napit
+    pisteet_pel1 -= len(pel1_7) * 5
+    pisteet_pel2 -= len(pel1_7) * 5
+
     if vuoro > 0 and (vuoro % 4 == 1 or vuoro % 4 == 2):
         pisteet_pel1 += tutki_edelliset_muuvit_vaaka(sorted(edelliset_muuvit))
         pisteet_pel1 += tutki_edelliset_muuvit_pysty(sorted(edelliset_muuvit))  
-        pisteet_pel1 -= len(pel1_7) * 5
+        
     elif vuoro > 0 and (vuoro % 4 == 3 or vuoro % 4 == 4):
         pisteet_pel2 += tutki_edelliset_muuvit_vaaka(sorted(edelliset_muuvit))
         pisteet_pel2 += tutki_edelliset_muuvit_pysty(sorted(edelliset_muuvit))  
-        pisteet_pel2 -= len(pel1_7) * 5
+        
 
     SCREEN.fill(BLACK)
     while True:
@@ -526,13 +521,14 @@ def main():
             
             if event.type == pygame.KEYDOWN:
                 #undo  
-                if event.key == pygame.K_F2:                        
-                    x, y = edelliset_muuvit[-1]                    
-                    if (vuoro % 4 == 1 or vuoro % 4 == 2): 
-                        pel1_7.append(ruudukko[y][x])
-                    else:
-                        pel2_7.append(ruudukko[y][x])
-                    ruudukko = undo(vuoro)  
+                if event.key == pygame.K_F2:    
+                    if len(edelliset_muuvit) > 0:                   
+                        x, y = edelliset_muuvit[-1]                    
+                        if (vuoro % 4 == 1 or vuoro % 4 == 2): 
+                            pel1_7.append(ruudukko[y][x])
+                        else:
+                            pel2_7.append(ruudukko[y][x])
+                        ruudukko = undo(vuoro)  
 
 
                 # ENTER = vuoronvaihto
