@@ -19,15 +19,15 @@ pisteet_pel1 = 0
 pisteet_pel2 = 0
 aakkoset = list("AAAAAAABDEEEFGHHHIIIIIIIIIJJJKKKKKLLLLLMMMMNNNOOOOOOPPRRRSSSSTTTTUUUUUUUUVVVVVYYYÄÄÄÄÖÖÖ")
 #aakkoset = list("AABDEEFGHHIIKLMUOV")
+kahden_pisteen_kirjaimet = ["B", "D", "F", "G"]
 pel1_7 = []
 pel2_7 = []
 ruudukko = []
 kerrokset = {}
 edelliset_muuvit = []     # yhden siirron ajan
+kirjaimet_yhdensiirronajalta = []
 kaikki_muuvit_talteen = []   # koko pelin ajan --> UNDO
 oikeellisuus = Oikeellisuus()
-
-# UNDO: 
 
 
 def jaa_napit_aloitus():
@@ -54,15 +54,14 @@ def drawGrid():
             rect = pygame.Rect(x*blockSize, y*blockSize, blockSize, blockSize)
             pygame.draw.rect(SCREEN, WHITE, rect, 1)   # 1 = vain reunat = mustaa keskellä
 
-def tekstit(vuoro):
-   
+def tekstit(vuoro):   
     if vuoro % 4 == 1 or vuoro % 4 == 2:        
         rect = pygame.Rect(15, 34, blockSize // 4, blockSize // 4)
     else:
         rect = pygame.Rect(15, WINDOW_HEIGHT - 40, blockSize // 4, blockSize // 4)
     pygame.draw.rect(SCREEN, YELLOW, rect, 0)    # 0 = kokovalkoinen
 
-    #pisteet:
+    #napit ja pisteet:
     fontti = pygame.font.SysFont("FreeMono", 32)
     fontti_pieni = pygame.font.SysFont("FreeMono", 27)
     pel1_str = "  "
@@ -127,7 +126,7 @@ def minne_kirjain(x, y, kirjain, vuoro):
     return True
     
 def tutki_mouse(x, y, vuoro, kirjain):
-    global edelliset_muuvit
+    global edelliset_muuvit, ruudukko
     kirjain_ind = -1
 
     # pelaaja 1
@@ -136,10 +135,16 @@ def tutki_mouse(x, y, vuoro, kirjain):
             kirjain_ind = mika_kirjain(x)
             kirjain = sorted(pel1_7)[kirjain_ind]  
     
-        elif y >= blockSize and y <= WINDOW_HEIGHT - blockSize:    
-            if minne_kirjain(x, y, kirjain, vuoro):   # False jos kerroksia jo 5
-                pel1_7.remove(kirjain)                  # TODO list.remove(x): x not in list
-                print(sorted(edelliset_muuvit))         # jos klikkasi 2 krt pelilautaa
+        elif y >= blockSize and y <= WINDOW_HEIGHT - blockSize:                
+            if minne_kirjain(x, y, kirjain, vuoro):   # False jos kerroksia jo 5   
+                if kirjain in pel1_7:            
+                    kirjaimet_yhdensiirronajalta.append(kirjain)
+                    pel1_7.remove(kirjain)                   
+                    print(sorted(edelliset_muuvit))         
+                else:
+                    ruudukko = undo()  
+                    ruudukko = undo()  
+                    minne_kirjain(x, y, kirjain, vuoro)
     
     # pelaaja 2
     elif vuoro % 4 == 3 or vuoro % 4 == 0:
@@ -149,8 +154,11 @@ def tutki_mouse(x, y, vuoro, kirjain):
 
         elif y >= blockSize and y <= WINDOW_HEIGHT - blockSize:    
             if minne_kirjain(x, y, kirjain, vuoro):
-                pel2_7.remove(kirjain)
-                print(sorted(edelliset_muuvit))
+                if kirjain in pel1_7:        
+                    kirjaimet_yhdensiirronajalta.append(kirjain)
+                    pel2_7.remove(kirjain)
+                    print(sorted(edelliset_muuvit))           
+
 
     return kirjain, kirjain_ind, vuoro
 
@@ -397,7 +405,7 @@ def lopputeksti(vuoro):   # vuoro voi olla myös -1, jos painettiin "L"
                 pygame.quit()
 
 def pelaaja_1(fontti):
-    global ruudukko, pisteet_pel1 
+    global ruudukko, pisteet_pel1, kirjaimet_yhdensiirronajalta
     valitus = fontti.render(f"", True, YELLOW)
     #oikeellisuus:
     if oikeellisuus.tarkista(ruudukko, edelliset_muuvit):   # laittomasta siirrosta ei pisteitä
@@ -425,7 +433,12 @@ def pelaaja_1(fontti):
             else:
                 for muuvi in edelliset_muuvit:   
                     pisteet_pel1 += tutki_vaaka_additional(muuvi[0], muuvi[1])   # x, y     
-                    print("tutki_vaaka_additional", pisteet_pel1)   
+                    print("tutki_vaaka_additional", pisteet_pel1) 
+
+        # erikoisnapit, pelaaja 1
+        for kirjain in kirjaimet_yhdensiirronajalta:
+            if kirjain in kahden_pisteen_kirjaimet: 
+                pisteet_pel1 += 2 
 
         # uudet napit
         for muuvi in edelliset_muuvit:                                                   
@@ -484,7 +497,7 @@ def pelaaja_2(fontti):
 
     return valitus
 
-def undo(vuoro):
+def undo():
     global kaikki_muuvit_talteen, edelliset_muuvit
     kaikki_muuvit_talteen = copy.deepcopy(kaikki_muuvit_talteen[:-1])
     tokavika = copy.deepcopy(kaikki_muuvit_talteen[-1]) 
@@ -502,7 +515,7 @@ def main():
     fontti = pygame.font.SysFont("Arial", 30)
     valitus = fontti.render(f"", True, GREEN)
     kirjain_ind = -1    
-    global edelliset_muuvit, pisteet_pel1, pisteet_pel2, ruudukko
+    global edelliset_muuvit, pisteet_pel1, pisteet_pel2, ruudukko, kirjaimet_yhdensiirronajalta
 
     while len(pel1_7) > 0 and len(pel2_7) > 0:       
         SCREEN.fill(BLACK)
@@ -528,7 +541,7 @@ def main():
                             pel1_7.append(ruudukko[y][x])
                         else:
                             pel2_7.append(ruudukko[y][x])
-                        ruudukko = undo(vuoro)  
+                        ruudukko = undo()  
 
 
                 # ENTER = vuoronvaihto
@@ -539,6 +552,8 @@ def main():
                         valitus = pelaaja_2(fontti)  
                     vuoro += 2
                     edelliset_muuvit = []
+                    kirjaimet_yhdensiirronajalta = []
+
 
                 #vaihda nappi
                 if chr(event.key) == "v":
