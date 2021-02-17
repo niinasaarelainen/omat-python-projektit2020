@@ -361,11 +361,11 @@ def vaihda_nappi(vuoro, kirjain):
 
 def laitetut_laittomat_napit_pois():
     global kaikki_muuvit_talteen
-    kaikki_muuvit_talteen = copy.deepcopy(kaikki_muuvit_talteen[:-1])
-    tokavika = copy.deepcopy(kaikki_muuvit_talteen[-1]) 
+    kaikki_muuvit_talteen = copy.deepcopy(kaikki_muuvit_talteen[:-(len(edelliset_muuvit))])
+    uusi_ruudukko = copy.deepcopy(kaikki_muuvit_talteen[-1]) 
     for x, y in edelliset_muuvit:
         kerrokset[x, y] -= 1
-    return tokavika
+    return uusi_ruudukko
 
 def lopputeksti(vuoro):   # vuoro voi olla myös -1, jos painettiin "L"
     global pisteet_pel1, pisteet_pel2
@@ -445,10 +445,10 @@ def pelaaja_1(fontti):
             if len(aakkoset) > 0:
                 pel1_7.append(uusi_nappi())
 
-    else: # laiton siirto
-        for x,y in edelliset_muuvit:   
-            pel1_7.append(ruudukko[y][x])
-        valitus = fontti.render(f"Laiton siirto, ei pisteitä", True, YELLOW)
+    else: # laiton siirto 
+        for kirjain in kirjaimet_yhdensiirronajalta:   
+            pel1_7.append(kirjain)
+        valitus = fontti.render(oikeellisuus.syy, True, YELLOW)
         ruudukko = laitetut_laittomat_napit_pois()
 
     return valitus
@@ -492,7 +492,7 @@ def pelaaja_2(fontti):
     else: # laiton siirto
         for x,y in edelliset_muuvit:   
             pel2_7.append(ruudukko[y][x])
-        valitus = fontti.render(f"Laiton siirto, ei pisteitä", True, YELLOW)
+        valitus = fontti.render(oikeellisuus.syy, True, YELLOW)
         ruudukko = laitetut_laittomat_napit_pois()
 
     return valitus
@@ -512,7 +512,7 @@ def main():
     
     vuoro = 1
     kirjain = ""
-    fontti = pygame.font.SysFont("Arial", 30)
+    fontti = pygame.font.SysFont("Arial", 26)
     valitus = fontti.render(f"", True, GREEN)
     kirjain_ind = -1    
     global edelliset_muuvit, pisteet_pel1, pisteet_pel2, ruudukko, kirjaimet_yhdensiirronajalta
