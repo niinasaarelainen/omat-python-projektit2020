@@ -17,6 +17,7 @@ kirjainvali = 57
 
 pisteet_pel1 = 0
 pisteet_pel2 = 0
+vuoro = 1
 aakkoset = list("AAAAAAABDEEEFGHHHIIIIIIIIIJJJKKKKKLLLLLMMMMNNNOOOOOOPPRRRSSSSTTTTUUUUUUUUVVVVVYYYÄÄÄÄÖÖÖ")
 #aakkoset = list("AABDEEFGHHIIKLMUOV")
 kahden_pisteen_kirjaimet = ["B", "D", "F", "G"]
@@ -154,7 +155,7 @@ def tutki_mouse(x, y, vuoro, kirjain):
 
         elif y >= blockSize and y <= WINDOW_HEIGHT - blockSize:    
             if minne_kirjain(x, y, kirjain, vuoro):
-                if kirjain in pel1_7:        
+                if kirjain in pel2_7:        
                     kirjaimet_yhdensiirronajalta.append(kirjain)
                     pel2_7.remove(kirjain)
                     print(sorted(edelliset_muuvit))           
@@ -405,10 +406,10 @@ def lopputeksti(vuoro):   # vuoro voi olla myös -1, jos painettiin "L"
                 pygame.quit()
 
 def pelaaja_1(fontti):
-    global ruudukko, pisteet_pel1, kirjaimet_yhdensiirronajalta
+    global ruudukko, pisteet_pel1, kirjaimet_yhdensiirronajalta, vuoro
     valitus = fontti.render(f"", True, YELLOW)
     #oikeellisuus:
-    if oikeellisuus.tarkista(ruudukko, edelliset_muuvit):   # laittomasta siirrosta ei pisteitä
+    if oikeellisuus.tarkista(ruudukko, sorted(edelliset_muuvit)):   # laittomasta siirrosta ei pisteitä
         y_t = [y for x, y in edelliset_muuvit]
         x_t = [x for x, y in edelliset_muuvit]
         # pelaaja1, vaaka pitkä, pysty vain additional : 
@@ -450,14 +451,15 @@ def pelaaja_1(fontti):
             pel1_7.append(kirjain)
         valitus = fontti.render(oikeellisuus.syy, True, YELLOW)
         ruudukko = laitetut_laittomat_napit_pois()
+        vuoro -= 2
 
     return valitus
 
 def pelaaja_2(fontti):
-    global ruudukko, pisteet_pel2
+    global ruudukko, pisteet_pel2, vuoro, kirjaimet_yhdensiirronajalta
     valitus = fontti.render(f"", True, YELLOW)
     #oikeellisuus:
-    if oikeellisuus.tarkista(ruudukko, edelliset_muuvit):   # laittomasta siirrosta ei pisteitä
+    if oikeellisuus.tarkista(ruudukko, sorted(edelliset_muuvit)):   # laittomasta siirrosta ei pisteitä
         y_t = [y for x, y in edelliset_muuvit]
         x_t = [x for x, y in edelliset_muuvit]
         # pelaaja1, vaaka pitkä, pysty vain additional : 
@@ -490,10 +492,11 @@ def pelaaja_2(fontti):
                 pel2_7.append(uusi_nappi())    
             
     else: # laiton siirto
-        for x,y in edelliset_muuvit:   
-            pel2_7.append(ruudukko[y][x])
+        for kirjain in kirjaimet_yhdensiirronajalta:   
+            pel1_7.append(kirjain)
         valitus = fontti.render(oikeellisuus.syy, True, YELLOW)
         ruudukko = laitetut_laittomat_napit_pois()
+        vuoro -= 2
 
     return valitus
 
@@ -510,12 +513,11 @@ def undo():
 def main():
     pygame.init()    
     
-    vuoro = 1
     kirjain = ""
     fontti = pygame.font.SysFont("Arial", 26)
     valitus = fontti.render(f"", True, GREEN)
     kirjain_ind = -1    
-    global edelliset_muuvit, pisteet_pel1, pisteet_pel2, ruudukko, kirjaimet_yhdensiirronajalta
+    global edelliset_muuvit, pisteet_pel1, pisteet_pel2, ruudukko, vuoro, kirjaimet_yhdensiirronajalta
 
     while len(pel1_7) > 0 and len(pel2_7) > 0:       
         SCREEN.fill(BLACK)

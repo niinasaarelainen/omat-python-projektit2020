@@ -2,13 +2,12 @@ import pygame
 
 class Oikeellisuus:
    
-   
-    def tarkista(self, ruudukko, edelliset_muuvit):
+    def tarkista(self, ruudukko, edelliset_muuvit):   # edelliset_muuvit sorted
         self.syy = ""
         self.ruudukko = ruudukko
         self.vika_indeksi = len(self.ruudukko) - 1
         self.edelliset_muuvit = edelliset_muuvit
-        if self.ymparilla_ei_tyhjaa() and self.xy_rivissa() and self.ei_samoja():
+        if self.ymparilla_ei_tyhjaa() and self.xy_rivissa() and self.ei_samoja() and self.ei_tyhjaa_valissa():
             return True
         return False
 
@@ -27,7 +26,7 @@ class Oikeellisuus:
             if y + 1 < self.vika_indeksi:
                 if not self.ruudukko[y  + 1 ][x] == "":
                     return True 
-            self.syy = "kirjaimen tulee koskettaa vaaka- tai pystysuunnassa vanhaa kirjainta "
+            self.syy = "kirjaimen tulee koskettaa vaaka-/pystysuunnassa toista kirjainta "
         return False
         
 
@@ -49,4 +48,16 @@ class Oikeellisuus:
 
 
     def ei_tyhjaa_valissa(self):
-        pass
+        y_t = [y for x, y in self.edelliset_muuvit]
+        x_t = [x for x, y in self.edelliset_muuvit]
+        if y_t[0] == y_t[-1] : 
+            for x in range(x_t[0], x_t[-1]):
+                if self.ruudukko[y_t[0]][x] == "":
+                    self.syy = "laittamiesi kirjainten välissä oli tyhjää"
+                    return False
+        if x_t[0] == x_t[-1] :
+            for y in range(y_t[0], y_t[-1]):
+                if self.ruudukko[y][x_t[0]] == "":
+                    self.syy = "laittamiesi kirjainten välissä oli tyhjää"
+                    return False        
+        return True
