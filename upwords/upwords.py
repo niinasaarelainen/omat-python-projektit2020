@@ -18,8 +18,8 @@ kirjainvali = 57
 pisteet_pel1 = 0
 pisteet_pel2 = 0
 vuoro = 1
-aakkoset = list("AAAAAAABDEEEFGHHHIIIIIIIIIJJJKKKKKLLLLLMMMMNNNOOOOOOPPRRRSSSSTTTTUUUUUUUUVVVVVYYYÄÄÄÄÖÖÖ")
-#aakkoset = list("AABDEEFGHHIIKLMUOV")
+#aakkoset = list("AAAAAAABDEEEFGHHHIIIIIIIIIJJJKKKKKLLLLLMMMMNNNOOOOOOPPRRRSSSSTTTTUUUUUUUUVVVVVYYYÄÄÄÄÖÖÖ")
+aakkoset = list("ABDEFGHHIIKLMOV")
 kahden_pisteen_kirjaimet = ["B", "D", "F", "G"]
 pel1_7 = []
 pel2_7 = []
@@ -261,7 +261,7 @@ def tutki_pysty_additional(x, y_orig):
         else:
             break
     y = y_orig
-    while x < kirjainten_lkm - 1:
+    while y < kirjainten_lkm - 1:
         if not ruudukko[y + 1][x] == "":
             pisteet_tama_kierros += kerrokset[x, y + 1]
             if kerrokset[x, y + 1] > 1 :   # 2 pistettä pohjakerroksesta
@@ -372,15 +372,7 @@ def lopputeksti(vuoro):   # vuoro voi olla myös -1, jos painettiin "L"
 
     # käyttämättöät napit
     pisteet_pel1 -= len(pel1_7) * 5
-    pisteet_pel2 -= len(pel1_7) * 5
-
-    if vuoro > 0 and (vuoro % 4 == 1 or vuoro % 4 == 2):
-        pisteet_pel1 += tutki_edelliset_muuvit_vaaka(sorted(edelliset_muuvit))
-        pisteet_pel1 += tutki_edelliset_muuvit_pysty(sorted(edelliset_muuvit))  
-        
-    elif vuoro > 0 and (vuoro % 4 == 3 or vuoro % 4 == 4):
-        pisteet_pel2 += tutki_edelliset_muuvit_vaaka(sorted(edelliset_muuvit))
-        pisteet_pel2 += tutki_edelliset_muuvit_pysty(sorted(edelliset_muuvit))          
+    pisteet_pel2 -= len(pel1_7) * 5            
 
     SCREEN.fill(BLACK)
     while True:
@@ -482,7 +474,12 @@ def pelaaja_2(fontti):
             else:
                 for muuvi in edelliset_muuvit:   
                     pisteet_pel2 += tutki_vaaka_additional(muuvi[0], muuvi[1])   # x, y     
-                    print("tutki_vaaka_additional", pisteet_pel2)   
+                    print("tutki_vaaka_additional", pisteet_pel2)  
+
+        # erikoisnapit, pelaaja 2
+        for kirjain in kirjaimet_yhdensiirronajalta:
+            if kirjain in kahden_pisteen_kirjaimet: 
+                pisteet_pel2 += 2  
 
         # uudet napit
         for muuvi in edelliset_muuvit:
@@ -517,7 +514,9 @@ def main():
     kirjain_ind = -1    
     global edelliset_muuvit, pisteet_pel1, pisteet_pel2, ruudukko, vuoro, kirjaimet_yhdensiirronajalta
 
-    while (len(pel1_7) > 0 or len(pel2_7) > 0) and len(aakkoset) > 0:       
+    
+
+    while (len(pel1_7) > 0 or len(pel2_7) > 0) or len(aakkoset) > 0:   
         SCREEN.fill(BLACK)
         drawGrid()
         tekstit(vuoro)          
@@ -543,7 +542,6 @@ def main():
                             pel2_7.append(ruudukko[y][x])
                         ruudukko = undo()  
 
-
                 # ENTER = vuoronvaihto
                 if event.key == pygame.K_RETURN:
                     if (vuoro % 4 == 1 or vuoro % 4 == 2) and len(edelliset_muuvit) > 0:                        
@@ -553,7 +551,6 @@ def main():
                     vuoro += 2
                     edelliset_muuvit = []
                     kirjaimet_yhdensiirronajalta = []
-
 
                 #vaihda nappi
                 if chr(event.key) == "v":
@@ -586,6 +583,11 @@ def main():
         CLOCK.tick(8000)   
         pygame.display.flip()
             
+    # peli loppuu siihen että pelaajan napit loppu ennenkuin ehtii painaa ENTER
+    if (vuoro % 4 == 1 or vuoro % 4 == 2) and len(edelliset_muuvit) > 0:                        
+        pelaaja_1(fontti)   
+    elif len(edelliset_muuvit) > 0:    
+        pelaaja_2(fontti)  
     lopputeksti(vuoro)
         
 
