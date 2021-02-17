@@ -158,10 +158,10 @@ def tutki_mouse(x, y, vuoro, kirjain):
                 if kirjain in pel2_7:        
                     kirjaimet_yhdensiirronajalta.append(kirjain)
                     pel2_7.remove(kirjain)
-                    print(sorted(edelliset_muuvit))           
-
+                    print(sorted(edelliset_muuvit))          
 
     return kirjain, kirjain_ind, vuoro
+    
 
 def tutki_edelliset_muuvit_vaaka(edelliset_muuvit):    
     tuplapisteet = True
@@ -284,7 +284,6 @@ def tutki_edelliset_muuvit_pysty(edelliset_muuvit):
     x_t = [x for x, y in edelliset_muuvit]
     y_t = [y for x, y in edelliset_muuvit]
     sanan_pituus =  y_t[-1] - y_t[0] + 1   # itse laitetut napi !!!!
-   
     
     #itse laitetut napit
     for x, y in edelliset_muuvit:
@@ -381,8 +380,7 @@ def lopputeksti(vuoro):   # vuoro voi olla myös -1, jos painettiin "L"
         
     elif vuoro > 0 and (vuoro % 4 == 3 or vuoro % 4 == 4):
         pisteet_pel2 += tutki_edelliset_muuvit_vaaka(sorted(edelliset_muuvit))
-        pisteet_pel2 += tutki_edelliset_muuvit_pysty(sorted(edelliset_muuvit))  
-        
+        pisteet_pel2 += tutki_edelliset_muuvit_pysty(sorted(edelliset_muuvit))          
 
     SCREEN.fill(BLACK)
     while True:
@@ -496,7 +494,7 @@ def pelaaja_2(fontti):
             pel1_7.append(kirjain)
         valitus = fontti.render(oikeellisuus.syy, True, YELLOW)
         ruudukko = laitetut_laittomat_napit_pois()
-        vuoro -= 2
+        vuoro -= 2   # oma vuoro pysyy, RETURN = +2, evens out
 
     return valitus
 
@@ -519,7 +517,7 @@ def main():
     kirjain_ind = -1    
     global edelliset_muuvit, pisteet_pel1, pisteet_pel2, ruudukko, vuoro, kirjaimet_yhdensiirronajalta
 
-    while len(pel1_7) > 0 and len(pel2_7) > 0:       
+    while (len(pel1_7) > 0 or len(pel2_7) > 0) and len(aakkoset) > 0:       
         SCREEN.fill(BLACK)
         drawGrid()
         tekstit(vuoro)          
