@@ -496,9 +496,10 @@ def pelaaja_2(fontti):
     return valitus
 
 def undo():
-    global kaikki_muuvit_talteen, edelliset_muuvit
+    global kaikki_muuvit_talteen, edelliset_muuvit, kirjaimet_yhdensiirronajalta
     kaikki_muuvit_talteen = copy.deepcopy(kaikki_muuvit_talteen[:-1])
     tokavika = copy.deepcopy(kaikki_muuvit_talteen[-1]) 
+    kirjaimet_yhdensiirronajalta = copy.deepcopy(kirjaimet_yhdensiirronajalta[:-1])
     x, y = edelliset_muuvit[-1]
     kerrokset[x, y] -= 1
     edelliset_muuvit = copy.deepcopy(edelliset_muuvit[:-1])
