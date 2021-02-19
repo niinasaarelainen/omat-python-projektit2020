@@ -4,6 +4,7 @@ pygame.init()
 pygame.midi.init()
 kello = pygame.time.Clock()
 naytto = pygame.display.set_mode((911, 220))
+fontti = pygame.font.SysFont("FreeMono", 35)
 fontti_pieni = pygame.font.SysFont("FreeMono", 25)
 port = pygame.midi.get_default_output_id()
 midi_out = pygame.midi.Output(port, 0)
@@ -74,14 +75,14 @@ def mainloop():
         naytto.fill((10, 10, 10))     
         pygame.display.flip()  
         
-        teksti = fontti_pieni.render(f"melodian pituus: {montako}", True, (0, 67, 67))  
-        naytto.blit(teksti, (25, 25))    
+        pituus = fontti.render(f"melodian pituus: {montako}", True, (10, 77, 77))  
+        naytto.blit(pituus, (60, 25))    
+        virheita = fontti.render(f"melodian pituus: {virheet}", True, (10, 77, 77))  
+        naytto.blit(virheita, (60, 75))  
         if koneen_vuoro:
             pygame.time.delay(700)
-            #print(f"melodian pituus: {montako}")
             soita_melodia(melodia, montako)
             koneen_vuoro = False
-            montako += 1
             monesko_kayttajan_aani = 0
 
         for event in pygame.event.get():
@@ -91,7 +92,7 @@ def mainloop():
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
                 if event.key == pygame.K_SPACE:
-                    soita_melodia(melodia, montako -1) 
+                    soita_melodia(melodia, montako ) 
                     break
                 if not melodia[monesko_kayttajan_aani] == chr(event.key):
                     virheet += 1
@@ -99,13 +100,12 @@ def mainloop():
                 midi_play(chr(event.key), edellinen, 8)
                 edellinen = chr(event.key)
                 monesko_kayttajan_aani += 1
-                if monesko_kayttajan_aani == montako -1:
+                if monesko_kayttajan_aani == montako :
+                    montako += 1
                     koneen_vuoro = True
        
         pygame.display.flip()
         kello.tick(40)
-
-
 
 
 melodia = generoi_melodia()    
