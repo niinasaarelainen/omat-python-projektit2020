@@ -13,7 +13,8 @@ WHITE = (200, 200, 200)
 
 
 def nappaimet(intervalli):
-    return "zxcvbnm,.-"[0 : intervalli]
+    # virheellinen syöte TODO
+    return "zxcvbnm,."[0 : intervalli]
 
 def alkuohjeet(naytto):
     teksti = fontti_pieni.render(f"Valitse intervalli, jonka alueella melodia liikkuu (2-9)", True, WHITE)
@@ -25,9 +26,10 @@ def alkuohjeet(naytto):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
                     mainloop()
-                teksti = fontti_pieni.render(f" käytä näppäimiä {nappaimet(int(chr(event.key)))}", True, WHITE)
+                print(event.key) 
+                teksti = fontti_pieni.render(f" käytä näppäimiä {nappaimet(int(chr(event.key)))}   (z = keski-c)", True, WHITE)
                 naytto.blit(teksti, (30, 75))
-                teksti = fontti_pieni.render(f" Sama melodia uudestaan = Space , Esc = lopeta", True, WHITE)
+                teksti = fontti_pieni.render(f" Sama melodia uudestaan = Space ,  Esc = lopeta", True, WHITE)
                 naytto.blit(teksti, (30, 120))     
                 teksti = fontti_pieni.render(f" Paina nyt ENTER, kun haluat aloittaa", True, WHITE)
                 naytto.blit(teksti, (30, 165))            
@@ -76,9 +78,9 @@ def mainloop():
         pygame.display.flip()  
         
         pituus = fontti.render(f"melodian pituus: {montako}", True, (10, 77, 77))  
-        naytto.blit(pituus, (60, 25))    
-        virheita = fontti.render(f"melodian pituus: {virheet}", True, (10, 77, 77))  
-        naytto.blit(virheita, (60, 75))  
+        naytto.blit(pituus, (160, 25))    
+        virheita = fontti.render(f"virheitä: {virheet}", True, (10, 77, 77))  
+        naytto.blit(virheita, (160, 75))  
         if koneen_vuoro:
             pygame.time.delay(700)
             soita_melodia(melodia, montako)
