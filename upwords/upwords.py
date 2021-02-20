@@ -18,8 +18,8 @@ kirjainvali = 57
 pisteet_pel1 = 0
 pisteet_pel2 = 0
 vuoro = 1
-#aakkoset = list("AAAAAAABDEEEFGHHHIIIIIIIIIJJJKKKKKLLLLLMMMMNNNOOOOOOPPRRRSSSSTTTTUUUUUUUUVVVVVYYYÄÄÄÄÖÖÖ")
-aakkoset = list("ABDEFGHHIIKLMOV")
+aakkoset = list("AAAAAAABDEEEFGHHHIIIIIIIIIJJJKKKKKLLLLLMMMMNNNOOOOOOPPRRRSSSSTTTTUUUUUUUUVVVVVYYYÄÄÄÄÖÖÖ")
+#aakkoset = list("ABDEFGHHIIKLMOV")
 kahden_pisteen_kirjaimet = ["B", "D", "F", "G"]
 pel1_7 = []
 pel2_7 = []
@@ -55,7 +55,7 @@ def drawGrid():
             rect = pygame.Rect(x*blockSize, y*blockSize, blockSize, blockSize)
             pygame.draw.rect(SCREEN, WHITE, rect, 1)   # 1 = vain reunat = mustaa keskellä
 
-def tekstit(vuoro):   
+def tekstit():   
     if vuoro % 4 == 1 or vuoro % 4 == 2:        
         rect = pygame.Rect(15, 34, blockSize // 4, blockSize // 4)
     else:
@@ -104,7 +104,8 @@ def mika_kirjain(x):
             indeksi = i
     return indeksi
 
-def minne_kirjain(x, y, kirjain, vuoro):
+def minne_kirjain(x, y, kirjain):
+    global vuoro
     x_indeksi = 0
     y_indeksi = 0 
 
@@ -119,15 +120,19 @@ def minne_kirjain(x, y, kirjain, vuoro):
     elif kerrokset[x_indeksi, y_indeksi] == 5:
         return False
     else:
-        kerrokset[x_indeksi, y_indeksi] += 1        
+        kerrokset[x_indeksi, y_indeksi] += 1   
+        if ruudukko[y_indeksi][x_indeksi] == kirjain :
+            print(" if ruudukko[y_indeksi][x_indeksi] == kirjain")
+            vuoro -= 2
+            return False     
         ruudukko[y_indeksi][x_indeksi] = kirjain        
 
     edelliset_muuvit.append([x_indeksi, y_indeksi])
     kaikki_muuvit_talteen.append(copy.deepcopy(ruudukko))
     return True
     
-def tutki_mouse(x, y, vuoro, kirjain):
-    global edelliset_muuvit, ruudukko
+def tutki_mouse(x, y, kirjain):
+    global edelliset_muuvit, ruudukko, vuoro
     kirjain_ind = -1
 
     # pelaaja 1
@@ -137,7 +142,7 @@ def tutki_mouse(x, y, vuoro, kirjain):
             kirjain = sorted(pel1_7)[kirjain_ind]  
     
         elif y >= blockSize and y <= WINDOW_HEIGHT - blockSize:                
-            if minne_kirjain(x, y, kirjain, vuoro):   # False jos kerroksia jo 5   
+            if minne_kirjain(x, y, kirjain):   # False jos kerroksia jo 5   
                 if kirjain in pel1_7:            
                     kirjaimet_yhdensiirronajalta.append(kirjain)
                     pel1_7.remove(kirjain)                   
@@ -145,7 +150,7 @@ def tutki_mouse(x, y, vuoro, kirjain):
                 else:
                     ruudukko = undo()  
                     ruudukko = undo()  
-                    minne_kirjain(x, y, kirjain, vuoro)
+                    minne_kirjain(x, y, kirjain)
     
     # pelaaja 2
     elif vuoro % 4 == 3 or vuoro % 4 == 0:
@@ -154,13 +159,18 @@ def tutki_mouse(x, y, vuoro, kirjain):
             kirjain = sorted(pel2_7)[kirjain_ind]
 
         elif y >= blockSize and y <= WINDOW_HEIGHT - blockSize:    
-            if minne_kirjain(x, y, kirjain, vuoro):
+            if minne_kirjain(x, y, kirjain):
                 if kirjain in pel2_7:        
                     kirjaimet_yhdensiirronajalta.append(kirjain)
                     pel2_7.remove(kirjain)
-                    print(sorted(edelliset_muuvit))          
+                    print(sorted(edelliset_muuvit))    
+                else:
+                    ruudukko = undo()  
+                    ruudukko = undo()  
+                    minne_kirjain(x, y, kirjain)
+         
 
-    return kirjain, kirjain_ind, vuoro
+    return kirjain, kirjain_ind
     
 
 def tutki_edelliset_muuvit_vaaka(edelliset_muuvit):    
@@ -331,7 +341,8 @@ def tutki_edelliset_muuvit_pysty(edelliset_muuvit):
         pisteet_tama_kierros *= 2        
     return pisteet_tama_kierros
 
-def vaihda_nappi(vuoro, kirjain):            
+def vaihda_nappi(kirjain):    
+    global vuoro        
     pyorii = True
     valitus = ""
     while pyorii:
@@ -339,25 +350,25 @@ def vaihda_nappi(vuoro, kirjain):
             if event.type == pygame.MOUSEBUTTONDOWN: 
                 x = event.pos[0]
                 y = event.pos[1]                  
-                kirjain, kirjain_ind, vuoro_uusi = tutki_mouse(x, y, vuoro, kirjain)  
+                kirjain, kirjain_ind = tutki_mouse(x, y, kirjain)  
                 if vuoro % 4 == 1 or vuoro % 4 == 2:
                     if y > WINDOW_HEIGHT - blockSize:
                         valitus = "Voit vaihtaa vain yhden napin, nyt on Pelaaja1:n vuoro"
                     else:                            
                         pel1_7.remove(kirjain)   
                         pel1_7.append(uusi_nappi())
-                        vuoro = vuoro_uusi + 2  # vuoro hyppäää ruudukko"tilan" yli
+                        vuoro += 2  # vuoro hyppäää ruudukko"tilan" yli
                 else:
                     if y < blockSize:
                         valitus = "Voit vaihtaa vain yhden napin, nyt on Pelaaja2:n vuoro"
                     else:    
                         pel2_7.remove(kirjain) 
                         pel2_7.append(uusi_nappi())
-                        vuoro = vuoro_uusi + 2  # vuoro hyppäää ruudukko"tilan" yli
+                        vuoro += 2  # vuoro hyppäää ruudukko"tilan" yli
                 pyorii = False
         CLOCK.tick(8000)    
            
-    return vuoro, kirjain, valitus   
+    return kirjain, valitus   
 
 def laitetut_laittomat_napit_pois():
     global kaikki_muuvit_talteen
@@ -432,6 +443,7 @@ def pelaaja_1(fontti):
                 pisteet_pel1 += 2 
 
         # uudet napit
+        print("edelliset_muuvit", edelliset_muuvit)
         for muuvi in edelliset_muuvit:                                                   
             if len(aakkoset) > 0:
                 pel1_7.append(uusi_nappi())
@@ -520,7 +532,7 @@ def main():
     while (len(pel1_7) > 0 or len(pel2_7) > 0) or len(aakkoset) > 0:   
         SCREEN.fill(BLACK)
         drawGrid()
-        tekstit(vuoro)          
+        tekstit()          
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -529,8 +541,7 @@ def main():
             if event.type == pygame.MOUSEBUTTONDOWN: 
                 x = event.pos[0]
                 y = event.pos[1]                  
-                kirjain, kirjain_ind, vuoro_uusi = tutki_mouse(x, y, vuoro, kirjain)     
-                vuoro = vuoro_uusi  
+                kirjain, kirjain_ind = tutki_mouse(x, y, kirjain)  
             
             if event.type == pygame.KEYDOWN:
                 #undo  
@@ -556,12 +567,12 @@ def main():
                 #vaihda nappi
                 if chr(event.key) == "v":
                     if len(aakkoset) > 0:                        
-                        vuoro, kirjain, valivali = vaihda_nappi(vuoro, kirjain)   
+                        kirjain, valivali = vaihda_nappi(kirjain)   
                         while not valivali == "":                            
                             valitus = fontti.render(valivali, True, YELLOW)
                             SCREEN.blit(valitus, (30, 71))     
                             pygame.display.flip()
-                            vuoro, kirjain, valivali = vaihda_nappi(vuoro, kirjain) 
+                            kirjain, valivali = vaihda_nappi(kirjain) 
                     else:
                         valitus = fontti.render(f"Ei enää uusia aakkosia, ei voi vaihtaa", True, YELLOW)
 
