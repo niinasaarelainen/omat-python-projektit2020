@@ -124,6 +124,7 @@ def minne_kirjain(x, y, kirjain):
         if ruudukko[y_indeksi][x_indeksi] == kirjain :
             print(" if ruudukko[y_indeksi][x_indeksi] == kirjain")
             vuoro -= 2
+            # TODO nappi pois laudalta pelaajalle takaisin
             return False     
         ruudukko[y_indeksi][x_indeksi] = kirjain        
 
@@ -556,9 +557,13 @@ def main():
 
                 # ENTER = vuoronvaihto
                 if event.key == pygame.K_RETURN:
-                    if (vuoro % 4 == 1 or vuoro % 4 == 2) and len(edelliset_muuvit) > 0:                        
+                    if (vuoro % 4 == 1 or vuoro % 4 == 2) and len(edelliset_muuvit) > 0:  
+                        if len(edelliset_muuvit) == 7:   # laitettiin kaikki napit     
+                            pisteet_pel1  += 15              
                         valitus = pelaaja_1(fontti)   
-                    elif len(edelliset_muuvit) > 0:    
+                    elif len(edelliset_muuvit) > 0:  
+                        if len(edelliset_muuvit) == 7:   # laitettiin kaikki napit     
+                            pisteet_pel2  += 15      
                         valitus = pelaaja_2(fontti)  
                     vuoro += 2
                     edelliset_muuvit = []
