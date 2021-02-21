@@ -501,7 +501,7 @@ def pelaaja_2(fontti):
             
     else: # laiton siirto
         for kirjain in kirjaimet_yhdensiirronajalta:   
-            pel1_7.append(kirjain)
+            pel2_7.append(kirjain)
         valitus = fontti.render(oikeellisuus.syy, True, YELLOW)
         ruudukko = laitetut_laittomat_napit_pois()
         vuoro -= 2   # oma vuoro pysyy, RETURN = +2, evens out
