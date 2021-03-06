@@ -21,8 +21,10 @@ intervallit = ["s2", "p3", "s3", "pu4", "y4/vä5", "pu5", "p6", "s6", "p7", "s7"
 oikea_vastaus = 0
 aani1 = 0
 aani2 = 0
-midi_numbers = {0:60, 1:61, 2:62, 3:63, 4:64, 5:65, 6:66, 7:67, 8:68, 9:69, 10:70, 11:71 }    #keski-c - h   
+midi_numbers = {0:60, 1:61, 2:62, 3:63, 4:64, 5:65, 6:66, 7:67, 8:68, 9:69, 10:70, 11:71, 12:72 }    #keski-c - h   
 oikein = -1  # aluksi ei kumpikaan, 0 = väärin, 1 = oikein
+
+sitar = 105
 
 
 def alusta_ruudukko():
@@ -69,7 +71,7 @@ def mika_grid_indeksi_y(y):
 def midi_play(notes, instrument, ms):
     midi_out.set_instrument(instrument)  
     for note in notes:
-        midi_out.note_on(midi_numbers[note], 110)
+        midi_out.note_on(midi_numbers[note], 120)
     pygame.time.delay(ms)
     for note in notes:
         midi_out.note_off(midi_numbers[note], 110)
@@ -78,19 +80,18 @@ def midi_play(notes, instrument, ms):
 def valitse_aanet():
     global oikea_vastaus, aani1, aani2
     aani1 = random.randint(0, 1)  # jos molemmat voi olla mikä ääni vain, tulee liikaa pieniä intervalleja
-    aani2 = random.randint(0, 11)
-    while aani1 == aani2 or abs(aani2 - aani1) == 1:
-        aani2 = random.randint(0, 11)
-    erotus = abs(aani2 - aani1) - 2
-    oikea_vastaus = erotus + 2
+    aani2 = random.randint(2, 12)
+    while abs(aani2 - aani1) == 1 or abs(aani2 - aani1) == 12: # vaihtoehdoissa ei ole eikä p2 eikä okt
+        aani2 = random.randint(2, 12)
+    oikea_vastaus = abs(aani2 - aani1)
 
 
 def soita_intervalli():  
-    global oikein  
     # peräkkäin
-    midi_play([aani1], 26, 400)  # notes, instrument, ms
-    midi_play([aani2], 26, 400) 
-    midi_play([aani1, aani2], 26, 800)
+    midi_play([aani1], sitar, 500)  # notes, instrument, ms
+    midi_play([aani2], sitar, 500) 
+    # yhtaikaa
+    midi_play([aani1, aani2], sitar, 1300)
    
 
 def ruudun_nollaus(pist, kysytty, x_ind, y_ind):
@@ -139,7 +140,6 @@ def mainloop():
                 y = event.pos[1]   
                 y_ind = mika_grid_indeksi_y(y)
                 if x_ind in [0,1] and y_ind >= 0 and y_ind <= 4:
-                    print(oikea_vastaus, ruudukko[y_ind][x_ind])
                     if oikea_vastaus == ruudukko[y_ind][x_ind]:
                         oikein = 1  
                         pist += 1                                       
