@@ -13,23 +13,23 @@ WHITE = (200, 200, 200)
 BLUE = (10, 97, 97)
 RED = (220, 0, 0)
 GREEN = (10, 220, 7)
-blockSize = 80
+blockSize = 90
 x_aloitus = 100
 y_aloitus = 130
 ruudukko = []
-soinnut = ["D7", "m7", "DMaj7", "mMaj7", "D7(b5)", "D7(#5)"]
-sointuvaihtoehdot = [[0, 4, 7, 10], [0, 3, 7, 10], [0, 4, 7, 11], [0, 3, 7, 11], [0, 4, 7, 10], [0, 4, 8, 10]]
+soinnut = ["D7", "m7", "DMaj7", "mMaj7", "D7(b5)", "D7(#5)", "puolidimi", "dimi"]
+sointuvaihtoehdot = [[0, 4, 7, 10], [0, 3, 7, 10], [0, 4, 7, 11], [0, 3, 7, 11], [0, 4, 6, 10], [0, 4, 8, 10], [0, 3, 6, 10],  [0, 3, 6, 9]]
 oikea_vastaus = ""
 oikea_sointu = []
 midi_numbers = {0:60, 1:61, 2:62, 3:63, 4:64, 5:65, 6:66, 7:67, 8:68, 9:69, 10:70, 11:71, 12:72 }    #keski-c - h   
 oikein = -1  # aluksi ei kumpikaan, 0 = väärin, 1 = oikein
-
+riveja = 4
 pno = 0
 
 
 def alusta_ruudukko():
     oikea_sointu = 0  
-    for rivi in range(3):
+    for rivi in range(riveja):
         ruudukko.append([])
         for sarake in range(2):
             ruudukko[rivi].append(oikea_sointu) 
@@ -38,7 +38,7 @@ def alusta_ruudukko():
 
 def drawGrid():  
     for x in range(2):
-        for y in range(3):                 
+        for y in range(riveja):                 
             rect = pygame.Rect(x*blockSize*3 + x_aloitus, y*blockSize + y_aloitus, blockSize*3, blockSize)
             pygame.draw.rect(naytto, WHITE, rect, 1)   # 1 = vain reunat = mustaa keskellä
             ind = ruudukko[y][x]
@@ -128,12 +128,13 @@ def mainloop():
                     break
 
             if event.type == pygame.MOUSEBUTTONDOWN: 
-                kysytty += 1   
+                
                 x = event.pos[0]
                 x_ind = mika_grid_indeksi_x(x)
                 y = event.pos[1]   
                 y_ind = mika_grid_indeksi_y(y)
-                if x_ind in [0,1] and y_ind >= 0 and y_ind <= 2:
+                if x_ind in [0,1] and y_ind >= 0 and y_ind < riveja:
+                    kysytty += 1   
                     if oikea_vastaus == ruudukko[y_ind][x_ind]:
                         oikein = 1  
                         pist += 1                                       
