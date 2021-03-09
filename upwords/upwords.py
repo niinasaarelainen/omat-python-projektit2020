@@ -104,7 +104,7 @@ def mika_kirjain(x):
             indeksi = i
     return indeksi
 
-def minne_kirjain(x, y, kirjain):
+def minne_kirjain(x, y, kirjain):  
     global vuoro
     x_indeksi = 0
     y_indeksi = 0 
@@ -120,13 +120,15 @@ def minne_kirjain(x, y, kirjain):
     elif kerrokset[x_indeksi, y_indeksi] == 5:
         return False
     else:
-        kerrokset[x_indeksi, y_indeksi] += 1   
+        # ei saa laittaa kahta samaa omaa kirjainta päällekkäin
         if ruudukko[y_indeksi][x_indeksi] == kirjain :
             print(" if ruudukko[y_indeksi][x_indeksi] == kirjain")
             vuoro -= 2
             # TODO nappi pois laudalta pelaajalle takaisin
-            return False     
-        ruudukko[y_indeksi][x_indeksi] = kirjain        
+            return False   
+        else:
+            kerrokset[x_indeksi, y_indeksi] += 1   
+            ruudukko[y_indeksi][x_indeksi] = kirjain        
 
     edelliset_muuvit.append([x_indeksi, y_indeksi])
     kaikki_muuvit_talteen.append(copy.deepcopy(ruudukko))
@@ -143,7 +145,8 @@ def tutki_mouse(x, y, kirjain):
             kirjain = sorted(pel1_7)[kirjain_ind]  
     
         elif y >= blockSize and y <= WINDOW_HEIGHT - blockSize:                
-            if minne_kirjain(x, y, kirjain):   # False jos kerroksia jo 5   
+            if minne_kirjain(x, y, kirjain):   # False jos kerroksia jo 5  / 2 samaa omaa pääl. 
+ # TODO jos oli kaksi J:tä ja yritti vaihtaa paikkaa, poistui molemmat J:t
                 if kirjain in pel1_7:            
                     kirjaimet_yhdensiirronajalta.append(kirjain)
                     pel1_7.remove(kirjain)                   
@@ -152,6 +155,12 @@ def tutki_mouse(x, y, kirjain):
                     ruudukko = undo()  
                     ruudukko = undo()  
                     minne_kirjain(x, y, kirjain)
+            # laiton siirto:
+            else:
+                for k in kirjaimet_yhdensiirronajalta:
+                    pel1_7.append(k)
+                    ruudukko = undo() 
+                vuoro -= 2
     
     # pelaaja 2
     elif vuoro % 4 == 3 or vuoro % 4 == 0:
@@ -168,8 +177,13 @@ def tutki_mouse(x, y, kirjain):
                 else:
                     ruudukko = undo()  
                     ruudukko = undo()  
-                    minne_kirjain(x, y, kirjain)
-         
+                    minne_kirjain(x, y, kirjain)   
+            # laiton siirto:
+            else:
+                for k in kirjaimet_yhdensiirronajalta:
+                    pel2_7.append(k)
+                    ruudukko = undo() 
+                vuoro -= 2      
 
     return kirjain, kirjain_ind
     
