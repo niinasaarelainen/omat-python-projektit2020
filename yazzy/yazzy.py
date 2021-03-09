@@ -29,11 +29,6 @@ def mitä_puuttuu(kerätään):
         naytto.blit(teksti, (540, y))    
 
 
-def valitse_lukitsemattomat(heitto):  
-    for noppa in heitto:
-        if noppa.valittu == False:
-            noppa.luku = random.randint(0, 5)
-    return heitto
 
 
 def tulos(heitto, kerätään):
@@ -41,10 +36,11 @@ def tulos(heitto, kerätään):
     lista = []
     for noppa in heitto:    
         lista.append(noppa.luku)
+        noppa.valittu = False
     setti = set(lista)    
 
     useita = {}
-    for i in range(6):
+    for i in range(1,7):   # lukemat 1-6 merkitään näin !!!! (muista 7-1 = 6)
         if lista.count(i) >= 2:
             useita[i] = lista.count(i) 
 
@@ -91,7 +87,7 @@ def tulos(heitto, kerätään):
             mika_tuli = "pikku suora "
             kerätään.remove("pikku suora (1-5)")               
 
-    if {0,2,3,4,5}.issubset(setti):   
+    if {2,3,4,5,6}.issubset(setti):   
         if "iso suora (2-6)" in kerätään:  
             mika_tuli = "iso suora"
             kerätään.remove("iso suora (2-6)")     
@@ -103,7 +99,7 @@ def piirra(heitto):
     x = EKA_NOPPA_X
     for noppa in heitto:
         naytto.blit(noppa.kuva(), (x, 160))
-        x += 75
+        x += 80
 
 
 def valintatekstit():
@@ -175,18 +171,18 @@ def silmukka():
                 if klikattu_ok:
                     klikattu_ok = False
                     heitto_123 += 1                    
-                    heitto = valitse_lukitsemattomat(heitto)
+                    heitto = valitse_lukitsemattomat(heitto)    # oli heitto
                    
                     if heitto_123 == 3:                         
                         naytto.fill((255, 255, 255))
+                        mika_tuli = tulos(heitto, kerätään)                        
                         piirra(heitto)
-                        mika_tuli = tulos(heitto, kerätään)
                         teksti = fontti.render(mika_tuli, True, (40, 40, 220))
                         naytto.blit(teksti, (220, 300))
                         if not "Et " in mika_tuli:
                             naytto.blit(clap, (320, 300))
                         pygame.display.flip()   
-                        pygame.time.delay(2000)  # 2 sekunnin viive
+                        pygame.time.delay(2500)  # 2,5 sekunnin viive
                         heitto_123 = 1
                         kierros += 1
                         heitto = valitse_5_randomia(nopat)
@@ -229,6 +225,6 @@ clap = pygame.transform.scale(clap, (100, 100) )
 
 alkunaytto()
 ei_valitut, valitut = nopat_listaan()
-nopat = muodosta_nopat(ei_valitut, valitut)
+nopat = muodosta_nopat(ei_valitut, valitut)   # 5 kpl Noppa-oliota
       
 silmukka()

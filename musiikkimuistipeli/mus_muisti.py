@@ -83,7 +83,7 @@ def mainloop():
         virheita = fontti.render(f"virheitä: {virheet}", True, BLUE)  
         naytto.blit(virheita, (190, 95))  
         teksti = fontti_pieni.render(f" Sama melodia uudestaan = Space ,  Esc = lopeta", True, WHITE)
-        naytto.blit(teksti, (65, 185))   
+        naytto.blit(teksti, (65, 180))   
         pygame.display.flip()
 
         if koneen_vuoro:
@@ -99,7 +99,7 @@ def mainloop():
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
                 if event.key == pygame.K_SPACE:
-                    soita_melodia(melodia, montako ) 
+                    soita_melodia(melodia, montako) 
                     break
                 if not melodia[monesko_kayttajan_aani] == chr(event.key):
                     virheet += 1
