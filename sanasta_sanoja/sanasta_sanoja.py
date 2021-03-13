@@ -52,6 +52,19 @@ def pisteet_nakyviin(pisteet):
     naytto.blit(t, (WIDTH - 50, 20))
 
 
+def onko_laillinen(arvottu_sana, sana):
+    s = ""
+    s = s.join(sana) 
+    if s.upper() == arvottu_sana:
+        return False
+    arvottu_sana = list(arvottu_sana)
+    for kirjain in sana:
+        if kirjain.upper() in arvottu_sana:
+            arvottu_sana.remove(kirjain.upper())
+        else:
+            return False
+    return True
+
 
 def main():
     pisteet = 0 
@@ -68,18 +81,22 @@ def main():
                 pygame.quit()
             else:                
                 if tapahtuma.type == pygame.KEYDOWN:    
-                    # välilyönti tai ENTER = sananvaihto               
+                    # välilyönti  tai ENTER :        
                     if tapahtuma.key == pygame.K_SPACE or tapahtuma.key == pygame.K_RETURN:
-                        pisteet += 1  
-                        rivi.append(chr(tapahtuma.key))
-                        print(rivit_ruudulla)  
-                        sanat.append(sana)  
+                        if len(sana) > 0 and not sana in sanat and onko_laillinen(arvottu_sana, sana):
+                            pisteet += 1  
+                            sanat.append(sana)  
+                        rivi.append(chr(pygame.K_SPACE))                        
                         sana = []
                         if len(rivi) > 40:
                             rivit_ruudulla.append(rivi)
                             rivi = []  
+                    # backspace:
+                    elif tapahtuma.key == pygame.K_BACKSPACE:
+                        rivi.pop(-1)
                     else:
                         rivi.append(chr(tapahtuma.key))
+                        sana.append(chr(tapahtuma.key))
             
         naytto.fill(valkoinen)
         sanat_nakyviin(rivi, rivit_ruudulla, arvottu_sana)     
@@ -105,4 +122,5 @@ sanastaSanoja = SanastaSanoja()
 vari = sanastaSanoja.arvo_vari()
 valkoinen = (255, 255, 255)
 musta = (3, 3, 3)
+punainen = (255, 0, 0)
 main()
