@@ -15,8 +15,8 @@ class SanastaSanoja:
     
     def sanavarasto(self):             
         sanat_7 = ["MAALARI", "HAALARI", "HAITARI", "VADELMA"]
-        # sanat_8 = ["MANSIKKA", "MUSTIKKA", "PENSSELI"]
-        sanat_8 = ["MANSIKKA"]                                           # TEST TODO vaihda
+        sanat_8 = ["MANSIKKA", "MUSTIKKA", "PENSSELI"]
+        #sanat_8 = ["MANSIKKA"]                                           # TEST TODO vaihda
         return sanat_8       
         
 
@@ -37,7 +37,7 @@ def scan_file(rivit, arvottu_sana):
     muistiin = []
     tallenna = False
     for rivi in rivit:
-        if "SEURAAVA SANA:" in rivi:
+        if tallenna and "SEURAAVA SANA:" in rivi:
            break
         if tallenna:
             muistiin.append(rivi.strip())
@@ -46,14 +46,28 @@ def scan_file(rivit, arvottu_sana):
     return muistiin
     
 
-def write_file(sanat, arvottu_sana):
+def write_file(sanat, arvottu_sana, rivit):
+    print("rivit@write_file", rivit, "sanat", sanat)
+    
     with open("sanat_tiedostossa.txt", "w") as tiedosto:
-        tiedosto.write(arvottu_sana+"\n")
-        for rivi in sanat:
+        #ensin uusin data:
+        tiedosto.write(arvottu_sana + "\n")
+        for sana in sanat:
             s = ""
-            s = s.join(rivi) 
+            s = s.join(sana) 
             tiedosto.write(s+"\n")
-        tiedosto.write("SEURAAVA SANA:")
+        tiedosto.write("SEURAAVA SANA:"+"\n")
+
+        #sitten vanha, josta otetaan pois nykyinen sana
+        kirjoita_vanhaa_tiedostoa = True    
+        for rivi in rivit: # tiedostossa jo olleet kaikki rivit            
+            if arvottu_sana in rivi:
+                kirjoita_vanhaa_tiedostoa = False
+            if kirjoita_vanhaa_tiedostoa:
+                tiedosto.write(rivi)
+            if "SEURAAVA SANA:" in rivi:
+                kirjoita_vanhaa_tiedostoa = True
+
             
 
 def sanat_nakyviin(sanat, arvottu_sana, keskenerainen_sana):
@@ -85,8 +99,8 @@ def sanat_nakyviin(sanat, arvottu_sana, keskenerainen_sana):
 def pisteet_nakyviin(pisteet):
     t = fontti_keski.render(f"{pisteet}", True, musta)
     naytto.blit(t, (WIDTH - 50, 20))
-    t = fontti_pieni_bold.render(f"F9 = en keksi enempää sanoja", True, musta)
-    naytto.blit(t, (WIDTH - 240, HEIGHT - 30))
+    t = fontti_pieni_bold.render(f"F9 = tallenna sanat & uusi sana", True, musta)
+    naytto.blit(t, (WIDTH - 260, HEIGHT - 30))
 
 
 def onko_laillinen(arvottu_sana, sana):
@@ -176,4 +190,4 @@ print("file:", file)
 sanat = scan_file(file, arvottu_sana)
 print("sanat:", sanat)
 main()
-write_file(sanat, arvottu_sana)
+write_file(sanat, arvottu_sana, file)
