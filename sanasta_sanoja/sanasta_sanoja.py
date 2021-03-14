@@ -15,8 +15,8 @@ class SanastaSanoja:
     
     def sanavarasto(self):             
         sanat_7 = ["MAALARI", "HAALARI", "HAITARI", "VADELMA"]
-        sanat_8 = ["MANSIKKA", "MUSTIKKA", "PENSSELI"]
-        #sanat_8 = ["MANSIKKA"]                                           # TEST TODO vaihda
+        sanat_8 = ["MANSIKKA", "MUSTIKKA", "PENSSELI", "HARAKIRI"]
+        #sanat_8 = ["MANSIKKA"]                                         
         return sanat_8       
         
 
@@ -118,29 +118,38 @@ def onko_laillinen(arvottu_sana, sana):
 
 
 def main():
-    global sanat
+    global sanat, arvottu_sana, file
     pisteet = len(sanat) 
     keskenerainen_sana = []
-    #rivi = []
-    #rivit_ruudulla = []
-    y = 60
     pelataan = True
 
     while pelataan:
+        naytto.fill(valkoinen)
+        sanat_nakyviin(sanat, arvottu_sana, keskenerainen_sana)     
+        pisteet_nakyviin(pisteet)   
+
         for tapahtuma in pygame.event.get(): 
             if tapahtuma.type == pygame.QUIT:
                 pygame.quit()
             else:                
                 if tapahtuma.type == pygame.KEYDOWN: 
 
-                    # keksimisen lopetus F9
+                    # keksimisen lopetus F9 & uusi sana
                     if tapahtuma.key == pygame.K_F9:
-                        pelataan = False 
                         sana = ""
                         sana = sana.join(keskenerainen_sana)
                         if len(keskenerainen_sana) > 0 and not sana in sanat and onko_laillinen(arvottu_sana, keskenerainen_sana):
                             pisteet += 1  
-                            sanat.append(sana)  
+                            sanat.append(sana)                          
+                        write_file(sanat, arvottu_sana, file)
+                        file = open_file()
+                        arvottu_sana_uusi = sanastaSanoja.arvo_sana()
+                        while arvottu_sana_uusi == arvottu_sana:
+                            arvottu_sana_uusi = sanastaSanoja.arvo_sana()
+                        arvottu_sana = arvottu_sana_uusi
+                        sanat = scan_file(file, arvottu_sana)
+                        pisteet = len(sanat) 
+                        keskenerainen_sana = []
 
                     # välilyönti  tai ENTER :        
                     elif tapahtuma.key == pygame.K_SPACE or tapahtuma.key == pygame.K_RETURN:
@@ -158,9 +167,7 @@ def main():
                         keskenerainen_sana.append(chr(tapahtuma.key))
 
             
-        naytto.fill(valkoinen)
-        sanat_nakyviin(sanat, arvottu_sana, keskenerainen_sana)     
-        pisteet_nakyviin(pisteet)   
+        
 
         pygame.display.flip()
         kello.tick(100)
@@ -190,4 +197,3 @@ print("file:", file)
 sanat = scan_file(file, arvottu_sana)
 print("sanat:", sanat)
 main()
-write_file(sanat, arvottu_sana, file)

@@ -1,13 +1,29 @@
+PENSSELI
+selin
+eli
+elin
+neli
+se
+peli
+sepeli
+eilen
+SEURAAVA SANA:
 MANSIKKA
 sika
 kasi
 sana
 mana
+kaski
+aski
 SEURAAVA SANA:
-PENSSELI
-selin
-eli
-elin
+HARAKIRI
+kiri
+kara
+harri
+kari
+kaira
+rai
+arki
 SEURAAVA SANA:
 MUSTIKKA
 tikka
@@ -18,4 +34,10 @@ muta
 kita
 takki
 kitka
+asu
+astu
+tuska
+katu
+tuki
+kasti
 SEURAAVA SANA:
