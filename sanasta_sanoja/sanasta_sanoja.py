@@ -8,9 +8,9 @@ class SanastaSanoja:
         self.sanat = self.sanavarasto()
     
     def arvo_vari(self):
-        r = random.randint(30, 200)   #ei yli 200, jottei tule liian vaaleaa
-        g = random.randint(30, 200)
-        b = random.randint(30, 200)
+        r = random.randint(40, 170)   #ei yli 170, jottei tule liian vaaleaa
+        g = random.randint(40, 170)
+        b = random.randint(40, 170)
         return r, g, b
     
     def sanavarasto(self):             
@@ -41,7 +41,6 @@ def scan_file(rivit, arvottu_sana):
            break
         if tallenna:
             muistiin.append(rivi.strip())
-            print("rivi@tallenna:", rivi)
         if arvottu_sana in rivi:
             tallenna = True
     return muistiin
@@ -57,7 +56,7 @@ def write_file(sanat, arvottu_sana):
         tiedosto.write("SEURAAVA SANA:")
             
 
-def sanat_nakyviin(sanat, rivi_keskenerainen, rivit_ruudulla, arvottu_sana):
+def sanat_nakyviin(sanat, arvottu_sana, keskenerainen_sana):
     
     # arvottu sana:
     t = fontti_iso.render(arvottu_sana, True, musta)
@@ -67,27 +66,20 @@ def sanat_nakyviin(sanat, rivi_keskenerainen, rivit_ruudulla, arvottu_sana):
     x = 50    
     y = 77
     for sana in sanat:
-        print("sana rivi 70", sana)
-        t = fontti_keski.render(sana, True, vari)
-        naytto.blit(t, (x, y))
-        x += len(sana) * 14
-        if x > WIDTH - 100:
-            x = 50
-            y += 40
-
-    # tämän pelikerran sanat:
-    for sana in rivit_ruudulla:
         s = ""
         s = s.join(sana) 
         t = fontti_keski.render(s, True, vari)
         naytto.blit(t, (x, y))
-        y += 40
+        x += len(sana) * 20
+        if x > WIDTH - 120:
+            x = 50
+            y += 40
 
     # keskeneräinen, uusin rivi:
     s = ""
-    s = s.join(rivi_keskenerainen) 
+    s = s.join(keskenerainen_sana) 
     t = fontti_keski.render(s, True, vari)
-    naytto.blit(t, (x, y))
+    naytto.blit(t, (x, y)) 
 
 
 def pisteet_nakyviin(pisteet):
@@ -102,7 +94,7 @@ def onko_laillinen(arvottu_sana, sana):
     s = s.join(sana) 
     if s.upper() == arvottu_sana:
         return False
-    arvottu_sana = list(arvottu_sana)
+    arvottu_sana= list(arvottu_sana)
     for kirjain in sana:
         if kirjain.upper() in arvottu_sana:
             arvottu_sana.remove(kirjain.upper())
@@ -113,10 +105,10 @@ def onko_laillinen(arvottu_sana, sana):
 
 def main():
     global sanat
-    pisteet = 0 
-    sana = []
-    rivi = []
-    rivit_ruudulla = []
+    pisteet = len(sanat) 
+    keskenerainen_sana = []
+    #rivi = []
+    #rivit_ruudulla = []
     y = 60
     pelataan = True
 
@@ -130,32 +122,30 @@ def main():
                     # keksimisen lopetus F9
                     if tapahtuma.key == pygame.K_F9:
                         pelataan = False 
-                        rivit_ruudulla.append(rivi)
-                        if len(sana) > 0 and not sana in sanat and onko_laillinen(arvottu_sana, sana):
+                        sana = ""
+                        sana = sana.join(keskenerainen_sana)
+                        if len(keskenerainen_sana) > 0 and not sana in sanat and onko_laillinen(arvottu_sana, keskenerainen_sana):
                             pisteet += 1  
                             sanat.append(sana)  
 
                     # välilyönti  tai ENTER :        
                     elif tapahtuma.key == pygame.K_SPACE or tapahtuma.key == pygame.K_RETURN:
-                        if len(sana) > 0 and not sana in sanat and onko_laillinen(arvottu_sana, sana):
+                        sana = ""
+                        sana = sana.join(keskenerainen_sana)
+                        if len(keskenerainen_sana) > 0 and not sana in sanat and onko_laillinen(arvottu_sana, keskenerainen_sana):
                             pisteet += 1  
-                            sanat.append(sana)  
-                        rivi.append(chr(pygame.K_SPACE))                        
-                        sana = []
-                        if len(rivi) > 40:
-                            rivit_ruudulla.append(rivi)
-                            rivi = []  
+                            sanat.append(sana)                        
+                        keskenerainen_sana= []
 
                     # backspace:
                     elif tapahtuma.key == pygame.K_BACKSPACE:
-                        rivi.pop(-1)
+                        keskenerainen_sana.pop(-1)
                     else:
-                        rivi.append(chr(tapahtuma.key))
-                        sana.append(chr(tapahtuma.key))
+                        keskenerainen_sana.append(chr(tapahtuma.key))
 
             
         naytto.fill(valkoinen)
-        sanat_nakyviin(sanat, rivi, rivit_ruudulla, arvottu_sana)     
+        sanat_nakyviin(sanat, arvottu_sana, keskenerainen_sana)     
         pisteet_nakyviin(pisteet)   
 
         pygame.display.flip()
@@ -170,8 +160,8 @@ HEIGHT = 400
 naytto = pygame.display.set_mode((WIDTH, HEIGHT))
 kello = pygame.time.Clock()
 
-fontti_iso = pygame.font.SysFont("Arial", 36)
-fontti_keski = pygame.font.SysFont("Arial", 26)
+fontti_iso = pygame.font.SysFont("FreeMono", 36, bold = True)
+fontti_keski = pygame.font.SysFont("FreeMono", 26)
 fontti_pieni_bold = pygame.font.SysFont("Arial", 16, bold = True)
 
 sanastaSanoja = SanastaSanoja()
@@ -180,7 +170,7 @@ valkoinen = (255, 255, 255)
 musta = (3, 3, 3)
 punainen = (255, 0, 0)
 
-arvottu_sana = sanastaSanoja.arvo_sana()
+arvottu_sana= sanastaSanoja.arvo_sana()
 file = open_file()
 print("file:", file)
 sanat = scan_file(file, arvottu_sana)
