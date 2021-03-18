@@ -50,9 +50,7 @@ def scan_file(rivit, arvottu_sana):
     return muistiin
     
 
-def write_file(sanat, arvottu_sana, rivit):
-    print("rivit@write_file", rivit, "sanat", sanat)
-    
+def write_file(sanat, arvottu_sana, rivit):    
     with open("sanat_tiedostossa.txt", "w") as tiedosto:
         #ensin uusin data:
         tiedosto.write(arvottu_sana + "\n")
@@ -100,30 +98,38 @@ def sanat_nakyviin(sanat, arvottu_sana, keskenerainen_sana):
     naytto.blit(t, (x, y)) 
 
 
-def pisteet_nakyviin(pisteet):
+def muut_tekstit_nakyviin(pisteet):
+    global error_msg
     t = fontti_keski.render(f"{pisteet}", True, musta)
     naytto.blit(t, (WIDTH - 50, 20))
     t = fontti_pieni_bold.render(f"F9 = tallenna sanat & uusi sana", True, musta)
     naytto.blit(t, (WIDTH - 260, HEIGHT - 30))
+    t = fontti_pieni_bold.render(f"{error_msg}", True, musta)
+    naytto.blit(t, (20, HEIGHT - 30))
 
 
 def onko_laillinen(arvottu_sana, sana):
+    global error_msg
     s = ""
     s = s.join(sana) 
     if s.upper() == arvottu_sana:
-        return False
-    print(f"{s}\n")
-    if f"{s}\n" not in wordlist:
-        return False
-    arvottu_sana= list(arvottu_sana)
+        error_msg = "Ei koko sanaa sellaisenaan"
+        return False    
+    arvottu_sana_list= list(arvottu_sana)
     for kirjain in sana:
-        if kirjain.upper() in arvottu_sana:
-            arvottu_sana.remove(kirjain.upper())
+        if kirjain.upper() in arvottu_sana_list:
+            arvottu_sana_list.remove(kirjain.upper())
         else:
+            error_msg = f"{arvottu_sana} ei tuota yrittämääsi sanaa"
             return False
+    if f"{s}\n" not in wordlist:
+        error_msg = "Ei ole englannin sana"
+        return False
+    if s in sanat:
+        error_msg = "Tämä sana on jo keksitty"
+        return False
+    error_msg = ""
     return True
-
-
 
 
 
@@ -136,7 +142,7 @@ def main():
     while pelataan:
         naytto.fill(valkoinen)
         sanat_nakyviin(sanat, arvottu_sana, keskenerainen_sana)     
-        pisteet_nakyviin(pisteet)   
+        muut_tekstit_nakyviin(pisteet)   
 
         for tapahtuma in pygame.event.get(): 
             if tapahtuma.type == pygame.QUIT:
@@ -148,7 +154,7 @@ def main():
                     if tapahtuma.key == pygame.K_F9:
                         sana = ""
                         sana = sana.join(keskenerainen_sana)
-                        if len(keskenerainen_sana) > 0 and not sana in sanat and onko_laillinen(arvottu_sana, keskenerainen_sana):
+                        if len(keskenerainen_sana) > 0 and onko_laillinen(arvottu_sana, keskenerainen_sana):
                             pisteet += 1  
                             sanat.append(sana)                          
                         write_file(sanat, arvottu_sana, file)
@@ -165,7 +171,7 @@ def main():
                     elif tapahtuma.key == pygame.K_SPACE or tapahtuma.key == pygame.K_RETURN:
                         sana = ""
                         sana = sana.join(keskenerainen_sana)
-                        if len(keskenerainen_sana) > 0 and not sana in sanat and onko_laillinen(arvottu_sana, keskenerainen_sana):
+                        if len(keskenerainen_sana) > 0 and onko_laillinen(arvottu_sana, keskenerainen_sana):
                             pisteet += 1  
                             sanat.append(sana)                        
                         keskenerainen_sana= []
@@ -175,8 +181,6 @@ def main():
                         keskenerainen_sana.pop(-1)
                     else:
                         keskenerainen_sana.append(chr(tapahtuma.key))
-
-            
         
 
         pygame.display.flip()
@@ -200,10 +204,9 @@ vari = sanastaSanoja.arvo_vari()
 valkoinen = (255, 255, 255)
 musta = (3, 3, 3)
 punainen = (255, 0, 0)
+error_msg = ""
 
 arvottu_sana= sanastaSanoja.arvo_sana()
 file, wordlist = open_files()
-print("file:", file)
 sanat = scan_file(file, arvottu_sana)
-print("sanat:", sanat)
 main()

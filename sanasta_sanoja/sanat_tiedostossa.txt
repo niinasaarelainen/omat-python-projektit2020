@@ -1,3 +1,15 @@
+MONOPOLY
+mono
+poly
+no
+mop
+pony
+on
+mon
+nom
+loo
+lo
+SEURAAVA SANA:
 ATOM BOMB
 atom
 bomb
@@ -5,13 +17,10 @@ mob
 boo
 bat
 at
-SEURAAVA SANA:
-MONOPOLY
-mono
-poly
-no
-mop
-pony
+moo
+bob
+tomb
+mom
 SEURAAVA SANA:
 MUSTIKKA
 tikka
