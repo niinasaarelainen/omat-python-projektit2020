@@ -26,12 +26,16 @@ class SanastaSanoja:
 
 #################################################################################################
 
-def open_file():
+def open_files():
     f = open("sanat_tiedostossa.txt", "r")
     rivit= []
     for rivi in f:    
-        rivit.append(rivi)     
-    return rivit
+        rivit.append(rivi)   
+    with open("wordlist.txt") as tiedosto:
+        rivit2= []
+        for rivi in tiedosto:    
+            rivit2.append(rivi)   
+    return rivit, rivit2
 
 def scan_file(rivit, arvottu_sana):
     muistiin = []
@@ -108,6 +112,9 @@ def onko_laillinen(arvottu_sana, sana):
     s = s.join(sana) 
     if s.upper() == arvottu_sana:
         return False
+    print(f"{s}\n")
+    if f"{s}\n" not in wordlist:
+        return False
     arvottu_sana= list(arvottu_sana)
     for kirjain in sana:
         if kirjain.upper() in arvottu_sana:
@@ -115,6 +122,9 @@ def onko_laillinen(arvottu_sana, sana):
         else:
             return False
     return True
+
+
+
 
 
 def main():
@@ -142,7 +152,7 @@ def main():
                             pisteet += 1  
                             sanat.append(sana)                          
                         write_file(sanat, arvottu_sana, file)
-                        file = open_file()
+                        file, file2 = open_files()
                         arvottu_sana_uusi = sanastaSanoja.arvo_sana()
                         while arvottu_sana_uusi == arvottu_sana:
                             arvottu_sana_uusi = sanastaSanoja.arvo_sana()
@@ -192,7 +202,7 @@ musta = (3, 3, 3)
 punainen = (255, 0, 0)
 
 arvottu_sana= sanastaSanoja.arvo_sana()
-file = open_file()
+file, wordlist = open_files()
 print("file:", file)
 sanat = scan_file(file, arvottu_sana)
 print("sanat:", sanat)
