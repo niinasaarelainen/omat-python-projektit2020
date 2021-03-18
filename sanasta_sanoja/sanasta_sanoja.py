@@ -15,9 +15,9 @@ class SanastaSanoja:
     
     def sanavarasto(self):             
         sanat_7 = ["MAALARI", "HAALARI", "HAITARI", "VADELMA"]
-        sanat_8 = ["MANSIKKA", "MUSTIKKA", "PENSSELI", "HARAKIRI"]
-        #sanat_8 = ["MANSIKKA"]                                         
-        return sanat_8       
+        sanat_8 = ["MANSIKKA", "MUSTIKKA", "PENSSELI", "HARAKIRI", "ELOHIIRI"]
+        sanat_8_eng = ["ATOM BOMB", "MONOPOLY"]                                         
+        return sanat_8_eng       
         
 
     def arvo_sana(self):         

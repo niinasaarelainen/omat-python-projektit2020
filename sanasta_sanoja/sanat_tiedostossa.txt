@@ -1,29 +1,17 @@
-PENSSELI
-selin
-eli
-elin
-neli
-se
-peli
-sepeli
-eilen
+ATOM BOMB
+atom
+bomb
+mob
+boo
+bat
+at
 SEURAAVA SANA:
-MANSIKKA
-sika
-kasi
-sana
-mana
-kaski
-aski
-SEURAAVA SANA:
-HARAKIRI
-kiri
-kara
-harri
-kari
-kaira
-rai
-arki
+MONOPOLY
+mono
+poly
+no
+mop
+pony
 SEURAAVA SANA:
 MUSTIKKA
 tikka
@@ -40,4 +28,51 @@ tuska
 katu
 tuki
 kasti
+ukki
+asti
+SEURAAVA SANA:
+ELOHIIRI
+lohi
+elo
+hiiri
+eli
+he
+riihi
+ilo
+iili
+SEURAAVA SANA:
+PENSSELI
+selin
+eli
+elin
+neli
+se
+peli
+sepeli
+eilen
+ne
+lei
+SEURAAVA SANA:
+MANSIKKA
+sika
+kasi
+sana
+mana
+kaski
+aski
+kiska
+SEURAAVA SANA:
+HARAKIRI
+kiri
+kara
+harri
+kari
+kaira
+rai
+arki
+arka
+hai
+aari
+raki
+raha
 SEURAAVA SANA:
