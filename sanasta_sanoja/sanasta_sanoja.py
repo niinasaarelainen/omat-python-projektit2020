@@ -1,4 +1,49 @@
-import pygame, random
+import pygame, random, copy 
+from itertools import permutations
+
+#################################################################################################
+class LoydaKaikki():
+    def __init__(self, lista, sana):        
+        self.sanalista = lista
+        self.sana = list(sana)
+        self.loydetyt_sanat = []
+
+    
+    def permutoi_sana(self, sana):
+        perms = [''.join(p) for p in permutations(sana)]
+        return perms
+
+    # liian vaikea ?!?
+    def etsi_x_mittaiset_sanat(self, kirjainten_maara):
+        sanakandidaatti = []
+        tulos = []
+        sana = copy.deepcopy(self.sana)
+        print("sana", sana)
+        for aloituskirjain in self.sana:
+            sanakandidaatti.append(aloituskirjain.lower())
+            sana.remove(aloituskirjain) 
+            for loput_kirjaimet in sana:
+                sanakandidaatti.append(loput_kirjaimet.lower())
+                if len(sanakandidaatti) == kirjainten_maara:
+                    s = ""
+                    s = s.join(sanakandidaatti)
+                    print(s)
+                    if s+ "\n" in self.sanalista:
+                        tulos.append(self.permutoi_sana(s))      
+                    sanakandidaatti.remove(loput_kirjaimet.lower())              
+            sanakandidaatti = []
+            sana = copy.deepcopy(self.sana)
+        return tulos
+
+
+    def etsi(self):
+        for kirjainten_maara in range(2, len(self.sana) + 1):
+            valitulos = self.etsi_x_mittaiset_sanat(kirjainten_maara)
+            for sana in valitulos:
+                self.loydetyt_sanat.append(sana)
+
+
+
 
 
 #################################################################################################
@@ -16,8 +61,9 @@ class SanastaSanoja:
     def sanavarasto(self):             
         sanat_7 = ["MAALARI", "HAALARI", "HAITARI", "VADELMA"]
         sanat_8 = ["MANSIKKA", "MUSTIKKA", "PENSSELI", "HARAKIRI", "ELOHIIRI"]
-        sanat_8_eng = ["ATOM BOMB", "MONOPOLY"]                                         
-        return sanat_8_eng       
+        sanat_8_eng = ["ATOMBOMB", "MONOPOLY"]  
+        test_3_eng = ["DOG"]                                       
+        return test_3_eng  
         
 
     def arvo_sana(self):         
@@ -208,5 +254,8 @@ error_msg = ""
 
 arvottu_sana= sanastaSanoja.arvo_sana()
 file, wordlist = open_files()
+kaikki = LoydaKaikki(wordlist, arvottu_sana)
+kaikki.etsi()
+print(kaikki.loydetyt_sanat)
 sanat = scan_file(file, arvottu_sana)
 main()
