@@ -5,45 +5,89 @@ from itertools import permutations
 class LoydaKaikki():
     def __init__(self, lista, sana):        
         self.sanalista = lista
-        self.sana = list(sana)
+        self.sana = list(sana.lower())
         self.loydetyt_sanat = []
-
+        self.kokelaat = []
     
     def permutoi_sana(self, sana):
         perms = [''.join(p) for p in permutations(sana)]
         return perms
+    
+    def etsi_setit_x_kirjainta(self, kirjainten_maara):
+        settikandidaatti = []
+        tulos = []
+        uniikit_setit = []
+        sana = copy.deepcopy(self.sana)
+        for aloituskirjain in self.sana:
+            settikandidaatti.append(aloituskirjain)
+            sana.remove(aloituskirjain) 
+            for loput_kirjaimet in sana:
+                settikandidaatti.append(loput_kirjaimet)
+                if len(settikandidaatti) == kirjainten_maara:
+                    if set(settikandidaatti) not in uniikit_setit:
+                        uniikit_setit.append(set(settikandidaatti))
+                        tulos.append(self.permutoi_sana(settikandidaatti))  
+                    settikandidaatti.remove(loput_kirjaimet)              
+            settikandidaatti = []
+            sana = copy.deepcopy(self.sana)
+        return tulos
 
-    # liian vaikea ?!?
+    def etsi_setit(self):        
+        #osasanat
+        for kirjainten_maara in range(2, len(self.sana)):
+            valitulos = self.etsi_setit_x_kirjainta(kirjainten_maara)
+            for lista in valitulos:
+                for sana in lista:
+                    if sana +"\n" in self.sanalista and sana not in self.loydetyt_sanat:
+                        self.loydetyt_sanat.append(sana) 
+        
+        #kaikki kirjaimet
+        for sana in self.permutoi_sana(self.sana):
+            sana = sana +"\n"
+            s_orig = ""
+            s_orig = s_orig.join(self.sana)+"\n"
+            if sana in self.sanalista and sana not in self.loydetyt_sanat and sana != s_orig:
+                self.loydetyt_sanat.append(sana) 
+
+    """
+    #liian hidas tapa, älä käytä : !!!!! 
     def etsi_x_mittaiset_sanat(self, kirjainten_maara):
         sanakandidaatti = []
         tulos = []
         sana = copy.deepcopy(self.sana)
-        print("sana", sana)
         for aloituskirjain in self.sana:
-            sanakandidaatti.append(aloituskirjain.lower())
+            sanakandidaatti.append(aloituskirjain)
             sana.remove(aloituskirjain) 
             for loput_kirjaimet in sana:
-                sanakandidaatti.append(loput_kirjaimet.lower())
+                sanakandidaatti.append(loput_kirjaimet)
                 if len(sanakandidaatti) == kirjainten_maara:
                     s = ""
                     s = s.join(sanakandidaatti)
-                    print(s)
-                    if s+ "\n" in self.sanalista:
-                        tulos.append(self.permutoi_sana(s))      
-                    sanakandidaatti.remove(loput_kirjaimet.lower())              
+                    if s not in self.kokelaat:
+                        self.kokelaat.append(s)
+                        tulos.append(self.permutoi_sana(s))  
+                    sanakandidaatti.remove(loput_kirjaimet)              
             sanakandidaatti = []
             sana = copy.deepcopy(self.sana)
         return tulos
 
 
-    def etsi(self):
-        for kirjainten_maara in range(2, len(self.sana) + 1):
+    def etsi(self):        
+        #osasanat
+        for kirjainten_maara in range(2, len(self.sana)):
             valitulos = self.etsi_x_mittaiset_sanat(kirjainten_maara)
-            for sana in valitulos:
-                self.loydetyt_sanat.append(sana)
-
-
-
+            for lista in valitulos:
+                for sana in lista:
+                    if sana +"\n" in self.sanalista and sana not in self.loydetyt_sanat:
+                        self.loydetyt_sanat.append(sana) 
+       
+        #kaikki kirjaimet
+        for sana in self.permutoi_sana(self.sana):
+            sana = sana +"\n"
+            s_orig = ""
+            s_orig = s_orig.join(self.sana)+"\n"
+            if sana in self.sanalista and sana not in self.loydetyt_sanat and sana != s_orig:
+                self.loydetyt_sanat.append(sana)  """
 
 
 #################################################################################################
@@ -61,9 +105,9 @@ class SanastaSanoja:
     def sanavarasto(self):             
         sanat_7 = ["MAALARI", "HAALARI", "HAITARI", "VADELMA"]
         sanat_8 = ["MANSIKKA", "MUSTIKKA", "PENSSELI", "HARAKIRI", "ELOHIIRI"]
-        sanat_8_eng = ["ATOMBOMB", "MONOPOLY"]  
-        test_3_eng = ["DOG"]                                       
-        return test_3_eng  
+        sanat_8_eng = ["ATOMBOMB", "MONOPOLY"]   
+        sanat_6_eng = ["VISUAL"]              
+        return sanat_6_eng
         
 
     def arvo_sana(self):         
@@ -255,7 +299,8 @@ error_msg = ""
 arvottu_sana= sanastaSanoja.arvo_sana()
 file, wordlist = open_files()
 kaikki = LoydaKaikki(wordlist, arvottu_sana)
-kaikki.etsi()
+#kaikki.etsi()
+kaikki.etsi_setit()
 print(kaikki.loydetyt_sanat)
 sanat = scan_file(file, arvottu_sana)
 main()
