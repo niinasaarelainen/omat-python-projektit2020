@@ -1,0 +1,4 @@
+STUDIOS
+['st', 'us', 'sd', 'si', 'is', 'so', 'os', 'ss', 'ut', 'ti', 'it', 'to', 'id', 'do', 'od', 'sit', 'tis', 'its', 'sot', 'sui', 'dis', 'ids', 'dos', 'sod', 'sis', 'sos', 'stud', 'dust', 'suit', 'situ', 'oust', 'outs', 'dost', 'dots', 'sits', 'sots', 'toss', 'studs', 'dusts', 'situs', 'suits', 'ousts', 'studio']
+VISUAL
+['iv', 'vs', 'va', 'is', 'si', 'ai', 'us', 'sa', 'as', 'al', 'la', 'via', 'val', 'visa', 'vias', 'avis', 'vail', 'vial', 'vials', 'silva']
