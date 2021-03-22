@@ -7,9 +7,11 @@ from itertools import permutations
 class LoydaKaikki():
     def __init__(self, lista, sana):        
         self.sanalista = lista
-        self.sana = list(sana.lower())
-        self.loydetyt_sanat = []
+        self.sana_orig = sana.lower()
+        self.sana = list(sana.lower())        
         self.kokelaat = []
+        self.uniikit = []           # kirjainyhdistelmät
+        self.loydetyt_sanat = []    # hyväksytyt engl.sanat
     
     def permutoi_sana(self, sana):
         perms = [''.join(p) for p in permutations(sana)]
@@ -22,85 +24,32 @@ class LoydaKaikki():
         print(s1, s2, s3)
         print(s1 == s3)    # True !!!!!!!!!!!!!!!!!!!   eli setit ei toimikaan ---> ei löydy sana bomb
 
-    
-    def etsi_aakkostetut_x_kirjainta(self, kirjainten_maara):
-        settikandidaatti = []
-        tulos = []
-        uniikit_kombot = []
-        sana = copy.deepcopy(self.sana)
-        for aloituskirjain in self.sana:
-            settikandidaatti.append(aloituskirjain)
-            sana.remove(aloituskirjain) 
-            for loput_kirjaimet in sana:
-                settikandidaatti.append(loput_kirjaimet)
-                if len(settikandidaatti) == kirjainten_maara:
-                    if sorted(settikandidaatti) not in uniikit_kombot:
-                        uniikit_kombot.append(sorted(settikandidaatti))
-                        tulos.append(self.permutoi_sana(settikandidaatti))  
-                    settikandidaatti.remove(loput_kirjaimet)  
-                    print(settikandidaatti)            
-            settikandidaatti = []
-            sana = copy.deepcopy(self.sana)
-        return tulos
+    def sub_lists (self): 
+        base = []   
+        lists = [base] 
+        for i in range(len(self.sana)): 
+            orig = lists[:] 
+            new = self.sana[i] 
+            for j in range(len(lists)): 
+                lists[j] = lists[j] + [new] 
+            lists = orig + lists 
+        self.kokelaat = lists        
+        return lists 
 
-    def etsi_aakkostetut(self):        
-        #osasanat
-        for kirjainten_maara in range(2, len(self.sana)):
-            valitulos = self.etsi_aakkostetut_x_kirjainta(kirjainten_maara)
-            for lista in valitulos:
-                for sana in lista:
-                    if sana +"\n" in self.sanalista and sana not in self.loydetyt_sanat:
-                        self.loydetyt_sanat.append(sana) 
-        
-        #kaikki kirjaimet
-        koko_sanan_perm = self.permutoi_sana(self.sana)
-        print(len(koko_sanan_perm))
-        for sana in self.permutoi_sana(self.sana):
-            sana = sana +"\n"
-            s_orig = ""
-            s_orig = s_orig.join(self.sana)+"\n"
-            if sana in self.sanalista and sana not in self.loydetyt_sanat and sana != s_orig:
-                self.loydetyt_sanat.append(sana) 
+    def lists_to_uniikit(self):
+        for sana in self.kokelaat:
+            if sorted(sana) not in self.uniikit:
+                self.uniikit.append(sorted(sana))
 
-    """
-    #liian hidas tapa, älä käytä : !!!!! 
-    def etsi_x_mittaiset_sanat(self, kirjainten_maara):
-        sanakandidaatti = []
-        tulos = []
-        sana = copy.deepcopy(self.sana)
-        for aloituskirjain in self.sana:
-            sanakandidaatti.append(aloituskirjain)
-            sana.remove(aloituskirjain) 
-            for loput_kirjaimet in sana:
-                sanakandidaatti.append(loput_kirjaimet)
-                if len(sanakandidaatti) == kirjainten_maara:
-                    s = ""
-                    s = s.join(sanakandidaatti)
-                    if s not in self.kokelaat:
-                        self.kokelaat.append(s)
-                        tulos.append(self.permutoi_sana(s))  
-                    sanakandidaatti.remove(loput_kirjaimet)              
-            sanakandidaatti = []
-            sana = copy.deepcopy(self.sana)
-        return tulos
-
-
-    def etsi(self):        
-        #osasanat
-        for kirjainten_maara in range(2, len(self.sana)):
-            valitulos = self.etsi_x_mittaiset_sanat(kirjainten_maara)
-            for lista in valitulos:
-                for sana in lista:
-                    if sana +"\n" in self.sanalista and sana not in self.loydetyt_sanat:
-                        self.loydetyt_sanat.append(sana) 
-       
-        #kaikki kirjaimet
-        for sana in self.permutoi_sana(self.sana):
-            sana = sana +"\n"
-            s_orig = ""
-            s_orig = s_orig.join(self.sana)+"\n"
-            if sana in self.sanalista and sana not in self.loydetyt_sanat and sana != s_orig:
-                self.loydetyt_sanat.append(sana)  """
+    def etsi(self):  
+        self.sub_lists() 
+        self.lists_to_uniikit()  
+        print("self.uniikit", self.uniikit)   
+        for sana in self.uniikit:
+            permutoidut = self.permutoi_sana(sana)
+            for perm in permutoidut:
+                if perm in self.sanalista and sana not in self.loydetyt_sanat and perm != self.sana_orig:
+                    self.loydetyt_sanat.append(perm) 
 
 
 #################################################################################################
@@ -121,7 +70,7 @@ class SanastaSanoja:
         sanat_8_eng = ["ATOMBOMB", "MONOPOLY"]    # 8kirj. = 40320 permutaatiota  (+2-7kirj)
         sanat_7_eng = ["STUDIOS"] 
         sanat_6_eng = ["VISUAL"]     
-        sanat_test = ["ABOMB"]         
+        sanat_test = ["RABBITS"]         
         return sanat_test
         
 
@@ -139,7 +88,7 @@ def open_files():
     with open("wordlist.txt") as tiedosto:   # .strip()  olisi kannattanut laittaa AINA !!!!   MUISTA !!!!!
         rivit2= []
         for rivi in tiedosto:    
-            rivit2.append(rivi) 
+            rivit2.append(rivi.strip()) 
     with open("wordlistasta_loytyvat.txt") as tiedosto:
         rivit3= []
         for rivi in tiedosto:    
@@ -214,8 +163,8 @@ def sanat_nakyviin(sanat, arvottu_sana, keskenerainen_sana):
 
 def muut_tekstit_nakyviin(pisteet):
     global error_msg
-    #t = fontti_keski.render(f"{pisteet}/{maksimi}", True, musta)
-    #naytto.blit(t, (WIDTH - 100, 20))
+    t = fontti_keski.render(f"{pisteet}/{maksimi}", True, musta)
+    naytto.blit(t, (WIDTH - 100, 20))
     t = fontti_pieni_bold.render(f"F9 = tallenna sanat & uusi sana", True, musta)
     naytto.blit(t, (WIDTH - 260, HEIGHT - 30))
     t = fontti_pieni_bold.render(f"{error_msg}", True, musta)
@@ -322,16 +271,13 @@ error_msg = ""
 
 arvottu_sana= sanastaSanoja.arvo_sana()             # CTRL + F5  !!!!!!!!!!
 file, wordlist, wordlistasta_loytyvat = open_files()
-#kaikki_mahdolliset_sanat_tasta_sanasta = wordlistasta_loytyvat[arvottu_sana] 
-#print(kaikki_mahdolliset_sanat_tasta_sanasta)
-#maksimi = kaikki_mahdolliset_sanat_tasta_sanasta.count(',') + 1
+kaikki_mahdolliset_sanat_tasta_sanasta = wordlistasta_loytyvat[arvottu_sana] 
+print(kaikki_mahdolliset_sanat_tasta_sanasta)
+maksimi = kaikki_mahdolliset_sanat_tasta_sanasta.count(',') + 1
 kaikki = LoydaKaikki(wordlist, arvottu_sana)
-kaikki.etsi_aakkostetut()
 
-test =  ['m','k', 'k']
-test.remove('k')
-print("remove k", test)
+kaikki.etsi()
+print(sorted(kaikki.uniikit))
 
-print(kaikki.loydetyt_sanat)
 sanat = scan_file(file, arvottu_sana)
-main(),
+main()
