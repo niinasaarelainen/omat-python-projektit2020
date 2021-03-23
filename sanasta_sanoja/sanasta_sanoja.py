@@ -44,11 +44,11 @@ class LoydaKaikki():
     def etsi(self):  
         self.sub_lists() 
         self.lists_to_uniikit()  
-        print("self.uniikit", self.uniikit)   
+        print("self.uniikit", sorted(self.uniikit))   
         for sana in self.uniikit:
             permutoidut = self.permutoi_sana(sana)
             for perm in permutoidut:
-                if perm in self.sanalista and sana not in self.loydetyt_sanat and perm != self.sana_orig:
+                if perm in self.sanalista and perm not in self.loydetyt_sanat and perm != self.sana_orig:
                     self.loydetyt_sanat.append(perm) 
 
 
@@ -68,10 +68,8 @@ class SanastaSanoja:
         sanat_7 = ["MAALARI", "HAALARI", "HAITARI", "VADELMA"]
         sanat_8 = ["MANSIKKA", "MUSTIKKA", "PENSSELI", "HARAKIRI", "ELOHIIRI"]   
         sanat_8_eng = ["ATOMBOMB", "MONOPOLY"]    # 8kirj. = 40320 permutaatiota  (+2-7kirj)
-        sanat_7_eng = ["STUDIOS"] 
-        sanat_6_eng = ["VISUAL"]     
-        sanat_test = ["RABBITS"]         
-        return sanat_test
+        löytyy_failista = ["STUDIOS", "VISUAL", "MATINEE", "RABBITS"]     
+        return löytyy_failista
         
 
     def arvo_sana(self):         
@@ -81,7 +79,7 @@ class SanastaSanoja:
 #################################################################################################
 
 def open_files():
-    f = open("sanat_tiedostossa.txt", "r")   # 3 eri failia
+    f = open("aiemmin_keksityt.txt", "r")   # 3 eri failia
     rivit= []
     for rivi in f:    
         rivit.append(rivi)  
@@ -114,7 +112,7 @@ def scan_file(rivit, arvottu_sana):
     
 
 def write_file(sanat, arvottu_sana, rivit):    
-    with open("sanat_tiedostossa.txt", "w") as tiedosto:
+    with open("aiemmin_keksityt.txt", "w") as tiedosto:
         #ensin uusin data:
         tiedosto.write(arvottu_sana + "\n")
         for sana in sanat:
@@ -164,7 +162,7 @@ def sanat_nakyviin(sanat, arvottu_sana, keskenerainen_sana):
 def muut_tekstit_nakyviin(pisteet):
     global error_msg
     t = fontti_keski.render(f"{pisteet}/{maksimi}", True, musta)
-    naytto.blit(t, (WIDTH - 100, 20))
+    naytto.blit(t, (WIDTH - 130, 20))
     t = fontti_pieni_bold.render(f"F9 = tallenna sanat & uusi sana", True, musta)
     naytto.blit(t, (WIDTH - 260, HEIGHT - 30))
     t = fontti_pieni_bold.render(f"{error_msg}", True, musta)
@@ -185,7 +183,7 @@ def onko_laillinen(arvottu_sana, sana):
         else:
             error_msg = f"{arvottu_sana} ei tuota yrittämääsi sanaa"
             return False
-    if f"{s}\n" not in wordlist:
+    if f"{s}" not in wordlist:
         error_msg = "Ei ole englannin sana"
         return False
     if s in sanat:
@@ -193,11 +191,10 @@ def onko_laillinen(arvottu_sana, sana):
         return False
     error_msg = ""
     return True
-
-
+    
 
 def main():
-    global sanat, arvottu_sana, file
+    global sanat, arvottu_sana, aiemmin_keksityt, maksimi
     pisteet = len(sanat) 
     keskenerainen_sana = []
     pelataan = True
@@ -219,14 +216,17 @@ def main():
                         sana = sana.join(keskenerainen_sana)
                         if len(keskenerainen_sana) > 0 and onko_laillinen(arvottu_sana, keskenerainen_sana):
                             pisteet += 1  
-                            sanat.append(sana)                          
-                        write_file(sanat, arvottu_sana, file)
-                        file, file2, file3 = open_files()
+                            sanat.append(sana)    
+                        print("sanat", sanat)                      
+                        write_file(sanat, arvottu_sana, aiemmin_keksityt)
+                        aiemmin_keksityt, file2, file3 = open_files()
                         arvottu_sana_uusi = sanastaSanoja.arvo_sana()
                         while arvottu_sana_uusi == arvottu_sana:
                             arvottu_sana_uusi = sanastaSanoja.arvo_sana()
-                        arvottu_sana = arvottu_sana_uusi
-                        sanat = scan_file(file, arvottu_sana)
+                        arvottu_sana = arvottu_sana_uusi                        
+                        kaikki_mahdolliset_sanat_tasta_sanasta = wordlistasta_loytyvat[arvottu_sana]
+                        maksimi = kaikki_mahdolliset_sanat_tasta_sanasta.count(',') + 1
+                        sanat = scan_file(aiemmin_keksityt, arvottu_sana)
                         pisteet = len(sanat) 
                         keskenerainen_sana = []
 
@@ -269,15 +269,19 @@ musta = (3, 3, 3)
 punainen = (255, 0, 0)
 error_msg = ""
 
+
 arvottu_sana= sanastaSanoja.arvo_sana()             # CTRL + F5  !!!!!!!!!!
-file, wordlist, wordlistasta_loytyvat = open_files()
-kaikki_mahdolliset_sanat_tasta_sanasta = wordlistasta_loytyvat[arvottu_sana] 
+aiemmin_keksityt, wordlist, wordlistasta_loytyvat = open_files()
+kaikki_mahdolliset_sanat_tasta_sanasta = wordlistasta_loytyvat[arvottu_sana]    # huom! string joka näyttää listalta !!
 print(kaikki_mahdolliset_sanat_tasta_sanasta)
 maksimi = kaikki_mahdolliset_sanat_tasta_sanasta.count(',') + 1
 kaikki = LoydaKaikki(wordlist, arvottu_sana)
 
+"""
 kaikki.etsi()
 print(sorted(kaikki.uniikit))
+print(sorted(kaikki.loydetyt_sanat))
+print(len(kaikki.loydetyt_sanat))   # rabbit oli 110 """
 
-sanat = scan_file(file, arvottu_sana)
+sanat = scan_file(aiemmin_keksityt, arvottu_sana)
 main()

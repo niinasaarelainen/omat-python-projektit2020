@@ -9,6 +9,17 @@ ten
 teen
 mean
 man
+a
+SEURAAVA SANA:
+VISUAL
+visa
+al
+la
+vs
+val
+us
+is
+a
 SEURAAVA SANA:
 RABBITS
 rabbit
@@ -23,15 +34,6 @@ bib
 rabbi
 stab
 at
-SEURAAVA SANA:
-VISUAL
-visa
-al
-la
-vs
-val
-us
-is
 SEURAAVA SANA:
 STUDIOS
 studio
