@@ -21,6 +21,7 @@ for tulos in lead.karsintatulos:
 
 sijoitukset = []
 for nimi, sij in tulokset.items():
+    print("sij", sij)
     sijoitukset.append([nimi, sij, sij[0] * sij[1] * sij[2]])
 
 
@@ -64,8 +65,10 @@ for tulos in speed.speed_finaali(sijoitukset[:8]):
 i = 1
 print("\nB O U L D E R -- FINAALI")
 for tulos in boulder.pisteet_finaali(sijoitukset[:8]) :  
-    if tulos[1] == 0:
-        pr = f"{tulos[0]}: {tulos[3]}Z{tulos[4]}"   # ei toppeja
+    if tulos[1] == 0 and tulos[3] != 0: # ei toppeja, mutta zoneja on
+        pr = f"{tulos[0]}: {tulos[3]}Z{tulos[4]}"   
+    elif tulos[1] == 0 and tulos[3] == 0: # ei toppeja, eikä zoneja 
+        pr = f"{tulos[0]}: - "
     else:
         pr = f"{tulos[0]}: {tulos[1]}T{tulos[2]}, {tulos[3]}Z{tulos[4]}"
     print(pr) 

@@ -34,7 +34,7 @@ def losers(tyypit):
 
     for tyyppi in tyypit:
         r = random.randint(1, 4)
-        if r == 1:
+        if r == 1 :  
             ajat.append([tyyppi[0], 100])   # tarkoittaa fail
         else:
             ajat.append([tyyppi[0], random.randint(8000,15000)/1000])   # aikoja 8.000 .. 15.000 s
@@ -80,7 +80,15 @@ def speed_karsinta():
     puolivali = int(len(alkutulos)/2)    # huom!  /2 tekee floatin vaikka tulos on int  8/2 != 4 vaan 4.0 !!! 
     losersit = losers(alkutulos[puolivali:])
     winnersit = winners(alkutulos[:puolivali])
-    return finaalit(winnersit) + losersit
+    print("\nS P E E D -- KARSINTA")
+    the_tulos = finaalit(winnersit) + losersit
+    for tulos in the_tulos:
+        if tulos[1] == 100:
+            pr = f"{tulos[0]}: fail"   # ei toppeja
+        else:
+            pr = f"{tulos[0]}: {tulos[1]} sekuntia"
+        print(pr) 
+    return the_tulos
 
 def speed_finaali(sijoitukset):
     alkutulos = finaalikierros(sijoitukset)

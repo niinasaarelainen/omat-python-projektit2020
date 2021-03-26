@@ -35,10 +35,16 @@ def pisteet_karsinta():
 def pisteet_finaali(sijoitukset):
     pisteet = []
     for i in range(8):
-        topit_lkm = random.randint(0,3)
-        topit_yritykset = random.randint(3, 20)
-        zonet_lkm = random.randint(topit_lkm,3)
-        zonet_yritykset = random.randint(3, 30)
+        if sijoitukset[i][0] == 'Janja':
+            topit_lkm = random.randint(2,3)
+            topit_yritykset = random.randint(topit_lkm, 5)  # 3 reittiä, flash jokaisesta : 3
+            zonet_lkm = random.randint(topit_lkm, 3)
+            zonet_yritykset = random.randint(topit_yritykset, topit_yritykset)
+        else:
+            topit_lkm = random.randint(0,3)
+            topit_yritykset = random.randint(3, 15)
+            zonet_lkm = random.randint(topit_lkm, 3)
+            zonet_yritykset = random.randint(3, topit_yritykset)
         pisteet.append([sijoitukset[i][0], topit_lkm, topit_yritykset, zonet_lkm, zonet_yritykset])  
     s = sorted(pisteet, key=lambda s: (-s[1], s[2], -s[3], s[4],) )   
     return s
