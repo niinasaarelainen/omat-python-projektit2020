@@ -29,7 +29,7 @@ def pisteet_karsinta():
                 zonet_yritykset += int(piste[1:])      
         tulokset.append([tulos[0], topit_lkm, topit_yritykset, zonet_lkm, zonet_yritykset])  
 
-    s = sorted(tulokset, key=lambda s: (-s[1], s[2], -s[3], s[4],) )   
+    s = sorted(tulokset, key=lambda s: (-s[1], s[2], -s[3], s[4],) )  
     return s
 
 def pisteet_finaali(sijoitukset):
@@ -56,11 +56,19 @@ def jarjesta_dictiin(lista, ind):
  
 
 karsintatulos = pisteet_karsinta()
-print(karsintatulos)
+print("\nB O U L D E R -- KARSINTA")
+for tulos in karsintatulos:
+    if tulos[1] == 0:
+        pr = f"{tulos[0]}: {tulos[3]}Z{tulos[4]}"   # ei toppeja
+    else:
+        pr = f"{tulos[0]}: {tulos[1]}T{tulos[2]}, {tulos[3]}Z{tulos[4]}"
+    print(pr) 
 
 
 
-""" ilman lambadaa
+
+
+""" ilman lambadaa, ei mene oikein !!!
 
 def onko_samoja_tuloksia(lista, ind):
     edellinen = lista[0]

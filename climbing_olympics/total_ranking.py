@@ -1,7 +1,6 @@
-import speed, boulder, lead, tkinter
+import speed, boulder, lead
 from operator import itemgetter
 
-# tkinter.
 
 #   K A R S I N T A : 
 tulokset = {}
@@ -45,10 +44,10 @@ def printtaa_tulokset(sijoitukset, karsinta_vai_finaali):
 
 
 sijoitukset.sort(key=itemgetter(2))
-printtaa_tulokset(sijoitukset, "KARSINTA")
+printtaa_tulokset(sijoitukset, "KARSINTA -- TOTAL POINTS")
 
 
-#  F I N A A L I
+#  F I N A A L I   8 PARASTA
 
 tulokset = {}
 i = 1  # eka sijoitus = 1
@@ -58,10 +57,20 @@ for tulos in speed.speed_finaali(sijoitukset[:8]):
     i += 1
 
 i = 1
+print("\nB O U L D E R -- FINAALI")
 for tulos in boulder.pisteet_finaali(sijoitukset[:8]) :  
+    if tulos[1] == 0:
+        pr = f"{tulos[0]}: {tulos[3]}Z{tulos[4]}"   # ei toppeja
+    else:
+        pr = f"{tulos[0]}: {tulos[1]}T{tulos[2]}, {tulos[3]}Z{tulos[4]}"
+    print(pr) 
     tulokset[tulos[0]].append(i)    # ei tasasijoituksia
     i += 1
 
+print("\nL E A D -- FINAALI")
+for tulos in lead.pisteet_finaali(sijoitukset[:8]):
+    pr = f"{tulos[0]}: {tulos[1]} (time:{tulos[2]:.2f})"   # 2 desimaalia
+    print(pr) 
 for tulos in lead.tulokset(lead.pisteet_finaali(sijoitukset[:8])):    
     tulokset[tulos[0]].append(tulos[1]+1)   # täällä saattaa olla tasasijoituksia
     
@@ -71,4 +80,4 @@ for nimi, sij in tulokset.items():
     sijoitukset.append([nimi, sij, sij[0] * sij[1] * sij[2]])
 
 sijoitukset.sort(key=itemgetter(2))
-printtaa_tulokset(sijoitukset, "FINAALI")
+printtaa_tulokset(sijoitukset, "FINAALI -- TOTAL POINTS")
