@@ -48,10 +48,15 @@ printtaa_tulokset(sijoitukset, "KARSINTA -- TOTAL POINTS")
 
 
 #  F I N A A L I   8 PARASTA
-
+print("\nS P E E D -- FINAALI")
 tulokset = {}
 i = 1  # eka sijoitus = 1
 for tulos in speed.speed_finaali(sijoitukset[:8]):
+    if tulos[1] == 100:
+        pr = f"{tulos[0]}: fail"   # ei toppeja
+    else:
+        pr = f"{tulos[0]}: {tulos[1]} sekuntia"
+    print(pr) 
     tulokset[tulos[0]] = []
     tulokset[tulos[0]].append(i)   # ei tasasijoituksia
     i += 1

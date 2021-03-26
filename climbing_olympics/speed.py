@@ -33,7 +33,11 @@ def losers(tyypit):
     ajat = []
 
     for tyyppi in tyypit:
-        ajat.append([tyyppi[0], random.randint(8000,15000)/1000])   # aikoja 8.000 .. 15.000 s
+        r = random.randint(1, 4)
+        if r == 1:
+            ajat.append([tyyppi[0], 100])   # tarkoittaa fail
+        else:
+            ajat.append([tyyppi[0], random.randint(8000,15000)/1000])   # aikoja 8.000 .. 15.000 s
     
     ajat.sort(key=itemgetter(1))
     return ajat    
@@ -55,7 +59,7 @@ def finaalit(winners):
     # 3.-4. sija
     ajat = []
     for tyyppi in winners[2:]:
-        ajat.append([tyyppi[0], random.randint(7500,11000)/1000])      
+        ajat.append([tyyppi[0], random.randint(7900,11000)/1000])      
     ajat.sort(key=itemgetter(1), reverse = True)
     #print("3-4-", ajat)
     tulos += ajat       # ei voi lisätä kaikkia kerralla, koska 2. sijoittunut voi olla huonompi kuin 3.
@@ -63,7 +67,7 @@ def finaalit(winners):
     # 1.-2. sija
     ajat = []
     for tyyppi in winners[:2]:
-        ajat.append([tyyppi[0], random.randint(7500,11000)/1000])      
+        ajat.append([tyyppi[0], random.randint(7500,10000)/1000])      
     ajat.sort(key=itemgetter(1), reverse = True)
     #print("1-2-", ajat)
     tulos += ajat 
@@ -77,7 +81,6 @@ def speed_karsinta():
     losersit = losers(alkutulos[puolivali:])
     winnersit = winners(alkutulos[:puolivali])
     return finaalit(winnersit) + losersit
-    # print(the_tulos)
 
 def speed_finaali(sijoitukset):
     alkutulos = finaalikierros(sijoitukset)
@@ -85,5 +88,4 @@ def speed_finaali(sijoitukset):
     losersit = losers(alkutulos[puolivali:])
     winnersit = winners(alkutulos[:puolivali])
     return finaalit(winnersit) + losersit
-    # print(the_tulos)
 
