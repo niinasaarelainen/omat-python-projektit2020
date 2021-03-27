@@ -23,7 +23,7 @@ class SpeedKilpailu:
         self.ajat.append(SpeedTulos("Jain", 11.022))
         self.ajat.append(SpeedTulos("Jessica", 8.023))
         self.ajat.append(SpeedTulos("Alex", 8.022))
-        self.ajat.append(SpeedTulos("AlexPlus", 9.929))   
+        self.ajat.append(SpeedTulos("Fanny", 9.929))   
         self.ajat.append(SpeedTulos("AlexHidas", 17.022))   
         self.ajat.append(SpeedTulos("Julia", fail))          # varaslähtö
         self.ajat.append(SpeedTulos("Ihmelapsi", 7.022))
@@ -37,10 +37,9 @@ class SpeedKilpailu:
     def finaalikierros(self, sijoitukset):
         self.ajat = []
         for i in range(8):
-            self.ajat.append([sijoitukset[i][0], random.randint(8000,15000)/1000])   # aikoja 8.000 .. 15.000 s
-
-        self.ajat.sort(key=itemgetter(1))
-        return self.ajat
+            self.ajat.append(SpeedTulos(sijoitukset[i][0], random.randint(8000,15000)/1000))   # aikoja 8.000 .. 15.000 s
+        s = sorted(self.ajat, key=lambda tulos: tulos.aika)
+        return s
 
 
     def losers(self, tyypit):
@@ -49,22 +48,22 @@ class SpeedKilpailu:
         for tyyppi in tyypit:
             r = random.randint(1, 4)
             if r == 1 :  
-                self.ajat.append([tyyppi[0], fail])   
+                self.ajat.append(SpeedTulos(tyyppi.nimi, fail))   
             else:
-                self.ajat.append([tyyppi[0], random.randint(8000,15000)/1000])   # aikoja 8.000 .. 15.000 s
+                self.ajat.append(SpeedTulos(tyyppi.nimi, random.randint(8000,15000)/1000))   # aikoja 8.000 .. 15.000 s
         
-        self.ajat.sort(key=itemgetter(1))
-        return self.ajat    
+        s = sorted(self.ajat, key=lambda tulos: tulos.aika)
+        return s 
 
 
     def winners(self, tyypit):
         self.ajat = []
 
         for tyyppi in tyypit:
-            self.ajat.append([tyyppi[0], random.randint(7000,12000)/1000])   
+            self.ajat.append(SpeedTulos(tyyppi.nimi, random.randint(7000,12000)/1000))   
         
-        self.ajat.sort(key=itemgetter(1))
-        return self.ajat    
+        s = sorted(self.ajat, key=lambda tulos: tulos.aika)
+        return s 
 
 
     def finaalit(self, winners):
@@ -73,20 +72,20 @@ class SpeedKilpailu:
         # 3.-4. sija
         self.ajat = []
         for tyyppi in winners[2:]:
-            self.ajat.append([tyyppi[0], random.randint(7900,11000)/1000])      
-        self.ajat.sort(key=itemgetter(1), reverse = True)
+            self.ajat.append(SpeedTulos(tyyppi.nimi, random.randint(7900,11000)/1000))      
+        s = sorted(self.ajat, key=lambda tulos: tulos.aika, reverse = True)
         #print("3-4-", self.ajat)
-        tulos += self.ajat       # ei voi lisätä kaikkia kerralla, koska 2. sijoittunut voi olla huonompi kuin 3.
+        tulos += s      # ei voi lisätä kaikkia kerralla, koska 2. sijoittunut voi olla huonompi kuin 3.
 
         # 1.-2. sija
         self.ajat = []
         for tyyppi in winners[:2]:
-            self.ajat.append([tyyppi[0], random.randint(7500,10000)/1000])      
-        self.ajat.sort(key=itemgetter(1), reverse = True)
+            self.ajat.append(SpeedTulos(tyyppi.nimi, random.randint(7500,10000)/1000))      
+        s = sorted(self.ajat, key=lambda tulos: tulos.aika, reverse = True)
         #print("1-2-", self.ajat)
-        tulos += self.ajat 
+        tulos += s
 
-        tulos.reverse()
+        tulos.reverse()   
         return tulos
 
     def speed_karsinta(self):
@@ -97,11 +96,7 @@ class SpeedKilpailu:
         print("\nS P E E D -- KARSINTA")
         the_tulos = self.finaalit(winnersit) + losersit
         for tulos in the_tulos:
-            if tulos[1] == 1000:
-                pr = f"{tulos[0]}: fail"   
-            else:
-                pr = f"{tulos[0]}: {tulos[1]} sekuntia"
-            print(pr) 
+            print(tulos) 
         return the_tulos
 
     def speed_finaali(self, sijoitukset):
@@ -111,7 +106,8 @@ class SpeedKilpailu:
         winnersit = self.winners(alkutulos[:puolivali])
         return self.finaalit(winnersit) + losersit
 
-
+"""
 speedKilpailu = SpeedKilpailu()
-for tulos in speedKilpailu.eka_kierros():
-    print(tulos)
+speedKilpailu.speed_karsinta()     # 2.tullut voi olla hitaampi kuin 3./4.
+# speedKilpailu.speed_finaali()   ei voi testata kun ei ole sijoitukset, joka rakentuu total_rankingissa
+"""

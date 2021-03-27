@@ -27,7 +27,7 @@ class BoulderKilpailu:
         pisteet.append(["Jain", "T10", "Z1", "T2", "Z1", "Z6"])
         pisteet.append(["Jessica", "T3", "Z1", "T5", "Z1", "Z7"])
         pisteet.append(["Alex", "T2", "Z1", "Z1", "Z12"])
-        pisteet.append(["AlexPlus", "T2", "Z1", "Z1", "Z3"])
+        pisteet.append(["Fanny", "T2", "Z1", "Z1", "Z3"])
         pisteet.append(["AlexHidas", "T2", "Z1", "Z1", "Z1"])
         pisteet.append(["Julia", "T3", "Z1", "T5", "Z1", "Z9"])
         pisteet.append(["Ihmelapsi", "Z1", "Z1", "Z12"])
@@ -51,6 +51,9 @@ class BoulderKilpailu:
             tulokset.append(BoulderTulos(tulos[0], self.topit_lkm, self.topit_yritykset, self.zonet_lkm, self.zonet_yritykset))  
 
         s = sorted(tulokset, key=lambda tulos: (-tulos.topit_lkm, tulos.topit_yritykset, -tulos.zonet_lkm, tulos.zonet_yritykset))  
+        print("\nB O U L D E R -- KARSINTA")
+        for tulos in s:
+            print(tulos) 
         return s
 
 
@@ -67,7 +70,7 @@ class BoulderKilpailu:
                 self.topit_yritykset = random.randint(3, 15)
                 self.zonet_lkm = random.randint(self.topit_lkm, 3)
                 self.zonet_yritykset = random.randint(3, self.topit_yritykset)
-            tulokset.append([sijoitukset[i][0], self.topit_lkm, self.topit_yritykset, self.zonet_lkm, self.zonet_yritykset])  
+            tulokset.append(BoulderTulos(sijoitukset[i][0], self.topit_lkm, self.topit_yritykset, self.zonet_lkm, self.zonet_yritykset))  
         s = sorted(tulokset, key=lambda tulos: (-tulos.topit_lkm, tulos.topit_yritykset, -tulos.zonet_lkm, tulos.zonet_yritykset))  
         return s
 
@@ -80,14 +83,11 @@ class BoulderKilpailu:
                 dict[tulos[ind]] = []    
                 dict[tulos[ind]].append(tulos)
         return dict
+ 
 
-    
-
-   
-
-
+"""
 boulderKilpailu = BoulderKilpailu()
 print("\nB O U L D E R -- KARSINTA")
 for tulos in boulderKilpailu.tulos_karsinta():
-    print(tulos)
+    print(tulos)  """
 

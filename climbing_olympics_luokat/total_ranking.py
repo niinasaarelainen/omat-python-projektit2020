@@ -3,25 +3,29 @@ from operator import itemgetter
 
 
 #   K A R S I N T A : 
+speedKilpailu = speed.SpeedKilpailu()
 tulokset = {}
 i = 1  # eka sijoitus = 1
-for tulos in speed.speed_karsinta():
-    tulokset[tulos[0]] = []
-    tulokset[tulos[0]].append(i)   # ei tasasijoituksia
+for tulos in speedKilpailu.speed_karsinta()  :
+    tulokset[tulos.nimi] = []
+    tulokset[tulos.nimi].append(i)   # ei tasasijoituksia
     i += 1
 
+boulderKilpailu = boulder.BoulderKilpailu()
 i = 1
-for tulos in boulder.karsintatulos:    
-    tulokset[tulos[0]].append(i)    # ei tasasijoituksia
+for tulos in boulderKilpailu.tulos_karsinta():    
+    tulokset[tulos.nimi].append(i)    # ei tasasijoituksia
     i += 1
 
-for tulos in lead.karsintatulos:    
-    tulokset[tulos[0]].append(tulos[1]+1)   # täällä saattaa olla tasasijoituksia
+leadKilpailu  = lead.LeadKilpailu()
+karsintatulokset = leadKilpailu.tulos_karsinta()
+print("\nL E A D -- KARSINTA")
+for tulos in leadKilpailu.jarjesta_sijoitukset(karsintatulokset) :
+    tulokset[tulos[0].nimi].append(tulos[1])   # täällä saattaa olla tasasijoituksia
     
 
 sijoitukset = []
 for nimi, sij in tulokset.items():
-    print("sij", sij)
     sijoitukset.append([nimi, sij, sij[0] * sij[1] * sij[2]])
 
 
@@ -52,29 +56,23 @@ printtaa_tulokset(sijoitukset, "KARSINTA -- TOTAL POINTS")
 print("\nS P E E D -- FINAALI")
 tulokset = {}
 i = 1  # eka sijoitus = 1
-for tulos in speed.speed_finaali(sijoitukset[:8]):
-    if tulos[1] == 1000:
-        pr = f"{tulos[0]}: fail"   # ei toppeja
-    else:
-        pr = f"{tulos[0]}: {tulos[1]} sekuntia"
-    print(pr) 
-    tulokset[tulos[0]] = []
-    tulokset[tulos[0]].append(i)   # ei tasasijoituksia
+for tulos in speedKilpailu.speed_finaali(sijoitukset[:8]):
+    
+    print(tulos) 
+    tulokset[tulos.nimi] = []
+    tulokset[tulos.nimi].append(i)   # ei tasasijoituksia
     i += 1
 
 i = 1
 print("\nB O U L D E R -- FINAALI")
-for tulos in boulder.tulos_finaali(sijoitukset[:8]) :      
+for tulos in boulderKilpailu.tulos_finaali(sijoitukset[:8]) :      
     print(tulos) 
-    tulokset[tulos[0]].append(i)    # ei tasasijoituksia
+    tulokset[tulos.nimi].append(i)    # ei tasasijoituksia
     i += 1
 
 print("\nL E A D -- FINAALI")
-for tulos in lead.pisteet_finaali(sijoitukset[:8]):
-    pr = f"{tulos[0]}: {tulos[1]} (time:{tulos[2]:.2f})"   # 2 desimaalia
-    print(pr) 
-for tulos in lead.tulokset(lead.pisteet_finaali(sijoitukset[:8])):    
-    tulokset[tulos[0]].append(tulos[1]+1)   # täällä saattaa olla tasasijoituksia
+for tulos in leadKilpailu.jarjesta_sijoitukset(leadKilpailu.pisteet_finaali(sijoitukset[:8])):    
+    tulokset[tulos[0].nimi].append(tulos[1])   # täällä saattaa olla tasasijoituksia
     
 
 sijoitukset = []
