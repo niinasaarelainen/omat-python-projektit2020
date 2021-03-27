@@ -265,12 +265,12 @@ fontti_pieni_bold = pygame.font.SysFont("Arial", 16, bold = True)
 sanastaSanoja = SanastaSanoja()
 vari = sanastaSanoja.arvo_vari()
 valkoinen = (255, 255, 255)
-musta = (3, 3, 3)
+musta = (3, 3, 3)                                   # CTRL + F5  !!!!!!!!!!
 punainen = (255, 0, 0)
 error_msg = ""
 
 
-arvottu_sana= sanastaSanoja.arvo_sana()             # CTRL + F5  !!!!!!!!!!
+arvottu_sana= sanastaSanoja.arvo_sana()             
 aiemmin_keksityt, wordlist, wordlistasta_loytyvat = open_files()
 kaikki_mahdolliset_sanat_tasta_sanasta = wordlistasta_loytyvat[arvottu_sana]    # huom! string joka näyttää listalta !!
 print(kaikki_mahdolliset_sanat_tasta_sanasta)
@@ -281,7 +281,7 @@ kaikki = LoydaKaikki(wordlist, arvottu_sana)
 kaikki.etsi()
 print(sorted(kaikki.uniikit))
 print(sorted(kaikki.loydetyt_sanat))
-print(len(kaikki.loydetyt_sanat))   # rabbit oli 110 """
+print(len(kaikki.loydetyt_sanat))    """
 
 sanat = scan_file(aiemmin_keksityt, arvottu_sana)
 main()

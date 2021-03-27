@@ -20,7 +20,8 @@ for tulos in lead.karsintatulos:
     
 
 sijoitukset = []
-for nimi, sij in tulokset.items():    # sij  = [1, 2, 6] = speedissä 1., boulderissa 2., lead 6.
+for nimi, sij in tulokset.items():
+    print("sij", sij)
     sijoitukset.append([nimi, sij, sij[0] * sij[1] * sij[2]])
 
 
