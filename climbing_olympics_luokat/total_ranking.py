@@ -53,7 +53,7 @@ print("\nS P E E D -- FINAALI")
 tulokset = {}
 i = 1  # eka sijoitus = 1
 for tulos in speed.speed_finaali(sijoitukset[:8]):
-    if tulos[1] == 100:
+    if tulos[1] == 1000:
         pr = f"{tulos[0]}: fail"   # ei toppeja
     else:
         pr = f"{tulos[0]}: {tulos[1]} sekuntia"
@@ -64,14 +64,8 @@ for tulos in speed.speed_finaali(sijoitukset[:8]):
 
 i = 1
 print("\nB O U L D E R -- FINAALI")
-for tulos in boulder.pisteet_finaali(sijoitukset[:8]) :  
-    if tulos[1] == 0 and tulos[3] != 0: # ei toppeja, mutta zoneja on
-        pr = f"{tulos[0]}: {tulos[3]}Z{tulos[4]}"   
-    elif tulos[1] == 0 and tulos[3] == 0: # ei toppeja, eikä zoneja 
-        pr = f"{tulos[0]}: - "
-    else:
-        pr = f"{tulos[0]}: {tulos[1]}T{tulos[2]}, {tulos[3]}Z{tulos[4]}"
-    print(pr) 
+for tulos in boulder.tulos_finaali(sijoitukset[:8]) :      
+    print(tulos) 
     tulokset[tulos[0]].append(i)    # ei tasasijoituksia
     i += 1
 
