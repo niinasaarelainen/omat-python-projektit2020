@@ -50,7 +50,6 @@ def printtaa_tulokset(karsinta_vai_finaali):
 
 
 karsintatulos = printtaa_tulokset("KARSINTA -- TOTAL POINTS")
-print(karsintatulos)
 
 
 #  F I N A A L I   8 PARASTA

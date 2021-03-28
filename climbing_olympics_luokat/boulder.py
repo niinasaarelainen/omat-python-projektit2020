@@ -13,7 +13,7 @@ class BoulderTulos:
 
     def __str__(self):
         if self.topit_lkm == 0 and self.zonet_lkm == 0:
-            return f"{self.nimi:15} -"
+            return f"{self.nimi:15} No Tops, No Zones"
         elif self.topit_lkm == 0:
             return f"{self.nimi:15} No Tops, {self.zonet_lkm}Z{self.zonet_yritykset}"
         return f"{self.nimi:15} {self.topit_lkm}T{self.topit_yritykset}, {self.zonet_lkm}Z{self.zonet_yritykset}"
@@ -73,16 +73,6 @@ class BoulderKilpailu:
             tulokset.append(BoulderTulos(koktulos.nimi, self.topit_lkm, self.topit_yritykset, self.zonet_lkm, self.zonet_yritykset))  
         s = sorted(tulokset, key=lambda tulos: (-tulos.topit_lkm, tulos.topit_yritykset, -tulos.zonet_lkm, tulos.zonet_yritykset))  
         return s
-
-    def jarjesta_dictiin(self, lista, ind):
-        dict = {}
-        for tulos in lista:
-            if tulos[ind] in dict:
-                dict[tulos[ind]].append(tulos)
-            else:
-                dict[tulos[ind]] = []    
-                dict[tulos[ind]].append(tulos)
-        return dict
  
 
 """

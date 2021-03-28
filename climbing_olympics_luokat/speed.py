@@ -74,7 +74,6 @@ class SpeedKilpailu:
         for tyyppi in winners[2:]:
             self.ajat.append(SpeedTulos(tyyppi.nimi, random.randint(7900,11000)/1000))      
         s = sorted(self.ajat, key=lambda tulos: tulos.aika, reverse = True)
-        #print("3-4-", self.ajat)
         tulos += s      # ei voi lisätä kaikkia kerralla, koska 2. sijoittunut voi olla huonompi kuin 3.
 
         # 1.-2. sija
@@ -82,7 +81,6 @@ class SpeedKilpailu:
         for tyyppi in winners[:2]:
             self.ajat.append(SpeedTulos(tyyppi.nimi, random.randint(7500,10000)/1000))      
         s = sorted(self.ajat, key=lambda tulos: tulos.aika, reverse = True)
-        #print("1-2-", self.ajat)
         tulos += s
 
         tulos.reverse()   

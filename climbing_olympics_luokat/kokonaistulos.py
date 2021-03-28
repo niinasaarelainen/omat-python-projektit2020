@@ -2,7 +2,7 @@ class Kokonaistulos:
 
     def __init__(self, nimi, speed):   # speed-kilpailu on ekana
         self.nimi = nimi
-        self.speed = speed
+        self.speed = speed   # monenneksiko tyyppi tuli tässä lajissa
 
     def lisaa_boulder (self, boulder):
         self.boulder = boulder
@@ -14,7 +14,7 @@ class Kokonaistulos:
         return self.speed * self.boulder * self.lead 
 
     def voitot(self):
-        print( [self.speed, self.boulder, self.lead].count(1))
+        #print( [self.speed, self.boulder, self.lead].count(1))
         return  [self.speed, self.boulder, self.lead].count(1)
 
     def __str__(self):

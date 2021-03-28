@@ -13,13 +13,14 @@ WHITE = (200, 200, 200)
 BLUE = (10, 97, 97)
 aania = 5       # ambitus kvintti jos käyttäjä ei muuta
 nap = "zxcvb"
+soittoalue = "zxcvbnm,."
 
 
 def nappaimet(intervalli):
     # virheellinen syöte TODO
     return "zxcvbnm,."[0 : intervalli]
 
-def alkuohjeet(naytto):
+def alkuohjeet1(naytto):
     global nap, aania
     teksti = fontti_pieni.render(f"Valitse intervalli, jonka alueella melodia liikkuu (2-9)", True, WHITE)
     naytto.blit(teksti, (30, 30))
@@ -35,42 +36,49 @@ def alkuohjeet(naytto):
                     aania = int(chr(event.key))     
                     print("aania:", aania)               
                     nap = nappaimet(aania)
-                teksti = fontti_pieni.render(f" käytä näppäimiä {nap}  (z = keski-c)", True, WHITE)
-                naytto.blit(teksti, (30, 75))
-                teksti = fontti_pieni.render(f" Sama melodia uudestaan = Space ,  Esc = lopeta", True, WHITE)
-                naytto.blit(teksti, (30, 120))     
-                teksti = fontti_pieni.render(f" Paina nyt ENTER, kun haluat aloittaa", True, WHITE)
-                naytto.blit(teksti, (30, 165))            
+                    alkuohjeet2(naytto)
+                else:
+                    naytto.fill((10, 10, 10))  
+                    teksti = fontti_pieni.render(f"Paina 2, 3, 4, 5, 6, 7, 8 tai 9", True, WHITE)
+                    naytto.blit(teksti, (30, 30))
 
         pygame.display.flip()
         kello.tick(40)
 
+def alkuohjeet2(naytto):
+    global nap, aania
+    teksti = fontti_pieni.render(f" käytä näppäimiä {nap}  (z = keski-c)", True, WHITE)
+    naytto.blit(teksti, (30, 75))
+    teksti = fontti_pieni.render(f" Sama melodia uudestaan = Space ,  Esc = lopeta", True, WHITE)
+    naytto.blit(teksti, (30, 120))     
+    teksti = fontti_pieni.render(f" Paina nyt ENTER, kun haluat aloittaa", True, WHITE)
+    naytto.blit(teksti, (30, 165))            
+
+    pygame.display.flip()
+    kello.tick(40)
+
 
 def generoi_melodia():
     print("aania:", aania)
-    aanet = "zxcvbnm,."  # näppäimistön alin rivi 6 ekaa
+    aanet = "zxcvbnm,."  # näppäimistön alin rivi 
     return [aanet[random.randint(0,aania -1)]  for i in range(200)]
 
 
-def midi_play(n, edellinen, instrument):
+def midi_play(n, instrument):
     midi_out.set_instrument(instrument)  
     midi_numbers = {"z":60, "x":62, "c":64, "v":65, "b":67, "n":69, "m":71 ,",":72, ".":74}    #60 = keski-c, 74 = d2
-    midi_out.note_off(midi_numbers[edellinen], 110)
-    midi_out.note_on(midi_numbers[n], 110)
+    midi_out.note_on(midi_numbers[n], 110)    
+    pygame.time.delay(300)
+    midi_out.note_off(midi_numbers[n], 110)
 
 
 def soita_melodia(melodia, montako):
-    edellinen = "z"
     for i in range(montako):
-        midi_play(melodia[i], edellinen, 2)
-        edellinen = melodia[i]
-        pygame.time.delay(300)
-        
+        midi_play(melodia[i], 2)        
    
 
 def mainloop():
     montako = 3
-    edellinen = "z"
     koneen_vuoro = True
     monesko_kayttajan_aani = 0
     virheet = 0   
@@ -101,16 +109,16 @@ def mainloop():
                 if event.key == pygame.K_SPACE:
                     soita_melodia(melodia, montako) 
                     break
-                if not melodia[monesko_kayttajan_aani] == chr(event.key):
+                if not melodia[monesko_kayttajan_aani] == chr(event.key) and chr(event.key) in soittoalue:
                     virheet += 1
                     print("virheitä:",  virheet)
-                midi_play(chr(event.key), edellinen, 8)
-                edellinen = chr(event.key)
-                monesko_kayttajan_aani += 1
+                if chr(event.key) in soittoalue: 
+                    midi_play(chr(event.key), 8)
+                    monesko_kayttajan_aani += 1
                 if monesko_kayttajan_aani == montako :
                     montako += 1
                     koneen_vuoro = True       
         
         kello.tick(40)
 
-alkuohjeet(naytto)
+alkuohjeet1(naytto)
