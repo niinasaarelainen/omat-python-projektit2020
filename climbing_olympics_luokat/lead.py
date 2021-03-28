@@ -33,13 +33,13 @@ class LeadKilpailu:
     def pisteet_finaali(self, sijoitukset):
         self.tulokset = []
         top = 48.0
-        for i in range(8):
-            if sijoitukset[i][0] == 'Janja':
+        for koktulos in sijoitukset:
+            if koktulos.nimi == 'Janja':
                 tulos =  random.randint(top/1.2*100, top*100)/100     # Janja pääsee väh. 5/6 reittiä
             else:
                 tulos =  random.randint(top/2*100, top*100)/100
             aika = random.randint(200, 600)/100
-            self.tulokset.append(LeadTulos(sijoitukset[i][0], int(tulos), aika))   # 3. parametri = aika, max 6 min
+            self.tulokset.append(LeadTulos(koktulos.nimi, int(tulos), aika))   # 3. parametri = aika, max 6 min
             
         s = sorted(self.tulokset, key=lambda tulos: (-tulos.ote, tulos.aika))        
         return s

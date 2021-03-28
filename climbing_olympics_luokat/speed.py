@@ -36,8 +36,8 @@ class SpeedKilpailu:
 
     def finaalikierros(self, sijoitukset):
         self.ajat = []
-        for i in range(8):
-            self.ajat.append(SpeedTulos(sijoitukset[i][0], random.randint(8000,15000)/1000))   # aikoja 8.000 .. 15.000 s
+        for koktulos in sijoitukset:
+            self.ajat.append(SpeedTulos(koktulos.nimi, random.randint(8000,15000)/1000))   # aikoja 8.000 .. 15.000 s
         s = sorted(self.ajat, key=lambda tulos: tulos.aika)
         return s
 

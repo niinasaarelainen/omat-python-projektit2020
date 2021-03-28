@@ -59,8 +59,8 @@ class BoulderKilpailu:
 
     def tulos_finaali(self, sijoitukset):
         tulokset = [] 
-        for i in range(8):
-            if sijoitukset[i][0] == 'Janja':
+        for koktulos in sijoitukset:
+            if koktulos.nimi == 'Janja':
                 self.topit_lkm = random.randint(2,3)
                 self.topit_yritykset = random.randint(self.topit_lkm, 5)  # 3 reittiä, flash jokaisesta : 3
                 self.zonet_lkm = random.randint(self.topit_lkm, 3)
@@ -70,7 +70,7 @@ class BoulderKilpailu:
                 self.topit_yritykset = random.randint(3, 15)
                 self.zonet_lkm = random.randint(self.topit_lkm, 3)
                 self.zonet_yritykset = random.randint(3, self.topit_yritykset)
-            tulokset.append(BoulderTulos(sijoitukset[i][0], self.topit_lkm, self.topit_yritykset, self.zonet_lkm, self.zonet_yritykset))  
+            tulokset.append(BoulderTulos(koktulos.nimi, self.topit_lkm, self.topit_yritykset, self.zonet_lkm, self.zonet_yritykset))  
         s = sorted(tulokset, key=lambda tulos: (-tulos.topit_lkm, tulos.topit_yritykset, -tulos.zonet_lkm, tulos.zonet_yritykset))  
         return s
 

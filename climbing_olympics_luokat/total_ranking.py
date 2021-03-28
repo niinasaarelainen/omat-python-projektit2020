@@ -1,36 +1,36 @@
-import speed, boulder, lead
+import speed, boulder, lead, kokonaistulos
 from operator import itemgetter
 
 
+tulokset =  {}   #  nimi : Kokonaistulos
+
 #   K A R S I N T A : 
 speedKilpailu = speed.SpeedKilpailu()
-tulokset = {}
-i = 1  # eka sijoitus = 1
+sij = 1  # eka sijoitus = 1
 for tulos in speedKilpailu.speed_karsinta()  :
-    tulokset[tulos.nimi] = []
-    tulokset[tulos.nimi].append(i)   # ei tasasijoituksia
-    i += 1
+    t = kokonaistulos.Kokonaistulos(tulos.nimi, sij) 
+    tulokset[tulos.nimi] = t # ei tasasijoituksia
+    sij += 1
 
 boulderKilpailu = boulder.BoulderKilpailu()
-i = 1
+sij = 1
 for tulos in boulderKilpailu.tulos_karsinta():    
-    tulokset[tulos.nimi].append(i)    # ei tasasijoituksia
-    i += 1
+    t = tulokset[tulos.nimi]    # ei tasasijoituksia
+    t.lisaa_boulder(sij)
+    sij += 1
 
 leadKilpailu  = lead.LeadKilpailu()
 karsintatulokset = leadKilpailu.tulos_karsinta()
 print("\nL E A D -- KARSINTA")
 for tulos in leadKilpailu.jarjesta_sijoitukset(karsintatulokset) :
-    tulokset[tulos[0].nimi].append(tulos[1])   # täällä saattaa olla tasasijoituksia
+    t = tulokset[tulos[0].nimi]    
+    t.lisaa_lead(tulos[1])   # täällä saattaa olla tasasijoituksia, eri systeemi kuin speed/lead
     
 
-sijoitukset = []
-for nimi, sij in tulokset.items():
-    sijoitukset.append([nimi, sij, sij[0] * sij[1] * sij[2]])
 
-
-
-def printtaa_tulokset(sijoitukset, karsinta_vai_finaali):
+def printtaa_tulokset(karsinta_vai_finaali):
+    koktulos = tulokset.values()
+    s = sorted(koktulos, key=lambda tulos: tulos.yhteispisteet())
     climber ="CLIMBER"
     lead = "LEAD"
     speed = "SPEED"
@@ -39,45 +39,42 @@ def printtaa_tulokset(sijoitukset, karsinta_vai_finaali):
     print("\n"+karsinta_vai_finaali)
     print(f"{climber:18} {speed:>8}  {boulder:>8}  {lead:>8} {total:>8} ")
     print("-"*56)
-    for tyyppi in sijoitukset:
-        climber = tyyppi[0]
-        speed = tyyppi[1][0]
-        boulder = tyyppi[1][1]
-        lead = tyyppi[1][2]
-        total = tyyppi[2]
+    for koktulos in s:
+        climber = koktulos.nimi
+        speed = koktulos.speed
+        boulder = koktulos.boulder
+        lead = koktulos.lead
+        total = koktulos.yhteispisteet()
         print(f"{climber:18} {speed:>8}  {boulder:>8}  {lead:>8} {total:>8} ")
+    return s[:8]
 
 
-sijoitukset.sort(key=itemgetter(2))
-printtaa_tulokset(sijoitukset, "KARSINTA -- TOTAL POINTS")
+karsintatulos = printtaa_tulokset("KARSINTA -- TOTAL POINTS")
+print(karsintatulos)
 
 
 #  F I N A A L I   8 PARASTA
 print("\nS P E E D -- FINAALI")
 tulokset = {}
-i = 1  # eka sijoitus = 1
-for tulos in speedKilpailu.speed_finaali(sijoitukset[:8]):
-    
+sij = 1  # eka sijoitus = 1
+for tulos in speedKilpailu.speed_finaali(karsintatulos):    
     print(tulos) 
-    tulokset[tulos.nimi] = []
-    tulokset[tulos.nimi].append(i)   # ei tasasijoituksia
-    i += 1
+    t = kokonaistulos.Kokonaistulos(tulos.nimi, sij) 
+    tulokset[tulos.nimi] = t # ei tasasijoituksia
+    sij += 1
 
-i = 1
+sij = 1
 print("\nB O U L D E R -- FINAALI")
-for tulos in boulderKilpailu.tulos_finaali(sijoitukset[:8]) :      
+for tulos in boulderKilpailu.tulos_finaali(karsintatulos) :      
     print(tulos) 
-    tulokset[tulos.nimi].append(i)    # ei tasasijoituksia
-    i += 1
+    t = tulokset[tulos.nimi]    # ei tasasijoituksia
+    t.lisaa_boulder(sij)
+    sij += 1
 
 print("\nL E A D -- FINAALI")
-for tulos in leadKilpailu.jarjesta_sijoitukset(leadKilpailu.pisteet_finaali(sijoitukset[:8])):    
-    tulokset[tulos[0].nimi].append(tulos[1])   # täällä saattaa olla tasasijoituksia
+for tulos in leadKilpailu.jarjesta_sijoitukset(leadKilpailu.pisteet_finaali(karsintatulos)):    
+    t = tulokset[tulos[0].nimi]    
+    t.lisaa_lead(tulos[1])   # täällä saattaa olla tasasijoituksia, eri systeemi kuin speed/lead
     
 
-sijoitukset = []
-for nimi, sij in tulokset.items():
-    sijoitukset.append([nimi, sij, sij[0] * sij[1] * sij[2]])
-
-sijoitukset.sort(key=itemgetter(2))
-printtaa_tulokset(sijoitukset, "FINAALI -- TOTAL POINTS")
+printtaa_tulokset( "FINAALI -- TOTAL POINTS")
