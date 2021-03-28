@@ -30,7 +30,7 @@ for tulos in leadKilpailu.jarjesta_sijoitukset(karsintatulokset) :
 
 def printtaa_tulokset(karsinta_vai_finaali):
     koktulos = tulokset.values()
-    s = sorted(koktulos, key=lambda tulos: tulos.yhteispisteet())
+    s = sorted(koktulos, key=lambda tulos: (tulos.yhteispisteet(), -tulos.voitot()))
     climber ="CLIMBER"
     lead = "LEAD"
     speed = "SPEED"
