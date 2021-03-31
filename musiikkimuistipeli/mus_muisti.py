@@ -84,7 +84,6 @@ def alkuohjeet3(naytto):
 
 
 def generoi_melodia():
-    print("aania:", aania)
     aanet = "zxcvbnm,."  # näppäimistön alin rivi 
     return [aanet[random.randint(0,aania -1)]  for i in range(200)]
 
