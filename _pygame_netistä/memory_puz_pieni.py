@@ -5,9 +5,9 @@ FPS = 30 # frames per second, the general speed of the program
 WINDOWWIDTH = 400 # size of window's width in pixels
 WINDOWHEIGHT = 400 # size of windows' height in pixels
 REVEALSPEED = 8 # speed boxes' sliding reveals and covers
-BOXSIZE = 40 # size of box height & width in pixels
+BOXSIZE = 50 # size of box height & width in pixels
 GAPSIZE = 10 # size of gap between boxes in pixels
-BOARDWIDTH = 4 # number of columns of icons
+BOARDWIDTH = 5 # number of columns of icons
 BOARDHEIGHT = 4 # number of rows of icons
 assert (BOARDWIDTH * BOARDHEIGHT) % 2 == 0, 'Board needs to have an even number of boxes for pairs of matches.'
 XMARGIN = int((WINDOWWIDTH - (BOARDWIDTH * (BOXSIZE + GAPSIZE))) / 2)
@@ -60,27 +60,26 @@ def main():
 
     DISPLAYSURF.fill(BGCOLOR)
     startGameAnimation(mainBoard)
-    moves = 0
+    tries = 0
 
     while True: # main game loop
         mouseClicked = False        
 
         DISPLAYSURF.fill(BGCOLOR) # drawing the window
         drawBoard(mainBoard, revealedBoxes)
-        moves_real = int(moves/2)
-        textsurface = myfont.render(f"tries: {moves_real}", False, (0, 0, 0))
+        textsurface = myfont.render(f"tries: {tries}", False, (0, 0, 0))
         DISPLAYSURF.blit(textsurface,(WINDOWWIDTH - 160, 10))
 
         for event in pygame.event.get(): # event handling loop
-            if event.type == QUIT or (event.type == KEYUP and event.key == K_ESCAPE):
+            if event.type == QUIT or (event.type == KEYUP and event.key == K_ESCAPE):  # Esc-näppäimen nostaminen
                 pygame.quit()
                 sys.exit()
-            elif event.type == MOUSEMOTION:
-                mousex, mousey = event.pos
+            #elif event.type == MOUSEMOTION:    TURHA
+            #    mousex, mousey = event.pos
             elif event.type == MOUSEBUTTONUP:
                 mousex, mousey = event.pos
-                mouseClicked = True                
-                moves += 1
+                mouseClicked = True             
+                
 
         boxx, boxy = getBoxAtPixel(mousex, mousey)
         if boxx != None and boxy != None:
@@ -94,6 +93,7 @@ def main():
                     firstSelection = (boxx, boxy)
                 else: # the current box was the second box clicked
                     # Check if there is a match between the two icons.
+                    tries += 1
                     icon1shape, icon1color = getShapeAndColor(mainBoard, firstSelection[0], firstSelection[1])
                     icon2shape, icon2color = getShapeAndColor(mainBoard, boxx, boxy)
 
@@ -104,13 +104,13 @@ def main():
                         revealedBoxes[firstSelection[0]][firstSelection[1]] = False
                         revealedBoxes[boxx][boxy] = False
                     elif hasWon(revealedBoxes): # check if all pairs found
-                        gameWonAnimation(mainBoard, moves_real, myfont)
+                        gameWonAnimation(mainBoard, tries, myfont)
                         pygame.time.wait(2000)
 
                         # Reset the board
                         mainBoard = getRandomizedBoard()
                         revealedBoxes = generateRevealedBoxesData(False)
-                        moves = 0
+                        tries = 0
 
                         # Show the fully unrevealed board for a second.
                         drawBoard(mainBoard, revealedBoxes)
@@ -152,14 +152,13 @@ def getRandomizedBoard():
         column = []
         for y in range(BOARDHEIGHT):
             column.append(icons[0])
-            del icons[0] # remove the icons as we assign them
+            del icons[0] # remove the icons as we assign them, jotta ei valita samoja uudestaan
         board.append(column)
     return board
 
 
 def splitIntoGroupsOf(groupSize, theList):
-    # splits a list into a list of lists, where the inner lists have at
-    # most groupSize number of items.
+    # splits a list into a list of lists, where the inner lists have at most groupSize number of items.
     result = []
     for i in range(0, len(theList), groupSize):
         result.append(theList[i:i + groupSize])
@@ -271,7 +270,7 @@ def startGameAnimation(board):
         coverBoxesAnimation(board, boxGroup)
 
 
-def gameWonAnimation(board, moves, myfont):
+def gameWonAnimation(board, tries, myfont):
     # flash the background color when the player has won
     coveredBoxes = generateRevealedBoxesData(True)
     color1 = LIGHTBGCOLOR
@@ -281,10 +280,10 @@ def gameWonAnimation(board, moves, myfont):
         color1, color2 = color2, color1 # swap colors
         DISPLAYSURF.fill(color1)
         drawBoard(board, coveredBoxes)
-        textsurface = myfont.render(f"tries: {moves}", False, (0, 0, 0))
+        textsurface = myfont.render(f"tries: {tries}", False, (0, 0, 0))
         DISPLAYSURF.blit(textsurface,(WINDOWWIDTH - 160, 10))
         pygame.display.update()
-        pygame.time.wait(300)
+        pygame.time.wait(200)
 
 
 def hasWon(revealedBoxes):
