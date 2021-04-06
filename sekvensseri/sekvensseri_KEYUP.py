@@ -83,21 +83,18 @@ def kuvat_nakyviin(vari):
 def soita_raita(aanitys): 
     global kursori, play_or_pause 
     laskuri = 0   
-    print(aanitys)
     for i in range(len(aanitys)):
         while play_or_pause:
-            pygame.time.delay(600)   
-            print("delay")
+            pygame.time.delay(500) 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     x, y = pygame.mouse.get_pos()
-                    check_mouse_action(x, y, RED)  
-                    print(play_or_pause )  
+                    check_mouse_action(x, y, RED) 
          
         kirjain, down, ms, raita = aanitys[i]
-        while laskuri != ms:      # TODO Pause kesken soiton !?!?!? 
+        while laskuri != ms:      
             laskuri += 1
             kursori += 1
             kello.tick(100) 
@@ -106,8 +103,7 @@ def soita_raita(aanitys):
                     pygame.quit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     x, y = pygame.mouse.get_pos()
-                    check_mouse_action(x, y, RED)  
-                    print(play_or_pause )  
+                    check_mouse_action(x, y, RED) 
                         
         if down:
             midi_out.set_instrument(midi_instruments[raita])
@@ -115,13 +111,11 @@ def soita_raita(aanitys):
         else:
             midi_out.note_off(midi_numbers[kirjain], 120)
     kursori = 0
-    print("kursori = 0")   
     play_or_pause = not play_or_pause
         
 
 def soita_kaikki_raidat():
     soivat_raidat = [raidat[i] for i in range(len(raidat)) if (i + 1) not in muted ]
-    #print("soivat_raidat", soivat_raidat)
     flat_list = [item for sublist in soivat_raidat for item in sublist]
     s = sorted(flat_list, key = lambda x: x[2])   # kolmas parametri = ms
     soita_raita(s)
@@ -133,7 +127,7 @@ def aanita(kirjain, down, ms):    # down = True, up = False
        
 
 def tallenna():
-    global aanitys
+    global aanitys    
     ms_offset = aanitys[0][2]
     aanitys = [(aani[0], aani[1], aani[2] - ms_offset) for aani in aanitys]
     for raita_nro in rec_enabled:
@@ -159,7 +153,8 @@ def check_mouse_action(x, y, vari):
         if not rec_or_pause:
             aanitys = []
         if rec_or_pause:
-            tallenna()        
+            if aanitys != []:
+                tallenna()        
     elif x > WIDTH - 185 and x < WIDTH - 85 and raita > raitoja:   # PLAY/ PAUSE   # TODO PAUSE
         play_or_pause = not play_or_pause
         kuvat_nakyviin(vari)
