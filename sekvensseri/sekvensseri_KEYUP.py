@@ -10,8 +10,8 @@ fontti = pygame.font.SysFont("FreeMono", 42)
 fontti_pieni = pygame.font.SysFont("FreeMono", 24)
 port = pygame.midi.get_default_output_id()
 midi_out = pygame.midi.Output(port, 0)
-midi_out.set_instrument(2)
-midi_numbers = {"z":60, "x":62, "c":64, "v":65, "b":67, "n":69, "m":71 ,",":72, ".":74}    #60 = keski-c, 74 = d2
+midi_numbers = {"z":60, "x":62, "c":64, "v":65, "b":67, "n":69, "m":71 ,",":72, ".":74, "-":76}    #60 = keski-c, 76 = e2
+midi_instruments = {1:2, 2:22, 3:33, 4:74}
 
 WHITE = (200, 200, 200)
 BLUE = (10, 97, 97)
@@ -74,12 +74,7 @@ def kuvat_nakyviin(vari):
     if rec_or_pause:
         pygame.draw.circle(naytto, punainen, (WIDTH - 66, HEIGHT - 104), 33)  
     else:
-        naytto.blit(pause_red, (WIDTH - 100, HEIGHT - 138)) 
-
-
-
-
-  
+        naytto.blit(pause_red, (WIDTH - 100, HEIGHT - 138))   
     
     
 
@@ -87,13 +82,13 @@ def kuvat_nakyviin(vari):
 def soita_raita(aanitys):   
     laskuri = 0   
     for i in range(len(aanitys)):
-        kirjain, down, ms = aanitys[i]
-        print(laskuri, ms)
+        kirjain, down, ms, raita = aanitys[i]
         while laskuri != ms:
             laskuri += 1
-            kello.tick(100)
-           
+            kello.tick(100)        
+        
         if down:
+            midi_out.set_instrument(midi_instruments[raita])
             midi_out.note_on(midi_numbers[kirjain], 120) 
         else:
             midi_out.note_off(midi_numbers[kirjain], 120)
@@ -101,7 +96,7 @@ def soita_raita(aanitys):
 
 def soita_kaikki_raidat():
     flat_list = [item for sublist in raidat for item in sublist]
-    s = sorted(flat_list, key = lambda x: x[1])
+    s = sorted(flat_list, key = lambda x: x[2])   # kolmas parametri = ms
     soita_raita(s)
 
 
@@ -115,6 +110,7 @@ def tallenna():
     ms_offset = aanitys[0][2]
     aanitys = [(aani[0], aani[1], aani[2] - ms_offset) for aani in aanitys]
     for raita_nro in rec_enabled:
+        aanitys = [(aani[0], aani[1], aani[2], raita_nro) for aani in aanitys] # lisätään raita
         print("aanitys@tallenna", aanitys)
         raidat[raita_nro - 1] = aanitys
 
@@ -147,9 +143,6 @@ def check_mouse_action(x, y, vari):
         if not play_or_pause and aanitys != []:
             soita_kaikki_raidat()
             play_or_pause = not play_or_pause
-        
-
-
 
 
 def main():
