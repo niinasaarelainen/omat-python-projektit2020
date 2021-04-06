@@ -85,8 +85,7 @@ def midi_play(n, ms, instrument):
     midi_out.note_off(midi_numbers[n], 110)
 
 
-def soita_raita(raita_nro):
-    aanitys = raidat[raita_nro]
+def soita_raita(aanitys):
     edellinen_aani = aanitys[0]       # "aani" = (kirjain, ms)
     if len(aanitys)> 1:
         for i in range(1, len(aanitys)):
@@ -96,10 +95,9 @@ def soita_raita(raita_nro):
            
 
 def soita_kaikki_raidat():
-    for i in range(len(raidat)):
-        if raidat[i] != []:
-            soita_raita(i)
-
+    flat_list = [item for sublist in raidat for item in sublist]
+    s = sorted(flat_list, key = lambda x: x[1])
+    soita_raita(s)
 
 
 def aanita(kirjain, ms):
@@ -108,7 +106,11 @@ def aanita(kirjain, ms):
        
 
 def tallenna():
+    global aanitys
+    ms_offset = aanitys[0][1]
+    aanitys = [(aani[0], aani[1] - ms_offset) for aani in aanitys]
     for raita_nro in rec_enabled:
+        print("aanitys@tallenna", aanitys)
         raidat[raita_nro - 1] = aanitys
 
 
