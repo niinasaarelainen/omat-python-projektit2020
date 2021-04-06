@@ -76,7 +76,6 @@ def kuvat_nakyviin(vari):
     else:
         naytto.blit(pause_red, (WIDTH - 100, HEIGHT - 138))   
     
-    
 
 
 def soita_raita(aanitys):   
@@ -95,7 +94,9 @@ def soita_raita(aanitys):
         
 
 def soita_kaikki_raidat():
-    flat_list = [item for sublist in raidat for item in sublist]
+    soivat_raidat = [raidat[i] for i in range(len(raidat)) if (i + 1) not in muted ]
+    print("soivat_raidat", soivat_raidat)
+    flat_list = [item for sublist in soivat_raidat for item in sublist]
     s = sorted(flat_list, key = lambda x: x[2])   # kolmas parametri = ms
     soita_raita(s)
 
@@ -113,7 +114,6 @@ def tallenna():
         aanitys = [(aani[0], aani[1], aani[2], raita_nro) for aani in aanitys] # lisätään raita
         print("aanitys@tallenna", aanitys)
         raidat[raita_nro - 1] = aanitys
-
 
    
 def check_mouse_action(x, y, vari):
@@ -134,7 +134,6 @@ def check_mouse_action(x, y, vari):
         if not rec_or_pause:
             aanitys = []
         if rec_or_pause:
-            print(aanitys)
             tallenna()        
     elif x > WIDTH - 185 and x < WIDTH - 85 and raita > raitoja:   # PLAY/ PAUSE   # TODO PAUSE
         play_or_pause = not play_or_pause
@@ -149,7 +148,6 @@ def main():
     ms = 0
     vari = valkoinen
     alusta_raidat()
-    print(raidat)
     while True:
         naytto.fill((250, 250, 250)) 
         
