@@ -8,6 +8,7 @@ HEIGHT = 500
 naytto = pygame.display.set_mode((WIDTH, HEIGHT))
 fontti = pygame.font.SysFont("FreeMono", 42)
 fontti_pieni = pygame.font.SysFont("FreeMono", 24)
+
 port = pygame.midi.get_default_output_id()
 midi_out = pygame.midi.Output(port, 0)
 midi_numbers = {"z":60, "x":62, "c":64, "v":65, "b":67, "n":69, "m":71 ,",":72, ".":74, "-":76}    #60 = keski-c, 76 = e2
@@ -16,8 +17,9 @@ midi_instruments = {1:2, 2:22, 3:33, 4:74}
 WHITE = (200, 200, 200)
 BLUE = (10, 97, 97)
 BLACK = (10, 10, 10)
-valkoinen = (250, 250, 250)
-punainen = (251, 0, 0)
+WHITE = (250, 250, 250)
+RED = (251, 0, 0)
+
 soittoalue = "zxcvbnm,.-"
 rec_enabled = [1]
 muted = []
@@ -25,11 +27,11 @@ raitoja = 4
 raidat = []
 play_or_pause = True
 rec_or_pause = True
-kursori = 0     # missä kohtaa äänitystä ollaan menossa, eli monesko melodian ääni
 aanitys = []
+kursori = 0
 
 play = pygame.image.load('play.png')
-play = pygame.transform.scale(play, (65, 65))
+play = pygame.transform.scale(play, (68, 68))
 
 pause = pygame.image.load('pause.jpg')
 pause = pygame.transform.scale(pause, (67, 67))
@@ -72,30 +74,54 @@ def kuvat_nakyviin(vari):
         naytto.blit(pause, (WIDTH - 188, HEIGHT - 138))
     # REC / PAUSE:
     if rec_or_pause:
-        pygame.draw.circle(naytto, punainen, (WIDTH - 66, HEIGHT - 104), 33)  
+        pygame.draw.circle(naytto, RED, (WIDTH - 66, HEIGHT - 104), 33)  
     else:
         naytto.blit(pause_red, (WIDTH - 100, HEIGHT - 138))   
     
 
 
-def soita_raita(aanitys):   
+def soita_raita(aanitys): 
+    global kursori, play_or_pause 
     laskuri = 0   
+    print(aanitys)
     for i in range(len(aanitys)):
+        while play_or_pause:
+            pygame.time.delay(600)   
+            print("delay")
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    x, y = pygame.mouse.get_pos()
+                    check_mouse_action(x, y, RED)  
+                    print(play_or_pause )  
+         
         kirjain, down, ms, raita = aanitys[i]
-        while laskuri != ms:
+        while laskuri != ms:      # TODO Pause kesken soiton !?!?!? 
             laskuri += 1
-            kello.tick(100)        
-        
+            kursori += 1
+            kello.tick(100) 
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    x, y = pygame.mouse.get_pos()
+                    check_mouse_action(x, y, RED)  
+                    print(play_or_pause )  
+                        
         if down:
             midi_out.set_instrument(midi_instruments[raita])
             midi_out.note_on(midi_numbers[kirjain], 120) 
         else:
             midi_out.note_off(midi_numbers[kirjain], 120)
+    kursori = 0
+    print("kursori = 0")   
+    play_or_pause = not play_or_pause
         
 
 def soita_kaikki_raidat():
     soivat_raidat = [raidat[i] for i in range(len(raidat)) if (i + 1) not in muted ]
-    print("soivat_raidat", soivat_raidat)
+    #print("soivat_raidat", soivat_raidat)
     flat_list = [item for sublist in soivat_raidat for item in sublist]
     s = sorted(flat_list, key = lambda x: x[2])   # kolmas parametri = ms
     soita_raita(s)
@@ -112,7 +138,6 @@ def tallenna():
     aanitys = [(aani[0], aani[1], aani[2] - ms_offset) for aani in aanitys]
     for raita_nro in rec_enabled:
         aanitys = [(aani[0], aani[1], aani[2], raita_nro) for aani in aanitys] # lisätään raita
-        print("aanitys@tallenna", aanitys)
         raidat[raita_nro - 1] = aanitys
 
    
@@ -139,14 +164,15 @@ def check_mouse_action(x, y, vari):
         play_or_pause = not play_or_pause
         kuvat_nakyviin(vari)
         pygame.display.flip()           # muista flip !!!!!!!!!!!!!!!!!
-        if not play_or_pause and aanitys != []:
-            soita_kaikki_raidat()
-            play_or_pause = not play_or_pause
+        if not play_or_pause and raidat != []:
+            if kursori == 0:
+                soita_kaikki_raidat()
+            #play_or_pause = not play_or_pause
 
 
 def main():
     ms = 0
-    vari = valkoinen
+    vari = WHITE
     alusta_raidat()
     while True:
         naytto.fill((250, 250, 250)) 
@@ -168,17 +194,17 @@ def main():
                     if rec_enabled != []:
                         aanita(chr(event.key), False, ms)
             
-            if event.type == pygame.MOUSEBUTTONUP:
+            if event.type == pygame.MOUSEBUTTONDOWN:
                 x, y = pygame.mouse.get_pos()
                 check_mouse_action(x, y, vari)        
      
-        teksti = fontti_pieni.render(f"ÄÄNITYS: käytä näppäimiä {soittoalue}", True, punainen)
+        teksti = fontti_pieni.render(f"ÄÄNITYS: käytä näppäimiä {soittoalue}", True, RED)
         naytto.blit(teksti, (10, HEIGHT -50))  
         ms += 1
-        if ms % 50 == 0 and vari == valkoinen:
-            vari = punainen
-        elif ms % 50 == 0 and vari == punainen:
-            vari = valkoinen                 
+        if ms % 50 == 0 and vari == WHITE:
+            vari = RED
+        elif ms % 50 == 0 and vari == RED:
+            vari = WHITE                 
         kuvat_nakyviin(vari)
         pygame.display.flip()
         kello.tick(100)
