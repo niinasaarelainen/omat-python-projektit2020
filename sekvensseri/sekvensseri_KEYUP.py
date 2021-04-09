@@ -7,8 +7,8 @@ kello = pygame.time.Clock()
 raitoja = 2
 assert raitoja > 0, "Vähintään yksi raita"
 assert raitoja <= 10, "Ruudulle ei mahdu kuin kymmenen raitaa"
-WIDTH = 505
-HEIGHT = raitoja * 85 + 90
+WIDTH = 990
+HEIGHT = raitoja * 85 + 100
 naytto = pygame.display.set_mode((WIDTH, HEIGHT))
 fontti = pygame.font.SysFont("FreeMono", 42)
 fontti_pieni = pygame.font.SysFont("FreeMono", 24)
@@ -32,6 +32,10 @@ play_or_pause = True
 rec_or_pause = True
 aanitys = []
 kursori = 0
+START_SEQ = 250 
+END_SEQ = 900
+RAIDAN_KORKEUS = 70
+EKA_RAITA_Y = 40
 
 play = pygame.image.load('play.png')
 play = pygame.transform.scale(play, (68, 68))
@@ -59,27 +63,27 @@ def alusta_raidat():
 
 def kuvat_nakyviin(vari):    
     for i in range(1, raitoja + 1):
-        teksti = fontti_pieni.render(f"{i}", True, (10, 10, 10))
-        naytto.blit(teksti, (40, i*70))
+        teksti = fontti_pieni.render(f"{i}", True, BLACK)
+        naytto.blit(teksti, (EKA_RAITA_Y, i * RAIDAN_KORKEUS))
         naytto.blit(rec, (80, i*70 - 30))
         if i in muted:
-            naytto.blit(mute, (190, i*70 ))
+            naytto.blit(mute, (190, i * RAIDAN_KORKEUS ))
         else:
-            naytto.blit(unmute, (190, i*70 ))  
+            naytto.blit(unmute, (190, i * RAIDAN_KORKEUS ))  
 
     for raita in rec_enabled:
         pygame.draw.circle(naytto, vari, (107, raita*70 + 14), 11)     # parametri vari tänne
 
     # PLAY / PAUSE:
     if play_or_pause:
-        naytto.blit(play, (WIDTH - 188, HEIGHT - 138))
+        naytto.blit(play, (WIDTH - 188, HEIGHT - 78))
     else:
-        naytto.blit(pause, (WIDTH - 188, HEIGHT - 138))
+        naytto.blit(pause, (WIDTH - 188, HEIGHT - 78))
     # REC / PAUSE:
     if rec_or_pause:
-        pygame.draw.circle(naytto, RED, (WIDTH - 66, HEIGHT - 104), 33)  
+        pygame.draw.circle(naytto, RED, (WIDTH - 66, HEIGHT - 44), 33)  
     else:
-        naytto.blit(pause_red, (WIDTH - 100, HEIGHT - 138))   
+        naytto.blit(pause_red, (WIDTH - 100, HEIGHT - 78))   
     
 
 
@@ -136,8 +140,24 @@ def tallenna():
     aanitys = [(aani[0], aani[1], aani[2] - ms_offset) for aani in aanitys]
     for raita_nro in rec_enabled:
         aanitys = [(aani[0], aani[1], aani[2], raita_nro) for aani in aanitys] # lisätään raita
-        raidat[raita_nro - 1] = aanitys
+        raidat[raita_nro - 1] = aanitys        
+        piirra_sekvenssi(aanitys)
+        
 
+def piirra_sekvenssi(aanitys): #kirjain, down, ms, raita_nro
+    key_down = [aani for aani in aanitys if aani[1] == True]
+    key_up = [aani for aani in aanitys if aani[1] == False]
+    print(key_down, key_up)
+    for aani_down in key_down:
+        kirjain_down, down, ms_down, raita_nro = aani_down
+        monesko = soittoalue.index(kirjain_down)  
+        y = raita_nro * RAIDAN_KORKEUS + EKA_RAITA_Y - monesko * 5
+        for aani_up in key_up:
+            kirjain_up, down, ms_up, raita_nro = aani_up
+            if kirjain_down == kirjain_up:
+                pygame.draw.line(naytto, BLACK, (ms_down //10 + START_SEQ, y), (ms_up // 10 + START_SEQ, y), 2)  
+                key_up.remove(aani_up)
+            
    
 def check_mouse_action(x, y, vari):
     global play_or_pause, rec_or_pause, aanitys
@@ -168,6 +188,13 @@ def check_mouse_action(x, y, vari):
                 soita_kaikki_raidat()
             #play_or_pause = not play_or_pause
 
+def tekstit_ruudulle():
+    teksti = fontti_pieni.render(f"0:00", True, BLACK)
+    naytto.blit(teksti, (START_SEQ, 20)) 
+    teksti = fontti_pieni.render(f"1:00", True, BLACK)
+    naytto.blit(teksti, (END_SEQ, 20)) 
+    teksti = fontti_pieni.render(f"ÄÄNITYS: käytä näppäimiä {soittoalue}", True, RED)
+    naytto.blit(teksti, (130, HEIGHT -50))
 
 def main():
     ms = 0
@@ -175,6 +202,10 @@ def main():
     alusta_raidat()
     while True:
         naytto.fill((250, 250, 250)) 
+        tekstit_ruudulle()
+        for raita_nro in rec_enabled:
+            if raidat[raita_nro - 1] != []:
+                piirra_sekvenssi(raidat[raita_nro - 1])
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -197,8 +228,7 @@ def main():
                 x, y = pygame.mouse.get_pos()
                 check_mouse_action(x, y, vari)        
      
-        teksti = fontti_pieni.render(f"ÄÄNITYS: käytä näppäimiä {soittoalue}", True, RED)
-        naytto.blit(teksti, (10, HEIGHT -50))  
+         
         ms += 1
         if ms % 50 == 0 and vari == WHITE:
             vari = RED
