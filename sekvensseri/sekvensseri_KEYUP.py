@@ -15,7 +15,7 @@ fontti_pieni = pygame.font.SysFont("FreeMono", 24)
 
 port = pygame.midi.get_default_output_id()
 midi_out = pygame.midi.Output(port, 0)
-midi_numbers = {"z":60, "x":62, "c":64, "v":65, "b":67, "n":69, "m":71 ,",":72, ".":74, "-":76}    #60 = keski-c, 76 = e2
+midi_numbers = {"z":60, "x":62, "c":64, "v":65, "b":67, "n":69, "m":71 ,",":72, ".":74, "/":76}    #60 = keski-c, 76 = e2
 midi_instruments = {1:2, 2:22, 3:33, 4:74, 5:88, 6:44, 7:99, 8:128, 9:101, 10:66}
 
 WHITE = (200, 200, 200)
@@ -113,7 +113,7 @@ def soita_raita(aanitys):
                     check_mouse_action(x, y, RED) 
                         
         if down:
-            print(ms)
+            #print(ms)
             midi_out.set_instrument(midi_instruments[raita])
             midi_out.note_on(midi_numbers[kirjain], 120) 
         else:
@@ -131,6 +131,7 @@ def soita_kaikki_raidat():
 
 def aanita(kirjain, down, ms):    # down = True, up = False
     global aanitys
+    print("aanita:", kirjain)
     aanitys.append((kirjain, down, ms))
        
 
@@ -145,9 +146,10 @@ def tallenna():
         
 
 def piirra_sekvenssi(aanitys): #kirjain, down, ms, raita_nro
+    soittoalue = "zxcvbnm,./"   # - vaihdettu /
     key_down = [aani for aani in aanitys if aani[1] == True]
     key_up = [aani for aani in aanitys if aani[1] == False]
-    print(key_down, key_up)
+    #print(key_down, key_up)
     for aani_down in key_down:
         kirjain_down, down, ms_down, raita_nro = aani_down
         monesko = soittoalue.index(kirjain_down)  
@@ -155,9 +157,10 @@ def piirra_sekvenssi(aanitys): #kirjain, down, ms, raita_nro
         for aani_up in key_up:
             kirjain_up, down, ms_up, raita_nro = aani_up
             if kirjain_down == kirjain_up:
-                pygame.draw.line(naytto, BLACK, (ms_down //10 + START_SEQ, y), (ms_up // 10 + START_SEQ, y), 2)  
+                #print("kirjain_up", kirjain_up, "ms", ms_up)
+                pygame.draw.line(naytto, BLACK, (ms_down // 7 + START_SEQ, y), (ms_up // 7 + START_SEQ, y), 2)  
                 key_up.remove(aani_up)
-            
+                break
    
 def check_mouse_action(x, y, vari):
     global play_or_pause, rec_or_pause, aanitys
@@ -203,24 +206,26 @@ def main():
     while True:
         naytto.fill((250, 250, 250)) 
         tekstit_ruudulle()
-        for raita_nro in rec_enabled:
-            if raidat[raita_nro - 1] != []:
-                piirra_sekvenssi(raidat[raita_nro - 1])
+        for raita_nro in range(len(raidat)):
+            if raidat[raita_nro] != []:
+                piirra_sekvenssi(raidat[raita_nro])
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
+
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
                 if event.key == pygame.K_SPACE:  # play / pause
                     #soita_melodia(melodia) 
                     break
-                if chr(event.key) in soittoalue: 
+                if chr(event.key) in soittoalue or chr(event.key) == '/':      # ??? näyttää - mutta tulee / : 
                     if rec_enabled != []:
                         aanita(chr(event.key), True, ms)
+
             if event.type == pygame.KEYUP:
-                if chr(event.key) in soittoalue: 
+                if chr(event.key) in soittoalue or chr(event.key) == '/':      # ??? näyttää - mutta tulee /                
                     if rec_enabled != []:
                         aanita(chr(event.key), False, ms)
             
