@@ -3,8 +3,12 @@ import random, pygame.midi, pygame
 pygame.init()    
 pygame.midi.init()
 kello = pygame.time.Clock()
+
+raitoja = 2
+assert raitoja > 0, "Vähintään yksi raita"
+assert raitoja <= 10, "Ruudulle ei mahdu kuin kymmenen raitaa"
 WIDTH = 505
-HEIGHT = 500
+HEIGHT = raitoja * 85 + 90
 naytto = pygame.display.set_mode((WIDTH, HEIGHT))
 fontti = pygame.font.SysFont("FreeMono", 42)
 fontti_pieni = pygame.font.SysFont("FreeMono", 24)
@@ -12,7 +16,7 @@ fontti_pieni = pygame.font.SysFont("FreeMono", 24)
 port = pygame.midi.get_default_output_id()
 midi_out = pygame.midi.Output(port, 0)
 midi_numbers = {"z":60, "x":62, "c":64, "v":65, "b":67, "n":69, "m":71 ,",":72, ".":74, "-":76}    #60 = keski-c, 76 = e2
-midi_instruments = {1:2, 2:22, 3:33, 4:74}
+midi_instruments = {1:2, 2:22, 3:33, 4:74, 5:88, 6:44, 7:99, 8:128, 9:101, 10:66}
 
 WHITE = (200, 200, 200)
 BLUE = (10, 97, 97)
@@ -23,7 +27,6 @@ RED = (251, 0, 0)
 soittoalue = "zxcvbnm,.-"
 rec_enabled = [1]
 muted = []
-raitoja = 4
 raidat = []
 play_or_pause = True
 rec_or_pause = True
@@ -94,7 +97,7 @@ def soita_raita(aanitys):
                     check_mouse_action(x, y, RED) 
          
         kirjain, down, ms, raita = aanitys[i]
-        while laskuri != ms:      
+        while laskuri != ms:   
             laskuri += 1
             kursori += 1
             kello.tick(100) 
@@ -106,6 +109,7 @@ def soita_raita(aanitys):
                     check_mouse_action(x, y, RED) 
                         
         if down:
+            print(ms)
             midi_out.set_instrument(midi_instruments[raita])
             midi_out.note_on(midi_numbers[kirjain], 120) 
         else:
@@ -138,7 +142,7 @@ def tallenna():
 def check_mouse_action(x, y, vari):
     global play_or_pause, rec_or_pause, aanitys
     raita = y // 70
-    if x > 194 and raita <= raitoja:         # MUTE
+    if x > 194 and x< 245 and raita <= raitoja:         # MUTE
         if raita in muted:
             muted.remove(raita)
         else:
@@ -148,14 +152,14 @@ def check_mouse_action(x, y, vari):
             rec_enabled.remove(raita)
         else:
             rec_enabled.append(raita)
-    elif x > WIDTH - 85 and raita > raitoja:    # REC/PAUSE
+    elif x > WIDTH - 85 :    # REC/PAUSE
         rec_or_pause = not rec_or_pause
         if not rec_or_pause:
             aanitys = []
         if rec_or_pause:
             if aanitys != []:
                 tallenna()        
-    elif x > WIDTH - 185 and x < WIDTH - 85 and raita > raitoja:   # PLAY/ PAUSE   # TODO PAUSE
+    elif x > WIDTH - 185 and x < WIDTH - 85 :   # PLAY/ PAUSE   # TODO PAUSE
         play_or_pause = not play_or_pause
         kuvat_nakyviin(vari)
         pygame.display.flip()           # muista flip !!!!!!!!!!!!!!!!!
