@@ -4,11 +4,11 @@ pygame.init()
 pygame.midi.init()
 kello = pygame.time.Clock()
 
-raitoja = 2
+raitoja = 8
 assert raitoja > 0, "Vähintään yksi raita"
 assert raitoja <= 10, "Ruudulle ei mahdu kuin kymmenen raitaa"
-WIDTH = 990
-HEIGHT = raitoja * 85 + 100
+WIDTH = 1170
+HEIGHT = raitoja * 81 + 100
 naytto = pygame.display.set_mode((WIDTH, HEIGHT))
 fontti = pygame.font.SysFont("FreeMono", 42)
 fontti_pieni = pygame.font.SysFont("FreeMono", 24)
@@ -16,7 +16,7 @@ fontti_pieni = pygame.font.SysFont("FreeMono", 24)
 port = pygame.midi.get_default_output_id()
 midi_out = pygame.midi.Output(port, 0)
 midi_numbers = {"z":60, "x":62, "c":64, "v":65, "b":67, "n":69, "m":71 ,",":72, ".":74, "/":76}    #60 = keski-c, 76 = e2
-midi_instruments = {1:2, 2:22, 3:33, 4:74, 5:88, 6:44, 7:99, 8:128, 9:101, 10:66}
+midi_instruments = {1:2, 2:22, 3:33, 4:74, 5:88, 6:44, 7:99, 8:127, 9:101, 10:66}
 
 WHITE = (200, 200, 200)
 BLUE = (10, 97, 97)
@@ -33,7 +33,7 @@ rec_or_pause = True
 aanitys = []
 kursori = 0
 START_SEQ = 250 
-END_SEQ = 900
+END_SEQ = 1100
 RAIDAN_KORKEUS = 70
 EKA_RAITA_Y = 40
 
@@ -115,9 +115,9 @@ def soita_raita(aanitys):
         if down:
             #print(ms)
             midi_out.set_instrument(midi_instruments[raita])
-            midi_out.note_on(midi_numbers[kirjain], 120) 
+            midi_out.note_on(midi_numbers[kirjain], 110) 
         else:
-            midi_out.note_off(midi_numbers[kirjain], 120)
+            midi_out.note_off(midi_numbers[kirjain], 110)
     kursori = 0
     play_or_pause = not play_or_pause
         
@@ -194,10 +194,12 @@ def check_mouse_action(x, y, vari):
 def tekstit_ruudulle():
     teksti = fontti_pieni.render(f"0:00", True, BLACK)
     naytto.blit(teksti, (START_SEQ, 20)) 
+    teksti = fontti_pieni.render(f"0:30", True, BLACK)
+    naytto.blit(teksti, ((END_SEQ - START_SEQ) // 2 + START_SEQ, 20)) 
     teksti = fontti_pieni.render(f"1:00", True, BLACK)
     naytto.blit(teksti, (END_SEQ, 20)) 
     teksti = fontti_pieni.render(f"ÄÄNITYS: käytä näppäimiä {soittoalue}", True, RED)
-    naytto.blit(teksti, (130, HEIGHT -50))
+    naytto.blit(teksti, (190, HEIGHT -50))
 
 def main():
     ms = 0

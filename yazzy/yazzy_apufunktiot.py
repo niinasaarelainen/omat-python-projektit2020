@@ -1,14 +1,14 @@
 import pygame, random
 from noppa import *
 
-
+MAX_SILMALUKU = 8
 
 def nopat_listaan():
     KUVAN_KOKO = 72
     nopat =[]            # ei-valitut eli norminopat
     valitut =[]           # valitut 
 
-    for i in range (1,7):
+    for i in range (1, MAX_SILMALUKU + 1):
         s = 'img\d'+str(i)+'.png'
         d = pygame.image.load(s).convert_alpha()
         d= pygame.transform.scale(d, (KUVAN_KOKO, KUVAN_KOKO) )
@@ -37,7 +37,7 @@ def alkuohjeet():
     ohjeet.append("  - täyskäsi")
     ohjeet.append("  - 4 samaa")
     ohjeet.append("  - 5 samaa")
-    ohjeet.append("  - suorat 1-5 ja 2-6")
+    ohjeet.append("  - suorat 1-5, 2-6, 3-7 ja 4-8")
     ohjeet.append("  ")
     ohjeet.append("  klikkaa hiirtä aloittaaksesi")   
 
@@ -49,7 +49,7 @@ def valitse_lukitsemattomat(nopat):
     heitto = nopat
     for i in range(5):
         if heitto[i].valittu == False:
-            heitto[i].luku = random.randint(1, 6)
+            heitto[i].luku = random.randint(1, MAX_SILMALUKU)
         print(heitto[i].luku )   
     return heitto
 
@@ -57,7 +57,7 @@ def valitse_lukitsemattomat(nopat):
 def valitse_5_randomia(nopat):    
     heitto = nopat
     for i in range(5):
-        heitto[i].luku = random.randint(1, 6)    
+        heitto[i].luku = random.randint(1, MAX_SILMALUKU)    
         heitto[i].valittu = False
 
         print(str(i) + ".luku ", heitto[i].luku )    
@@ -66,5 +66,5 @@ def valitse_5_randomia(nopat):
 
 def mitä_kerätään():
     kerätään = ["kaksi paria", "kolmoset", "täyskäsi", "neloset",
-                "Y A Z Z Y ! ! !", "pikku suora (1-5)", "iso suora (2-6)"]
+                "Y A Z Z Y ! ! !", "suora 1-5", "suora 2-6", "suora 3-7", "suora 4-8"]
     return kerätään
