@@ -107,14 +107,12 @@ def piirra(heitto):
     x = EKA_NOPPA_X
     for noppa in heitto:
         naytto.blit(noppa.kuva(), (x, 160))
-        x += 80
+        x += NOPPIEN_VALI + KUVAN_KOKO
 
 
 def valintatekstit():
     teksti = fontti.render("Klikkaa mitkä nopat haluat säilyttää ja lopuksi  OK ", True, (0, 20, 20))    
-    naytto.blit(teksti, (50, 40))
-    teksti = fontti.render("tai  VALITSE KAIKKI", True, (0, 20, 20))    
-    naytto.blit(teksti, (50, 75))
+    naytto.blit(teksti, (50, 50))
     teksti = fontti.render(" VALITSE KAIKKI ", True, (0, 220, 220))
     naytto.blit(teksti, (80, HEIGHT // 2 + 50))
     teksti = fontti.render(" OK ", True, (0, 220, 0))
@@ -124,11 +122,11 @@ def valintatekstit():
 def toggle_valittu(klikkaus, heitto):
     hiiri_x, hiiri_y = klikkaus
     if hiiri_x < EKA_NOPPA_X:
-        hiiri_x = EKA_NOPPA_X
-    if hiiri_x > EKA_NOPPA_X + (75*5):
-        hiiri_x = EKA_NOPPA_X + (75*5) -2
+        hiiri_x = EKA_NOPPA_X 
+    if hiiri_x > EKA_NOPPA_X + ((KUVAN_KOKO + NOPPIEN_VALI) * 5):    # 5 = noppien väli
+        hiiri_x = EKA_NOPPA_X + ((KUVAN_KOKO + NOPPIEN_VALI)* 5) - NOPPIEN_VALI // 2 
 
-    nopan_nro = (hiiri_x - EKA_NOPPA_X) // 75
+    nopan_nro = (hiiri_x - EKA_NOPPA_X) // (KUVAN_KOKO + NOPPIEN_VALI)
     heitto[nopan_nro].toggle_valittu()
     return heitto
 
@@ -146,10 +144,10 @@ def silmukka():
     kierros = 1   # max 12
     heitto = valitse_5_randomia(nopat)
 
-    while kierros <= 12 and len(kerätään) > 0:       
+    while kierros <= KIERROKSIA and len(kerätään) > 0:       
         naytto.fill((255, 255, 255))             
         valintatekstit()    
-        teksti = fontti.render(f" kierros {kierros}/12 ,  heitto {heitto_123} ", True, (200, 0, 20))
+        teksti = fontti.render(f" kierros {kierros}/{KIERROKSIA} ,  heitto {heitto_123} ", True, (200, 0, 20))
         naytto.blit(teksti, (100, HEIGHT - 60))
         piirra(heitto)
         mitä_puuttuu(kerätään)
@@ -221,6 +219,7 @@ pygame.init()
 WIDTH = 780
 HEIGHT = 410
 EKA_NOPPA_X = 80
+KIERROKSIA = 16
 
 naytto = pygame.display.set_mode((WIDTH, HEIGHT))
 kello = pygame.time.Clock()

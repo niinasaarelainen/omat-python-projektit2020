@@ -2,9 +2,10 @@ import pygame, random
 from noppa import *
 
 MAX_SILMALUKU = 8
+KUVAN_KOKO = 75
+NOPPIEN_VALI = 5
 
 def nopat_listaan():
-    KUVAN_KOKO = 72
     nopat =[]            # ei-valitut eli norminopat
     valitut =[]           # valitut 
 
