@@ -1,5 +1,5 @@
 from functools import reduce    # "flatten":ia varten
-from datetime import date
+import datetime  
 
 class Kiipeilyreitti:
     def __init__(self, nimi: str, pituus: int, grade: str, ticks = 0):
@@ -15,9 +15,16 @@ class Kiipeilyreitti:
 
     def tikkaa(self):
         self.onko_kiivetty = True
-        self.tikkauspvm = date.today()
-        print(self.tikkauspvm)
+        self.tikkauspvm = datetime.datetime.today()
         self.ticks += 1
+
+    def tikkausvuosi (self):
+        if self.tikkauspvm == None:
+            return "Ei ole kiivetty"
+        return self.tikkauspvm.year
+
+    def pvm(self):
+        return f"  tikattu: {self.tikkauspvm.day}.{self.tikkauspvm.month}.{self.tikkauspvm.year}"
 
     def __str__(self):
         return f"{self.nimi}, pituus {self.pituus} metriä, grade {self.grade}, ticks {self.ticks}"
@@ -71,7 +78,19 @@ def kiivetyt_greidin_mukaan(kalliot:list):
         vastaus_lista.append(kallio.kiivetyt())
     vastaus_lista = reduce(lambda x,y: x+y,vastaus_lista)    # flatten = [1,2,3],[4,5,6], [7] --> [1, 2, 3, 4, 5, 6, 7]
     #print(vastaus_lista)                # (self.nimi, reitti)
-    return sorted(vastaus_lista, key=lambda kallio: kallio[1].grade)   
+    return sorted(vastaus_lista, key=lambda kallio: kallio[1].grade)  
+
+
+
+def kiivetyt_aikajarjestyksessa(kalliot:list):   # TODO
+    vastaus_lista = []
+    for kallio in kalliot:        
+        vastaus_lista.append(kallio.kiivetyt())
+    vastaus_lista = reduce(lambda x,y: x+y,vastaus_lista)    # flatten = [1,2,3],[4,5,6], [7] --> [1, 2, 3, 4, 5, 6, 7]
+    #print(vastaus_lista)                # (self.nimi, reitti)
+    return sorted(vastaus_lista, key=lambda kallio: kallio[1].tikkauspvm)  
+
+
 
 def kiipeamattomat_anna_greidi_saa_tikit(kalliot:list, greidi):
     vastaus_lista = []
@@ -116,7 +135,9 @@ if __name__ == "__main__":
     possu.tikkaa()
     hedelma = Kiipeilyreitti("Hedelmätarha", 8, "6A", 88)
     nalkkila.lisaa_reitti(hedelma)
+    print(hedelma.nimi, hedelma.tikkausvuosi())
     hedelma.tikkaa()
+    print(hedelma.nimi, hedelma.tikkausvuosi())
     niinanErikoinen = Kiipeilyreitti("Niinan erikoinen", 28, "6A+", 77)
     nalkkila.lisaa_reitti(niinanErikoinen)
     
@@ -146,6 +167,7 @@ if __name__ == "__main__":
         print(kallion_nimi, ": " ,  reitti)
 
     niinanErikoinen.tikkaa()
+    print( niinanErikoinen.tikkausvuosi())
 
     print("\nkiipeamattomat_anna_greidi_saa_tikit:")
     for kallion_nimi, reitti in kiipeamattomat_anna_greidi_saa_tikit(kalliot, "6A+"):
@@ -154,3 +176,13 @@ if __name__ == "__main__":
     print("\nkiipeamattomat @ Nalkkila:")
     for kallion_nimi, reitti in nalkkila.kiipeamattomat():
         print(reitti)
+
+    print("\nkiivetyt_aikajarjestyksessa:")
+    for kallion_nimi, reitti in kiivetyt_aikajarjestyksessa(kalliot):
+        print(reitti)
+
+    pvm = datetime.datetime.strptime("2020-06-07", '%Y-%m-%d')
+    niinanErikoinen.tikkauspvm = pvm
+    print("\nkiivetyt_aikajarjestyksessa:")
+    for kallion_nimi, reitti in kiivetyt_aikajarjestyksessa(kalliot):
+        print(reitti, reitti.pvm())
