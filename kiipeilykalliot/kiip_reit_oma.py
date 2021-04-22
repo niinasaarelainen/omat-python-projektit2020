@@ -3,9 +3,11 @@ class Kiipeilyreitti:
         self.nimi = nimi
         self.pituus = pituus
         self.grade = grade
+        self.parametrit = [self.nimi, self.pituus, self.grade]
 
     def __gt__(self, verrokki):
         return self.nimi > verrokki.nimi
+
 
     def __str__(self):
         return f"{self.nimi}, pituus {self.pituus} metriä, grade {self.grade}"
@@ -20,6 +22,11 @@ def vaikeuden_mukaan_2xlambda(reitit: list):
 
 def pituuden_mukaan(reitit: list):
     return sorted(reitit, key=lambda alkio: alkio.pituus, reverse = True)    
+
+
+# TODO
+def minka_mukaan(reitit: list, monesko):
+    return sorted(reitit, key=lambda alkio: alkio.parametrit[monesko])    
 
 def normi_sorted(reitit: list):
     return sorted(reitit)  #  reverse = True  toimii täälläkin
@@ -53,3 +60,17 @@ if __name__ == "__main__":
     print("\n normi:")
     for reitti in normi_sorted([r1, r2, r3, r4, r5, r6, r7, r8]):
         print(reitti)
+
+ 
+    print("\npituuden mukaan (käytössä: minka_mukaan)")
+    minka = minka_mukaan([r1, r2, r3, r4, r5, r6, r7, r8], 1)
+    for reitti in minka:
+        print(reitti)   
+
+    print("\ngreidin mukaan (käytössä: minka_mukaan)")
+    minka = minka_mukaan([r1, r2, r3, r4, r5, r6, r7, r8], 2)
+    for reitti in minka:
+        print(reitti)   
+
+    
+
