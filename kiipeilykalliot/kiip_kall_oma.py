@@ -1,11 +1,13 @@
 from functools import reduce    # "flatten":ia varten
+from datetime import date
 
 class Kiipeilyreitti:
     def __init__(self, nimi: str, pituus: int, grade: str, ticks = 0):
         self.nimi = nimi
         self.pituus = pituus
         self.grade = grade
-        self.onko_kiivetty = False
+        self.onko_kiivetty = False    
+        self.tikkauspvm = None    
         self.ticks = ticks
 
     def __gt__(self, verrokki):
@@ -13,6 +15,8 @@ class Kiipeilyreitti:
 
     def tikkaa(self):
         self.onko_kiivetty = True
+        self.tikkauspvm = date.today()
+        print(self.tikkauspvm)
         self.ticks += 1
 
     def __str__(self):
@@ -42,16 +46,16 @@ class Kiipeilykallio:
 
     def vaikein_reitti(self):
         def vaikeuden_mukaan(reitti):
-            return reitti.grade
+            return reitti.grade, reitti.pituus     ###  HUOM !!!!  Järjestäminen 2 parametrin mukaan
         return sorted(self.__reitit, key=vaikeuden_mukaan)[-1]
 
     def __str__(self):
-        return f"{self.nimi} {self.reitteja()} reittiä, vaikein {self.vaikein_reitti().grade}"
+        return f"{self.nimi} {self.reitteja()} reittiä, vaikein {self.vaikein_reitti().grade}({self.vaikein_reitti().nimi})"
 
 # !!!
 def etsi_tietyn_greidin_reitit(kalliot:list, grade):
     # tähän tulee yhdet sulkuparit liikaa
-    #astaus_lista = [kallio.reitit_graden_mukaan(grade) for kallio in kalliot if kallio.reitit_graden_mukaan(grade) != []]
+    #vastaus_lista = [kallio.reitit_graden_mukaan(grade) for kallio in kalliot if kallio.reitit_graden_mukaan(grade) != []]
     
     for kallio in kalliot:        
         vastaus_lista = kallio.reitit_graden_mukaan(grade)
@@ -69,14 +73,14 @@ def kiivetyt_greidin_mukaan(kalliot:list):
     #print(vastaus_lista)                # (self.nimi, reitti)
     return sorted(vastaus_lista, key=lambda kallio: kallio[1].grade)   
 
-def kiipeamättomat_anna_greidi_saa_tikit(kalliot:list, greidi):
+def kiipeamattomat_anna_greidi_saa_tikit(kalliot:list, greidi):
     vastaus_lista = []
     for kallio in kalliot:        
         vastaus_lista.append(kallio.kiipeamattomat())
     vastaus_lista = reduce(lambda x,y: x+y,vastaus_lista)    # flatten = [1,2,3],[4,5,6], [7] --> [1, 2, 3, 4, 5, 6, 7]
     #print(vastaus_lista)                # (self.nimi, reitti)
-    vastaus_lista = [kallio for kallio in kallio[1] if kallio[1].grade == greidi]
-    return sorted(vastaus_lista, key=lambda kallio: kallio[1].ticks)   
+    oikeagreidiset = [kallio for kallio in vastaus_lista if kallio[1].grade == greidi]
+    return sorted(oikeagreidiset, key=lambda kallio: kallio[1].ticks, reverse = True)   
 
 
 def reittien_maaran_mukaan(kalliot:list):
@@ -102,24 +106,26 @@ if __name__ == "__main__":
 
     k2 = Kiipeilykallio("Nummi")
     k2.lisaa_reitti(Kiipeilyreitti("Syncro", 14, "8C+"))
+    k2.lisaa_reitti(Kiipeilyreitti("PidempiSyncro", 15, "8C+"))
 
-    k3 = Kiipeilykallio("Nalkkilan släbi")
-    k3.lisaa_reitti(Kiipeilyreitti("Pieniä askelia", 12, "6A+", 61))
-    k3.lisaa_reitti(Kiipeilyreitti("Smooth operator", 11, "7A", 11))
+    nalkkila = Kiipeilykallio("Nalkkilan släbi")
+    nalkkila.lisaa_reitti(Kiipeilyreitti("Pieniä askelia", 12, "6A+", 61))
+    nalkkila.lisaa_reitti(Kiipeilyreitti("Smooth operator", 11, "7A", 11))
     possu = Kiipeilyreitti("Possu ei pidä", 12 , "6B+", 45)
-    k3.lisaa_reitti(possu)
+    nalkkila.lisaa_reitti(possu)
     possu.tikkaa()
     hedelma = Kiipeilyreitti("Hedelmätarha", 8, "6A", 88)
-    k3.lisaa_reitti(hedelma)
+    nalkkila.lisaa_reitti(hedelma)
     hedelma.tikkaa()
-    k3.lisaa_reitti(Kiipeilyreitti("Niinan erikoinen", 28, "6A+", 77))
+    niinanErikoinen = Kiipeilyreitti("Niinan erikoinen", 28, "6A+", 77)
+    nalkkila.lisaa_reitti(niinanErikoinen)
     
-    print("vaikein_reitti:", k3.vaikein_reitti())
+    print("vaikein_reitti:", nalkkila.vaikein_reitti())
 
     print(k1)
-    print(k3.nimi, k3.reitteja())
-    print(k3.vaikein_reitti())
-    kalliot = [k1, k2, k3]
+    print(nalkkila.nimi, nalkkila.reitteja())
+    print(nalkkila.vaikein_reitti())
+    kalliot = [k1, k2, nalkkila]
     print()
     for kallio in reittien_maaran_mukaan(kalliot):
         print(kallio)
@@ -136,5 +142,15 @@ if __name__ == "__main__":
         print(kallion_nimi, ": " ,  reitti)
        
     print("\nkiipeamättomat_anna_greidi_saa_tikit:")
-    for kallion_nimi, reitti in kiipeamättomat_anna_greidi_saa_tikit(kalliot, "6A+"):
+    for kallion_nimi, reitti in kiipeamattomat_anna_greidi_saa_tikit(kalliot, "6A+"):
         print(kallion_nimi, ": " ,  reitti)
+
+    niinanErikoinen.tikkaa()
+
+    print("\nkiipeamattomat_anna_greidi_saa_tikit:")
+    for kallion_nimi, reitti in kiipeamattomat_anna_greidi_saa_tikit(kalliot, "6A+"):
+        print(kallion_nimi, ": " ,  reitti)
+
+    print("\nkiipeamattomat @ Nalkkila:")
+    for kallion_nimi, reitti in nalkkila.kiipeamattomat():
+        print(reitti)
