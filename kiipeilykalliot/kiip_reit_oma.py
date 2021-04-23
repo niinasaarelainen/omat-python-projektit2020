@@ -3,7 +3,7 @@ class Kiipeilyreitti:
         self.nimi = nimi
         self.pituus = pituus
         self.grade = grade
-        self.parametrit = [self.nimi, self.pituus, self.grade]
+        self.attribuutit = [self.nimi, self.pituus, self.grade]
 
     def __gt__(self, verrokki):
         return self.nimi > verrokki.nimi
@@ -24,12 +24,14 @@ def pituuden_mukaan(reitit: list):
     return sorted(reitit, key=lambda alkio: alkio.pituus, reverse = True)    
 
 
-# TODO
 def minka_mukaan(reitit: list, monesko):
-    return sorted(reitit, key=lambda alkio: alkio.parametrit[monesko])    
+    return sorted(reitit, key=lambda alkio: alkio.attribuutit[monesko])       # TOIMII !!!!!!
+
+def minka_mukaan_2param(reitit: list, monesko1, monesko2):
+    return sorted(reitit, key=lambda alkio: (alkio.attribuutit[monesko1], alkio.attribuutit[monesko2]))       # TOIMII !!!!!!
 
 def normi_sorted(reitit: list):
-    return sorted(reitit)  #  reverse = True  toimii täälläkin
+    return sorted(reitit)  #  reverse = True  toimii täälläkin              # __gt__
 
 
 if __name__ == "__main__":
@@ -69,6 +71,11 @@ if __name__ == "__main__":
 
     print("\ngreidin mukaan (käytössä: minka_mukaan)")
     minka = minka_mukaan([r1, r2, r3, r4, r5, r6, r7, r8], 2)
+    for reitti in minka:
+        print(reitti)   
+
+    print("\ngreidin ja pituuden mukaan (käytössä: minka_mukaan_2param)")
+    minka = minka_mukaan_2param([r1, r2, r3, r4, r5, r6, r7, r8], 2, 1)
     for reitti in minka:
         print(reitti)   
 

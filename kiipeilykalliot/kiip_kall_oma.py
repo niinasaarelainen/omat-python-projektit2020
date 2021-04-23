@@ -2,16 +2,34 @@ from functools import reduce    # "flatten":ia varten
 import datetime  
 
 class Kiipeilyreitti:
+    """ vanha:
     def __init__(self, nimi: str, pituus: int, grade: str, ticks = 0):
         self.nimi = nimi
         self.pituus = pituus
         self.grade = grade
         self.onko_kiivetty = False    
         self.tikkauspvm = None    
-        self.ticks = ticks
+        self.ticks = ticks """
+
+    def __init__(self, data:list):
+        self.raakadata = data
+        self.nimi = data[0]
+        self.pituus =  int(data[1])
+        self.grade =  data[2]
+        self.ticks =  int(data[3])       
+        self.onko_kiivetty = None
+        self.onkokiivetty()        
+        self.tikkauspvm = None            
+        self.attribuutit = [self.nimi, self.pituus, self.grade, self.ticks]         # HUOM !!!!!
 
     def __gt__(self, verrokki):
         return self.nimi > verrokki.nimi
+
+    def onkokiivetty(self):
+        if len(self.raakadata) == 5:
+            self.onko_kiivetty = True
+        else:
+            self.onko_kiivetty = False
 
     def tikkaa(self):
         self.onko_kiivetty = True
@@ -59,7 +77,22 @@ class Kiipeilykallio:
     def __str__(self):
         return f"{self.nimi} {self.reitteja()} reittiä, vaikein {self.vaikein_reitti().grade}({self.vaikein_reitti().nimi})"
 
-# !!!
+
+########################################################################################################
+
+kalliot = []
+
+def openfile():
+    f = open("data.txt", "r")
+    data = [rivi.strip().split(",") for rivi in f] 
+    for item in data:  
+        if len(item) == 1:            
+            kalliot.append(Kiipeilykallio(reduce(lambda x,y: x+y, item)))    # poistaa []
+        else:
+            kalliot[-1].lisaa_reitti(Kiipeilyreitti(item))
+    print(kalliot[-1])
+    print(kalliot[-1].kiivetyt())
+
 def etsi_tietyn_greidin_reitit(kalliot:list, grade):
     # tähän tulee yhdet sulkuparit liikaa
     #vastaus_lista = [kallio.reitit_graden_mukaan(grade) for kallio in kalliot if kallio.reitit_graden_mukaan(grade) != []]
@@ -82,7 +115,7 @@ def kiivetyt_greidin_mukaan(kalliot:list):
 
 
 
-def kiivetyt_aikajarjestyksessa(kalliot:list):   # TODO
+def kiivetyt_aikajarjestyksessa(kalliot:list):   
     vastaus_lista = []
     for kallio in kalliot:        
         vastaus_lista.append(kallio.kiivetyt())
@@ -115,6 +148,9 @@ def vaikeimman_reitin_mukaan(kalliot:list):
 
 if __name__ == "__main__":
 
+    openfile()
+
+    """
     k1 = Kiipeilykallio("Olhava")
     kantti = Kiipeilyreitti("Kantti", 38, "6A+", 31)
     k1.lisaa_reitti(kantti)
@@ -186,3 +222,4 @@ if __name__ == "__main__":
     print("\nkiivetyt_aikajarjestyksessa:")
     for kallion_nimi, reitti in kiivetyt_aikajarjestyksessa(kalliot):
         print(reitti, reitti.pvm())
+    """
