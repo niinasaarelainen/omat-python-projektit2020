@@ -1,4 +1,9 @@
 Olhava
-Kantti, 38, 6A+, 31, tick
-Suuri leikkaus, 36, 6B, 21, tick
-Ruotsalaisten reitti, 42, 5+, 55
+Kantti, 38, 6A+, 31, sport, tick
+TestiKantti, 38, 6A+, 1, sport
+Suuri leikkaus, 36, 6B, 21, sport, tick
+Ruotsalaisten reitti, 42, 5+, 55, sport
+Nalkkilan släbi
+Pieniä askelia, 12, 6A+, 61, sport, tick
+Smooth operator, 11, 7A, 11, sport
+Possu ei pidä, 12 , 6B+, 45, sport, tick

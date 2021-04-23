@@ -13,16 +13,16 @@ class Kiipeilyreitti:
 
     def __init__(self, data:list):
         self.raakadata = data
-        self.nimi = data[0]
+        self.nimi = data[0].strip()
         self.pituus =  int(data[1])
-        self.grade =  data[2]
+        self.grade =  data[2].strip()
         self.ticks =  int(data[3])       
         self.onko_kiivetty = False
         self.onkokiivetty()        
         self.tikkauspvm = None   
         self.grade_opinion = None
         self.rating = None
-        self.sport_vai_tradi = int(data[4])
+        self.sport_vai_tradi = data[4].strip()
         self.attribuutit = [self.nimi, self.pituus, self.grade, self.ticks, self.sport_vai_tradi]         # HUOM !!!!!
                                # 0           1           2            3           4
 
@@ -64,28 +64,28 @@ class Kiipeilyreitti:
 class Kiipeilykallio:
     def __init__(self, nimi: str):
         self.nimi = nimi
-        self.__reitit = []
+        self.reitit = []
 
     def lisaa_reitti(self, reitti: Kiipeilyreitti):
-        self.__reitit.append(reitti)
+        self.reitit.append(reitti)
 
     def reitteja(self):
-        return len(self.__reitit)
+        return len(self.reitit)
 
     def reitit_graden_mukaan(self, grade):
-        reitit = [(self.nimi, reitti) for reitti in self.__reitit if reitti.grade== grade]        
+        reitit = [(self.nimi, reitti) for reitti in self.reitit if reitti.grade== grade]        
         return reitit
 
     def kiivetyt(self):
-        return [(self.nimi, reitti) for reitti in self.__reitit if reitti.onko_kiivetty == True]        
+        return [(self.nimi, reitti) for reitti in self.reitit if reitti.onko_kiivetty == True]        
          
     def kiipeamattomat(self):
-        return [(self.nimi, reitti) for reitti in self.__reitit if reitti.onko_kiivetty == False]        
+        return [(self.nimi, reitti) for reitti in self.reitit if reitti.onko_kiivetty == False]        
 
     def vaikein_reitti(self):
         def vaikeuden_mukaan(reitti):
             return reitti.grade, reitti.pituus     ###  HUOM !!!!  Järjestäminen 2 parametrin mukaan
-        return sorted(self.__reitit, key=vaikeuden_mukaan)[-1]
+        return sorted(self.reitit, key=vaikeuden_mukaan)[-1]
 
     def __str__(self):
         return f"{self.nimi} {self.reitteja()} reittiä, vaikein {self.vaikein_reitti().grade}({self.vaikein_reitti().nimi})"
@@ -93,7 +93,7 @@ class Kiipeilykallio:
 
 ########################################################################################################
 
-kalliot = []
+
 
 def openfile():
     f = open("data.txt", "r")
@@ -104,7 +104,18 @@ def openfile():
         else:
             kalliot[-1].lisaa_reitti(Kiipeilyreitti(item))
     print(kalliot[-1])
-    print(kalliot[-1].kiivetyt())
+    for kallio, reitti in (kalliot[-1].kiivetyt()):
+        print(f"{kallio}: {reitti}")
+    #anna_grade_opinion()
+
+def etsi_reitti_hakusanalla(hakusana):
+    vastaukset = []
+    for kallio in kalliot:
+        for reitti in kallio.reitit:
+            if hakusana in reitti.nimi:
+                vastaukset.append(reitti)
+    return vastaukset
+
 
 def etsi_tietyn_greidin_reitit(kalliot:list, grade):
     # tähän tulee yhdet sulkuparit liikaa
@@ -161,7 +172,21 @@ def vaikeimman_reitin_mukaan(kalliot:list):
 
 if __name__ == "__main__":
 
+    kalliot = []
+
     openfile()
+
+    vastaukset = etsi_reitti_hakusanalla("Kant")
+    for reitti in vastaukset:
+        print(reitti.nimi)
+
+    vastaukset = etsi_reitti_hakusanalla("ei")
+    monesko = 1
+    for reitti in vastaukset:
+        print(f"{monesko}. {reitti.nimi}")
+        monesko += 1
+
+    print("vaikein_reitti:", kalliot[-1].vaikein_reitti())
 
     """
     k1 = Kiipeilykallio("Olhava")
