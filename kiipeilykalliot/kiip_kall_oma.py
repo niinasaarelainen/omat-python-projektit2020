@@ -17,16 +17,27 @@ class Kiipeilyreitti:
         self.pituus =  int(data[1])
         self.grade =  data[2]
         self.ticks =  int(data[3])       
-        self.onko_kiivetty = None
+        self.onko_kiivetty = False
         self.onkokiivetty()        
-        self.tikkauspvm = None            
-        self.attribuutit = [self.nimi, self.pituus, self.grade, self.ticks]         # HUOM !!!!!
+        self.tikkauspvm = None   
+        self.grade_opinion = None
+        self.rating = None
+        self.sport_vai_tradi = int(data[4])
+        self.attribuutit = [self.nimi, self.pituus, self.grade, self.ticks, self.sport_vai_tradi]         # HUOM !!!!!
+                               # 0           1           2            3           4
 
     def __gt__(self, verrokki):
         return self.nimi > verrokki.nimi
 
+    def anna_grade_opinion (self, grade):
+        self.grade_opinion = grade
+
+    def anna_rating (self, rating):
+        self.rating = rating
+     
+
     def onkokiivetty(self):
-        if len(self.raakadata) == 5:
+        if len(self.raakadata) == 6:
             self.onko_kiivetty = True
         else:
             self.onko_kiivetty = False
@@ -42,6 +53,8 @@ class Kiipeilyreitti:
         return self.tikkauspvm.year
 
     def pvm(self):
+        if self.tikkauspvm == None:
+            return "Ei ole kiivetty"
         return f"  tikattu: {self.tikkauspvm.day}.{self.tikkauspvm.month}.{self.tikkauspvm.year}"
 
     def __str__(self):
