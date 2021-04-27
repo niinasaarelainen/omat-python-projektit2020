@@ -6,10 +6,8 @@ class Kiipeilyreitti:
     def __init__(self, data:list):
         self.raakadata = data
         self.sanakirja = {}
-        self.kasittele_attribuutit()
-        
-        self.nimi = self.sanakirja["nimi"]
-        
+        self.kasittele_attribuutit()        
+        self.nimi = self.sanakirja["nimi"]        
         self.pituus =  int(self.sanakirja["pituus"])
         self.grade =  self.sanakirja["grade"]
         self.ticks =  self.sanakirja["ticks"]  
@@ -66,6 +64,18 @@ class Kiipeilykallio:
     def __init__(self, nimi: str):
         self.nimi = nimi
         self.reitit = []
+
+
+    def jarjesta_reitit_yhden_attribuutin_mukaan(self, nro):
+        def yhden_mukaan(reitti):
+            return reitti.attribuutit[nro]     
+        return sorted(self.reitit, key=yhden_mukaan)
+
+    def jarjesta_reitit_kahden_attribuutin_mukaan(self, nro1, nro2):
+        def kahden_mukaan(reitti):
+            return reitti.attribuutit[nro1], reitti.attribuutit[nro2]     
+        return sorted(self.reitit, key=kahden_mukaan)
+
 
     def lisaa_reitti(self, reitti: Kiipeilyreitti):
         self.reitit.append(reitti)

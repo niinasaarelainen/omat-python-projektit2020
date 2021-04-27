@@ -1,7 +1,7 @@
 kallio:Olhava
 nimi:Kantti,pituus:38,grade:6A+,ticks:31,type:sport,tick:yes
 nimi:TestiKantti,pituus:38,grade:6A+,ticks:1,type:sport,tick:no
-nimi:Suurileikkaus,pituus:36,grade:6B,ticks:21,type:sport,tick:yes
+nimi:Suurileikkaus,pituus:36,grade:6B,ticks:31,type:sport,tick:yes
 nimi:Ruotsalaistenreitti,pituus:42,grade:5+,ticks:55,type:sport,tick:no
 
 kallio:Nalkkila

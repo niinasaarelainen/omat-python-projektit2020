@@ -21,11 +21,17 @@ def openfile():
             reittilista = []
         
     kallion_nimi = ""
-       
+
+
+"""  EI TOIMI !!
+def jarjesta_yhdella_attribuutilla_kalliosta(kallion_nimi, nro):
+    return sorted(reitti.attribuutit[nro], key=lambda reitti: kallion_nimi, reverse = True)    """
+
+ 
 
 def etsi_reitti_hakusanalla(hakusana):
     vastaukset = []
-    for kallio in kalliot:
+    for kallio in kalliot.values():      # HUOM!   ei pelkkä kalliot !!!!!!!!!!!!
         for reitti in kallio.reitit:
             if hakusana in reitti.nimi:
                 vastaukset.append(reitti)
@@ -36,7 +42,7 @@ def etsi_tietyn_greidin_reitit(kalliot:list, grade):
     # tähän tulee yhdet sulkuparit liikaa
     #vastaus_lista = [kallio.reitit_graden_mukaan(grade) for kallio in kalliot if kallio.reitit_graden_mukaan(grade) != []]
     
-    for kallio in kalliot:        
+    for kallio in kalliot.values():        
         vastaus_lista = kallio.reitit_graden_mukaan(grade)
         for kallion_nimi, reitti in vastaus_lista:
            print(kallion_nimi, ": " ,  reitti)
@@ -46,7 +52,7 @@ def etsi_tietyn_greidin_reitit(kalliot:list, grade):
 
 def kiivetyt_greidin_mukaan(kalliot:list):
     vastaus_lista = []
-    for kallio in kalliot:        
+    for kallio in kalliot.values():        
         vastaus_lista.append(kallio.kiivetyt())
     vastaus_lista = reduce(lambda x,y: x+y,vastaus_lista)    # flatten = [1,2,3],[4,5,6], [7] --> [1, 2, 3, 4, 5, 6, 7]
     #print(vastaus_lista)                # (self.nimi, reitti)
@@ -56,7 +62,7 @@ def kiivetyt_greidin_mukaan(kalliot:list):
 
 def kiivetyt_aikajarjestyksessa(kalliot:list):   
     vastaus_lista = []
-    for kallio in kalliot:        
+    for kallio in kalliot.values():        
         vastaus_lista.append(kallio.kiivetyt())
     vastaus_lista = reduce(lambda x,y: x+y,vastaus_lista)    # flatten = [1,2,3],[4,5,6], [7] --> [1, 2, 3, 4, 5, 6, 7]
     #print(vastaus_lista)                # (self.nimi, reitti)
@@ -66,7 +72,7 @@ def kiivetyt_aikajarjestyksessa(kalliot:list):
 
 def kiipeamattomat_anna_greidi_saa_tikit(kalliot:list, greidi):
     vastaus_lista = []
-    for kallio in kalliot:        
+    for kallio in kalliot.values():        
         vastaus_lista.append(kallio.kiipeamattomat())
     vastaus_lista = reduce(lambda x,y: x+y,vastaus_lista)    # flatten = [1,2,3],[4,5,6], [7] --> [1, 2, 3, 4, 5, 6, 7]
     #print(vastaus_lista)                # (self.nimi, reitti)
@@ -75,11 +81,11 @@ def kiipeamattomat_anna_greidi_saa_tikit(kalliot:list, greidi):
 
 
 def reittien_maaran_mukaan(kalliot:list):
-    return sorted(kalliot, key=lambda kallio: kallio.reitteja())   
+    return sorted(kalliot.values(), key=lambda kallio: kallio.reitteja())   
 
 def vaikeimman_reitin_mukaan(kalliot:list):
     #return list(reversed(vaikeuden_mukaan[kallio for kallio.vaikein_reitti() in kalliot])
-    return sorted(kalliot, key=lambda kallio: kallio.vaikein_reitti().grade, reverse = True)   
+    return sorted(kalliot.values(), key=lambda kallio: kallio.vaikein_reitti().grade, reverse = True)   
 
 
 
@@ -96,19 +102,37 @@ if __name__ == "__main__":
     print("oöhavan ekan reitin sanakirja", kalliot["Olhava"].reitit[0].sanakirja)
 
 
-    """
+    
     vastaukset = etsi_reitti_hakusanalla("ei")
     monesko = 1
     for reitti in vastaukset:
         print(f"{monesko}. {reitti.nimi}")
         monesko += 1
 
-    print("vaikein_reitti:", kalliot[-1].vaikein_reitti())
+    print("vaikein_reitti:",  kalliot["Olhava"].vaikein_reitti())
+    for kallio in reittien_maaran_mukaan(kalliot):
+        print(kallio)
+
+    print("vaikein_reitti:", kalliot["Olhava"].vaikein_reitti())
+
+    print("\njarjesta_reitit_yhden_attribuutin_mukaan (nimi = 0):")
+    for reitti in kalliot["Olhava"].jarjesta_reitit_yhden_attribuutin_mukaan(0):
+        print(reitti)
+
+    print("\njarjesta_reitit_yhden_attribuutin_mukaan (pit = 1):")
+    for reitti in kalliot["Olhava"].jarjesta_reitit_yhden_attribuutin_mukaan(1):
+        print(reitti)
+
+    print("\njarjesta_reitit_yhden_attribuutin_mukaan (grade = 2):")
+    for reitti in kalliot["Olhava"].jarjesta_reitit_yhden_attribuutin_mukaan(2):
+        print(reitti)
+
+    print("\njarjesta_reitit_kahden_attribuutin_mukaan(ticks = 3), nimi:")
+    for reitti in kalliot["Olhava"].jarjesta_reitit_kahden_attribuutin_mukaan(3, 0):
+        print(reitti)
 
 
-
-
-
+    """
      # WANHAT:
 
     k2 = Kiipeilykallio("Nummi")
