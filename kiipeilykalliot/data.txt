@@ -1,9 +1,10 @@
-Olhava
-Kantti, 38, 6A+, 31, sport, tick
-TestiKantti, 38, 6A+, 1, sport
-Suuri leikkaus, 36, 6B, 21, sport, tick
-Ruotsalaisten reitti, 42, 5+, 55, sport
-Nalkkilan släbi
-Pieniä askelia, 12, 6A+, 61, sport, tick
-Smooth operator, 11, 7A, 11, sport
-Possu ei pidä, 12 , 6B+, 45, sport, tick
+kallio:Olhava
+nimi:Kantti,pituus:38,greidi:6A+,ticks:31,type:sport,tick:yes
+nimi:TestiKantti,pituus:38,greidi:6A+,ticks:1,type:sport,tick:no
+nimi:Suurileikkaus,pituus:36,greidi:6B,ticks:21,type:sport,tick:yes
+nimi:Ruotsalaistenreitti,pituus:42,greidi:5+,ticks:55,type:sport,tick:no
+
+kallio:Nalkkilansläbi
+nimi:Pieniäaskelia,pituus:12,greidi:6A+,ticks:61,type:sport,tick:yes
+nimi:Smoothoperator,pituus:11,greidi:7A,ticks:11,type:sport,tick:no
+nimi:Possueipidä,pituus:12,greidi:6B+,ticks:45,type:sport,tick:yes

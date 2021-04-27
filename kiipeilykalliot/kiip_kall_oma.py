@@ -13,6 +13,9 @@ class Kiipeilyreitti:
 
     def __init__(self, data:list):
         self.raakadata = data
+        self.sanakirja = {}
+        self.kasittele_attribuutit()
+        """
         self.nimi = data[0].strip()
         self.pituus =  int(data[1])
         self.grade =  data[2].strip()
@@ -25,7 +28,12 @@ class Kiipeilyreitti:
         self.sport_vai_tradi = data[4].strip()
         self.attribuutit = [self.nimi, self.pituus, self.grade, self.ticks, self.sport_vai_tradi]         # HUOM !!!!!
                                # 0           1           2            3           4
-
+    """
+    def kasittele_attribuutit(self):
+        for pari in self.raakadata:
+            self.sanakirja[pari[0]]= pari[1]
+        print(self.sanakirja)
+    
     def __gt__(self, verrokki):
         return self.nimi > verrokki.nimi
 
@@ -97,16 +105,23 @@ class Kiipeilykallio:
 
 def openfile():
     f = open("data.txt", "r")
-    data = [rivi.strip().split(",") for rivi in f] 
-    for item in data:  
-        if len(item) == 1:            
-            kalliot.append(Kiipeilykallio(reduce(lambda x,y: x+y, item)))    # poistaa []
-        else:
-            kalliot[-1].lisaa_reitti(Kiipeilyreitti(item))
-    print(kalliot[-1])
-    for kallio, reitti in (kalliot[-1].kiivetyt()):
-        print(f"{kallio}: {reitti}")
-    #anna_grade_opinion()
+    data = [rivi.strip().split(",") for rivi in f if rivi.strip() != ''] 
+    for rivi in data: 
+        reittilista = []
+        for item in rivi:   # kallio:olhava   <-- item
+            pari = item.split(":")    
+            if pari[0] == "kallio":           
+                kalliot.append(Kiipeilykallio(pari[1]))   
+            else:
+                reittilista.append(pari)
+
+        if reittilista != []:      
+            kalliot[-1].lisaa_reitti(Kiipeilyreitti(reittilista)) 
+        """        
+        print(kalliot[-1])
+        for kallio, reitti in (kalliot[-1].kiivetyt()):
+            print(f"{kallio}: {reitti}")
+    #anna_grade_opinion() """
 
 def etsi_reitti_hakusanalla(hakusana):
     vastaukset = []
@@ -175,11 +190,9 @@ if __name__ == "__main__":
     kalliot = []
 
     openfile()
+    print("vikan kallion ekan reitin sanakirja", kalliot[-1].reitit[0].sanakirja)
 
-    vastaukset = etsi_reitti_hakusanalla("Kant")
-    for reitti in vastaukset:
-        print(reitti.nimi)
-
+    """
     vastaukset = etsi_reitti_hakusanalla("ei")
     monesko = 1
     for reitti in vastaukset:
@@ -188,7 +201,11 @@ if __name__ == "__main__":
 
     print("vaikein_reitti:", kalliot[-1].vaikein_reitti())
 
-    """
+
+
+
+
+     # WANHAT:
     k1 = Kiipeilykallio("Olhava")
     kantti = Kiipeilyreitti("Kantti", 38, "6A+", 31)
     k1.lisaa_reitti(kantti)
