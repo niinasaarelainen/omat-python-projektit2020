@@ -18,10 +18,15 @@ def openfile():
                 reittilista.append(pari)
         if reittilista != [] and kallion_nimi != '':   
             kalliot[kallion_nimi].lisaa_reitti(Kiipeilyreitti(reittilista)) 
-            reittilista = []
-        
+            reittilista = []        
     kallion_nimi = ""
-
+    
+def muodosta_kaikki_reitit():
+    kaikki_reitit = []
+    for kallio in kalliot.values():
+        for reitti in kallio.reitit:
+            kaikki_reitit.append(reitti)
+    return kaikki_reitit
 
 """  EI TOIMI !!
 def jarjesta_yhdella_attribuutilla_kalliosta(kallion_nimi, nro):
@@ -89,20 +94,27 @@ def vaikeimman_reitin_mukaan(kalliot:list):
 
 
 
- 
+def jarjesta_reitit_yhden_attribuutin_mukaan(minka_mukaan):
+    def yhden_mukaan(reitti):
+        return reitti.sanakirja[minka_mukaan]
+    return sorted(kaikki_reitit, key=yhden_mukaan)  
+
+def jarjesta_reitit_kahden_attribuutin_mukaan(minka_mukaan1, minka_mukaan2):
+    def kahden_mukaan(reitti):
+        return reitti.sanakirja[minka_mukaan1], reitti.sanakirja[minka_mukaan2]
+    return sorted(kaikki_reitit, key=kahden_mukaan)   
+
+
 
 if __name__ == "__main__":
 
-    kalliot = {}
+    kalliot = {}    
 
     openfile()
-    print(kalliot)
-    print(kalliot["Olhava"].reitit)   # 4 kpl
-    print(kalliot["Nalkkila"].reitit)   # 3 kpl
-    print("oöhavan ekan reitin sanakirja", kalliot["Olhava"].reitit[0].sanakirja)
-
-
+    kaikki_reitit = muodosta_kaikki_reitit()
+    print("     kaikki_reitit", kaikki_reitit)
     
+    print("oöhavan ekan reitin sanakirja", kalliot["Olhava"].reitit[0].sanakirja)    
     vastaukset = etsi_reitti_hakusanalla("ei")
     monesko = 1
     for reitti in vastaukset:
@@ -115,20 +127,33 @@ if __name__ == "__main__":
 
     print("vaikein_reitti:", kalliot["Olhava"].vaikein_reitti())
 
-    print("\njarjesta_reitit_yhden_attribuutin_mukaan (nimi = 0):")
-    for reitti in kalliot["Olhava"].jarjesta_reitit_yhden_attribuutin_mukaan(0):
+    # !! metodi luokassa Kiipeilykallio:
+    print("\njarjesta_reitit_yhden_attribuutin_mukaan  NIMI  ")
+    for reitti in kalliot["Olhava"].jarjesta_reitit_yhden_attribuutin_mukaan("nimi"):
         print(reitti)
 
-    print("\njarjesta_reitit_yhden_attribuutin_mukaan (pit = 1):")
-    for reitti in kalliot["Olhava"].jarjesta_reitit_yhden_attribuutin_mukaan(1):
+    print("\njarjesta_reitit_yhden_attribuutin_mukaan   PIT :")
+    for reitti in kalliot["Olhava"].jarjesta_reitit_yhden_attribuutin_mukaan("pituus"):
         print(reitti)
 
-    print("\njarjesta_reitit_yhden_attribuutin_mukaan (grade = 2):")
-    for reitti in kalliot["Olhava"].jarjesta_reitit_yhden_attribuutin_mukaan(2):
+    print("\njarjesta_reitit_yhden_attribuutin_mukaan   grade :")
+    for reitti in kalliot["Olhava"].jarjesta_reitit_yhden_attribuutin_mukaan("grade"):
         print(reitti)
 
-    print("\njarjesta_reitit_kahden_attribuutin_mukaan(ticks = 3), nimi:")
-    for reitti in kalliot["Olhava"].jarjesta_reitit_kahden_attribuutin_mukaan(3, 0):
+    print("\njarjesta_reitit_kahden_attribuutin_mukaan    ticks , nimi:")
+    for reitti in kalliot["Olhava"].jarjesta_reitit_kahden_attribuutin_mukaan("ticks", "nimi"):
+        print(reitti)        
+
+    print("\nreittien_maaran_mukaan")
+    for kallio in reittien_maaran_mukaan(kalliot):
+        print(kallio)
+
+    print("\njarjesta_  KAIKKI   reitit_yhden_attribuutin_mukaan  ticks:")
+    for reitti in jarjesta_reitit_yhden_attribuutin_mukaan("ticks"):
+        print(reitti)
+
+    print("\njarjesta_  KAIKKI   reitit_kahden_attribuutin_mukaan    grade, pit:")
+    for reitti in jarjesta_reitit_kahden_attribuutin_mukaan("grade", "pituus"):
         print(reitti)
 
 

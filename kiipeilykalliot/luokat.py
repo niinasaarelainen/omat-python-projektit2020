@@ -66,14 +66,14 @@ class Kiipeilykallio:
         self.reitit = []
 
 
-    def jarjesta_reitit_yhden_attribuutin_mukaan(self, nro):
+    def jarjesta_reitit_yhden_attribuutin_mukaan(self, minka_mukaan):
         def yhden_mukaan(reitti):
-            return reitti.attribuutit[nro]     
+            return reitti.sanakirja[minka_mukaan]
         return sorted(self.reitit, key=yhden_mukaan)
 
-    def jarjesta_reitit_kahden_attribuutin_mukaan(self, nro1, nro2):
+    def jarjesta_reitit_kahden_attribuutin_mukaan(self, minka_mukaan1, minka_mukaan2):
         def kahden_mukaan(reitti):
-            return reitti.attribuutit[nro1], reitti.attribuutit[nro2]     
+            return reitti.sanakirja[minka_mukaan1], reitti.sanakirja[minka_mukaan2]
         return sorted(self.reitit, key=kahden_mukaan)
 
 
