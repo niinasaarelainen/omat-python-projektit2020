@@ -36,10 +36,10 @@ class Kiipeilyreitti:
      
 
     def onkokiivetty(self):
-        if self.tick == "yes":
-            self.tick = True
+        if self.sanakirja["tick"] == "yes":
+            self.sanakirja["tick"] = True
         else:
-            self.tick = False
+            self.sanakirja["tick"] = False
 
     def tikkaa(self):
         self.onko_kiivetty = True
@@ -76,6 +76,10 @@ class Kiipeilykallio:
             return reitti.sanakirja[minka_mukaan1], reitti.sanakirja[minka_mukaan2]
         return sorted(self.reitit, key=kahden_mukaan)
 
+    def etsi_reitit_yhden_attribuutin_mukaan(self, mika_attribuutti, mita_etsitaan):
+        reitit = [(self.nimi, reitti) for reitti in self.reitit if reitti.sanakirja[mika_attribuutti] == mita_etsitaan]        
+        return reitit
+
 
     def lisaa_reitti(self, reitti: Kiipeilyreitti):
         self.reitit.append(reitti)
@@ -83,9 +87,7 @@ class Kiipeilykallio:
     def reitteja(self):
         return len(self.reitit)
 
-    def reitit_graden_mukaan(self, grade):
-        reitit = [(self.nimi, reitti) for reitti in self.reitit if reitti.grade== grade]        
-        return reitit
+    
 
     def kiivetyt(self):
         return [(self.nimi, reitti) for reitti in self.reitit if reitti.onko_kiivetty == True]        

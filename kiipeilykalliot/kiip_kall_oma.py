@@ -104,6 +104,14 @@ def jarjesta_reitit_kahden_attribuutin_mukaan(minka_mukaan1, minka_mukaan2):
         return reitti.sanakirja[minka_mukaan1], reitti.sanakirja[minka_mukaan2]
     return sorted(kaikki_reitit, key=kahden_mukaan)   
 
+def etsi_reitit_yhden_attribuutin_mukaan(mika_attribuutti, mita_etsitaan):
+    reitit = [reitti for reitti in kaikki_reitit if reitti.sanakirja[mika_attribuutti] == mita_etsitaan]        
+    return reitit
+
+def etsi_reitit_kahden_attribuutin_mukaan(mika_attribuutti1, mita_etsitaan1, mika_attribuutti2, mita_etsitaan2):
+    reitit = [reitti for reitti in kaikki_reitit if reitti.sanakirja[mika_attribuutti1] == mita_etsitaan1 and reitti.sanakirja[mika_attribuutti2] == mita_etsitaan2]        
+    return reitit
+
 
 
 if __name__ == "__main__":
@@ -155,6 +163,22 @@ if __name__ == "__main__":
     print("\njarjesta_  KAIKKI   reitit_kahden_attribuutin_mukaan    grade, pit:")
     for reitti in jarjesta_reitit_kahden_attribuutin_mukaan("grade", "pituus"):
         print(reitti)
+
+    print("\njarjesta_  KAIKKI   reitit_kahden_attribuutin_mukaan    tick, grade:")
+    for reitti in jarjesta_reitit_kahden_attribuutin_mukaan("tick", "grade"):
+        print(reitti)
+
+    print("\netsi_ reitit_yhden_attribuutin_mukaan    grade = 6A+")
+    for kallio, reitti in kalliot["Olhava"].etsi_reitit_yhden_attribuutin_mukaan("grade", "6A+"):
+        print(f"{kallio}: {reitti}")
+
+    print("\netsi_ reitit_yhden_attribuutin_mukaan   KAIKKI  grade = 6A+")
+    for reitti in etsi_reitit_yhden_attribuutin_mukaan("grade", "6A+"):
+        print(f"{reitti}")
+
+    print("\netsi_ reitit_kahden_attribuutin_mukaan   KAIKKI  grade = 6A+, ei ole kiivetty")
+    for reitti in etsi_reitit_kahden_attribuutin_mukaan("grade", "6A+", "tick", False):
+        print(f"{reitti}")
 
 
     """
