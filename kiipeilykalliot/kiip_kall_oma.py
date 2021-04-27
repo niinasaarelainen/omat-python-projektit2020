@@ -1,127 +1,27 @@
 from functools import reduce    # "flatten":ia varten
 import datetime  
-
-class Kiipeilyreitti:
-    """ vanha:
-    def __init__(self, nimi: str, pituus: int, grade: str, ticks = 0):
-        self.nimi = nimi
-        self.pituus = pituus
-        self.grade = grade
-        self.onko_kiivetty = False    
-        self.tikkauspvm = None    
-        self.ticks = ticks """
-
-    def __init__(self, data:list):
-        self.raakadata = data
-        self.sanakirja = {}
-        self.kasittele_attribuutit()
-        """
-        self.nimi = data[0].strip()
-        self.pituus =  int(data[1])
-        self.grade =  data[2].strip()
-        self.ticks =  int(data[3])       
-        self.onko_kiivetty = False
-        self.onkokiivetty()        
-        self.tikkauspvm = None   
-        self.grade_opinion = None
-        self.rating = None
-        self.sport_vai_tradi = data[4].strip()
-        self.attribuutit = [self.nimi, self.pituus, self.grade, self.ticks, self.sport_vai_tradi]         # HUOM !!!!!
-                               # 0           1           2            3           4
-    """
-    def kasittele_attribuutit(self):
-        for pari in self.raakadata:
-            self.sanakirja[pari[0]]= pari[1]
-        print(self.sanakirja)
-    
-    def __gt__(self, verrokki):
-        return self.nimi > verrokki.nimi
-
-    def anna_grade_opinion (self, grade):
-        self.grade_opinion = grade
-
-    def anna_rating (self, rating):
-        self.rating = rating
-     
-
-    def onkokiivetty(self):
-        if len(self.raakadata) == 6:
-            self.onko_kiivetty = True
-        else:
-            self.onko_kiivetty = False
-
-    def tikkaa(self):
-        self.onko_kiivetty = True
-        self.tikkauspvm = datetime.datetime.today()
-        self.ticks += 1
-
-    def tikkausvuosi (self):
-        if self.tikkauspvm == None:
-            return "Ei ole kiivetty"
-        return self.tikkauspvm.year
-
-    def pvm(self):
-        if self.tikkauspvm == None:
-            return "Ei ole kiivetty"
-        return f"  tikattu: {self.tikkauspvm.day}.{self.tikkauspvm.month}.{self.tikkauspvm.year}"
-
-    def __str__(self):
-        return f"{self.nimi}, pituus {self.pituus} metriä, grade {self.grade}, ticks {self.ticks}"
-
-########################################################################################################
-class Kiipeilykallio:
-    def __init__(self, nimi: str):
-        self.nimi = nimi
-        self.reitit = []
-
-    def lisaa_reitti(self, reitti: Kiipeilyreitti):
-        self.reitit.append(reitti)
-
-    def reitteja(self):
-        return len(self.reitit)
-
-    def reitit_graden_mukaan(self, grade):
-        reitit = [(self.nimi, reitti) for reitti in self.reitit if reitti.grade== grade]        
-        return reitit
-
-    def kiivetyt(self):
-        return [(self.nimi, reitti) for reitti in self.reitit if reitti.onko_kiivetty == True]        
-         
-    def kiipeamattomat(self):
-        return [(self.nimi, reitti) for reitti in self.reitit if reitti.onko_kiivetty == False]        
-
-    def vaikein_reitti(self):
-        def vaikeuden_mukaan(reitti):
-            return reitti.grade, reitti.pituus     ###  HUOM !!!!  Järjestäminen 2 parametrin mukaan
-        return sorted(self.reitit, key=vaikeuden_mukaan)[-1]
-
-    def __str__(self):
-        return f"{self.nimi} {self.reitteja()} reittiä, vaikein {self.vaikein_reitti().grade}({self.vaikein_reitti().nimi})"
-
-
-########################################################################################################
-
+from luokat import *
 
 
 def openfile():
     f = open("data.txt", "r")
     data = [rivi.strip().split(",") for rivi in f if rivi.strip() != ''] 
-    for rivi in data: 
-        reittilista = []
+    reittilista = []
+    kallion_nimi = ""
+    for rivi in data:         
         for item in rivi:   # kallio:olhava   <-- item
             pari = item.split(":")    
             if pari[0] == "kallio":           
-                kalliot.append(Kiipeilykallio(pari[1]))   
+                kalliot[pari[1]] = Kiipeilykallio(pari[1])   
+                kallion_nimi = pari[1]
             else:
                 reittilista.append(pari)
-
-        if reittilista != []:      
-            kalliot[-1].lisaa_reitti(Kiipeilyreitti(reittilista)) 
-        """        
-        print(kalliot[-1])
-        for kallio, reitti in (kalliot[-1].kiivetyt()):
-            print(f"{kallio}: {reitti}")
-    #anna_grade_opinion() """
+        if reittilista != [] and kallion_nimi != '':   
+            kalliot[kallion_nimi].lisaa_reitti(Kiipeilyreitti(reittilista)) 
+            reittilista = []
+        
+    kallion_nimi = ""
+       
 
 def etsi_reitti_hakusanalla(hakusana):
     vastaukset = []
@@ -187,10 +87,14 @@ def vaikeimman_reitin_mukaan(kalliot:list):
 
 if __name__ == "__main__":
 
-    kalliot = []
+    kalliot = {}
 
     openfile()
-    print("vikan kallion ekan reitin sanakirja", kalliot[-1].reitit[0].sanakirja)
+    print(kalliot)
+    print(kalliot["Olhava"].reitit)   # 4 kpl
+    print(kalliot["Nalkkila"].reitit)   # 3 kpl
+    print("oöhavan ekan reitin sanakirja", kalliot["Olhava"].reitit[0].sanakirja)
+
 
     """
     vastaukset = etsi_reitti_hakusanalla("ei")
@@ -206,32 +110,12 @@ if __name__ == "__main__":
 
 
      # WANHAT:
-    k1 = Kiipeilykallio("Olhava")
-    kantti = Kiipeilyreitti("Kantti", 38, "6A+", 31)
-    k1.lisaa_reitti(kantti)
-    kantti.tikkaa()
-    k1.lisaa_reitti(Kiipeilyreitti("Suuri leikkaus", 36, "6B", 21))
-    k1.lisaa_reitti(Kiipeilyreitti("Ruotsalaisten reitti", 42, "5+", 55))
-
 
     k2 = Kiipeilykallio("Nummi")
     k2.lisaa_reitti(Kiipeilyreitti("Syncro", 14, "8C+"))
     k2.lisaa_reitti(Kiipeilyreitti("PidempiSyncro", 15, "8C+"))
 
-    nalkkila = Kiipeilykallio("Nalkkilan släbi")
-    nalkkila.lisaa_reitti(Kiipeilyreitti("Pieniä askelia", 12, "6A+", 61))
-    nalkkila.lisaa_reitti(Kiipeilyreitti("Smooth operator", 11, "7A", 11))
-    possu = Kiipeilyreitti("Possu ei pidä", 12 , "6B+", 45)
-    nalkkila.lisaa_reitti(possu)
-    possu.tikkaa()
-    hedelma = Kiipeilyreitti("Hedelmätarha", 8, "6A", 88)
-    nalkkila.lisaa_reitti(hedelma)
-    print(hedelma.nimi, hedelma.tikkausvuosi())
-    hedelma.tikkaa()
-    print(hedelma.nimi, hedelma.tikkausvuosi())
-    niinanErikoinen = Kiipeilyreitti("Niinan erikoinen", 28, "6A+", 77)
-    nalkkila.lisaa_reitti(niinanErikoinen)
-    
+        
     print("vaikein_reitti:", nalkkila.vaikein_reitti())
 
     print(k1)

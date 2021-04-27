@@ -1,10 +1,10 @@
 kallio:Olhava
-nimi:Kantti,pituus:38,greidi:6A+,ticks:31,type:sport,tick:yes
-nimi:TestiKantti,pituus:38,greidi:6A+,ticks:1,type:sport,tick:no
-nimi:Suurileikkaus,pituus:36,greidi:6B,ticks:21,type:sport,tick:yes
-nimi:Ruotsalaistenreitti,pituus:42,greidi:5+,ticks:55,type:sport,tick:no
+nimi:Kantti,pituus:38,grade:6A+,ticks:31,type:sport,tick:yes
+nimi:TestiKantti,pituus:38,grade:6A+,ticks:1,type:sport,tick:no
+nimi:Suurileikkaus,pituus:36,grade:6B,ticks:21,type:sport,tick:yes
+nimi:Ruotsalaistenreitti,pituus:42,grade:5+,ticks:55,type:sport,tick:no
 
-kallio:Nalkkilansläbi
-nimi:Pieniäaskelia,pituus:12,greidi:6A+,ticks:61,type:sport,tick:yes
-nimi:Smoothoperator,pituus:11,greidi:7A,ticks:11,type:sport,tick:no
-nimi:Possueipidä,pituus:12,greidi:6B+,ticks:45,type:sport,tick:yes
+kallio:Nalkkila
+nimi:Pieniäaskelia,pituus:12,grade:6A+,ticks:61,type:sport,tick:yes
+nimi:Smoothoperator,pituus:11,grade:7A,ticks:11,type:sport,tick:no
+nimi:Possueipidä,pituus:12,grade:6B+,ticks:45,type:sport,tick:yes
