@@ -6,7 +6,8 @@ class Kiipeilyreitti:
     def __init__(self, data:list):
         self.raakadata = data
         self.sanakirja = {}
-        self.kasittele_attribuutit()        
+        self.kasittele_attribuutit()   
+        self.kallio =  self.sanakirja["kallio"]        
         self.nimi = self.sanakirja["nimi"]           # nämä ei välttämättömät mutta lyhyempi merkintä kuin sanakirja["x"]
         self.pituus = self.sanakirja["pituus"]   
         self.grade =  self.sanakirja["grade"]
@@ -55,7 +56,7 @@ class Kiipeilyreitti:
         return f"  tikattu: {self.tikkauspvm.day}.{self.tikkauspvm.month}.{self.tikkauspvm.year}"
 
     def __str__(self):
-        return f"{self.nimi}, pituus {self.pituus} metriä, grade {self.grade}, ticks {self.ticks}"
+        return f"{self.nimi}, pituus {self.pituus} metriä, grade {self.grade}, ticks {self.ticks} ({self.kallio})"
 
 
 ########################################################################################################
