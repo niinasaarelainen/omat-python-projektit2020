@@ -11,13 +11,16 @@ class Kiipeilyreitti:
         self.nimi = self.sanakirja["nimi"]           # nämä ei välttämättömät mutta lyhyempi merkintä kuin sanakirja["x"]
         self.pituus = self.sanakirja["pituus"]   
         self.grade =  self.sanakirja["grade"]
-        self.ticks =  int(self.sanakirja["ticks"])         
+        self.ticks =  self.sanakirja["ticks"]         
         self.type = self.sanakirja["type"]
         self.tick = self.sanakirja["tick"]   # yes / no
         self.onkokiivetty()                  # -->  True/ False
         self.tikkauspvm = None   
+        self.sanakirja["tikkauspvm"] = None
         self.grade_opinion = None
+        self.sanakirja["grade_opinion"] = None
         self.rating = None
+        self.sanakirja["rating"] = "-1"
 
     
     def kasittele_attribuutit(self):
@@ -36,9 +39,11 @@ class Kiipeilyreitti:
 
     def anna_grade_opinion (self, grade):
         self.grade_opinion = grade
+        self.sanakirja["grade_opinion"] = self.grade_opinion
 
     def anna_rating (self, rating):
-        self.rating = rating    
+        self.rating = str(rating)    
+        self.sanakirja["rating"] = self.rating
 
     def tikkaa(self):
         self.tick = True
@@ -56,6 +61,8 @@ class Kiipeilyreitti:
         return f"  tikattu: {self.tikkauspvm.day}.{self.tikkauspvm.month}.{self.tikkauspvm.year}"
 
     def __str__(self):
+        if self.rating != None:
+            return f"{self.nimi}, pituus {self.pituus} metriä, grade {self.grade}, ticks {self.ticks}, oma arvosana {self.rating} ({self.kallio})"
         return f"{self.nimi}, pituus {self.pituus} metriä, grade {self.grade}, ticks {self.ticks} ({self.kallio})"
 
 
