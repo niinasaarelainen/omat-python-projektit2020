@@ -30,7 +30,10 @@ for tulos in leadKilpailu.jarjesta_sijoitukset(karsintatulokset) :
 
 def printtaa_tulokset(karsinta_vai_finaali):
     koktulos = tulokset.values()
-    s = sorted(koktulos, key=lambda tulos: (tulos.yhteispisteet(), -tulos.voitot()))
+    if karsinta_vai_finaali == "FINAALI -- TOTAL POINTS":
+        s = sorted(koktulos, key=lambda tulos: (tulos.yhteispisteet(), -tulos.voitot(), tulos.yhteenlasketut_pisteet(), tulos.karsinnansijoitus))
+    else:
+        s = sorted(koktulos, key=lambda tulos: (tulos.yhteispisteet(), -tulos.voitot(), tulos.yhteenlasketut_pisteet()))
     climber ="CLIMBER"
     lead = "LEAD"
     speed = "SPEED"
@@ -39,13 +42,16 @@ def printtaa_tulokset(karsinta_vai_finaali):
     print("\n"+karsinta_vai_finaali)
     print(f"{climber:18} {speed:>8}  {boulder:>8}  {lead:>8} {total:>8} ")
     print("-"*56)
+    sijoitus = 1
     for koktulos in s:
-        climber = koktulos.nimi
+        climber = koktulos.nimi        
         speed = koktulos.speed
         boulder = koktulos.boulder
         lead = koktulos.lead
         total = koktulos.yhteispisteet()
         print(f"{climber:18} {speed:>8}  {boulder:>8}  {lead:>8} {total:>8} ")
+        koktulos.karsinnan_sij = sijoitus
+        sijoitus += 1
     return s[:8]
 
 
@@ -54,6 +60,7 @@ karsintatulos = printtaa_tulokset("KARSINTA -- TOTAL POINTS")
 
 #  F I N A A L I   8 PARASTA
 print("\nS P E E D -- FINAALI")
+tulokset_karsinta = tulokset
 tulokset = {}
 sij = 1  # eka sijoitus = 1
 for tulos in speedKilpailu.speed_finaali(karsintatulos):    
@@ -76,4 +83,4 @@ for tulos in leadKilpailu.jarjesta_sijoitukset(leadKilpailu.pisteet_finaali(kars
     t.lisaa_lead(tulos[1])   # täällä saattaa olla tasasijoituksia, eri systeemi kuin speed/lead
     
 
-printtaa_tulokset( "FINAALI -- TOTAL POINTS")
+printtaa_tulokset("FINAALI -- TOTAL POINTS")

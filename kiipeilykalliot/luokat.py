@@ -26,7 +26,7 @@ class Kiipeilyreitti:
     def kasittele_attribuutit(self):
         for pari in self.raakadata:
             if pari[0] == "ticks":
-                self.sanakirja[pari[0]]= int(pari[1])
+                self.sanakirja[pari[0]]= int(pari[1]) #jos ei tee int(), järjestää esim. 1, 11, 3, 33, 4...
             else:
                 self.sanakirja[pari[0]]= pari[1]
         print(self.sanakirja)
