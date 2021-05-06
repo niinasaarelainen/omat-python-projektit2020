@@ -39,7 +39,7 @@ def etsi_reitti_hakusanalla(hakusana):
         for reitti in kallio.reitit:
             for value in reitti.sanakirja.values():
                 if value != True and value != False and value != None:
-                    if hakusana in value:
+                    if hakusana in str(value):
                        vastaukset.append(reitti)
     return vastaukset
 
@@ -115,6 +115,11 @@ if __name__ == "__main__":
     for kallio, reitti in kalliot["Olhava"].etsi_reitit_yhden_attribuutin_mukaan("rating", "5"):
         print(f"{kallio}: {reitti}")
 
+    print("\njarjesta_  KAIKKI   reitit_yhden_attribuutin_mukaan  ticks:")
+    for reitti in jarjesta_reitit_yhden_attribuutin_mukaan("ticks"):
+        print(reitti)
+
+
     """
     print("\njarjesta_reitit_yhden_attribuutin_mukaan   PIT :")
     for reitti in kalliot["Olhava"].jarjesta_reitit_yhden_attribuutin_mukaan("pituus"):
@@ -132,10 +137,7 @@ if __name__ == "__main__":
     for kallio in reittien_maaran_mukaan(kalliot):
         print(kallio)
 
-    print("\njarjesta_  KAIKKI   reitit_yhden_attribuutin_mukaan  ticks:")
-    for reitti in jarjesta_reitit_yhden_attribuutin_mukaan("ticks"):
-        print(reitti)
-
+    
     print("\njarjesta_  KAIKKI   reitit_kahden_attribuutin_mukaan    grade, pit:")
     for reitti in jarjesta_reitit_kahden_attribuutin_mukaan("grade", "pituus"):
         print(reitti)
@@ -151,7 +153,7 @@ if __name__ == "__main__":
     for reitti in etsi_reitit_yhden_attribuutin_mukaan("grade", "6A+"):
         print(f"{reitti}")
 
-    print("\netsi_ reitit_kahden_attribuutin_mukaan   KAIKKI  grade = 6A+, ei ole kiivetty")  # TODO jarj ticksien muk. ?!??
+    print("\netsi_ reitit_kahden_attribuutin_mukaan   KAIKKI  grade = 6A+, ei ole kiivetty")  
     for reitti in etsi_reitit_kahden_attribuutin_mukaan("grade", "6A+", "tick", False):
         print(f"{reitti}")
 
