@@ -120,7 +120,7 @@ if __name__ == "__main__":
         print(reitti)
 
 
-    """
+    
     print("\njarjesta_reitit_yhden_attribuutin_mukaan   PIT :")
     for reitti in kalliot["Olhava"].jarjesta_reitit_yhden_attribuutin_mukaan("pituus"):
         print(reitti)
@@ -145,8 +145,6 @@ if __name__ == "__main__":
     print("\njarjesta_  KAIKKI   reitit_kahden_attribuutin_mukaan    tick, grade:")
     for reitti in jarjesta_reitit_kahden_attribuutin_mukaan("tick", "grade"):
         print(reitti)
-
-    
     
 
     print("\netsi_ reitit_yhden_attribuutin_mukaan   KAIKKI  grade = 6A+")
@@ -160,4 +158,4 @@ if __name__ == "__main__":
 
     print("\netsi_sitten_jarjesta_reitit   kiipeämättömät, greidi")
     for reitti in etsi_sitten_jarjesta_reitit("tick", False, "grade"):
-        print(reitti) """
+        print(reitti) 
