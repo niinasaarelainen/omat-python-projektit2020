@@ -9,6 +9,7 @@ class Kiipeilyreitti:
         self.kasittele_attribuutit()   
         self.kallio =  self.sanakirja["kallio"]        
         self.nimi = self.sanakirja["nimi"]           # nämä ei välttämättömät mutta lyhyempi merkintä kuin sanakirja["x"]
+        self.sektori = self.sanakirja["sektori"]
         self.pituus = self.sanakirja["pituus"]   
         self.grade =  self.sanakirja["grade"]
         self.ticks =  int(self.sanakirja["ticks"])      
@@ -29,6 +30,8 @@ class Kiipeilyreitti:
                 self.sanakirja[pari[0]]= int(pari[1]) #jos ei tee int(), järjestää esim. 1, 11, 3, 33, 4...
             else:
                 self.sanakirja[pari[0]]= pari[1]
+        if "sektori" not in self.sanakirja:
+             self.sanakirja["sektori"] = ""
         print(self.sanakirja)
 
     def onkokiivetty(self):

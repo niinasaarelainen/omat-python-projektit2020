@@ -40,7 +40,7 @@ def printtaa_tulokset(karsinta_vai_finaali):
     boulder = "BOULDER"
     total = "TOTAL"
     print("\n"+karsinta_vai_finaali)
-    print(f"{climber:18} {speed:>8}  {boulder:>8}  {lead:>8} {total:>8} ")
+    print(f"{climber:18} {speed:<8}  {boulder:<8}  {lead:<8} {total:<8} ")
     print("-"*56)
     sijoitus = 1
     for koktulos in s:
@@ -49,7 +49,7 @@ def printtaa_tulokset(karsinta_vai_finaali):
         boulder = koktulos.boulder
         lead = koktulos.lead
         total = koktulos.yhteispisteet()
-        print(f"{climber:18} {speed:>8}  {boulder:>8}  {lead:>8} {total:>8} ")
+        print(f"{climber:18} {speed:<8}  {boulder:<8}  {lead:<8} {total:<8} ")
         koktulos.karsinnan_sij = sijoitus
         sijoitus += 1
     return s[:8]

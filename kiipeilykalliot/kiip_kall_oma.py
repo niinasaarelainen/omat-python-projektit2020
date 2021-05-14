@@ -90,8 +90,7 @@ if __name__ == "__main__":
     vastaukset = etsi_reitti_hakusanalla("ei")
     monesko = 1
     for reitti in vastaukset:
-        nimi = reitti.sanakirja["nimi"]
-        print(f"{monesko}. {nimi}")
+        print(f"{monesko}. {reitti.nimi}")
         monesko += 1
 
     print()
@@ -99,7 +98,6 @@ if __name__ == "__main__":
     vastaukset = etsi_reitti_hakusanalla("6A")
     monesko = 1
     for reitti in vastaukset:
-        nimi = reitti.sanakirja["nimi"]
         print(f"{monesko}. {reitti}")
         monesko += 1
     vastaukset[0].anna_rating(5)
@@ -119,8 +117,15 @@ if __name__ == "__main__":
     for reitti in jarjesta_reitit_yhden_attribuutin_mukaan("ticks"):
         print(reitti)
 
+    print()
+    print("pohjoinen")
+    vastaukset = etsi_reitti_hakusanalla("pohjoinen")
+    monesko = 1
+    for reitti in vastaukset:
+        print(f"{monesko}. {reitti}")
+        monesko += 1
 
-    
+    """
     print("\njarjesta_reitit_yhden_attribuutin_mukaan   PIT :")
     for reitti in kalliot["Olhava"].jarjesta_reitit_yhden_attribuutin_mukaan("pituus"):
         print(reitti)
@@ -159,3 +164,4 @@ if __name__ == "__main__":
     print("\netsi_sitten_jarjesta_reitit   kiipeämättömät, greidi")
     for reitti in etsi_sitten_jarjesta_reitit("tick", False, "grade"):
         print(reitti) 
+    """
