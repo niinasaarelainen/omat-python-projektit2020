@@ -125,6 +125,12 @@ if __name__ == "__main__":
         print(f"{monesko}. {reitti}")
         monesko += 1
 
+    print()
+    print(kalliot["Olhava"].grade_statistics())
+
+    print()
+    print(kalliot["Nalkkila"].grade_statistics())
+
     """
     print("\njarjesta_reitit_yhden_attribuutin_mukaan   PIT :")
     for reitti in kalliot["Olhava"].jarjesta_reitit_yhden_attribuutin_mukaan("pituus"):

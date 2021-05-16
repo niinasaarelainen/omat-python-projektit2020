@@ -77,6 +77,24 @@ class Kiipeilykallio:
     def __init__(self, nimi: str):
         self.nimi = nimi
         self.reitit = []
+        self.grade_statistics_dict = {}
+
+    def grade_statistics(self): 
+        for reitti in self.reitit:
+            if reitti.grade not in self.grade_statistics_dict:
+                self.grade_statistics_dict[reitti.grade] = 1
+            else:
+                self.grade_statistics_dict[reitti.grade] += 1
+        s_key = sorted(self.grade_statistics_dict.items(), key=lambda x: x[0])
+        s_value = sorted(self.grade_statistics_dict.items(), key=lambda x: x[1], reverse=True)
+        palautus_str = self.nimi + "n reitit greidijärjestyksessä:\n"
+        for key, value in s_key:
+            palautus_str += key + ": " + str(value) + "kpl, "
+        palautus_str += "\nyleisyysjärjestyksessä:\n"
+        for key, value in s_value:
+            palautus_str += key + ": " + str(value) + "kpl, "
+        return palautus_str
+
 
     def jarjesta_reitit_yhden_attribuutin_mukaan(self, minka_mukaan):
         def yhden_mukaan(reitti):
