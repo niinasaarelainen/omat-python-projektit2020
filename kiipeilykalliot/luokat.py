@@ -90,10 +90,11 @@ class Kiipeilykallio:
         palautus_str = self.nimi + "n reitit greidijärjestyksessä:\n"
         for key, value in s_key:
             palautus_str += key + ": " + str(value) + "kpl, "
-        palautus_str += "\nyleisyysjärjestyksessä:\n"
+        palautus_str = palautus_str[:-2]
+        palautus_str += "\n" + self.nimi + "n reitit yleisyysjärjestyksessä:\n"
         for key, value in s_value:
             palautus_str += key + ": " + str(value) + "kpl, "
-        return palautus_str
+        return palautus_str[:-2]   # vika pilkku pois
 
 
     def jarjesta_reitit_yhden_attribuutin_mukaan(self, minka_mukaan):
