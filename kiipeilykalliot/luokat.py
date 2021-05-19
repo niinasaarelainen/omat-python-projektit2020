@@ -98,6 +98,7 @@ class Kiipeilykallio:
 
 
     def jarjesta_reitit_yhden_attribuutin_mukaan(self, minka_mukaan):
+        print("\njärjestettiin kallion " + self.nimi + " reitit attribuutin "+ minka_mukaan + " mukaan:")   
         def yhden_mukaan(reitti):
             return reitti.sanakirja[minka_mukaan]
         return sorted(self.reitit, key=yhden_mukaan)
@@ -121,7 +122,7 @@ class Kiipeilykallio:
         return len([reitti for reitti in self.reitit if reitti.sanakirja["tick"] == True])  
 
     def __str__(self):
-        return f"{self.nimi} {self.reitteja()} reittiä, joista kiivetty {self.kiivetty_lkm()}"
+        return f"\n{self.nimi} {self.reitteja()} reittiä, joista kiivetty {self.kiivetty_lkm()}\n{self.grade_statistics()}"
 
 
 ########################################################################################################

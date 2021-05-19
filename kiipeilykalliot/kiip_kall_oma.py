@@ -34,6 +34,7 @@ def muodosta_kaikki_reitit():   # häviää tieto mihin kallioon liittyvät
 
 
 def etsi_reitti_hakusanalla(hakusana):
+    print("\nhakusanalla "+ hakusana + " löytyi:")
     vastaukset = []
     for kallio in kalliot.values():      # HUOM!   ei pelkkä kalliot !!!!!!!!!!!!
         for reitti in kallio.reitit:
@@ -46,11 +47,13 @@ def etsi_reitti_hakusanalla(hakusana):
 
 ######  J Ä R J E S T Ä  ###########
 def jarjesta_reitit_yhden_attribuutin_mukaan(minka_mukaan):
+    print("\njärjestettiin kaikki reitit attribuutin "+ minka_mukaan + " mukaan:")      
     def yhden_mukaan(reitti):
         return reitti.sanakirja[minka_mukaan]
     return sorted(kaikki_reitit, key=yhden_mukaan)  
 
 def jarjesta_reitit_kahden_attribuutin_mukaan(minka_mukaan1, minka_mukaan2):
+    print("\njärjestettiin kaikki reitit attribuuttien "+ minka_mukaan1 + " ja " + minka_mukaan2 + " mukaan:")    
     def kahden_mukaan(reitti):
         return reitti.sanakirja[minka_mukaan1], reitti.sanakirja[minka_mukaan2]
     return sorted(kaikki_reitit, key=kahden_mukaan)   
@@ -103,35 +106,39 @@ if __name__ == "__main__":
     vastaukset[0].anna_rating(5)
     print(vastaukset[0].rating)
 
+    """
     
-    # !! metodi luokassa Kiipeilykallio:
-    print("\njarjesta_reitit_yhden_attribuutin_mukaan  rating  ")
-    for reitti in kalliot["Olhava"].jarjesta_reitit_yhden_attribuutin_mukaan("rating"):
-        print(reitti)
 
     print("\netsi_ reitit_yhden_attribuutin_mukaan    rating = 5:")
     for kallio, reitti in kalliot["Olhava"].etsi_reitit_yhden_attribuutin_mukaan("rating", "5"):
-        print(f"{kallio}: {reitti}")
+        print(f"{kallio}: {reitti}") """
 
-    print("\njarjesta_  KAIKKI   reitit_yhden_attribuutin_mukaan  ticks:")
+    
     for reitti in jarjesta_reitit_yhden_attribuutin_mukaan("ticks"):
         print(reitti)
 
-    print()
-    print("pohjoinen")
     vastaukset = etsi_reitti_hakusanalla("pohjoinen")
     monesko = 1
     for reitti in vastaukset:
         print(f"{monesko}. {reitti}")
         monesko += 1
+   
+    print(kalliot["Nalkkila"])   # includes grade_statistics()
 
-    print()
-    print(kalliot["Olhava"].grade_statistics())
+    print("\njarjesta_  KAIKKI   reitit_kahden_attribuutin_mukaan    grade, pit:")
+    for reitti in jarjesta_reitit_kahden_attribuutin_mukaan("grade", "pituus"):
+        print("\t", reitti)
 
-    print()
-    print(kalliot["Nalkkila"].grade_statistics())
+    # !! metodi luokassa Kiipeilykallio:
+    for reitti in kalliot["Olhava"].jarjesta_reitit_yhden_attribuutin_mukaan("rating"):
+        print("\t", reitti)
+
 
     """
+    for reitti in kalliot["Olhava"].jarjesta_reitit_kahden_attribuutin_mukaan("ticks", "nimi"):
+        print(reitti)       
+
+   
     print("\njarjesta_reitit_yhden_attribuutin_mukaan   PIT :")
     for reitti in kalliot["Olhava"].jarjesta_reitit_yhden_attribuutin_mukaan("pituus"):
         print(reitti)
@@ -140,19 +147,13 @@ if __name__ == "__main__":
     for reitti in kalliot["Olhava"].jarjesta_reitit_yhden_attribuutin_mukaan("grade"):
         print(reitti)
 
-    print("\njarjesta_reitit_kahden_attribuutin_mukaan    ticks , nimi:")
-    for reitti in kalliot["Olhava"].jarjesta_reitit_kahden_attribuutin_mukaan("ticks", "nimi"):
-        print(reitti)        
+     
 
     print("\nreittien_maaran_mukaan")
     for kallio in reittien_maaran_mukaan(kalliot):
         print(kallio)
 
     
-    print("\njarjesta_  KAIKKI   reitit_kahden_attribuutin_mukaan    grade, pit:")
-    for reitti in jarjesta_reitit_kahden_attribuutin_mukaan("grade", "pituus"):
-        print(reitti)
-
     print("\njarjesta_  KAIKKI   reitit_kahden_attribuutin_mukaan    tick, grade:")
     for reitti in jarjesta_reitit_kahden_attribuutin_mukaan("tick", "grade"):
         print(reitti)
