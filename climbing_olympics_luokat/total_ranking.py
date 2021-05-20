@@ -63,7 +63,7 @@ def luo_kilpailijat():
     kilpailijat["Shauna"].anna_muut_tiedot(163, 51, 2, "Great Britain", 24)
     kilpailijat["Aleksandra"].anna_muut_tiedot(163, 51, 2, "Poland", 24)
     kilpailijat["Chaehyun"].anna_muut_tiedot(163, 51, 2, "South Korea", 24)
-    kilpailijat["Iuliia"].anna_muut_tiedot(163, 51, 2, "Russia", 24)
+    kilpailijat["Iuliia"].anna_muut_tiedot(163, 51, 2, "Russia", 28)
     kilpailijat["Viktoriia"].anna_muut_tiedot(163, 51, 2, "Russia", 24)
     kilpailijat["Laura"].anna_muut_tiedot(163, 51, 2, "Italia", 24)
     kilpailijat["YiLing"].anna_muut_tiedot(163, 51, 2, "China", 24)
@@ -83,7 +83,6 @@ speedKilpailu = speed.SpeedKilpailu()
 sij = 1  # eka sijoitus = 1
 for tulos in speedKilpailu.speed_karsinta(kilpailijat)  :
     t = kokonaistulos.Kokonaistulos(tulos.kilpailija, sij) 
-    print("tulos.nimi", tulos.nimi)
     tulokset[tulos.nimi] = t # ei tasasijoituksia
     sij += 1
 
@@ -115,8 +114,8 @@ def printtaa_tulokset(karsinta_vai_finaali):
     boulder = "BOULDER"
     total = "TOTAL"
     print("\n"+karsinta_vai_finaali)
-    print(f"{climber:18} {speed:<8}  {boulder:<8}  {lead:<8} {total:<8} ")
-    print("-"*56)
+    print(f"{climber:28} {speed:<8}  {boulder:<8}  {lead:<8} {total:<8} ")
+    print("-"*63)
     sijoitus = 1
     for koktulos in s:
         climber = koktulos.nimi        
@@ -124,7 +123,7 @@ def printtaa_tulokset(karsinta_vai_finaali):
         boulder = koktulos.boulder
         lead = koktulos.lead
         total = koktulos.yhteispisteet()
-        print(f"{climber:18} {speed:<8}  {boulder:<8}  {lead:<8} {total:<8} ")
+        print(f"{climber:28} {speed:<8}  {boulder:<8}  {lead:<8} {total:<8} ")
         koktulos.karsinnan_sij = sijoitus
         sijoitus += 1
     return s[:8]

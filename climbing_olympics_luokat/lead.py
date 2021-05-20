@@ -4,10 +4,10 @@ class LeadTulos:
 
     def __init__ (self, nimi, ote, aika):
         self.nimi = nimi
-        self.ote = ote
+        self.ote = ote                  # TODO esim. 22+  siis plus !!
         self.aika = aika
     def __str__(self):        
-        return f"{self.nimi:15}  {self.ote:7} (time:{self.aika:.2f})" 
+        return f"{self.nimi:28}  {self.ote:7} (time:{self.aika:.2f})" 
 
 
 class LeadKilpailu:
@@ -17,7 +17,7 @@ class LeadKilpailu:
         top = 45.0
         for kilpailija in kilpailijat:
             if kilpailija == 'Janja':
-                tulos =  random.randint(top/1.2*100, top*100)/100     # Janja pääsee väh. 5/6 reittiä
+                tulos =  random.randint(int(top/1.15*100), top*100)/100     # Janja pääsee väh. 5/6 reittiä
             else:
                 tulos =  random.randint(top/2*100, top*100)/100
             aika = random.randint(200, 600)/100
@@ -30,8 +30,8 @@ class LeadKilpailu:
         self.tulokset = []
         top = 48.0
         for koktulos in sijoitukset:
-            if koktulos.nimi == 'Janja':
-                tulos =  random.randint(top/1.2*100, top*100)/100     # Janja pääsee väh. 5/6 reittiä
+            if koktulos.nimi == 'Janja Garnbret':
+                tulos =  random.randint(int(top/1.15*100), top*100)/100     # Janja pääsee väh. 5/6 reittiä
             else:
                 tulos =  random.randint(top/2*100, top*100)/100
             aika = random.randint(200, 600)/100
@@ -58,8 +58,3 @@ class LeadKilpailu:
         
         return tulokset
             
-"""
-leadKilpailu  = LeadKilpailu()
-tulokset_list = leadKilpailu.tulos_karsinta()
-karsintatulos = leadKilpailu.tulokset(tulokset_list)  """  
-

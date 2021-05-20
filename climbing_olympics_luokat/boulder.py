@@ -13,10 +13,10 @@ class BoulderTulos:
 
     def __str__(self):
         if self.topit_lkm == 0 and self.zonet_lkm == 0:
-            return f"{self.nimi:15} No Tops, No Zones"
+            return f"{self.nimi:28} No Tops, No Zones"
         elif self.topit_lkm == 0:
-            return f"{self.nimi:15} No Tops, {self.zonet_lkm}Z{self.zonet_yritykset}"
-        return f"{self.nimi:15} {self.topit_lkm}T{self.topit_yritykset}, {self.zonet_lkm}Z{self.zonet_yritykset}"
+            return f"{self.nimi:28} No Tops, {self.zonet_lkm}Z{self.zonet_yritykset}"
+        return f"{self.nimi:28} {self.topit_lkm}T{self.topit_yritykset}, {self.zonet_lkm}Z{self.zonet_yritykset}"
 
 
 class BoulderKilpailu:
@@ -46,7 +46,7 @@ class BoulderKilpailu:
     def tulos_finaali(self, sijoitukset):
         tulokset = [] 
         for koktulos in sijoitukset:
-            if koktulos.nimi == 'Janja':
+            if koktulos.nimi == 'Janja Garnbret':
                 self.topit_lkm = random.randint(2,3)
                 self.topit_yritykset = random.randint(self.topit_lkm, 5)  # 3 reittiä, flash jokaisesta : 3
                 self.zonet_lkm = random.randint(self.topit_lkm, 3)

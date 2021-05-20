@@ -11,8 +11,8 @@ class SpeedTulos:
 
     def __str__(self):
         if self.aika == fail:
-            return f"{self.nimi:15}fail"
-        return f"{self.nimi:15}{self.aika} sec"
+            return f"{self.nimi:28}fail"
+        return f"{self.nimi:28}{self.aika} sec"
         
 
 
