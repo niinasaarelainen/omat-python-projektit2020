@@ -1,7 +1,8 @@
 class Kokonaistulos:
 
-    def __init__(self, nimi, speed):   # speed-kilpailu on ekana
-        self.nimi = nimi
+    def __init__(self, kilpailija, speed):   # speed-kilpailu on ekana
+        self.nimi = kilpailija.nimi
+        self.kilpailija = kilpailija
         self.speed = speed   # monenneksiko tyyppi tuli tässä lajissa
         self.karsinnan_sij = None
 

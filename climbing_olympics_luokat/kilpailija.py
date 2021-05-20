@@ -16,4 +16,8 @@ class Kilpailija:
         self.ika = ika
 
     def __str__(self):
+        if self.wingspan > 0:                                                 # halutaan plusmerkki näkyviin
+            return f"\n{self.nimi} ({self.maa})\n{self.ika} vuotta, {self.pituus} cm, wingspan +{self.wingspan}, {self.paino} kg"
+        else:   
+            return f"\n{self.nimi} ({self.maa})\n{self.ika} vuotta, {self.pituus} cm, wingspan {self.wingspan}, {self.paino} kg"
         
