@@ -28,7 +28,7 @@ class Kilpailija:
 
 def luo_kilpailijat():
     # 20 naista:
-    kilpailijat["Janja"] = Kilpailija("Janja Garnbret")    # pistemerkintä, koska eri failissa    
+    kilpailijat["Janja"] = Kilpailija("Janja Garnbret")    
     kilpailijat["Mia"] = Kilpailija("Mia Krampl")
     kilpailijat["Jessica"] = Kilpailija("Jessica Pilz") 
     kilpailijat["Petra"] = Kilpailija("Petra Kllinger") 
@@ -70,8 +70,8 @@ def luo_kilpailijat():
     kilpailijat["Oceania"].anna_muut_tiedot(163, 51, 2, "Australia", 24)
     kilpailijat["Erin"].anna_muut_tiedot(163, 51, 2, "South Africa", 24)
     
-    for nimi, kilpailija in kilpailijat.items():
-        print(kilpailija)
+    #for nimi, kilpailija in kilpailijat.items():
+    #    print(kilpailija)
 
 
 kilpailijat = {}  # nimi : Kilpailija
@@ -83,18 +83,19 @@ speedKilpailu = speed.SpeedKilpailu()
 sij = 1  # eka sijoitus = 1
 for tulos in speedKilpailu.speed_karsinta(kilpailijat)  :
     t = kokonaistulos.Kokonaistulos(tulos.kilpailija, sij) 
+    print("tulos.nimi", tulos.nimi)
     tulokset[tulos.nimi] = t # ei tasasijoituksia
     sij += 1
 
 boulderKilpailu = boulder.BoulderKilpailu()
 sij = 1
-for tulos in boulderKilpailu.tulos_karsinta():    
+for tulos in boulderKilpailu.tulos_karsinta(kilpailijat): 
     t = tulokset[tulos.nimi]    # ei tasasijoituksia
     t.lisaa_boulder(sij)
     sij += 1
 
 leadKilpailu  = lead.LeadKilpailu()
-karsintatulokset = leadKilpailu.tulos_karsinta()
+karsintatulokset = leadKilpailu.tulos_karsinta(kilpailijat)
 print("\nL E A D -- KARSINTA")
 for tulos in leadKilpailu.jarjesta_sijoitukset(karsintatulokset) :
     t = tulokset[tulos[0].nimi]    

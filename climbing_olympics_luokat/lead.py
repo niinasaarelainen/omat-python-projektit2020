@@ -12,23 +12,19 @@ class LeadTulos:
 
 class LeadKilpailu:
 
-    def tulos_karsinta(self):      # 10 kilpailijaa, 8 finaaliin     
-        top = 46.0        
+    def tulos_karsinta(self, kilpailijat):      # 10 kilpailijaa, 8 finaaliin     
         self.tulokset = []
-        self.tulokset.append(LeadTulos("Janja", top, 4.40))   # 3. parametri = aika, max 6 min
-        self.tulokset.append(LeadTulos("Jain", 44.0, 5.0))            
-        self.tulokset.append(LeadTulos("Jessica", 39.5, 5.50))
-        self.tulokset.append(LeadTulos("Alex", 9.0, 2.41))
-        self.tulokset.append(LeadTulos("AlexHidas", 9.5, 3.30))   # +  # AlexPlus ja Julia kaikki samat    
-        self.tulokset.append(LeadTulos("Julia",  9.5, 3.30))
-        self.tulokset.append(LeadTulos("Fanny", 39.0, 3.51))   
-        self.tulokset.append(LeadTulos("Ihmelapsi", top, 4.41))
-        self.tulokset.append(LeadTulos("Margo", 45.5, 5.11))
-        self.tulokset.append(LeadTulos("Anna", 22.0, 4.41))
-
+        top = 45.0
+        for kilpailija in kilpailijat:
+            if kilpailija == 'Janja':
+                tulos =  random.randint(top/1.2*100, top*100)/100     # Janja pääsee väh. 5/6 reittiä
+            else:
+                tulos =  random.randint(top/2*100, top*100)/100
+            aika = random.randint(200, 600)/100
+            self.tulokset.append(LeadTulos(kilpailijat[kilpailija].nimi, int(tulos), aika))   # 3. parametri = aika, max 6 min
+            
         s = sorted(self.tulokset, key=lambda tulos: (-tulos.ote, tulos.aika))        
         return s
-
 
     def pisteet_finaali(self, sijoitukset):
         self.tulokset = []

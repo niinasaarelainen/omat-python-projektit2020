@@ -21,36 +21,22 @@ class BoulderTulos:
 
 class BoulderKilpailu:
 
-    def tulos_karsinta(self):      # erilainen data kuin BoulderTulos !! Tämän olisi voinut jäättää pois
-        pisteet = []      
-        pisteet.append(["Janja", "T1", "Z1", "T2", "Z1", "Z1"]) # 3 boulderia, vikasta ei toppia
-        pisteet.append(["Jain", "T10", "Z1", "T2", "Z1", "Z6"])
-        pisteet.append(["Jessica", "T3", "Z1", "T5", "Z1", "Z7"])
-        pisteet.append(["Alex", "T2", "Z1", "Z1", "Z12"])
-        pisteet.append(["Fanny", "T2", "Z1", "Z1", "Z3"])
-        pisteet.append(["AlexHidas", "T2", "Z1", "Z1", "Z1"])
-        pisteet.append(["Julia", "T3", "Z1", "T5", "Z1", "Z9"])
-        pisteet.append(["Ihmelapsi", "Z1", "Z1", "Z12"])
-        pisteet.append(["Anna", "T4","Z1", "Z1", "Z12"])
-        pisteet.append(["Margo", "T5", "Z1", "Z1", "Z12"])    
-            
-        tulokset = []   # järjestämätön data    
-        for tulos in pisteet:   
-            self.topit_lkm = 0 
-            self.topit_yritykset = 0
-            self.zonet_lkm = 0
-            self.zonet_yritykset = 0
-        
-            for piste in tulos[1:]:  
-                if "T" in piste:
-                    self.topit_lkm += 1
-                    self.topit_yritykset += int(piste[1:])
-                elif "Z" in piste:   
-                    self.zonet_lkm += 1
-                    self.zonet_yritykset += int(piste[1:])      
-            tulokset.append(BoulderTulos(tulos[0], self.topit_lkm, self.topit_yritykset, self.zonet_lkm, self.zonet_yritykset))  
-
+    def tulos_karsinta(self, kilpailijat):      # erilainen data kuin BoulderTulos !! Tämän olisi voinut jäättää pois
+        tulokset = [] 
+        for kilpailija in kilpailijat:
+            if kilpailija == 'Janja':
+                self.topit_lkm = random.randint(3,4)
+                self.topit_yritykset = random.randint(self.topit_lkm, 5)  #4 reittiä, flash jokaisesta : 3
+                self.zonet_lkm = random.randint(self.topit_lkm, 4)
+                self.zonet_yritykset = random.randint(self.topit_yritykset, self.topit_yritykset)
+            else:
+                self.topit_lkm = random.randint(0,4)
+                self.topit_yritykset = random.randint(4, 15)
+                self.zonet_lkm = random.randint(self.topit_lkm, 4)
+                self.zonet_yritykset = random.randint(3, self.topit_yritykset)
+            tulokset.append(BoulderTulos(kilpailijat[kilpailija].nimi, self.topit_lkm, self.topit_yritykset, self.zonet_lkm, self.zonet_yritykset))  
         s = sorted(tulokset, key=lambda tulos: (-tulos.topit_lkm, tulos.topit_yritykset, -tulos.zonet_lkm, tulos.zonet_yritykset))  
+      
         print("\nB O U L D E R -- KARSINTA")
         for tulos in s:
             print(tulos) 
@@ -74,10 +60,3 @@ class BoulderKilpailu:
         s = sorted(tulokset, key=lambda tulos: (-tulos.topit_lkm, tulos.topit_yritykset, -tulos.zonet_lkm, tulos.zonet_yritykset))  
         return s
  
-
-"""
-boulderKilpailu = BoulderKilpailu()
-print("\nB O U L D E R -- KARSINTA")
-for tulos in boulderKilpailu.tulos_karsinta():
-    print(tulos)  """
-
