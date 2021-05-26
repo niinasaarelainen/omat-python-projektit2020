@@ -25,9 +25,54 @@ class Kilpailija:
             return f"\n{self.nimi} ({self.maa})\n{self.ika} vuotta, {self.pituus} cm, wingspan {self.wingspan}, {self.paino} kg"
         
 
+def luo_kilpailijat_miehet():
+    # 20 miestä olympialaisissa 2021:
+    kilpailijat["Sean"] = Kilpailija("Sean McColl")    
+    kilpailijat["Alexei"] = Kilpailija("Alexei Rubtsov")
+    kilpailijat["Jakob"] = Kilpailija("Jakob Schubert") 
+    kilpailijat["Tomoa"] = Kilpailija("Tomoa Narasaki") 
+    kilpailijat["Kai"] = Kilpailija("Kai Harada")     
+    kilpailijat["Colin"] = Kilpailija("Colin Duffy")    
+    kilpailijat["Nathaniel"] = Kilpailija("Nathaniel Coleman")
+    kilpailijat["Adam"] = Kilpailija("Adam Ondra") 
+    kilpailijat["Jan"] = Kilpailija("Jan Hojer") 
+    kilpailijat["Rishat"] = Kilpailija("Rishat Khaibullin") 
+    kilpailijat["Mickael"] = Kilpailija("Mickael Mawem") 
+    kilpailijat["Alexander"] = Kilpailija("Alexander Megos") 
+    kilpailijat["Ludovico"] = Kilpailija("Ludovico Fossali") 
+    kilpailijat["Michael"]  = Kilpailija("Michael Piccolruaz")
+    kilpailijat["Jongwon"] = Kilpailija("Jongwon Chon")
+    kilpailijat["Bassa"] = Kilpailija("Bassa Mawem")
+    kilpailijat["Alberto"] = Kilpailija("Alberto Ginéz López")
+    kilpailijat["Tom"] = Kilpailija("Tom O'Halloran")
+    kilpailijat["Christopher"] = Kilpailija("Christopher Cosser")
+    kilpailijat["YuFei"] = Kilpailija("YuFei Pan")
 
-def luo_kilpailijat():
-    # 20 naista:
+    kilpailijat["Sean"].anna_muut_tiedot(169, 60, 0, "Canada",33)
+    kilpailijat["Alexei"].anna_muut_tiedot(178, 63,0,"Russia", 32)
+    kilpailijat["Jakob"].anna_muut_tiedot(173, 63, 0,"Austria", 30)
+    kilpailijat["Tomoa"].anna_muut_tiedot(170, 58,"Japan", 24)
+    kilpailijat["Kai"].anna_muut_tiedot(168, 51, 0,"Japan",22)   
+    kilpailijat["Colin"].anna_muut_tiedot(168, 55, 4,"USA", 17)
+    kilpailijat["Nathaniel"].anna_muut_tiedot(182, 74, 5,"USA",24)
+    kilpailijat["Adam"].anna_muut_tiedot(186, 70, "Czeck", 28)
+    kilpailijat["Jan"].anna_muut_tiedot(188, 77, 10, "Germany", 29)
+    kilpailijat["Rishat"].anna_muut_tiedot(177, 66, -2, "Kazakhstan", 25)
+    kilpailijat["Mickael"].anna_muut_tiedot(177, 68, 7, "France", 30)
+    kilpailijat["Alexander"].anna_muut_tiedot(173, 57, 8, "Germany", 28)
+    kilpailijat["Ludovico"].anna_muut_tiedot(177,"Italy", 24)
+    kilpailijat["Michael"].anna_muut_tiedot(177,"Italy", 25)
+    kilpailijat["Jongwon"].anna_muut_tiedot(176, 53, 10, "South Korea", 25)
+    kilpailijat["Bassa"].anna_muut_tiedot(177,"France", 36)
+    kilpailijat["Alberto"].anna_muut_tiedot(169, 58, 3,"Spain, 18")
+    kilpailijat["Tom"].anna_muut_tiedot(177, 62, 4, "Australia", 28)
+    kilpailijat["Christopher"].anna_muut_tiedot(177, 71, -1, "South Africa", 20)
+    kilpailijat["YuFei"].anna_muut_tiedot(170, 59, 1, "China", 20)
+
+
+
+def luo_kilpailijat_naiset():
+    # 20 naista olympialaisissa 2021:
     kilpailijat["Janja"] = Kilpailija("Janja Garnbret")    
     kilpailijat["Mia"] = Kilpailija("Mia Krampl")
     kilpailijat["Jessica"] = Kilpailija("Jessica Pilz") 
@@ -70,12 +115,26 @@ def luo_kilpailijat():
     kilpailijat["Oceania"].anna_muut_tiedot(163, 51, 2, "Australia", 24)
     kilpailijat["Erin"].anna_muut_tiedot(163, 51, 2, "South Africa", 24)
     
-    #for nimi, kilpailija in kilpailijat.items():
-    #    print(kilpailija)
 
 
 kilpailijat = {}  # nimi : Kilpailija
-luo_kilpailijat()
+print("\n 1  Naisten kilpailu")
+print("\n 2  Miesten kilpailu")
+print("\n 3  20 naiskilpailijan tiedot")
+print("\n 4  20 miesskilpailijan tiedot")
+vastaus = input("\nMitä tehdään? Anna numero 1-4")
+if vastaus == "1":
+    luo_kilpailijat_naiset()
+elif vastaus == "2":    
+    luo_kilpailijat_miehet()
+elif vastaus == "3": 
+    luo_kilpailijat_naiset()
+    for nimi, kilpailija in kilpailijat.items():
+        print(kilpailija)
+elif vastaus == "4":   
+    luo_kilpailijat_miehet()
+    for nimi, kilpailija in kilpailijat.items():
+        print(kilpailija)  
 tulokset =  {}   #  nimi : Kokonaistulos
 
 #   K A R S I N T A : 
