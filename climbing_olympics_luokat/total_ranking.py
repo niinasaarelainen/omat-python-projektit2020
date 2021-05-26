@@ -19,11 +19,16 @@ class Kilpailija:
         self.ika = ika
         self.ranking = ranking
 
+    def painotukset(self, s, b, l):  # arvosana 1-10 kunkin disciplinen taidoista, 10 = maailman paras
+        self.s = s
+        self.b = b
+        self. l = l
+
     def __str__(self):
         if self.wingspan > 0:                                                 # halutaan plusmerkki näkyviin
-            return f"\n{self.nimi} ({self.maa})\n{self.ika} vuotta, {self.pituus} cm, wingspan +{self.wingspan}, {self.paino} kg\nbest ranking in 2019: {self.ranking}"
+            return f"\n{self.nimi} ({self.maa})\n {self.ika} years, {self.pituus} cm, wingspan +{self.wingspan}, {self.paino} kg\n best ranking in 2019: {self.ranking}"
         else:   
-            return f"\n{self.nimi} ({self.maa})\n{self.ika} vuotta, {self.pituus} cm, wingspan {self.wingspan}, {self.paino} kg\nbest ranking in 2019: {self.ranking}"
+            return f"\n{self.nimi} ({self.maa})\n {self.ika} years, {self.pituus} cm, wingspan {self.wingspan}, {self.paino} kg\n best ranking in 2019: {self.ranking}"
         
 ####  end  class Kilpailija ##############################################################
 
@@ -52,25 +57,45 @@ def luo_kilpailijat_miehet():
     kilpailijat["YuFei"] = Kilpailija("YuFei Pan")
 
     kilpailijat["Sean"].anna_muut_tiedot(169, 60, 0, "Canada",33, "3rd (Lead)")
+    kilpailijat["Sean"].painotukset(6, 8, 8) # arvosana 1-10 kunkin disciplinen taidoista, 10 = maailman paras
     kilpailijat["Alexey"].anna_muut_tiedot(178, 63,0,"Russia", 32, "7th (Boulder)")
+    kilpailijat["Alexey"].painotukset(4, 9, 4)
     kilpailijat["Jakob"].anna_muut_tiedot(173, 63, 0,"Austria", 30, "10th (Boulder)")
+    kilpailijat["Jakob"].painotukset(7, 10, 9)
     kilpailijat["Tomoa"].anna_muut_tiedot(170, 58,3, "Japan", 24, "1st (Boulder)")
+    kilpailijat["Tomoa"].painotukset(9, 10, 7)
     kilpailijat["Kai"].anna_muut_tiedot(168, 51, 0,"Japan",22, "4th (Lead)")   
+    kilpailijat["Kai"].painotukset(9, 10, 7)
     kilpailijat["Colin"].anna_muut_tiedot(168, 55, 4,"USA", 17, "-")
+    kilpailijat["Colin"].painotukset(6, 9, 8)
     kilpailijat["Nathaniel"].anna_muut_tiedot(182, 74, 5,"USA",24, "20th (Boulder)")
+    kilpailijat["Nathaniel"].painotukset(8, 8, 6)
     kilpailijat["Adam"].anna_muut_tiedot(186, 70, 12, "Czeck", 28, "1st (Lead)")
+    kilpailijat["Adam"].painotukset(4, 10, 10)
     kilpailijat["Jan"].anna_muut_tiedot(188, 77, 10, "Germany", 29,"6th (Boulder)")
+    kilpailijat["Jan"].painotukset(6, 7, 8)
     kilpailijat["Rishat"].anna_muut_tiedot(177, 66, -2, "Kazakhstan", 25, "29th (Speed)")
+    kilpailijat["Rishat"].painotukset(10, 2, 1)
     kilpailijat["Mickael"].anna_muut_tiedot(177, 68, 7, "France", 30, "30th (Boulder)")
+    kilpailijat["Mickael"].painotukset(3, 8, 5)
     kilpailijat["Alexander"].anna_muut_tiedot(173, 57, 8, "Germany", 28, "7th (Lead)")
+    kilpailijat["Alexander"].painotukset(6, 8, 8)
     kilpailijat["Ludovico"].anna_muut_tiedot(177, 68, 2, "Italy", 24, "15th (Speed)")
+    kilpailijat["Ludovico"].painotukset(10, 2, 1)
     kilpailijat["Michael"].anna_muut_tiedot(177, 62, 3, "Italy", 25), "33rd (Boulder)"
+    kilpailijat["Michael"].painotukset(3, 7, 6)
     kilpailijat["Jongwon"].anna_muut_tiedot(176, 53, 10, "South Korea", 25, "4th (Boulder)")
+    kilpailijat["Jongwon"].painotukset(8, 10, 7)
     kilpailijat["Bassa"].anna_muut_tiedot(177, 71, 2, "France", 36, "1st (Speed)")
+    kilpailijat["Bassa"].painotukset(10, 4, 5)
     kilpailijat["Alberto"].anna_muut_tiedot(169, 58, 3,"Spain", 18,"2nd (Lead)")
+    kilpailijat["Alberto"].painotukset(7, 6, 10)
     kilpailijat["Tom"].anna_muut_tiedot(177, 62, 4, "Australia", 28, "78th (Speed)")
+    kilpailijat["Tom"].painotukset(8, 3, 4)
     kilpailijat["Christopher"].anna_muut_tiedot(177, 71, -1, "South Africa", 20, "-")
+    kilpailijat["Christopher"].painotukset(2, 2, 2)
     kilpailijat["YuFei"].anna_muut_tiedot(170, 59, 1, "China", 20, "13th (Lead)")
+    kilpailijat["YuFei"].painotukset(5, 5, 8)
 
 
 
@@ -97,26 +122,26 @@ def luo_kilpailijat_naiset():
     kilpailijat["Oceania"] = Kilpailija("Oceania MacKenzie")
     kilpailijat["Erin"] = Kilpailija("Erin Sterkenburg")
 
-    kilpailijat["Janja"].anna_muut_tiedot(164, 47, 1, "Slovenia", 22)    
-    kilpailijat["Mia"].anna_muut_tiedot(163, 51, 2, "Slovenia", 24)
-    kilpailijat["Jessica"].anna_muut_tiedot(163, 51, -2, "Austria", 24)
-    kilpailijat["Petra"].anna_muut_tiedot(165, 54, 12, "Switzerland", 29)
-    kilpailijat["Julia"].anna_muut_tiedot(166, 51, 2, "France", 28)    
-    kilpailijat["Anouck"].anna_muut_tiedot(163, 51, 2, "France", 24)
-    kilpailijat["Miho"].anna_muut_tiedot(162, 53, 2, "Japan", 23)
-    kilpailijat["Akiyo"].anna_muut_tiedot(165, 49, 2, "Japan", 31)
-    kilpailijat["Alannah"].anna_muut_tiedot(166, 51, 2, "Canada", 27)
-    kilpailijat["Brooke"].anna_muut_tiedot(157, 46, 3, "USA", 20)
-    kilpailijat["Kyra"].anna_muut_tiedot(163, 51, 2, "USA", 24)
-    kilpailijat["Shauna"].anna_muut_tiedot(163, 51, 2, "Great Britain", 24)
-    kilpailijat["Aleksandra"].anna_muut_tiedot(163, 51, 2, "Poland", 24)
-    kilpailijat["Chaehyun"].anna_muut_tiedot(163, 51, 2, "South Korea", 24)
-    kilpailijat["Iuliia"].anna_muut_tiedot(163, 51, 2, "Russia", 28)
-    kilpailijat["Viktoriia"].anna_muut_tiedot(163, 51, 2, "Russia", 24)
-    kilpailijat["Laura"].anna_muut_tiedot(163, 51, 2, "Italia", 24)
-    kilpailijat["YiLing"].anna_muut_tiedot(163, 51, 2, "China", 24)
-    kilpailijat["Oceania"].anna_muut_tiedot(163, 51, 2, "Australia", 24)
-    kilpailijat["Erin"].anna_muut_tiedot(163, 51, 2, "South Africa", 24)
+    kilpailijat["Janja"].anna_muut_tiedot(164, 47, 1, "Slovenia", 22, "1st (Boulder)")    
+    kilpailijat["Mia"].anna_muut_tiedot(163, 51, 2, "Slovenia", 20, "9th (Lead)")
+    kilpailijat["Jessica"].anna_muut_tiedot(163, 51, -2, "Austria", 24, "5th (Boulder)")
+    kilpailijat["Petra"].anna_muut_tiedot(165, 54, 12, "Switzerland", 29, "6th (Boulder)")
+    kilpailijat["Julia"].anna_muut_tiedot(166, 51, 2, "France", 24, "9th (Boulder)")    
+    kilpailijat["Anouck"].anna_muut_tiedot(163, 51, 2, "France", 24, "2nd (Speed)")
+    kilpailijat["Miho"].anna_muut_tiedot(162, 53, 2, "Japan", 23, "15th (Boulder)")
+    kilpailijat["Akiyo"].anna_muut_tiedot(165, 49, 2, "Japan", 31, "2nd (Boulder)")
+    kilpailijat["Alannah"].anna_muut_tiedot(166, 51, 2, "Canada", 27, "12th (Boulder)")
+    kilpailijat["Brooke"].anna_muut_tiedot(157, 46, 3, "USA", 20, "46th (Lead)")
+    kilpailijat["Kyra"].anna_muut_tiedot(163, 51, 2, "USA", 24, "18th (Boulder)")
+    kilpailijat["Shauna"].anna_muut_tiedot(163, 51, 2, "Great Britain", 24, "11th (Boulder)")
+    kilpailijat["Aleksandra"].anna_muut_tiedot(163, 51, 2, "Poland", 27, "9th (Speed)")
+    kilpailijat["Chaehyun"].anna_muut_tiedot(163, 51, 2, "South Korea", 17, "1st (Lead)")
+    kilpailijat["Iuliia"].anna_muut_tiedot(163, 51, 2, "Russia", 28, "10th (Speed)")
+    kilpailijat["Viktoriia"].anna_muut_tiedot(163, 51, 2, "Russia", 20, "35th (Lead)")
+    kilpailijat["Laura"].anna_muut_tiedot(163, 51, 2, "Italia", 20, "14th (Lead)")
+    kilpailijat["YiLing"].anna_muut_tiedot(163, 51, 2, "China", 24, "1st (Speed)")
+    kilpailijat["Oceania"].anna_muut_tiedot(163, 51, 2, "Australia", 18, "26th (Boulder)")
+    kilpailijat["Erin"].anna_muut_tiedot(163, 51, 2, "South Africa", 18, "-")
     
 
 def kilpailu():
@@ -211,12 +236,13 @@ print("\n 1  Naisten kilpailu")
 print("\n 2  Miesten kilpailu")
 print("\n 3  20 naiskilpailijan tiedot")
 print("\n 4  20 miesskilpailijan tiedot")
-vastaus = input("\nMitä tehdään? Anna numero 1-4")
+vastaus = input("\nMitä tehdään? Anna numero 1-4 ")
 if vastaus == "1":
     luo_kilpailijat_naiset()
     kilpailu()
 elif vastaus == "2":    
     luo_kilpailijat_miehet()
+    kilpailu()
 elif vastaus == "3": 
     luo_kilpailijat_naiset()
     for nimi, kilpailija in kilpailijat.items():
