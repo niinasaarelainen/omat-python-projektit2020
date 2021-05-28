@@ -3,15 +3,8 @@ from operator import itemgetter
 
 class Kilpailija:
 
-    def __init__(self, nimi):
+    def __init__(self, nimi, pituus, paino, wingspan, maa, ika, ranking = ""):
         self.nimi = nimi
-        self.pituus = None
-        self.paino = None
-        self.wingspan = None
-        self.maa = None
-        self.ika = None
-
-    def anna_muut_tiedot(self, pituus, paino, wingspan, maa, ika, ranking = ""):
         self.pituus = pituus
         self.paino = paino
         self.wingspan = wingspan
@@ -35,67 +28,46 @@ class Kilpailija:
 
 def luo_kilpailijat_miehet():
     # 20 miestä olympialaisissa 2021:
-    kilpailijat["Sean"] = Kilpailija("Sean McColl")    
-    kilpailijat["Alexey"] = Kilpailija("Alexey Rubtsov")
-    kilpailijat["Jakob"] = Kilpailija("Jakob Schubert") 
-    kilpailijat["Tomoa"] = Kilpailija("Tomoa Narasaki") 
-    kilpailijat["Kai"] = Kilpailija("Kai Harada")     
-    kilpailijat["Colin"] = Kilpailija("Colin Duffy")    
-    kilpailijat["Nathaniel"] = Kilpailija("Nathaniel Coleman")
-    kilpailijat["Adam"] = Kilpailija("Adam Ondra") 
-    kilpailijat["Jan"] = Kilpailija("Jan Hojer") 
-    kilpailijat["Rishat"] = Kilpailija("Rishat Khaibullin") 
-    kilpailijat["Mickael"] = Kilpailija("Mickael Mawem") 
-    kilpailijat["Alexander"] = Kilpailija("Alexander Megos") 
-    kilpailijat["Ludovico"] = Kilpailija("Ludovico Fossali") 
-    kilpailijat["Michael"]  = Kilpailija("Michael Piccolruaz")
-    kilpailijat["Jongwon"] = Kilpailija("Jongwon Chon")
-    kilpailijat["Bassa"] = Kilpailija("Bassa Mawem")
-    kilpailijat["Alberto"] = Kilpailija("Alberto Ginéz López")
-    kilpailijat["Tom"] = Kilpailija("Tom O'Halloran")
-    kilpailijat["Christopher"] = Kilpailija("Christopher Cosser")
-    kilpailijat["YuFei"] = Kilpailija("YuFei Pan")
-
-    kilpailijat["Sean"].anna_muut_tiedot(169, 60, 0, "Canada",33, "3rd (Lead)")
-    kilpailijat["Sean"].painotukset(6, 8, 8) # arvosana 1-10 kunkin disciplinen taidoista, 10 = maailman paras
-    kilpailijat["Alexey"].anna_muut_tiedot(178, 63,0,"Russia", 32, "7th (Boulder)")
-    kilpailijat["Alexey"].painotukset(4, 9, 4)
-    kilpailijat["Jakob"].anna_muut_tiedot(173, 63, 0,"Austria", 30, "10th (Boulder)")
-    kilpailijat["Jakob"].painotukset(7, 10, 9)
-    kilpailijat["Tomoa"].anna_muut_tiedot(170, 58,3, "Japan", 24, "1st (Boulder)")
-    kilpailijat["Tomoa"].painotukset(9, 10, 7)
-    kilpailijat["Kai"].anna_muut_tiedot(168, 51, 0,"Japan",22, "4th (Lead)")   
-    kilpailijat["Kai"].painotukset(9, 10, 7)
-    kilpailijat["Colin"].anna_muut_tiedot(168, 55, 4,"USA", 17, "-")
-    kilpailijat["Colin"].painotukset(6, 9, 8)
-    kilpailijat["Nathaniel"].anna_muut_tiedot(182, 74, 5,"USA",24, "20th (Boulder)")
-    kilpailijat["Nathaniel"].painotukset(8, 8, 6)
-    kilpailijat["Adam"].anna_muut_tiedot(186, 70, 12, "Czeck", 28, "1st (Lead)")
-    kilpailijat["Adam"].painotukset(4, 10, 10)
-    kilpailijat["Jan"].anna_muut_tiedot(188, 77, 10, "Germany", 29,"6th (Boulder)")
-    kilpailijat["Jan"].painotukset(6, 7, 8)
-    kilpailijat["Rishat"].anna_muut_tiedot(177, 66, -2, "Kazakhstan", 25, "29th (Speed)")
-    kilpailijat["Rishat"].painotukset(10, 2, 1)
-    kilpailijat["Mickael"].anna_muut_tiedot(177, 68, 7, "France", 30, "30th (Boulder)")
-    kilpailijat["Mickael"].painotukset(3, 8, 5)
-    kilpailijat["Alexander"].anna_muut_tiedot(173, 57, 8, "Germany", 28, "7th (Lead)")
-    kilpailijat["Alexander"].painotukset(6, 8, 8)
-    kilpailijat["Ludovico"].anna_muut_tiedot(177, 68, 2, "Italy", 24, "15th (Speed)")
-    kilpailijat["Ludovico"].painotukset(10, 2, 1)
-    kilpailijat["Michael"].anna_muut_tiedot(177, 62, 3, "Italy", 25), "33rd (Boulder)"
-    kilpailijat["Michael"].painotukset(3, 7, 6)
-    kilpailijat["Jongwon"].anna_muut_tiedot(176, 53, 10, "South Korea", 25, "4th (Boulder)")
-    kilpailijat["Jongwon"].painotukset(8, 10, 7)
-    kilpailijat["Bassa"].anna_muut_tiedot(177, 71, 2, "France", 36, "1st (Speed)")
-    kilpailijat["Bassa"].painotukset(10, 4, 5)
-    kilpailijat["Alberto"].anna_muut_tiedot(169, 58, 3,"Spain", 18,"2nd (Lead)")
-    kilpailijat["Alberto"].painotukset(7, 6, 10)
-    kilpailijat["Tom"].anna_muut_tiedot(177, 62, 4, "Australia", 28, "78th (Speed)")
-    kilpailijat["Tom"].painotukset(8, 3, 4)
-    kilpailijat["Christopher"].anna_muut_tiedot(177, 71, -1, "South Africa", 20, "-")
-    kilpailijat["Christopher"].painotukset(2, 2, 2)
-    kilpailijat["YuFei"].anna_muut_tiedot(170, 59, 1, "China", 20, "13th (Lead)")
-    kilpailijat["YuFei"].painotukset(5, 5, 8)
+    kilpailijat["Sean McColl"] = Kilpailija("Sean McColl", 169, 60, 0, "Canada",33, "3rd (Lead)")    
+    kilpailijat["Sean McColl"].painotukset(6, 8, 8) # arvosana 1-10 kunkin disciplinen taidoista, 10 = maailman paras
+    kilpailijat["Alexey Rubtsov"] = Kilpailija("Alexey Rubtsov", 178, 63,0,"Russia", 32, "7th (Boulder)")
+    kilpailijat["Alexey Rubtsov"].painotukset(4, 9, 4)
+    kilpailijat["Jakob Schubert"] = Kilpailija("Jakob Schubert", 173, 63, 0,"Austria", 30, "10th (Boulder)")
+    kilpailijat["Jakob Schubert"].painotukset(7, 10, 9)
+    kilpailijat["Tomoa Narasaki"] = Kilpailija("Tomoa Narasaki", 170, 58,3, "Japan", 24, "1st (Boulder)") 
+    kilpailijat["Tomoa Narasaki"].painotukset(9, 10, 7)
+    kilpailijat["Kai Harada"] = Kilpailija("Kai Harada", 168, 51, 0,"Japan",22, "4th (Lead)")    
+    kilpailijat["Kai Harada"].painotukset(9, 10, 7) 
+    kilpailijat["Colin Duffy"] = Kilpailija("Colin Duffy", 168, 55, 4,"USA", 17, "-") 
+    kilpailijat["Colin Duffy"] .painotukset(6, 9, 8)   
+    kilpailijat["Nathaniel Coleman"] = Kilpailija("Nathaniel Coleman", 182, 74, 5,"USA",24, "20th (Boulder)")
+    kilpailijat["Nathaniel Coleman"].painotukset(8, 8, 6)
+    kilpailijat["Adam Ondra"] = Kilpailija("Adam Ondra", 186, 70, 12, "Czeck", 28, "1st (Lead)") 
+    kilpailijat["Adam Ondra"].painotukset(4, 10, 10)
+    kilpailijat["Jan Hojer"] = Kilpailija("Jan Hojer", 188, 77, 10, "Germany", 29,"6th (Boulder)")
+    kilpailijat["Jan Hojer"].painotukset(6, 7, 8)
+    kilpailijat["Rishat Khaibullin"] = Kilpailija("Rishat Khaibullin", 177, 66, -2, "Kazakhstan", 25, "29th (Speed)") 
+    kilpailijat["Rishat Khaibullin"].painotukset(10, 2, 2)
+    kilpailijat["Mickael Mawem"] = Kilpailija("Mickael Mawem", 177, 68, 7, "France", 30, "30th (Boulder)") 
+    kilpailijat["Mickael Mawem"].painotukset(3, 8, 5)
+    kilpailijat["Alexander Megos"] = Kilpailija("Alexander Megos", 173, 57, 8, "Germany", 28, "7th (Lead)") 
+    kilpailijat["Alexander Megos"].painotukset(6, 8, 8)
+    kilpailijat["Ludovico Fossali"] = Kilpailija("Ludovico Fossali", 177, 68, 2, "Italy", 24, "15th (Speed)") 
+    kilpailijat["Ludovico Fossali"].painotukset(10, 2, 2)
+    kilpailijat["Michael Piccolruaz"] = Kilpailija("Michael Piccolruaz", 177, 62, 3, "Italy", 25, "33rd (Boulder)")
+    kilpailijat["Michael Piccolruaz"].painotukset(3, 7, 6)
+    kilpailijat["Jongwon Chon"] = Kilpailija("Jongwon Chon", 176, 53, 10, "South Korea", 25, "4th (Boulder)")
+    kilpailijat["Jongwon Chon"].painotukset(8, 10, 7)
+    kilpailijat["Bassa Mawem"] = Kilpailija("Bassa Mawem", 177, 71, 2, "France", 36, "1st (Speed)")
+    kilpailijat["Bassa Mawem"] .painotukset(10, 4, 5)
+    kilpailijat["Alberto Ginéz López"] = Kilpailija("Alberto Ginéz López", 169, 58, 3,"Spain", 18,"2nd (Lead)")
+    kilpailijat["Alberto Ginéz López"].painotukset(7, 6, 10)
+    kilpailijat["Tom O'Halloran"] = Kilpailija("Tom O'Halloran", 177, 62, 4, "Australia", 28, "78th (Speed)")
+    kilpailijat["Tom O'Halloran"].painotukset(8, 3, 4)
+    kilpailijat["Christopher Cosser"] = Kilpailija("Christopher Cosser", 177, 71, -1, "South Africa", 20, "-")
+    kilpailijat["Christopher Cosser"].painotukset(2, 2, 3)
+    kilpailijat["YuFei Pan"] = Kilpailija("YuFei Pan", 170, 59, 1, "China", 20, "13th (Lead)")
+    kilpailijat["YuFei Pan"].painotukset(5, 5, 8)
 
 
 
@@ -213,14 +185,14 @@ def kilpailu():
 
     sij = 1
     print("\nB O U L D E R -- FINAALI")
-    for tulos in boulderKilpailu.tulos_finaali(karsintatulos) :      
+    for tulos in boulderKilpailu.tulos_finaali(karsintatulos, kilpailijat) :      
         print(tulos) 
         t = tulokset[tulos.nimi]    # ei tasasijoituksia
         t.lisaa_boulder(sij)
         sij += 1
 
     print("\nL E A D -- FINAALI")
-    for tulos in leadKilpailu.jarjesta_sijoitukset(leadKilpailu.pisteet_finaali(karsintatulos)):    
+    for tulos in leadKilpailu.jarjesta_sijoitukset(leadKilpailu.pisteet_finaali(karsintatulos, kilpailijat)):    
         t = tulokset[tulos[0].nimi]    
         t.lisaa_lead(tulos[1])   # täällä saattaa olla tasasijoituksia, eri systeemi kuin speed/lead
         

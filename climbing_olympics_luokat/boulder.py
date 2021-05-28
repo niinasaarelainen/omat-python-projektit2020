@@ -24,16 +24,12 @@ class BoulderKilpailu:
     def tulos_karsinta(self, kilpailijat):      # erilainen data kuin BoulderTulos !! Tämän olisi voinut jäättää pois
         tulokset = [] 
         for kilpailija in kilpailijat:
-            if kilpailija == 'Janja':
-                self.topit_lkm = random.randint(3,4)
-                self.topit_yritykset = random.randint(self.topit_lkm, 5)  #4 reittiä, flash jokaisesta : 3
-                self.zonet_lkm = random.randint(self.topit_lkm, 4)
-                self.zonet_yritykset = random.randint(self.topit_yritykset, self.topit_yritykset)
-            else:
-                self.topit_lkm = random.randint(0,4)
-                self.topit_yritykset = random.randint(4, 15)
-                self.zonet_lkm = random.randint(self.topit_lkm, 4)
-                self.zonet_yritykset = random.randint(3, self.topit_yritykset)
+            maksimi = int(kilpailijat[kilpailija].b/10 * 4) #4 reittiä
+            self.topit_lkm = random.randint(max(0, maksimi -1), maksimi)
+            self.topit_yritykset = random.randint(self.topit_lkm, 10) 
+            self.zonet_lkm = random.randint(self.topit_lkm, min(4, maksimi +1))
+            self.zonet_yritykset = random.randint(self.zonet_lkm, 15)
+           
             tulokset.append(BoulderTulos(kilpailijat[kilpailija].nimi, self.topit_lkm, self.topit_yritykset, self.zonet_lkm, self.zonet_yritykset))  
         s = sorted(tulokset, key=lambda tulos: (-tulos.topit_lkm, tulos.topit_yritykset, -tulos.zonet_lkm, tulos.zonet_yritykset))  
       
@@ -43,19 +39,15 @@ class BoulderKilpailu:
         return s
 
 
-    def tulos_finaali(self, sijoitukset):
+    def tulos_finaali(self, sijoitukset, kilpailijat):
         tulokset = [] 
         for koktulos in sijoitukset:
-            if koktulos.nimi == 'Janja Garnbret':
-                self.topit_lkm = random.randint(2,3)
-                self.topit_yritykset = random.randint(self.topit_lkm, 5)  # 3 reittiä, flash jokaisesta : 3
-                self.zonet_lkm = random.randint(self.topit_lkm, 3)
-                self.zonet_yritykset = random.randint(self.topit_yritykset, self.topit_yritykset)
-            else:
-                self.topit_lkm = random.randint(0,3)
-                self.topit_yritykset = random.randint(3, 15)
-                self.zonet_lkm = random.randint(self.topit_lkm, 3)
-                self.zonet_yritykset = random.randint(3, self.topit_yritykset)
+            maksimi = int(kilpailijat[koktulos.nimi].b/10 * 3)  #3 reittiä
+            self.topit_lkm = random.randint(max(0, maksimi -1), maksimi)
+            self.topit_yritykset = random.randint(self.topit_lkm, 9)  
+            self.zonet_lkm = random.randint(self.topit_lkm, min(4, maksimi +1))
+            self.zonet_yritykset = random.randint(self.zonet_lkm, 15)
+            
             tulokset.append(BoulderTulos(koktulos.nimi, self.topit_lkm, self.topit_yritykset, self.zonet_lkm, self.zonet_yritykset))  
         s = sorted(tulokset, key=lambda tulos: (-tulos.topit_lkm, tulos.topit_yritykset, -tulos.zonet_lkm, tulos.zonet_yritykset))  
         return s
