@@ -15,7 +15,7 @@ class Kilpailija:
     def painotukset(self, s, b, l):  # arvosana 1-10 kunkin disciplinen taidoista, 10 = maailman paras
         self.s = s
         self.b = b
-        self. l = l
+        self.l = l
 
     def __str__(self):
         if self.wingspan > 0:                                                 # halutaan plusmerkki näkyviin
@@ -121,7 +121,7 @@ def kilpailu():
     #   K A R S I N T A : 
     speedKilpailu = speed.SpeedKilpailu()
     sij = 1  # eka sijoitus = 1
-    for tulos in speedKilpailu.speed_karsinta(kilpailijat)  :
+    for tulos in speedKilpailu.speed_karsinta(kilpailijat, voittoaika)  :
         t = kokonaistulos.Kokonaistulos(tulos.kilpailija, sij) 
         tulokset[tulos.nimi] = t # ei tasasijoituksia
         sij += 1
@@ -177,7 +177,7 @@ def kilpailu():
     tulokset_karsinta = tulokset
     tulokset = {}
     sij = 1  # eka sijoitus = 1
-    for tulos in speedKilpailu.speed_finaali(karsintatulos):    
+    for tulos in speedKilpailu.speed_finaali(karsintatulos, kilpailijat, voittoaika):    
         print(tulos) 
         t = kokonaistulos.Kokonaistulos(tulos.kilpailija, sij) 
         tulokset[tulos.nimi] = t # ei tasasijoituksia
@@ -203,6 +203,7 @@ def kilpailu():
 
 kilpailijat = {}  # nimi : Kilpailija
 tulokset =  {}   #  nimi : Kokonaistulos
+voittoaika = 0
 
 print("\n 1  Naisten kilpailu")
 print("\n 2  Miesten kilpailu")
@@ -211,9 +212,11 @@ print("\n 4  20 miesskilpailijan tiedot")
 vastaus = input("\nMitä tehdään? Anna numero 1-4 ")
 if vastaus == "1":
     luo_kilpailijat_naiset()
+    voittoaika = 7.7  # naisten speed-maksimi
     kilpailu()
 elif vastaus == "2":    
     luo_kilpailijat_miehet()
+    voittoaika = 5.9 # miesten speed-maksimi
     kilpailu()
 elif vastaus == "3": 
     luo_kilpailijat_naiset()
