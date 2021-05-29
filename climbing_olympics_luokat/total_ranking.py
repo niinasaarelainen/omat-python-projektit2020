@@ -3,7 +3,7 @@ from operator import itemgetter
 
 class Kilpailija:
 
-    def __init__(self, nimi, pituus, paino, wingspan, maa, ika, ranking = ""):
+    def __init__(self, nimi, pituus, paino, wingspan, maa, ika, ranking = "-"):
         self.nimi = nimi
         self.pituus = pituus
         self.paino = paino
@@ -38,7 +38,7 @@ def luo_kilpailijat_miehet():
     kilpailijat["Tomoa Narasaki"].painotukset(9, 10, 7)
     kilpailijat["Kai Harada"] = Kilpailija("Kai Harada", 168, 51, 0,"Japan",22, "4th (Lead)")    
     kilpailijat["Kai Harada"].painotukset(9, 10, 7) 
-    kilpailijat["Colin Duffy"] = Kilpailija("Colin Duffy", 168, 55, 4,"USA", 17, "-") 
+    kilpailijat["Colin Duffy"] = Kilpailija("Colin Duffy", 168, 55, 4,"USA", 17) 
     kilpailijat["Colin Duffy"] .painotukset(6, 9, 8)   
     kilpailijat["Nathaniel Coleman"] = Kilpailija("Nathaniel Coleman", 182, 74, 5,"USA",24, "20th (Boulder)")
     kilpailijat["Nathaniel Coleman"].painotukset(8, 8, 6)
@@ -64,7 +64,7 @@ def luo_kilpailijat_miehet():
     kilpailijat["Alberto Ginéz López"].painotukset(7, 6, 10)
     kilpailijat["Tom O'Halloran"] = Kilpailija("Tom O'Halloran", 177, 62, 4, "Australia", 28, "78th (Speed)")
     kilpailijat["Tom O'Halloran"].painotukset(8, 3, 4)
-    kilpailijat["Christopher Cosser"] = Kilpailija("Christopher Cosser", 177, 71, -1, "South Africa", 20, "-")
+    kilpailijat["Christopher Cosser"] = Kilpailija("Christopher Cosser", 177, 71, -1, "South Africa", 20)
     kilpailijat["Christopher Cosser"].painotukset(2, 2, 3)
     kilpailijat["YuFei Pan"] = Kilpailija("YuFei Pan", 170, 59, 1, "China", 20, "13th (Lead)")
     kilpailijat["YuFei Pan"].painotukset(5, 5, 8)
@@ -203,12 +203,12 @@ def kilpailu():
 
 kilpailijat = {}  # nimi : Kilpailija
 tulokset =  {}   #  nimi : Kokonaistulos
-voittoaika = 0
+voittoaika = 0.0
 
 print("\n 1  Naisten kilpailu")
 print("\n 2  Miesten kilpailu")
 print("\n 3  20 naiskilpailijan tiedot")
-print("\n 4  20 miesskilpailijan tiedot")
+print("\n 4  20 mieskilpailijan tiedot")
 vastaus = input("\nMitä tehdään? Anna numero 1-4 ")
 if vastaus == "1":
     luo_kilpailijat_naiset()

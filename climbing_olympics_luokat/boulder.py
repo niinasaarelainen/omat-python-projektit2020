@@ -26,9 +26,15 @@ class BoulderKilpailu:
         for kilpailija in kilpailijat:
             maksimi = int(kilpailijat[kilpailija].b/10 * 4) #4 reittiä
             self.topit_lkm = random.randint(max(0, maksimi -1), maksimi)
-            self.topit_yritykset = random.randint(self.topit_lkm, 10) 
+            if self.topit_lkm == 0:
+                self.topit_yritykset = 0
+            else: 
+                self.topit_yritykset = random.randint(self.topit_lkm, 10) 
             self.zonet_lkm = random.randint(self.topit_lkm, min(4, maksimi +1))
-            self.zonet_yritykset = random.randint(self.zonet_lkm, 15)
+            if self.zonet_lkm == 0:
+                self.zonet_yritykset = 0
+            else: 
+                self.zonet_yritykset = random.randint(self.zonet_lkm, 15)
            
             tulokset.append(BoulderTulos(kilpailijat[kilpailija].nimi, self.topit_lkm, self.topit_yritykset, self.zonet_lkm, self.zonet_yritykset))  
         s = sorted(tulokset, key=lambda tulos: (-tulos.topit_lkm, tulos.topit_yritykset, -tulos.zonet_lkm, tulos.zonet_yritykset))  
@@ -44,9 +50,15 @@ class BoulderKilpailu:
         for koktulos in sijoitukset:
             maksimi = int(kilpailijat[koktulos.nimi].b/10 * 3)  #3 reittiä
             self.topit_lkm = random.randint(max(0, maksimi -1), maksimi)
-            self.topit_yritykset = random.randint(self.topit_lkm, 9)  
-            self.zonet_lkm = random.randint(self.topit_lkm, min(4, maksimi +1))
-            self.zonet_yritykset = random.randint(self.zonet_lkm, 15)
+            if self.topit_lkm == 0:
+                self.topit_yritykset = 0
+            else: 
+                self.topit_yritykset = random.randint(self.topit_lkm, 10) 
+            self.zonet_lkm = random.randint(self.topit_lkm, min(3, maksimi +1))
+            if self.zonet_lkm == 0:
+                self.zonet_yritykset = 0
+            else: 
+                self.zonet_yritykset = random.randint(self.zonet_lkm, 15)
             
             tulokset.append(BoulderTulos(koktulos.nimi, self.topit_lkm, self.topit_yritykset, self.zonet_lkm, self.zonet_yritykset))  
         s = sorted(tulokset, key=lambda tulos: (-tulos.topit_lkm, tulos.topit_yritykset, -tulos.zonet_lkm, tulos.zonet_yritykset))  
