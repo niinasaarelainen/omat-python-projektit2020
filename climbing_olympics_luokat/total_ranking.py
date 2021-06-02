@@ -35,9 +35,9 @@ def luo_kilpailijat_miehet():
     kilpailijat["Jakob Schubert"] = Kilpailija("Jakob Schubert", 173, 63, 0,"Austria", 30, "10th (Boulder)")
     kilpailijat["Jakob Schubert"].painotukset(7, 10, 9)
     kilpailijat["Tomoa Narasaki"] = Kilpailija("Tomoa Narasaki", 170, 58,3, "Japan", 24, "1st (Boulder)") 
-    kilpailijat["Tomoa Narasaki"].painotukset(9, 10, 7)
+    kilpailijat["Tomoa Narasaki"].painotukset(8, 10, 7)
     kilpailijat["Kai Harada"] = Kilpailija("Kai Harada", 168, 51, 0,"Japan",22, "4th (Lead)")    
-    kilpailijat["Kai Harada"].painotukset(9, 10, 7) 
+    kilpailijat["Kai Harada"].painotukset(8, 10, 7) 
     kilpailijat["Colin Duffy"] = Kilpailija("Colin Duffy", 168, 55, 4,"USA", 17) 
     kilpailijat["Colin Duffy"] .painotukset(6, 9, 8)   
     kilpailijat["Nathaniel Coleman"] = Kilpailija("Nathaniel Coleman", 182, 74, 5,"USA",24, "20th (Boulder)")
@@ -73,55 +73,54 @@ def luo_kilpailijat_miehet():
 
 def luo_kilpailijat_naiset():
     # 20 naista olympialaisissa 2021:
-    kilpailijat["Janja"] = Kilpailija("Janja Garnbret")    
-    kilpailijat["Mia"] = Kilpailija("Mia Krampl")
-    kilpailijat["Jessica"] = Kilpailija("Jessica Pilz") 
-    kilpailijat["Petra"] = Kilpailija("Petra Kllinger") 
-    kilpailijat["Julia"] = Kilpailija("Julia Chanourdie")     
-    kilpailijat["Anouck"] = Kilpailija("Anouck Jaubert")
-    kilpailijat["Miho"] = Kilpailija("Miho Nonaka") 
-    kilpailijat["Akiyo"] = Kilpailija("Akiyo Noguchi") 
-    kilpailijat["Alannah"] = Kilpailija("Alannah Yip") 
-    kilpailijat["Brooke"] = Kilpailija("Brooke Raboutou") 
-    kilpailijat["Kyra"] = Kilpailija("Kyra Condie") 
-    kilpailijat["Shauna"] = Kilpailija("Shauna Coxey") 
-    kilpailijat["Aleksandra"]  = Kilpailija("Aleksandra Miroslaw")
-    kilpailijat["Chaehyun"] = Kilpailija("Chaehyun Seo")
-    kilpailijat["Iuliia"] = Kilpailija("Iuliia Kaplina")
-    kilpailijat["Viktoriia"] = Kilpailija("Viktoriia Meshkova")
-    kilpailijat["Laura"] = Kilpailija("Laura Rogora")
-    kilpailijat["YiLing"] = Kilpailija("YiLing Song")
-    kilpailijat["Oceania"] = Kilpailija("Oceania MacKenzie")
-    kilpailijat["Erin"] = Kilpailija("Erin Sterkenburg")
-
-    kilpailijat["Janja"].anna_muut_tiedot(164, 47, 1, "Slovenia", 22, "1st (Boulder)")    
-    kilpailijat["Mia"].anna_muut_tiedot(163, 51, 2, "Slovenia", 20, "9th (Lead)")
-    kilpailijat["Jessica"].anna_muut_tiedot(163, 51, -2, "Austria", 24, "5th (Boulder)")
-    kilpailijat["Petra"].anna_muut_tiedot(165, 54, 12, "Switzerland", 29, "6th (Boulder)")
-    kilpailijat["Julia"].anna_muut_tiedot(166, 51, 2, "France", 24, "9th (Boulder)")    
-    kilpailijat["Anouck"].anna_muut_tiedot(163, 51, 2, "France", 24, "2nd (Speed)")
-    kilpailijat["Miho"].anna_muut_tiedot(162, 53, 2, "Japan", 23, "15th (Boulder)")
-    kilpailijat["Akiyo"].anna_muut_tiedot(165, 49, 2, "Japan", 31, "2nd (Boulder)")
-    kilpailijat["Alannah"].anna_muut_tiedot(166, 51, 2, "Canada", 27, "12th (Boulder)")
-    kilpailijat["Brooke"].anna_muut_tiedot(157, 46, 3, "USA", 20, "46th (Lead)")
-    kilpailijat["Kyra"].anna_muut_tiedot(163, 51, 2, "USA", 24, "18th (Boulder)")
-    kilpailijat["Shauna"].anna_muut_tiedot(163, 51, 2, "Great Britain", 24, "11th (Boulder)")
-    kilpailijat["Aleksandra"].anna_muut_tiedot(163, 51, 2, "Poland", 27, "9th (Speed)")
-    kilpailijat["Chaehyun"].anna_muut_tiedot(163, 51, 2, "South Korea", 17, "1st (Lead)")
-    kilpailijat["Iuliia"].anna_muut_tiedot(163, 51, 2, "Russia", 28, "10th (Speed)")
-    kilpailijat["Viktoriia"].anna_muut_tiedot(163, 51, 2, "Russia", 20, "35th (Lead)")
-    kilpailijat["Laura"].anna_muut_tiedot(163, 51, 2, "Italia", 20, "14th (Lead)")
-    kilpailijat["YiLing"].anna_muut_tiedot(163, 51, 2, "China", 24, "1st (Speed)")
-    kilpailijat["Oceania"].anna_muut_tiedot(163, 51, 2, "Australia", 18, "26th (Boulder)")
-    kilpailijat["Erin"].anna_muut_tiedot(163, 51, 2, "South Africa", 18, "-")
+    kilpailijat["Janja Garnbret"] = Kilpailija("Janja Garnbret", 164, 47, 1, "Slovenia", 22, "1st (Boulder)")    
+    kilpailijat["Janja Garnbret"].painotukset(6, 10, 10)
+    kilpailijat["Mia Krampl"] = Kilpailija("Mia Krampl", 163, 51, 2, "Slovenia", 20, "9th (Lead)")
+    kilpailijat[""].painotukset(6, 9, 9)
+    kilpailijat["Jessica Pilz"] = Kilpailija("Jessica Pilz", 163, 51, -2, "Austria", 24, "5th (Boulder)") 
+    kilpailijat[""].painotukset(6, 9, 9)
+    kilpailijat["Petra Kllinger"] = Kilpailija("Petra Kllinger", 165, 54, 12, "Switzerland", 29, "6th (Boulder)") 
+    kilpailijat[""].painotukset(6, 9, 9)
+    kilpailijat["Julia Chanourdie"] = Kilpailija("Julia Chanourdie", 166, 51, 2, "France", 24, "9th (Boulder)")     
+    kilpailijat[""].painotukset(6, 9, 9)
+    kilpailijat["Anouck Jaubert"] = Kilpailija("Anouck Jaubert", 163, 51, 2, "France", 24, "2nd (Speed)")
+    kilpailijat[""].painotukset(6, 9, 9)
+    kilpailijat["Miho Nonaka"] = Kilpailija("Miho Nonaka", 162, 53, 2, "Japan", 23, "15th (Boulder)") 
+    kilpailijat[""].painotukset(6, 9, 9)
+    kilpailijat["Akiyo Noguchi"] = Kilpailija("Akiyo Noguchi", 165, 49, 2, "Japan", 31, "2nd (Boulder)") 
+    kilpailijat[""].painotukset(6, 9, 9)
+    kilpailijat["Alannah Yip"] = Kilpailija("Alannah Yip", 166, 51, 2, "Canada", 27, "12th (Boulder)") 
+    kilpailijat[""].painotukset(6, 9, 9)
+    kilpailijat["Brooke Raboutou"] = Kilpailija("Brooke Raboutou", 154, 46, 3, "USA", 20, "46th (Lead)") 
+    kilpailijat[""].painotukset(6, 9, 9)
+    kilpailijat["Kyra Condie"] = Kilpailija("Kyra Condie", 162, 51, 2, "USA", 24, "18th (Boulder)") 
+    kilpailijat[""].painotukset(6, 9, 9)
+    kilpailijat["Shauna Coxey"] = Kilpailija("Shauna Coxey", 163, 51, 2, "Great Britain", 24, "11th (Boulder)") 
+    kilpailijat[""].painotukset(6, 9, 9)
+    kilpailijat["Aleksandra Miroslaw"]  = Kilpailija("Aleksandra Miroslaw", 163, 51, 2, "Poland", 27, "9th (Speed)")
+    kilpailijat[""].painotukset(6, 9, 9)
+    kilpailijat["Chaehyun Seo"] = Kilpailija("Chaehyun Seo", 160, 51, 2, "South Korea", 17, "1st (Lead)")
+    kilpailijat[""].painotukset(6, 9, 9)
+    kilpailijat["Iuliia Kaplina"] = Kilpailija("Iuliia Kaplina", 163, 51, 2, "Russia", 28, "10th (Speed)")
+    kilpailijat[""].painotukset(6, 9, 9)
+    kilpailijat["Viktoriia Meshkova"] = Kilpailija("Viktoriia Meshkova", 163, 51, 2, "Russia", 20, "35th (Lead)")
+    kilpailijat[""].painotukset(6, 9, 9)
+    kilpailijat["Laura Rogora"] = Kilpailija("Laura Rogora", 163, 51, 2, "Italia", 20, "14th (Lead)")
+    kilpailijat[""].painotukset(6, 9, 9)
+    kilpailijat["YiLing Song"] = Kilpailija("YiLing Song", 163, 51, 2, "China", 24, "1st (Speed)")
+    kilpailijat[""].painotukset(6, 9, 9)
+    kilpailijat["Oceania MacKenzie"] = Kilpailija("Oceania MacKenzie", 163, 51, 2, "Australia", 18, "26th (Boulder)")
+    kilpailijat[""].painotukset(6, 9, 9)
+    kilpailijat["Erin Sterkenburg"] = Kilpailija("Erin Sterkenburg", 163, 51, 2, "South Africa", 18)
+    kilpailijat[""].painotukset(6, 9, 9)
     
 
 def kilpailu():
     global tulokset
     #   K A R S I N T A : 
-    speedKilpailu = speed.SpeedKilpailu()
+    speedKilpailu = speed.SpeedKilpailu(voittoaika)
     sij = 1  # eka sijoitus = 1
-    for tulos in speedKilpailu.speed_karsinta(kilpailijat, voittoaika)  :
+    for tulos in speedKilpailu.speed_karsinta(kilpailijat)  :
         t = kokonaistulos.Kokonaistulos(tulos.kilpailija, sij) 
         tulokset[tulos.nimi] = t # ei tasasijoituksia
         sij += 1
@@ -177,7 +176,7 @@ def kilpailu():
     tulokset_karsinta = tulokset
     tulokset = {}
     sij = 1  # eka sijoitus = 1
-    for tulos in speedKilpailu.speed_finaali(karsintatulos, kilpailijat, voittoaika):    
+    for tulos in speedKilpailu.speed_finaali(karsintatulos, kilpailijat):    
         print(tulos) 
         t = kokonaistulos.Kokonaistulos(tulos.kilpailija, sij) 
         tulokset[tulos.nimi] = t # ei tasasijoituksia
@@ -212,11 +211,11 @@ print("\n 4  20 mieskilpailijan tiedot")
 vastaus = input("\nMitä tehdään? Anna numero 1-4 ")
 if vastaus == "1":
     luo_kilpailijat_naiset()
-    voittoaika = 7.7  # naisten speed-maksimi
+    voittoaika = 7.0  # naisten speed-maksimi
     kilpailu()
 elif vastaus == "2":    
     luo_kilpailijat_miehet()
-    voittoaika = 5.9 # miesten speed-maksimi
+    voittoaika = 5.2 # miesten speed-maksimi
     kilpailu()
 elif vastaus == "3": 
     luo_kilpailijat_naiset()
