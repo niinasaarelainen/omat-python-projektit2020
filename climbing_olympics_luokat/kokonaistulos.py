@@ -18,8 +18,8 @@ class Kokonaistulos:
     def voitot(self):   # jos tasapisteet, ensisijainen kriteeri
         return  [self.speed, self.boulder, self.lead].count(1)
 
-    def yhteenlasketut_pisteet(self):  # jos tasapisteet, toissijainen kriteeri
-        return self.speed + self.boulder + self.lead 
+    def paras_sijoitus(self):  # jos tasapisteet, toissijainen kriteeri
+        return min(self.speed, self.boulder, self.lead) 
 
     def karsinnansijoitus(self):
         return self.karsinnan_sij
