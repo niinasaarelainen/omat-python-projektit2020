@@ -111,21 +111,32 @@ def rivi_ok():
         if nykyinen_arvaus[i] == voittorivi_temp[i]:
             oikealla_paikalla += 1
             voittorivi_temp[i] = val
-        elif nykyinen_arvaus[i] in voittorivi_temp:
+    for i in range(len(nykyinen_arvaus)):
+        if nykyinen_arvaus[i] in voittorivi_temp:
             oikea_vari_vaaralla_paikalla += 1
             ind = voittorivi_temp.index(nykyinen_arvaus[i])
+            print("ind", ind)
             voittorivi_temp[ind] = val
     nykyinen_arvaus = {0:val, 1:val, 2:val, 3:val}
     monesko_arvaus += 1
-    print(oikealla_paikalla, oikea_vari_vaaralla_paikalla)
+    return oikealla_paikalla, oikea_vari_vaaralla_paikalla
 
-
+def piira_tuomio(mustia, valkoisia, y_kohdennettu):
+    x = 20
+    for i in range(mustia):
+        pygame.draw.circle(naytto, (mus), (x, y_kohdennettu), OIKEIN_KOKO) 
+        x += 30
+    for i in range(valkoisia):
+        pygame.draw.circle(naytto, (val), (x, y_kohdennettu), OIKEIN_KOKO) 
+        x += 30
 
 def silmukka():    
     teksti = ""
     x_kohdennettu = -30
     y_kohdennettu = Y_ALOITUS + monesko_arvaus * (P_KOKO * 2 + VALI)   
     vari = val    
+    mustia = 0
+    valkoisia = 0
     
     while True:
         naytto.fill((val))
@@ -139,7 +150,7 @@ def silmukka():
                     x = tapahtuma.pos[0]
                     y = tapahtuma.pos[1]  
                     if x >= 400 and x <= 500 and y >= 40 and y <= 140:
-                        rivi_ok()
+                        mustia, valkoisia = rivi_ok()
                     elif x >= WIDTH - 60 - P_KOKO: 
                         if y != None:
                             vari = varit[mika_vari(y)]
@@ -151,10 +162,12 @@ def silmukka():
 
         
         pygame.draw.circle(naytto, (vari), (x_kohdennettu, y_kohdennettu), P_KOKO) 
-        piirra_lukitut_pallot(nykyinen_arvaus, y_kohdennettu)     
+        piirra_lukitut_pallot(nykyinen_arvaus, y_kohdennettu)        
+        pelaaja_tilanne(y_kohdennettu)
+        y_kohdennettu =  y_kohdennettu - (P_KOKO * 2 + VALI)
+        piira_tuomio(mustia, valkoisia, y_kohdennettu)
         valitusteksti(teksti)
         #piirra_valinta(x_valinta, y_valinta)
-        pelaaja_tilanne(y_kohdennettu)
         pygame.display.flip() 
         kello.tick(1000)   
 
@@ -167,4 +180,5 @@ print(voittorivi)
 monesko_arvaus = 0
 nykyinen_arvaus = {0:val, 1:val, 2:val, 3:val}
 arvaukset = []
+tuomiot = []   # TODO
 silmukka()
