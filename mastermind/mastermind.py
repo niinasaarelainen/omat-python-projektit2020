@@ -45,8 +45,7 @@ def valitusteksti(text):
 
 
 def pelaaja_tilanne(y):   
-    x = X_ALOITUS
-    y = Y_ALOITUS + y     
+    x = X_ALOITUS   
     for i in range (palloja):      
         pygame.draw.circle(naytto, mus, (x, y), P_KOKO, 2)  
         x += P_KOKO * 2 + VALI
@@ -90,38 +89,72 @@ def onko_voitto(mita_Verrataan, mihin_verrataan, kuulia):
     return False
 
 
+def piirra_lukitut_pallot(nykyinen_arvaus, y_kohdennettu) :    
+    y = Y_ALOITUS
+    for arvaus in arvaukset:
+        for i in range(len(arvaus)):
+            x_kohdennettu = X_ALOITUS + i * (P_KOKO * 2 + VALI)
+            pygame.draw.circle(naytto, (arvaus[i]), (x_kohdennettu, y), P_KOKO) 
+        y += P_KOKO * 2 + VALI
 
-def silmukka():
-    monesko_arvaus = 0
+    for i in range(len(nykyinen_arvaus)):
+        x_kohdennettu = X_ALOITUS + i * (P_KOKO * 2 + VALI)
+        pygame.draw.circle(naytto, (nykyinen_arvaus[i]), (x_kohdennettu, y_kohdennettu), P_KOKO) 
+
+def rivi_ok():
+    global nykyinen_arvaus, monesko_arvaus, arvaukset
+    oikealla_paikalla = 0
+    oikea_vari_vaaralla_paikalla = 0
+    voittorivi_temp = copy.deepcopy(voittorivi)
+    arvaukset.append(nykyinen_arvaus)
+    for i in range(len(nykyinen_arvaus)):
+        if nykyinen_arvaus[i] == voittorivi_temp[i]:
+            oikealla_paikalla += 1
+            voittorivi_temp[i] = val
+        elif nykyinen_arvaus[i] in voittorivi_temp:
+            oikea_vari_vaaralla_paikalla += 1
+            ind = voittorivi_temp.index(nykyinen_arvaus[i])
+            voittorivi_temp[ind] = val
+    nykyinen_arvaus = {0:val, 1:val, 2:val, 3:val}
+    monesko_arvaus += 1
+    print(oikealla_paikalla, oikea_vari_vaaralla_paikalla)
+
+
+
+def silmukka():    
     teksti = ""
     x_kohdennettu = -30
-    y_kohdennettu = Y_ALOITUS + monesko_arvaus * (P_KOKO * 2 + VALI)
-    vari = val
+    y_kohdennettu = Y_ALOITUS + monesko_arvaus * (P_KOKO * 2 + VALI)   
+    vari = val    
     
     while True:
         naytto.fill((val))
+        naytto.blit(ok,  (400,40))
+        y_kohdennettu = Y_ALOITUS + (monesko_arvaus * (P_KOKO * 2 + VALI)) 
         varivalikoima()        
         for tapahtuma in pygame.event.get():
                 if tapahtuma.type == pygame.QUIT:
                     pygame.quit()                
                 if tapahtuma.type == pygame.MOUSEBUTTONDOWN:    
                     x = tapahtuma.pos[0]
-                    y = tapahtuma.pos[1]   
-                    if x >= WIDTH - 60 - P_KOKO: 
+                    y = tapahtuma.pos[1]  
+                    if x >= 400 and x <= 500 and y >= 40 and y <= 140:
+                        rivi_ok()
+                    elif x >= WIDTH - 60 - P_KOKO: 
                         if y != None:
                             vari = varit[mika_vari(y)]
-                            print("vari", vari)
                     else:               
                         monesko_pallo = mika_paikka(x)  # voi olla None
-                        print("monesko_pallo", monesko_pallo)
                         if monesko_pallo != None:
+                            nykyinen_arvaus[monesko_pallo] = vari
                             x_kohdennettu = X_ALOITUS + monesko_pallo * (P_KOKO * 2 + VALI)
-                            print(x_kohdennettu)
-                            
+
+        
         pygame.draw.circle(naytto, (vari), (x_kohdennettu, y_kohdennettu), P_KOKO) 
+        piirra_lukitut_pallot(nykyinen_arvaus, y_kohdennettu)     
         valitusteksti(teksti)
         #piirra_valinta(x_valinta, y_valinta)
-        pelaaja_tilanne(monesko_arvaus)
+        pelaaja_tilanne(y_kohdennettu)
         pygame.display.flip() 
         kello.tick(1000)   
 
@@ -131,4 +164,7 @@ pygame.display.set_caption("MasterMind")
 palloja = alkunaytto()
 voittorivi = arvo_voittorivi(palloja)
 print(voittorivi)
+monesko_arvaus = 0
+nykyinen_arvaus = {0:val, 1:val, 2:val, 3:val}
+arvaukset = []
 silmukka()

@@ -12,11 +12,11 @@ OIKEIN_KOKO = 12
 X_ALOITUS = 150
 Y_ALOITUS = 100
 
-
+ok = pygame.image.load('ok.png')
 naytto = pygame.display.set_mode((WIDTH, HEIGHT))
 kello = pygame.time.Clock()
 
-val = (222, 222, 222)  # vain bg
+val = (252, 252, 252)  # vain bg
 mus = (1, 1, 1)        # pallon ääriviivat
 pun = (255, 0, 0)      # 6 peliväriä
 sin = (0, 0, 255) 
