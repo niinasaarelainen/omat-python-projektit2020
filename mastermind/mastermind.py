@@ -3,12 +3,11 @@ from vakiot import *
 from gameover import *
 
 
-def alkunaytto():
-    fontti = pygame.font.SysFont("Arial", 30)
+def alkunaytto():    
     naytto.fill((val))
     y = 130
     for rivi in alkuohjeet():
-        teksti = fontti.render(rivi, True, vih)
+        teksti = fontti_iso.render(rivi, True, vih)
         naytto.blit(teksti, (150, y))
         y += 40
     pygame.display.flip()
@@ -34,7 +33,7 @@ def arvo_voittorivi(palloja):
     return rivi
 
 
-def pelaaja_tilanne(y):   
+def tyhjat_pallot(y):   
     x = X_ALOITUS   
     for i in range (palloja):      
         pygame.draw.circle(naytto, mus, (x, y), P_KOKO, 2)  
@@ -118,21 +117,32 @@ def rivi_ok():
 
 def piira_tuomiot():
     x = 22
-    y = Y_ALOITUS
+    y =  Y_ALOITUS
     for mustia, valkoisia in tuomiot:  # tuomio = tuple
         for i in range(mustia):
             pygame.draw.circle(naytto, (mus), (x, y), OIKEIN_KOKO) 
-            x += 30
+            x += 20
         for i in range(valkoisia):
             pygame.draw.circle(naytto, (mus), (x, y), OIKEIN_KOKO, 2)  # valkoinen jossa mustat reunat
-            x += 30
-        y += (P_KOKO * 2 + VALI_PIENEMPI)
+            x += 20
+        y += (P_KOKO * 2 + VALI)
         x = 20
+
+def nayta_oikea_vastaus():
+    x = 360
+    y = HEIGHT - 40
+    for pallo in voittorivi:  
+        pygame.draw.circle(naytto, (pallo), (x, y), P_KOKO) 
+        x +=  (P_KOKO * 2 + VALI - 2)
+
 
 def silmukka(): 
     x_kohdennettu = -30
     y_kohdennettu = Y_ALOITUS + monesko_arvaus * (P_KOKO * 2 + VALI)   
     vari = val 
+     
+    alateksti = True 
+    kaikki_oikein = False
     
     while True:
         naytto.fill((val))
@@ -141,12 +151,18 @@ def silmukka():
         varivalikoima()        
         for tapahtuma in pygame.event.get():
                 if tapahtuma.type == pygame.QUIT:
-                    pygame.quit()                
-                if tapahtuma.type == pygame.MOUSEBUTTONDOWN:    
+                    pygame.quit()  
+                elif tapahtuma.type == pygame.KEYDOWN:
+                    if tapahtuma.key == pygame.K_SPACE:                         
+                        alateksti = False    
+                elif tapahtuma.type == pygame.MOUSEBUTTONDOWN:    
                     x = tapahtuma.pos[0]
                     y = tapahtuma.pos[1]  
                     if x >= 480 and x <= 580 and y >= y_kohdennettu -40 and y <= y_kohdennettu + 70:
-                        tuomiot.append(rivi_ok())
+                        tuomio = rivi_ok()
+                        tuomiot.append(tuomio)
+                        if tuomio[0] == palloja:
+                            kaikki_oikein = True
                     elif x >= WIDTH - 60 - P_KOKO: 
                         if y != None:
                             vari = varit[mika_vari(y)]
@@ -158,15 +174,26 @@ def silmukka():
 
         
         pygame.draw.circle(naytto, (vari), (x_kohdennettu, y_kohdennettu), P_KOKO) 
-        piirra_lukitut_pallot(nykyinen_arvaus, y_kohdennettu)        
-        pelaaja_tilanne(y_kohdennettu)
+        piirra_lukitut_pallot(nykyinen_arvaus, y_kohdennettu)           
         y_kohdennettu =  y_kohdennettu - (P_KOKO * 2 + VALI)
         piira_tuomiot()
+        if kaikki_oikein:
+            teksti = fontti_iso.render("JESS!! Kaikki oikein", True, vih)
+            naytto.blit(teksti, (X_ALOITUS, y_kohdennettu + 40))
+        else:
+            tyhjat_pallot(y_kohdennettu)
+        if alateksti:
+            teksti = fontti_pieni.render("Space = Näytä oikea vastaus", True, vih)
+            naytto.blit(teksti, (325, HEIGHT - 40))
+        else:
+            nayta_oikea_vastaus()    
         pygame.display.flip() 
-        kello.tick(1000)   
+        kello.tick(2000)   
 
 
 pygame.init()
+fontti_iso = pygame.font.SysFont("Arial", 32)      
+fontti_pieni = pygame.font.SysFont("Arial", 25)
 pygame.display.set_caption("MasterMind")
 palloja = alkunaytto()
 voittorivi = arvo_voittorivi(palloja)

@@ -1,7 +1,7 @@
 import pygame
 
 WIDTH = 660
-HEIGHT = 640
+HEIGHT = 700
 VALI = 10
 P_KOKO = 22
 OIKEIN_KOKO = 9
@@ -12,6 +12,7 @@ Y_ALOITUS = 100
 ok = pygame.image.load('ok.png')
 naytto = pygame.display.set_mode((WIDTH, HEIGHT))
 kello = pygame.time.Clock()
+
 
 val = (252, 252, 252)  # vain bg
 mus = (1, 1, 1)        # pallon ääriviivat
@@ -30,9 +31,9 @@ def alkuohjeet():
     ohjeet = []
     ohjeet.append("Paina näppäintä 4, 5 tai 6")
     ohjeet.append("")
-    ohjeet.append("    4 =  4 palloa")
-    ohjeet.append("    5 =  5 palloa")
-    ohjeet.append("    6 =  6 palloa")
+    ohjeet.append("    4  =  4 palloa")
+    ohjeet.append("    5  =  5 palloa")
+    ohjeet.append("    6  =  6 palloa")
 
     return ohjeet
 
