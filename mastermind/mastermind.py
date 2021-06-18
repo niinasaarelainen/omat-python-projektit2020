@@ -135,16 +135,31 @@ def nayta_oikea_vastaus():
         pygame.draw.circle(naytto, (pallo), (x, y), P_KOKO) 
         x +=  (P_KOKO * 2 + VALI - 2)
 
+def lopputeksti():
+    y = 130
+    pygame.draw.rect(naytto, val, pygame.Rect(0, HEIGHT - 70, WIDTH, HEIGHT))
+    teksti = fontti_iso.render("Et ehtinyt ratkaista.", True, vih)
+    naytto.blit(teksti, (50, HEIGHT- 60))
+    nayta_oikea_vastaus()
+    pygame.display.flip()
+
+    while True:
+        for tapahtuma in pygame.event.get():
+            if tapahtuma.type == pygame.QUIT:
+                 pygame.quit()
+            elif tapahtuma.type == pygame.KEYDOWN:
+                if tapahtuma.key == pygame.K_4:
+                    return 4
+
 
 def silmukka(): 
     x_kohdennettu = -30
     y_kohdennettu = Y_ALOITUS + monesko_arvaus * (P_KOKO * 2 + VALI)   
-    vari = val 
-     
+    vari = val      
     alateksti = True 
     kaikki_oikein = False
     
-    while True:
+    while monesko_arvaus < 10:
         naytto.fill((val))
         naytto.blit(ok,  (480, y_kohdennettu - 10))
         y_kohdennettu = Y_ALOITUS + (monesko_arvaus * (P_KOKO * 2 + VALI)) 
@@ -163,6 +178,7 @@ def silmukka():
                         tuomiot.append(tuomio)
                         if tuomio[0] == palloja:
                             kaikki_oikein = True
+                            alateksti = False
                     elif x >= WIDTH - 60 - P_KOKO: 
                         if y != None:
                             vari = varit[mika_vari(y)]
@@ -175,20 +191,22 @@ def silmukka():
         
         pygame.draw.circle(naytto, (vari), (x_kohdennettu, y_kohdennettu), P_KOKO) 
         piirra_lukitut_pallot(nykyinen_arvaus, y_kohdennettu)           
-        y_kohdennettu =  y_kohdennettu - (P_KOKO * 2 + VALI)
-        piira_tuomiot()
         if kaikki_oikein:
             teksti = fontti_iso.render("JESS!! Kaikki oikein", True, vih)
-            naytto.blit(teksti, (X_ALOITUS, y_kohdennettu + 40))
+            naytto.blit(teksti, (X_ALOITUS, y_kohdennettu + 30))
         else:
             tyhjat_pallot(y_kohdennettu)
         if alateksti:
             teksti = fontti_pieni.render("Space = Näytä oikea vastaus", True, vih)
             naytto.blit(teksti, (325, HEIGHT - 40))
-        else:
-            nayta_oikea_vastaus()    
+        elif not kaikki_oikein:
+            nayta_oikea_vastaus()  
+        y_kohdennettu =  y_kohdennettu - (P_KOKO * 2 + VALI)
+        piira_tuomiot()  
         pygame.display.flip() 
         kello.tick(2000)   
+
+    lopputeksti()
 
 
 pygame.init()
