@@ -80,6 +80,7 @@ def onko_voitto(mita_Verrataan, mihin_verrataan, kuulia):
 
 
 def piirra_lukitut_pallot(nykyinen_arvaus, y_kohdennettu) :    
+    print("piirra_lukitut_pallot")
     y = Y_ALOITUS
     for arvaus in arvaukset:
         for i in range(len(arvaus)):
@@ -129,27 +130,39 @@ def piira_tuomiot():
         x = 20
 
 def nayta_oikea_vastaus():
-    x = 360
+    x = 365
     y = HEIGHT - 40
     for pallo in voittorivi:  
         pygame.draw.circle(naytto, (pallo), (x, y), P_KOKO) 
         x +=  (P_KOKO * 2 + VALI - 2)
 
 def lopputeksti():
-    y = 130
+    global palloja
     pygame.draw.rect(naytto, val, pygame.Rect(0, HEIGHT - 70, WIDTH, HEIGHT))
     teksti = fontti_iso.render("Et ehtinyt ratkaista.", True, vih)
-    naytto.blit(teksti, (50, HEIGHT- 60))
+    naytto.blit(teksti, (50, HEIGHT- 80))
+    teksti = fontti_iso.render("ENTER = Uusi peli", True, vih)
+    naytto.blit(teksti, (50, HEIGHT- 40))
     nayta_oikea_vastaus()
     pygame.display.flip()
+    uusi_peli()
 
+def uusi_peli():
+    print("uusi_peli")
+    global palloja, voittorivi, monesko_arvaus, nykyinen_arvaus, arvaukset, tuomiot
     while True:
         for tapahtuma in pygame.event.get():
             if tapahtuma.type == pygame.QUIT:
                  pygame.quit()
             elif tapahtuma.type == pygame.KEYDOWN:
-                if tapahtuma.key == pygame.K_4:
-                    return 4
+                if tapahtuma.key == pygame.K_RETURN:
+                    palloja = alkunaytto()
+                    voittorivi = arvo_voittorivi(palloja)
+                    monesko_arvaus = 0
+                    nykyinen_arvaus = {0:val, 1:val, 2:val, 3:val, 4:val, 5:val}
+                    arvaukset = []
+                    tuomiot = []      
+                    silmukka()
 
 
 def silmukka(): 
@@ -159,7 +172,7 @@ def silmukka():
     alateksti = True 
     kaikki_oikein = False
     
-    while monesko_arvaus < 10:
+    while monesko_arvaus <= 10:
         naytto.fill((val))
         naytto.blit(ok,  (480, y_kohdennettu - 10))
         y_kohdennettu = Y_ALOITUS + (monesko_arvaus * (P_KOKO * 2 + VALI)) 
@@ -193,7 +206,11 @@ def silmukka():
         piirra_lukitut_pallot(nykyinen_arvaus, y_kohdennettu)           
         if kaikki_oikein:
             teksti = fontti_iso.render("JESS!! Kaikki oikein", True, vih)
-            naytto.blit(teksti, (X_ALOITUS, y_kohdennettu + 30))
+            naytto.blit(teksti, (X_ALOITUS -10, y_kohdennettu + 30))
+            teksti = fontti_iso.render("ENTER = Uusi peli", True, vih)
+            naytto.blit(teksti, (X_ALOITUS -10, y_kohdennettu + 60))
+            pygame.display.flip()
+            uusi_peli()
         else:
             tyhjat_pallot(y_kohdennettu)
         if alateksti:

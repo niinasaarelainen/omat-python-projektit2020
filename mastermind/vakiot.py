@@ -1,7 +1,7 @@
 import pygame
 
-WIDTH = 660
-HEIGHT = 750
+WIDTH = 666
+HEIGHT = 770
 VALI = 10
 P_KOKO = 22
 OIKEIN_KOKO = 9
