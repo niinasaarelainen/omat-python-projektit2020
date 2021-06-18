@@ -4,9 +4,9 @@ from gameover import *
 
 
 def alkunaytto():
-    fontti = pygame.font.SysFont("Arial", 26)
+    fontti = pygame.font.SysFont("Arial", 30)
     naytto.fill((val))
-    y = 140
+    y = 130
     for rivi in alkuohjeet():
         teksti = fontti.render(rivi, True, vih)
         naytto.blit(teksti, (150, y))
@@ -34,16 +34,6 @@ def arvo_voittorivi(palloja):
     return rivi
 
 
-def valitusteksti(text):
-    rivit = text.split(".")
-    fontti = pygame.font.SysFont("Arial", 18)
-    y = HEIGHT - 100
-    for rivi in rivit:
-        teksti = fontti.render(rivi, True, (200, 0, 0))
-        naytto.blit(teksti, (10, y))
-        y += 30
-
-
 def pelaaja_tilanne(y):   
     x = X_ALOITUS   
     for i in range (palloja):      
@@ -54,9 +44,10 @@ def pelaaja_tilanne(y):
 def piirra_valinta(x_valinta, y_valinta):
     pygame.draw.circle(naytto, (0, 0, 100), (x_valinta, y_valinta), P_KOKO) 
 
+
 def varivalikoima():
-    x = WIDTH - 60
-    y = 50
+    x = WIDTH - 55
+    y = Y_ALOITUS
     for vari in varit:
         pygame.draw.circle(naytto, (vari), (x, y), P_KOKO) 
         y += P_KOKO * 2 + VALI
@@ -64,7 +55,7 @@ def varivalikoima():
 
 def  mika_vari(y):
     # värivalikoima oikealla:
-    y = (y - Y_ALOITUS + P_KOKO) // (P_KOKO * 2 + VALI) + 1
+    y = (y - Y_ALOITUS + P_KOKO) // (P_KOKO * 2 + VALI) 
     if y >= 0 and y <= len(varit) -1:
         return y
     return None
@@ -109,24 +100,24 @@ def rivi_ok():
     voittorivi_temp = copy.deepcopy(voittorivi)
     nykyinen_arvaus_temp = copy.deepcopy(nykyinen_arvaus)
     arvaukset.append(nykyinen_arvaus)
-    for i in range(len(nykyinen_arvaus)):
+    for i in range(palloja):
         if nykyinen_arvaus_temp[i] == voittorivi_temp[i]:
             oikealla_paikalla += 1
             voittorivi_temp[i] = val
             nykyinen_arvaus_temp[i] = mus
-    for i in range(len(nykyinen_arvaus)):
+    for i in range(palloja):
         if nykyinen_arvaus_temp[i] in voittorivi_temp:
             oikea_vari_vaaralla_paikalla += 1
             ind = voittorivi_temp.index(nykyinen_arvaus_temp[i])
             print("ind", ind)
             voittorivi_temp[ind] = val
-    nykyinen_arvaus = {0:val, 1:val, 2:val, 3:val}
+    nykyinen_arvaus = {0:val, 1:val, 2:val, 3:val, 4:val, 5:val}
     monesko_arvaus += 1
     return oikealla_paikalla, oikea_vari_vaaralla_paikalla
 
 
 def piira_tuomiot():
-    x = 20
+    x = 22
     y = Y_ALOITUS
     for mustia, valkoisia in tuomiot:  # tuomio = tuple
         for i in range(mustia):
@@ -135,29 +126,17 @@ def piira_tuomiot():
         for i in range(valkoisia):
             pygame.draw.circle(naytto, (mus), (x, y), OIKEIN_KOKO, 2)  # valkoinen jossa mustat reunat
             x += 30
-        y += (P_KOKO * 2 + VALI)
+        y += (P_KOKO * 2 + VALI_PIENEMPI)
         x = 20
 
-    """#viimeisin
-    x = 20
-    for i in range(mustia):
-        pygame.draw.circle(naytto, (mus), (x, y_kohdennettu), OIKEIN_KOKO) 
-        x += 30
-    for i in range(valkoisia):
-        pygame.draw.circle(naytto, (val), (x, y_kohdennettu), OIKEIN_KOKO) 
-        x += 30 """
-
-def silmukka():    
-    teksti = ""
+def silmukka(): 
     x_kohdennettu = -30
     y_kohdennettu = Y_ALOITUS + monesko_arvaus * (P_KOKO * 2 + VALI)   
-    vari = val    
-    mustia = 0
-    valkoisia = 0
+    vari = val 
     
     while True:
         naytto.fill((val))
-        naytto.blit(ok,  (400,40))
+        naytto.blit(ok,  (480, y_kohdennettu - 10))
         y_kohdennettu = Y_ALOITUS + (monesko_arvaus * (P_KOKO * 2 + VALI)) 
         varivalikoima()        
         for tapahtuma in pygame.event.get():
@@ -166,7 +145,7 @@ def silmukka():
                 if tapahtuma.type == pygame.MOUSEBUTTONDOWN:    
                     x = tapahtuma.pos[0]
                     y = tapahtuma.pos[1]  
-                    if x >= 400 and x <= 500 and y >= 40 and y <= 140:
+                    if x >= 480 and x <= 580 and y >= y_kohdennettu -40 and y <= y_kohdennettu + 70:
                         tuomiot.append(rivi_ok())
                     elif x >= WIDTH - 60 - P_KOKO: 
                         if y != None:
@@ -183,8 +162,6 @@ def silmukka():
         pelaaja_tilanne(y_kohdennettu)
         y_kohdennettu =  y_kohdennettu - (P_KOKO * 2 + VALI)
         piira_tuomiot()
-        valitusteksti(teksti)
-        #piirra_valinta(x_valinta, y_valinta)
         pygame.display.flip() 
         kello.tick(1000)   
 
@@ -195,7 +172,7 @@ palloja = alkunaytto()
 voittorivi = arvo_voittorivi(palloja)
 print(voittorivi)
 monesko_arvaus = 0
-nykyinen_arvaus = {0:val, 1:val, 2:val, 3:val}
+nykyinen_arvaus = {0:val, 1:val, 2:val, 3:val, 4:val, 5:val}
 arvaukset = []
-tuomiot = []       # TODO
+tuomiot = []      
 silmukka()

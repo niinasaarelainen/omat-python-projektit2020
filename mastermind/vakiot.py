@@ -1,15 +1,12 @@
 import pygame
 
-WIDTH = 600
-HEIGHT = 630
-YLIN_KUULA_X = WIDTH // 2 -1
-YLIN_KUULA_Y = 48
-ALIN_KUULA_X = WIDTH // 2 -1
-ALIN_KUULA_Y = HEIGHT - 63
-VALI = 11
-P_KOKO = 23
-OIKEIN_KOKO = 11
-X_ALOITUS = 150
+WIDTH = 660
+HEIGHT = 640
+VALI = 10
+P_KOKO = 22
+OIKEIN_KOKO = 9
+VALI_PIENEMPI = 7
+X_ALOITUS = 160
 Y_ALOITUS = 100
 
 ok = pygame.image.load('ok.png')
@@ -33,9 +30,9 @@ def alkuohjeet():
     ohjeet = []
     ohjeet.append("Paina näppäintä 4, 5 tai 6")
     ohjeet.append("")
-    ohjeet.append("   4 =  4 palloa")
-    ohjeet.append("   5 =  5 palloa")
-    ohjeet.append("   6 =  6 palloa")
+    ohjeet.append("    4 =  4 palloa")
+    ohjeet.append("    5 =  5 palloa")
+    ohjeet.append("    6 =  6 palloa")
 
     return ohjeet
 
