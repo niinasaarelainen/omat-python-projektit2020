@@ -1,5 +1,6 @@
 from functools import reduce    # "flatten":ia varten
 import datetime  
+from datetime import date
 
 class Kiipeilyreitti:
     
@@ -35,6 +36,12 @@ class Kiipeilyreitti:
              self.sanakirja["sektori"] = ""
         print(self.sanakirja)
 
+    def kasittele_luontipvm(self):
+        osat = self.luontipvm.split(".")
+        self.luontipvm = date(int(osat[2]), int(osat[1]), int(osat[0]))
+
+    def print_luontipvm(self):
+        return f"{self.luontipvm.day}.{self.luontipvm.month}.{self.luontipvm.year}"
     
     def __gt__(self, verrokki):
         return self.nimi > verrokki.nimi

@@ -137,8 +137,12 @@ if __name__ == "__main__":
     print()
     for reitti in kalliot["Olhava"].reitit:
         reitti.tikkaa()
+        reitti.kasittele_luontipvm()
         print("\t", reitti, reitti.pvm())
 
+
+    for reitti in kalliot["Olhava"].jarjesta_reitit_yhden_attribuutin_mukaan("luontipvm"):
+        print(reitti, reitti.print_luontipvm())
     
 
     """
@@ -146,9 +150,7 @@ if __name__ == "__main__":
         print(reitti)       
 
    
-    print("\njarjesta_reitit_yhden_attribuutin_mukaan   PIT :")
-    for reitti in kalliot["Olhava"].jarjesta_reitit_yhden_attribuutin_mukaan("pituus"):
-        print(reitti)
+    
 
     print("\njarjesta_reitit_yhden_attribuutin_mukaan   grade :")
     for reitti in kalliot["Olhava"].jarjesta_reitit_yhden_attribuutin_mukaan("grade"):
