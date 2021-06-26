@@ -67,30 +67,18 @@ def mika_paikka(x):
         return x
     return None
 
-def onko_voitto(mita_Verrataan, mihin_verrataan, kuulia):   
-    sijainnit = []
-    for x, y in mita_Verrataan:
-        for  i in range(kuulia):
-            if x > mihin_verrataan[i][0] - P_KOKO+2 and x < mihin_verrataan[i][0] + P_KOKO+2 and y > mihin_verrataan[i][1] - P_KOKO+2 and y < mihin_verrataan[i][1] + P_KOKO+2:
-                sijainnit.append(i)
-    print(sijainnit)
-    if len(set(sijainnit)) == kuulia:
-        return True
-    return False
 
+def piirra_lukitut_pallot(nykyinen_arvaus, y_kohdennettu) :       
 
-def piirra_lukitut_pallot(nykyinen_arvaus, y_kohdennettu) :    
-    print("piirra_lukitut_pallot")
+    for i in range(len(nykyinen_arvaus)):
+        x_kohdennettu = X_ALOITUS + i * (P_KOKO * 2 + VALI)
+        pygame.draw.circle(naytto, (nykyinen_arvaus[i]), (x_kohdennettu, y_kohdennettu), P_KOKO) 
     y = Y_ALOITUS
     for arvaus in arvaukset:
         for i in range(len(arvaus)):
             x_kohdennettu = X_ALOITUS + i * (P_KOKO * 2 + VALI)
             pygame.draw.circle(naytto, (arvaus[i]), (x_kohdennettu, y), P_KOKO) 
         y += P_KOKO * 2 + VALI
-
-    for i in range(len(nykyinen_arvaus)):
-        x_kohdennettu = X_ALOITUS + i * (P_KOKO * 2 + VALI)
-        pygame.draw.circle(naytto, (nykyinen_arvaus[i]), (x_kohdennettu, y_kohdennettu), P_KOKO) 
 
 
 def rivi_ok():
@@ -103,14 +91,13 @@ def rivi_ok():
     for i in range(palloja):
         if nykyinen_arvaus_temp[i] == voittorivi_temp[i]:
             oikealla_paikalla += 1
-            voittorivi_temp[i] = val
-            nykyinen_arvaus_temp[i] = mus
+            voittorivi_temp[i] = mus
+            nykyinen_arvaus_temp[i] = val
     for i in range(palloja):
         if nykyinen_arvaus_temp[i] in voittorivi_temp:
             oikea_vari_vaaralla_paikalla += 1
             ind = voittorivi_temp.index(nykyinen_arvaus_temp[i])
-            print("ind", ind)
-            voittorivi_temp[ind] = val
+            voittorivi_temp[ind] = mus
     nykyinen_arvaus = {0:val, 1:val, 2:val, 3:val, 4:val, 5:val}
     monesko_arvaus += 1
     return oikealla_paikalla, oikea_vari_vaaralla_paikalla
@@ -148,7 +135,6 @@ def lopputeksti():
     uusi_peli()
 
 def uusi_peli():
-    print("uusi_peli")
     global palloja, voittorivi, monesko_arvaus, nykyinen_arvaus, arvaukset, tuomiot
     while True:
         for tapahtuma in pygame.event.get():
@@ -206,9 +192,9 @@ def silmukka():
         piirra_lukitut_pallot(nykyinen_arvaus, y_kohdennettu)           
         if kaikki_oikein:
             teksti = fontti_iso.render("JESS!! Kaikki oikein", True, vih)
-            naytto.blit(teksti, (X_ALOITUS -10, y_kohdennettu + 30))
+            naytto.blit(teksti, (X_ALOITUS -30, y_kohdennettu + 35))
             teksti = fontti_iso.render("ENTER = Uusi peli", True, vih)
-            naytto.blit(teksti, (X_ALOITUS -10, y_kohdennettu + 60))
+            naytto.blit(teksti, (X_ALOITUS -30, y_kohdennettu + 66))
             pygame.display.flip()
             uusi_peli()
         else:
@@ -232,7 +218,6 @@ fontti_pieni = pygame.font.SysFont("Arial", 25)
 pygame.display.set_caption("MasterMind")
 palloja = alkunaytto()
 voittorivi = arvo_voittorivi(palloja)
-print(voittorivi)
 monesko_arvaus = 0
 nykyinen_arvaus = {0:val, 1:val, 2:val, 3:val, 4:val, 5:val}
 arvaukset = []
