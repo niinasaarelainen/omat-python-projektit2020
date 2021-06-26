@@ -123,6 +123,7 @@ if __name__ == "__main__":
         print(f"{monesko}. {reitti}")
         monesko += 1
    
+    
     print(kalliot["Nalkkila"])   # includes grade_statistics()
 
     print("\njarjesta_  KAIKKI   reitit_kahden_attribuutin_mukaan    grade, pit:")
@@ -133,6 +134,12 @@ if __name__ == "__main__":
     for reitti in kalliot["Olhava"].jarjesta_reitit_yhden_attribuutin_mukaan("rating"):
         print("\t", reitti)
 
+    print()
+    for reitti in kalliot["Olhava"].reitit:
+        reitti.tikkaa()
+        print("\t", reitti, reitti.pvm())
+
+    
 
     """
     for reitti in kalliot["Olhava"].jarjesta_reitit_kahden_attribuutin_mukaan("ticks", "nimi"):

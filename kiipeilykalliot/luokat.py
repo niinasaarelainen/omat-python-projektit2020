@@ -14,8 +14,9 @@ class Kiipeilyreitti:
         self.grade =  self.sanakirja["grade"]
         self.ticks =  int(self.sanakirja["ticks"])      
         self.type = self.sanakirja["type"]
-        self.tick = self.sanakirja["tick"]   # yes / no
-        self.onkokiivetty()                  # -->  True/ False
+        self.luontipvm = self.sanakirja["luontipvm"]   # yes / no        
+        self.tick = False
+        self.sanakirja["tick"] = None
         self.tikkauspvm = None   
         self.sanakirja["tikkauspvm"] = None
         self.grade_opinion = None
@@ -34,11 +35,6 @@ class Kiipeilyreitti:
              self.sanakirja["sektori"] = ""
         print(self.sanakirja)
 
-    def onkokiivetty(self):
-        if self.sanakirja["tick"] == "yes":
-            self.sanakirja["tick"] = True
-        else:
-            self.sanakirja["tick"] = False
     
     def __gt__(self, verrokki):
         return self.nimi > verrokki.nimi
