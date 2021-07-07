@@ -12,16 +12,17 @@ midi_out = pygame.midi.Output(port, 0)
 
 WHITE = (200, 200, 200)
 BLUE = (10, 97, 97)
-BUTTON2 = 200
+RED = (210, 7, 7)
 blockSize = 60
 x_aloitus = 100
-y_aloitus = 200
+y_aloitus = 60
 aania = 5       # ambitus kvintti 
 soittoalue = "zxcvbnm,."
 melodiat = {4:[], 5:[], 6:[]}
 eka = ""
 toka = ""
 sama = False   
+montako_aanta = 4
 
 
 
@@ -90,33 +91,31 @@ def soita_melodiat(montako):
         midi_play(toka[i], 2)       
 
 
-def draw_oikein_vaarin():
-    rect = pygame.Rect(blockSize*3 + x_aloitus, blockSize + y_aloitus, blockSize*3, blockSize)
+def draw_tekstit(pisteet, kysytty):
+    rect = pygame.Rect( x_aloitus, y_aloitus, blockSize*3, blockSize)
     pygame.draw.rect(naytto, WHITE, rect, 1)   # 1 = vain reunat = mustaa keskellä
     text = fontti.render(f" SAMA ", True, BLUE)  
-    rect = pygame.Rect(blockSize*3 + x_aloitus + blockSize*3, blockSize + y_aloitus, blockSize*3, blockSize)
+    naytto.blit(text, (x_aloitus + 10, y_aloitus + 5))
+    rect = pygame.Rect (x_aloitus + blockSize*3,  y_aloitus, blockSize*3, blockSize)
     pygame.draw.rect(naytto, WHITE, rect, 1)   # 1 = vain reunat = mustaa keskellä
     text = fontti.render(f" ERI ", True, BLUE)  
-    naytto.blit(text, (190, 95))
+    naytto.blit(text, (300, y_aloitus + 5))
+    teksti = fontti_pieni.render(f" Sama pari uudestaan = Space ,  Esc = lopeta", True, WHITE)
+    naytto.blit(teksti, (65, 183))    
+    virheita = fontti_pieni.render(f"oikein: {pisteet}/{kysytty}", True, RED)  
+    naytto.blit(virheita, (660, y_aloitus + 5))  
 
-   
 
-def main():
-    montako_aanta = 4
-    virheet = 0      
+def main():    
+    pisteet = 0   
+    kysytty = 0
+    valitse_melodiat(montako_aanta)
+    soita_melodiat(montako_aanta)   
 
     while True:
-        naytto.fill((10, 10, 10))            
-        draw_oikein_vaarin()          
-        virheita = fontti.render(f"virheitä: {virheet}", True, BLUE)  
-        naytto.blit(virheita, (190, 95))  
-        teksti = fontti_pieni.render(f" Sama pari uudestaan = Space ,  Esc = lopeta", True, WHITE)
-        naytto.blit(teksti, (65, 180))   
-        pygame.display.flip()
-
-        pygame.time.delay(700)
-        valitse_melodiat(montako_aanta)
-        #soita_melodiat(montako_aanta)
+        naytto.fill((10, 10, 10))     
+        draw_tekstit(pisteet, kysytty)                   
+        #pygame.time.delay(700)             
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -128,16 +127,25 @@ def main():
                     soita_melodiat(montako_aanta) 
             if event.type == pygame.MOUSEBUTTONDOWN: 
                 x = event.pos[0]
-                y = event.pos[1]  
-                if x > BUTTON2 :
-                    if sama == True:
-                        virheet += 1
+                y = event.pos[1]                 
+                if x > x_aloitus + blockSize*3 :
+                    if sama == False:
+                        pisteet += 1
                 else:
-                     if sama == False:
-                         virheet += 1
+                     if sama == True:
+                         pisteet += 1
+                kysytty += 1
+                     
+                naytto.fill((10, 10, 10))     
+                draw_tekstit(pisteet, kysytty)                        
+                pygame.display.flip()
+                
+                valitse_melodiat(montako_aanta)
+                soita_melodiat(montako_aanta)
+                
                     
-        
-        kello.tick(40)
+        pygame.display.flip()
+        kello.tick(50)
 
 
 
