@@ -54,10 +54,11 @@ def alkuohjeet(naytto):
 
 def muodosta_melodiat():
     global melodiat
-    melodiat[3] = ["123", "357", "865"]
-    melodiat[4] = ["1235", "3576", "8657"] 
-    melodiat[5] = ["123", "357", "865"]  #TODO
-    melodiat[6] = ["123", "357", "865"]
+    melodiat[3] = ["123", "357", "865",  "225", "876", "358", "576", "673", "512", "723", "442"] 
+    melodiat[4] = ["1188", "8878", "8181"]
+    #melodiat[4] = ["1235", "3576", "8657", "2256", "4876", "1358", "5762", "6573", "5612", "7323"] 
+    melodiat[5] = ["12355", "35767", "86571", "22562", "48763", "13578", "45762", "65173", "56122", "37323"] 
+    melodiat[6] = ["125578", "357672", "865271", "244562", "487563", "135787", "245762", "637378", "565122", "375678"] 
     
 
 def valitse_melodiat(montako_aanta):
@@ -73,10 +74,14 @@ def valitse_melodiat(montako_aanta):
         monesko_aani_muuttuu = random.randint(0, montako_aanta-1) 
         alas_vai_ylos = random.randint(0, 1) 
         if alas_vai_ylos == 0:        
-            uusi_aani = min(8, int(eka[monesko_aani_muuttuu]) + 1)            
+            uusi_aani = min(8, int(eka[monesko_aani_muuttuu]) + 1)      
+            if uusi_aani == int(eka[monesko_aani_muuttuu]) :
+                uusi_aani = max(1, int(eka[monesko_aani_muuttuu]) - 1)  
         else:  
-            uusi_aani = max(0, int(eka[monesko_aani_muuttuu]) - 1)  
-        toka = toka.replace(str(eka[monesko_aani_muuttuu]), str(uusi_aani))
+            uusi_aani = max(1, int(eka[monesko_aani_muuttuu]) - 1)  
+            if uusi_aani == int(eka[monesko_aani_muuttuu]) :
+                uusi_aani = max(1, int(eka[monesko_aani_muuttuu]) + 1)     
+        toka = toka.replace(eka[monesko_aani_muuttuu], str(uusi_aani))
         sama = False
     print("eka:", eka, "toka",  toka)
     return eka, toka
@@ -85,9 +90,9 @@ def valitse_melodiat(montako_aanta):
 def midi_play(n, instrument):
     midi_out.set_instrument(instrument)  
     midi_numbers = {"1":60, "2":62, "3":64, "4":65, "5":67, "6":69, "7":71 ,"8":72}    
-    midi_out.note_on(midi_numbers[n], 110)    
+    midi_out.note_on(midi_numbers[n], 100)    
     pygame.time.delay(300)
-    midi_out.note_off(midi_numbers[n], 110)
+    midi_out.note_off(midi_numbers[n], 100)
 
 
 def soita_melodiat(montako):
