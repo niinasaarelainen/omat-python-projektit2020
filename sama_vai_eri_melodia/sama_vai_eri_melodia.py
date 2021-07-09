@@ -54,34 +54,37 @@ def alkuohjeet(naytto):
 
 def muodosta_melodiat():
     global melodiat
-    melodiat[3].append(["zcv", "zcb", "zvc", "zxx", "zxc", "zzz", "zxv", "zbv", "zzv"])
-    melodiat[4].append(["zcvb", "zcbb", "zcvc", "zxvb", "zcxb", "zcbb", "zxbb", "zcbv", "zcvv"])
-    melodiat[5].append(["zcvbv", "zcbbv", "zcvcv", "zxvbv", "zcxbv", "zcbbv", "zxbbv", "zcbvv", "zcvvb", "zcbxv", "zcvzb"])
-    melodiat[6].append(["zcvbvx", "zcbbvx", "zcvcvx", "zxvbvx", "zcxbvx", "zcbbvc", "zxbbvx", "zcbvvc", "zcvvbc", "zcbxvx", "zcvzbx"])
-
+    melodiat[3] = ["123", "357", "865"]
+    melodiat[4] = ["1235", "3576", "8657"] 
+    melodiat[5] = ["123", "357", "865"]  #TODO
+    melodiat[6] = ["123", "357", "865"]
+    
 
 def valitse_melodiat(montako_aanta):
     global eka, toka, sama
-    monesko_melodia = random.randint(0, len(melodiat[montako_aanta][0]) - 1) 
+    monesko_melodia = random.randint(0, len(melodiat[montako_aanta]) - 1) 
     print("monesko_melodia", monesko_melodia)
-    eka = melodiat[montako_aanta][0][monesko_melodia]
+    eka = melodiat[montako_aanta][monesko_melodia]
     sama_vai_ei = random.randint(0,1) 
-    if sama_vai_ei == 0:        
-        toka = eka
+    toka = eka
+    if sama_vai_ei == 0:  
         sama = True
     else:        
-        monesko_melodia2 = random.randint(0, len(melodiat[montako_aanta][0]) - 1) 
-        while monesko_melodia2 == monesko_melodia:
-             monesko_melodia2 = random.randint(0, len(melodiat[montako_aanta][0]) - 1) 
-        toka = melodiat[montako_aanta][0][monesko_melodia2]
-        print("monesko_melodia2", monesko_melodia2)
+        monesko_aani_muuttuu = random.randint(0, montako_aanta-1) 
+        alas_vai_ylos = random.randint(0, 1) 
+        if alas_vai_ylos == 0:        
+            uusi_aani = min(8, int(eka[monesko_aani_muuttuu]) + 1)            
+        else:  
+            uusi_aani = max(0, int(eka[monesko_aani_muuttuu]) - 1)  
+        toka = toka.replace(str(eka[monesko_aani_muuttuu]), str(uusi_aani))
         sama = False
+    print("eka:", eka, "toka",  toka)
     return eka, toka
 
 
 def midi_play(n, instrument):
     midi_out.set_instrument(instrument)  
-    midi_numbers = {"z":60, "x":62, "c":64, "v":65, "b":67, "n":69, "m":71 ,",":72, ".":74}    #60 = keski-c, 74 = d2
+    midi_numbers = {"1":60, "2":62, "3":64, "4":65, "5":67, "6":69, "7":71 ,"8":72}    
     midi_out.note_on(midi_numbers[n], 110)    
     pygame.time.delay(300)
     midi_out.note_off(midi_numbers[n], 110)
