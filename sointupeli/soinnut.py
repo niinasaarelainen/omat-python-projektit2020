@@ -3,7 +3,7 @@ import random, pygame.midi, pygame
 pygame.init()    
 pygame.midi.init()
 kello = pygame.time.Clock()
-naytto = pygame.display.set_mode((800, 600))
+naytto = pygame.display.set_mode((800, 560))
 fontti = pygame.font.SysFont("FreeMono", 42)
 fontti_pieni = pygame.font.SysFont("FreeMono", 25)
 port = pygame.midi.get_default_output_id()
@@ -76,6 +76,15 @@ def midi_play(notes, instrument, ms):
     for note in notes:
         midi_out.note_off(midi_numbers[note], 110)
 
+def midi_arpeggio(notes, instrument, ms):
+    midi_out.set_instrument(instrument)  
+    for note in notes:
+        midi_out.note_on(midi_numbers[note], 120)
+        pygame.time.delay(ms)
+    pygame.time.delay(ms*2)
+    for note in notes:
+        midi_out.note_off(midi_numbers[note], 110)
+
 
 def valitse_aanet():
     global oikea_sointu, oikea_vastaus
@@ -86,12 +95,17 @@ def valitse_aanet():
 
 def soita_sointu(): 
     midi_play(oikea_sointu, pno, 1500)  # notes, instrument, ms
+
+def soita_murrettuna(): 
+    midi_arpeggio(oikea_sointu, pno, 500)  # notes, instrument, ms
    
 
 def ruudun_nollaus(pist, kysytty, x_ind, y_ind):
     naytto.fill((10, 10, 10))  
     teksti = fontti_pieni.render(f"Sama sointu uudestaan = Space ", True, WHITE)
-    naytto.blit(teksti, (100, 40))   
+    naytto.blit(teksti, (100, 35))  
+    teksti = fontti_pieni.render(f"Sama murrettuna = M ", True, WHITE)
+    naytto.blit(teksti, (100, 58))    
     drawGrid()   
     pisteet = fontti.render(f" {pist}/{kysytty}", True, BLUE)  
     naytto.blit(pisteet, (640, 25))  
@@ -118,17 +132,21 @@ def mainloop():
         ruudun_nollaus(pist, kysytty, x_ind, y_ind)              
         
         for event in pygame.event.get():
+
             if event.type == pygame.QUIT:
                 pygame.quit()
+
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
                 if event.key == pygame.K_SPACE:
                     soita_sointu()  
                     break
+                if event.key == pygame.K_m:
+                    soita_murrettuna()  
+                    break
 
-            if event.type == pygame.MOUSEBUTTONDOWN: 
-                
+            if event.type == pygame.MOUSEBUTTONDOWN:                 
                 x = event.pos[0]
                 x_ind = mika_grid_indeksi_x(x)
                 y = event.pos[1]   
