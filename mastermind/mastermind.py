@@ -17,6 +17,8 @@ def alkunaytto():
             if tapahtuma.type == pygame.QUIT:
                  pygame.quit()
             elif tapahtuma.type == pygame.KEYDOWN:
+                if tapahtuma.key == pygame.K_3:
+                    return 3
                 if tapahtuma.key == pygame.K_4:
                     return 4
                 if tapahtuma.key == pygame.K_5:

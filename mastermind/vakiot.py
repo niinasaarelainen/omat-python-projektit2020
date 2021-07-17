@@ -29,8 +29,9 @@ varit = [pun, sin, kel, vio, vih, rus]
 
 def alkuohjeet():
     ohjeet = []
-    ohjeet.append("Paina näppäintä 4, 5 tai 6")
+    ohjeet.append("Paina näppäintä 3, 4, 5 tai 6")
     ohjeet.append("")
+    ohjeet.append("    3  =  3 palloa")
     ohjeet.append("    4  =  4 palloa")
     ohjeet.append("    5  =  5 palloa")
     ohjeet.append("    6  =  6 palloa")
