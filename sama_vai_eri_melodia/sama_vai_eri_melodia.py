@@ -46,7 +46,7 @@ def alkuohjeet(naytto):
         naytto.blit(teksti, (30, 70))
         teksti = fontti_pieni.render(f" Klikkaa ovatko ne sama vai eri", True, WHITE)
         naytto.blit(teksti, (30, 100))   
-        teksti = fontti_pieni.render(f" Paina nyt ENTER, kun haluat aloittaa", True, WHITE)
+        teksti = fontti_pieni.render(f" Paina ENTER, kun haluat aloittaa", True, WHITE)
         naytto.blit(teksti, (30, 175))            
 
         pygame.display.flip()
@@ -121,21 +121,21 @@ def draw_tekstit(pisteet, kysytty):
     text = fontti_pieni.render(f" Melodian pituus: nuolet ylös ja alas (nykyinen {montako_aanta})", True, WHITE)  
     naytto.blit(text, (65, 250))
 
+def paivita_ruutu(pisteet, kysytty):
+    naytto.fill((10, 10, 10))     
+    draw_tekstit(pisteet, kysytty)                        
+    pygame.display.flip()
+
+
 def main():    
     global montako_aanta
     pisteet = 0   
     kysytty = 0
-    naytto.fill((10, 10, 10))     
-    draw_tekstit(pisteet, kysytty)      
-    pygame.display.flip()
+    paivita_ruutu(pisteet, kysytty)
     valitse_melodiat(montako_aanta)
     soita_melodiat(montako_aanta)   
 
     while True:
-        naytto.fill((10, 10, 10))     
-        draw_tekstit(pisteet, kysytty)                   
-        #pygame.time.delay(700)             
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()    
@@ -144,14 +144,21 @@ def main():
                     pygame.quit()
                 if event.key == pygame.K_SPACE:
                     soita_melodiat(montako_aanta) 
+
+                # muutetaan melodian pituutta:    
                 if event.key == pygame.K_UP:
                     if montako_aanta < AANTEN_MAX:
                         montako_aanta += 1
+                        paivita_ruutu(pisteet, kysytty)
                         valitse_melodiat(montako_aanta)
+                        soita_melodiat(montako_aanta)
                 if event.key == pygame.K_DOWN:
                     if montako_aanta > AANTEN_MIN:
                         montako_aanta -= 1
+                        paivita_ruutu(pisteet, kysytty)
                         valitse_melodiat(montako_aanta)
+                        soita_melodiat(montako_aanta)
+
             if event.type == pygame.MOUSEBUTTONDOWN:  
                 x = event.pos[0]
                 y = event.pos[1]                 
@@ -163,15 +170,12 @@ def main():
                          pisteet += 1
                 kysytty += 1
                      
-                naytto.fill((10, 10, 10))     
-                draw_tekstit(pisteet, kysytty)                        
-                pygame.display.flip()
-
+                paivita_ruutu(pisteet, kysytty)
                 valitse_melodiat(montako_aanta)
                 soita_melodiat(montako_aanta)
                 
                     
-        pygame.display.flip()
+        paivita_ruutu(pisteet, kysytty)
         kello.tick(50)
 
 
