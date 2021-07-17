@@ -65,27 +65,29 @@ def alkuohjeet2(naytto):
 
 def alkuohjeet3(naytto):
     global nap, aania
-    naytto.fill((10, 10, 10))  
+    naytto.fill((10, 10, 10))      
     while True:    
         for event in pygame.event.get(): 
-            if event.key == pygame.K_ESCAPE:
-                pygame.quit()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_RETURN:
-                    main()
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_RETURN:
+                        main()
 
         teksti = fontti_pieni.render(f" käytä näppäimiä {nap}  (z = keski-c)", True, WHITE)
         naytto.blit(teksti, (30, 75))
         teksti = fontti_pieni.render(f" Paina nyt ENTER, kun haluat aloittaa", True, WHITE)
         naytto.blit(teksti, (30, 105))            
 
+        soita_aanialue(nap, aania)
         pygame.display.flip()
-        kello.tick(40)
+        kello.tick(80)   
+        
 
 
 def generoi_melodia():
-    aanet = "zxcvbnm,."  # näppäimistön alin rivi 
-    return [aanet[random.randint(0,aania -1)]  for i in range(200)]
+    return [soittoalue[random.randint(0,aania -1)]  for i in range(200)]
 
 
 def midi_play(n, instrument):
@@ -96,13 +98,14 @@ def midi_play(n, instrument):
     midi_out.note_off(midi_numbers[n], 110)
 
 
+def soita_aanialue(alue, montako):
+    for i in range(montako):
+        midi_play(alue[i], 12)        
+   
+
 def soita_melodia(melodia, montako):
     for i in range(montako):
         midi_play(melodia[i], 2)        
-   
-
-def uusi_melodia():                         # TODO
-    print("def uusi_melodia")
 
 
 def main():
