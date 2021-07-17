@@ -201,6 +201,7 @@ def tekstit_ruudulle():
     teksti = fontti_pieni.render(f"ÄÄNITYS: käytä näppäimiä {soittoalue}", True, RED)
     naytto.blit(teksti, (190, HEIGHT -50))
 
+
 def main():
     ms = 0
     vari = WHITE
@@ -225,11 +226,13 @@ def main():
                 if chr(event.key) in soittoalue or chr(event.key) == '/':      # ??? näyttää - mutta tulee / : 
                     if rec_enabled != []:
                         aanita(chr(event.key), True, ms)
+                        midi_out.note_on(midi_numbers[chr(event.key)], 110) 
 
             if event.type == pygame.KEYUP:
                 if chr(event.key) in soittoalue or chr(event.key) == '/':      # ??? näyttää - mutta tulee /                
                     if rec_enabled != []:
                         aanita(chr(event.key), False, ms)
+                        midi_out.note_off(midi_numbers[chr(event.key)], 110) 
             
             if event.type == pygame.MOUSEBUTTONDOWN:
                 x, y = pygame.mouse.get_pos()
