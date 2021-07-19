@@ -10,18 +10,18 @@ def openfile():
     kallion_nimi = ""
     kallio_data = []
     for rivi in data:         
-        for item in rivi:   # kallio:olhava   <-- item
-            pari = item.split(":")    
-            if pari[0] == "kallio":                      
-                kalliot[pari[1]] = Kiipeilykallio(pari[1])   
-                kallion_nimi = pari[1]
-                kallio_data = pari
+        for item in rivi:   # kallio:olhava#etelä   <-- item
+            tunniste, tiedot = item.split(":")    
+            if tunniste == "kallio":   
+                nimi, ilmansuunta = tiedot.split("#")   
+                print("nimi, ilmansuunta", nimi, ilmansuunta)             
+                kalliot[nimi] = Kiipeilykallio(nimi, ilmansuunta) 
             else:
-                reittilista.append(pari)
+                reittilista.append(nimi)
         if reittilista != [] and kallion_nimi != '':   
-            reittilista.append(kallio_data)    
+            reittilista.append(nimi)    
             print(reittilista)
-            kalliot[kallion_nimi].lisaa_reitti(Kiipeilyreitti(reittilista)) 
+            kalliot[nimi].lisaa_reitti(Kiipeilyreitti(reittilista)) 
             reittilista = []        
     kallion_nimi = ""
     
@@ -86,7 +86,7 @@ if __name__ == "__main__":
     kaikki_reitit = muodosta_kaikki_reitit()
     print("     kaikki_reitit", kaikki_reitit)
     
-    print("oöhavan ekan reitin sanakirja", kalliot["Olhava"].reitit[0].sanakirja)    
+    print("olhavan ekan reitin sanakirja", kalliot["Olhava"].reitit[0].sanakirja)    
 
     print()
     print("etsi ei")

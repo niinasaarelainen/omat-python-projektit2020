@@ -77,8 +77,9 @@ class Kiipeilyreitti:
 
 ########################################################################################################
 class Kiipeilykallio:
-    def __init__(self, nimi: str):
+    def __init__(self, nimi, ilmansuunta: str):
         self.nimi = nimi
+        self.ilmansuunta = ilmansuunta
         self.reitit = []
         self.grade_statistics_dict = {}
 
