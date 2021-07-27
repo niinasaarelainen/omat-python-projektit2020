@@ -8,7 +8,7 @@ class Kiipeilyreitti:
         self.raakadata = data
         self.sanakirja = {}
         self.kasittele_attribuutit()   
-        self.kallio =  self.sanakirja["kallio"]        
+        self.kallio =  self.sanakirja["kallio"].split("#")[0]       # HUOM !!  
         self.nimi = self.sanakirja["nimi"]           # nämä ei välttämättömät mutta lyhyempi merkintä kuin sanakirja["x"]
         self.sektori = self.sanakirja["sektori"]
         self.pituus = self.sanakirja["pituus"]   
@@ -20,6 +20,8 @@ class Kiipeilyreitti:
         self.sanakirja["tick"] = None
         self.tikkauspvm = None   
         self.sanakirja["tikkauspvm"] = None
+        self.projektina = False
+        self.sanakirja["projektina"] = None
         self.grade_opinion = None
         self.sanakirja["grade_opinion"] = None
         self.rating = None

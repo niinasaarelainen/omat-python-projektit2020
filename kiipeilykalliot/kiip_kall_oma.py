@@ -3,6 +3,7 @@ import datetime
 from luokat import *
 
 
+"""wanha:
 def openfile():
     f = open("data.txt", "r")
     data = [rivi.strip().split(",") for rivi in f if rivi.strip() != ''] 
@@ -10,25 +11,51 @@ def openfile():
     kallion_nimi = ""
     kallio_data = []
     for rivi in data:         
-        for item in rivi:   # kallio:olhava#etelä   <-- item
-            tunniste, tiedot = item.split(":")    
-            if tunniste == "kallio":   
-                nimi, ilmansuunta = tiedot.split("#")   
-                print("nimi, ilmansuunta", nimi, ilmansuunta)             
-                kalliot[nimi] = Kiipeilykallio(nimi, ilmansuunta) 
+        for item in rivi:   # kallio:olhava   <-- item
+            pari = item.split(":")    
+            if pari[0] == "kallio":                      
+                kalliot[pari[1]] = Kiipeilykallio(pari[1], "etelä")   
+                kallion_nimi = pari[1]
+                kallio_data = pari
             else:
-                reittilista.append(nimi)
+                reittilista.append(pari)
         if reittilista != [] and kallion_nimi != '':   
-            reittilista.append(nimi)    
+            reittilista.append(kallio_data)    
             print(reittilista)
-            kalliot[nimi].lisaa_reitti(Kiipeilyreitti(reittilista)) 
+            kalliot[kallion_nimi].lisaa_reitti(Kiipeilyreitti(reittilista)) 
             reittilista = []        
     kallion_nimi = ""
-    
+    """
+
+def openfile():
+    f = open("data.txt", "r")
+    data = [rivi.strip().split(",") for rivi in f if rivi.strip() != ''] 
+    reittilista = []
+    kallion_nimi = ""
+    kallio_data = []
+    for rivi in data:         
+        for item in rivi:   # kallio:olhava   <-- item
+            pari = item.split(":")             
+            if pari[0] == "kallio":   
+                kallion_nimi, ilmansuunta = pari[1].split("#")                      
+                kalliot[kallion_nimi] = Kiipeilykallio(kallion_nimi, ilmansuunta)   
+                kallio_data = pari
+            else:
+                reittilista.append(pari)
+        if reittilista != [] and kallion_nimi != '':   
+            reittilista.append(kallio_data)    
+            print("reittilista", reittilista)
+            kalliot[kallion_nimi].lisaa_reitti(Kiipeilyreitti(reittilista)) 
+            reittilista = []        
+    kallion_nimi = ""
+
+
+
 def muodosta_kaikki_reitit():   # häviää tieto mihin kallioon liittyvät
     kaikki_reitit = []
     for kallio in kalliot.values():
         for reitti in kallio.reitit:
+            print(reitti)
             kaikki_reitit.append(reitti)
     return kaikki_reitit
 
@@ -88,6 +115,7 @@ if __name__ == "__main__":
     
     print("olhavan ekan reitin sanakirja", kalliot["Olhava"].reitit[0].sanakirja)    
 
+    """
     print()
     print("etsi ei")
     vastaukset = etsi_reitti_hakusanalla("ei")
@@ -105,13 +133,11 @@ if __name__ == "__main__":
         monesko += 1
     vastaukset[0].anna_rating(5)
     print(vastaukset[0].rating)
-
-    """
     
 
     print("\netsi_ reitit_yhden_attribuutin_mukaan    rating = 5:")
     for kallio, reitti in kalliot["Olhava"].etsi_reitit_yhden_attribuutin_mukaan("rating", "5"):
-        print(f"{kallio}: {reitti}") """
+        print(f"{kallio}: {reitti}") 
 
     
     for reitti in jarjesta_reitit_yhden_attribuutin_mukaan("ticks"):
@@ -145,19 +171,15 @@ if __name__ == "__main__":
         print(reitti, reitti.print_luontipvm())
     
 
-    """
     for reitti in kalliot["Olhava"].jarjesta_reitit_kahden_attribuutin_mukaan("ticks", "nimi"):
         print(reitti)       
 
    
-    
-
     print("\njarjesta_reitit_yhden_attribuutin_mukaan   grade :")
     for reitti in kalliot["Olhava"].jarjesta_reitit_yhden_attribuutin_mukaan("grade"):
         print(reitti)
 
      
-
     print("\nreittien_maaran_mukaan")
     for kallio in reittien_maaran_mukaan(kalliot):
         print(kallio)
