@@ -3,29 +3,6 @@ import datetime
 from luokat import *
 
 
-"""wanha:
-def openfile():
-    f = open("data.txt", "r")
-    data = [rivi.strip().split(",") for rivi in f if rivi.strip() != ''] 
-    reittilista = []
-    kallion_nimi = ""
-    kallio_data = []
-    for rivi in data:         
-        for item in rivi:   # kallio:olhava   <-- item
-            pari = item.split(":")    
-            if pari[0] == "kallio":                      
-                kalliot[pari[1]] = Kiipeilykallio(pari[1], "etelä")   
-                kallion_nimi = pari[1]
-                kallio_data = pari
-            else:
-                reittilista.append(pari)
-        if reittilista != [] and kallion_nimi != '':   
-            reittilista.append(kallio_data)    
-            print(reittilista)
-            kalliot[kallion_nimi].lisaa_reitti(Kiipeilyreitti(reittilista)) 
-            reittilista = []        
-    kallion_nimi = ""
-    """
 
 def openfile():
     f = open("data.txt", "r")
@@ -105,101 +82,25 @@ def etsi_sitten_jarjesta_reitit(mika_attribuutti1, mita_etsitaan1, mika_attribuu
     return sorted(reitit, key=yhden_mukaan)  
 
 
+def kallioValinnat(valinta):
+    if valinta == "1":     
+        for kallio in kalliot.values(): 
+            if "etel" in kallio.ilmansuunta :
+                print("JESS")
+
+
 
 if __name__ == "__main__":
+
+    k = Kayttoliittyma()
+    kallio_vai_reitti = k.valinta1()
+    if kallio_vai_reitti == "1":        
+        kallioValinnat(k.kallioValinnat())
+    else:
+        pass
 
     kalliot = {}    
     openfile()
     kaikki_reitit = muodosta_kaikki_reitit()
-    print("     kaikki_reitit", kaikki_reitit)
     
-    print("olhavan ekan reitin sanakirja", kalliot["Olhava"].reitit[0].sanakirja)    
-
-    """
-    print()
-    print("etsi ei")
-    vastaukset = etsi_reitti_hakusanalla("ei")
-    monesko = 1
-    for reitti in vastaukset:
-        print(f"{monesko}. {reitti.nimi}")
-        monesko += 1
-
-    print()
-    print("etsi 6A")
-    vastaukset = etsi_reitti_hakusanalla("6A")
-    monesko = 1
-    for reitti in vastaukset:
-        print(f"{monesko}. {reitti}")
-        monesko += 1
-    vastaukset[0].anna_rating(5)
-    print(vastaukset[0].rating)
     
-
-    print("\netsi_ reitit_yhden_attribuutin_mukaan    rating = 5:")
-    for kallio, reitti in kalliot["Olhava"].etsi_reitit_yhden_attribuutin_mukaan("rating", "5"):
-        print(f"{kallio}: {reitti}") 
-
-    
-    for reitti in jarjesta_reitit_yhden_attribuutin_mukaan("ticks"):
-        print(reitti)
-
-    vastaukset = etsi_reitti_hakusanalla("pohjoinen")
-    monesko = 1
-    for reitti in vastaukset:
-        print(f"{monesko}. {reitti}")
-        monesko += 1
-   
-    
-    print(kalliot["Nalkkila"])   # includes grade_statistics()
-
-    print("\njarjesta_  KAIKKI   reitit_kahden_attribuutin_mukaan    grade, pit:")
-    for reitti in jarjesta_reitit_kahden_attribuutin_mukaan("grade", "pituus"):
-        print("\t", reitti)
-
-    # !! metodi luokassa Kiipeilykallio:
-    for reitti in kalliot["Olhava"].jarjesta_reitit_yhden_attribuutin_mukaan("rating"):
-        print("\t", reitti)
-
-    print()
-    for reitti in kalliot["Olhava"].reitit:
-        reitti.tikkaa()
-        reitti.kasittele_luontipvm()
-        print("\t", reitti, reitti.pvm())
-
-
-    for reitti in kalliot["Olhava"].jarjesta_reitit_yhden_attribuutin_mukaan("luontipvm"):
-        print(reitti, reitti.print_luontipvm())
-    
-
-    for reitti in kalliot["Olhava"].jarjesta_reitit_kahden_attribuutin_mukaan("ticks", "nimi"):
-        print(reitti)       
-
-   
-    print("\njarjesta_reitit_yhden_attribuutin_mukaan   grade :")
-    for reitti in kalliot["Olhava"].jarjesta_reitit_yhden_attribuutin_mukaan("grade"):
-        print(reitti)
-
-     
-    print("\nreittien_maaran_mukaan")
-    for kallio in reittien_maaran_mukaan(kalliot):
-        print(kallio)
-
-    
-    print("\njarjesta_  KAIKKI   reitit_kahden_attribuutin_mukaan    tick, grade:")
-    for reitti in jarjesta_reitit_kahden_attribuutin_mukaan("tick", "grade"):
-        print(reitti)
-    
-
-    print("\netsi_ reitit_yhden_attribuutin_mukaan   KAIKKI  grade = 6A+")
-    for reitti in etsi_reitit_yhden_attribuutin_mukaan("grade", "6A+"):
-        print(f"{reitti}")
-
-    print("\netsi_ reitit_kahden_attribuutin_mukaan   KAIKKI  grade = 6A+, ei ole kiivetty")  
-    for reitti in etsi_reitit_kahden_attribuutin_mukaan("grade", "6A+", "tick", False):
-        print(f"{reitti}")
-
-
-    print("\netsi_sitten_jarjesta_reitit   kiipeämättömät, greidi")
-    for reitti in etsi_sitten_jarjesta_reitit("tick", False, "grade"):
-        print(reitti) 
-    """
