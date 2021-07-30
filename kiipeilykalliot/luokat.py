@@ -19,7 +19,12 @@ class Kayttoliittyma:
     def reittiValinnat(self):
         print("\n 1 = Etsi")
         print(" 2 = Järjestä")
-        self.reittivalinta = input("Valitse 1 tai 2  ")
+        print(" 3 = Tikkaa")
+        print(" 4 = Merkkaa projektiksi")
+        print(" 5 = Grade-mielipide")
+        print(" 6 = Arvostele reitti")
+        print(" 7 = Näytä reitin henk.koht. tiedot")
+        self.reittivalinta = input("Valitse 1 - 7  ")
         return self.reittivalinta
     
 
@@ -81,11 +86,15 @@ class Kiipeilyreitti:
         self.tick = True
         self.tikkauspvm = datetime.datetime.today()
         self.ticks += 1
+        self.projektina = False
+
+    def nayta_henk_koht_tiedot(self):
+        return f"{self.nimi}: {self.tikkausvuosi()}, projektina:{self.projektina}, greidi noinniinku omasta mielestä:{self.grade_opinion}, arvosana: {self.rating}"
 
     def tikkausvuosi (self):
         if self.tikkauspvm == None:
             return "Ei ole kiivetty"
-        return self.tikkauspvm.year
+        return f"kiivetty {self.tikkauspvm.year}"
 
     def pvm(self):
         if self.tikkauspvm == None:

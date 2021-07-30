@@ -63,6 +63,7 @@ def jarjesta_reitit_kahden_attribuutin_mukaan(minka_mukaan1, minka_mukaan2):
 def reittien_maaran_mukaan(kalliot:list):     # turha ?!?!?!?
     return sorted(kalliot.values(), key=lambda kallio: kallio.reitteja())   
 
+
 ######  E T S I  ###########
 def etsi_reitit_yhden_attribuutin_mukaan(mika_attribuutti, mita_etsitaan):
     reitit = [reitti for reitti in kaikki_reitit if reitti.sanakirja[mika_attribuutti] == mita_etsitaan]        
@@ -108,7 +109,7 @@ def reittiValinnat(valinta):  # TODO
 
         def search(lookup, reitti):
             for value in reitti.sanakirja.values():
-                if lookup in str(value):
+                if lookup.upper() in str(value).upper():    # HUOM! Jotkut arvot int
                     return True
 
         if len(hakusanat) == 1:
@@ -117,7 +118,69 @@ def reittiValinnat(valinta):  # TODO
             reitit = [reitti for reitti in kaikki_reitit if search(hakusanat[0], reitti) and search(hakusanat[1], reitti)]   
         for reitti in reitit:
             print(reitti)
+
     # Järjestä
+    if valinta == "2":    
+        print("\n Minkä mukaan järjestetään? Kategoriat ovat:")
+        print("nimi, sektori, pituus, grade, ticks, type, luontipvm ")
+        hakusanat = input("Anna 1 tai 2 kategoriaa, esim. luontipvm type järjestää ensisijaisesti luontipvm:n mukaan ")
+        hakusanat = hakusanat.split(" ")
+        if len(hakusanat) == 1:
+            for reitti  in jarjesta_reitit_yhden_attribuutin_mukaan(hakusanat[0]):
+                print(reitti)
+        if len(hakusanat) == 2:
+            for reitti  in jarjesta_reitit_kahden_attribuutin_mukaan(hakusanat[0], hakusanat[1]):
+                print(reitti)
+
+    # Tikkaa  (tikkaus tehdään myös valinnoissa 5 ja 6)
+    if valinta == "3":   
+        reitin_nimi = input("Mikä reitti tikataan? Voit antaa osan reitin nimestä  ")
+        def search(lookup, reitti):
+            if lookup.upper() in reitti.nimi.upper():    # HUOM! Jotkut arvot int
+                return True
+        reitit = [reitti for reitti in kaikki_reitit if search(reitin_nimi, reitti)]   
+        for reitti in reitit:
+            reitti.tikkaa()  # tekee 4 asiaa
+            print(reitti.nimi + " tikattu")
+
+    # Merkkaa projektiksi
+    if valinta == "4":  
+        reitin_nimi = input("Mikä reitti merkataan projektiksi? Voit antaa osan reitin nimestä  ")
+        def search(lookup, reitti):
+            if lookup.upper() in reitti.nimi.upper():    # HUOM! Jotkut arvot int
+                return True
+        reitit = [reitti for reitti in kaikki_reitit if search(reitin_nimi, reitti)]   
+        for reitti in reitit:
+            reitti.projektina = True
+            print(reitti.nimi + " on nyt projektisi")
+
+    # Grade-mielipide
+    if valinta == "5":
+        tiedot = input("Anna reitin nimi (tai osanimi) ja greidiavio, esim. possu 6B  ")
+        nimi, grade = tiedot.split(" ")
+        reitit = [reitti for reitti in kaikki_reitit if nimi.upper() in reitti.nimi.upper()]
+        for reitti in reitit:
+            reitti.tikkaa()
+            reitti.grade_opinion = grade
+
+    # Arvostele reitti
+    if valinta == "6":
+        tiedot = input("Anna reitin nimi (tai osanimi) ja arvosana(1-5), esim. ruo 5  ")
+        nimi, arvosana = tiedot.split(" ")
+        reitit = [reitti for reitti in kaikki_reitit if nimi.upper() in reitti.nimi.upper()]
+        for reitti in reitit:
+            reitti.tikkaa()
+            reitti.rating = arvosana
+
+    # Näytä reitin henk.koht. tiedot
+    if valinta == "7":
+        reitin_nimi = input("Minkä reitin omat tietosi haluat? Voit antaa osan reitin nimestä  ")
+        def search(lookup, reitti):
+            if lookup.upper() in reitti.nimi.upper():    # HUOM! Jotkut arvot int
+                return True
+        reitit = [reitti for reitti in kaikki_reitit if search(reitin_nimi, reitti)]   
+        for reitti in reitit:
+            print(reitti.nayta_henk_koht_tiedot())
 
 
 if __name__ == "__main__":
