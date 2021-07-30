@@ -1,8 +1,8 @@
 kallio:Olhava#etelä
-nimi:Kantti,sektori:pohjoinen,pituus:38,grade:6A+,ticks:31,type:sport,luontipvm:6.6.1970
-nimi:TestiKantti,sektori:pohjoinen,pituus:38,grade:6A+,ticks:1,type:sport,luontipvm:5.6.1970
-nimi:Suurileikkaus,pituus:36,grade:6B,ticks:31,type:sport,luontipvm:4.6.1970
-nimi:Ruotsalaistenreitti,pituus:42,grade:5+,ticks:55,type:sport,luontipvm:3.6.1970
+nimi:Kantti,sektori:1,pituus:38,grade:6A+,ticks:31,type:sport,luontipvm:6.6.1970
+nimi:TestiKantti,sektori:1,pituus:38,grade:6A+,ticks:1,type:sport,luontipvm:5.6.1970
+nimi:Suurileikkaus,sektori:2,pituus:36,grade:6B,ticks:31,type:sport,luontipvm:4.6.1970
+nimi:Ruotsalaistenreitti,sektori:2,pituus:42,grade:5+,ticks:55,type:sport,luontipvm:3.6.1970
 
 kallio:Nalkkila#etelä
 nimi:Pieniäaskelia,pituus:12,grade:6A+,ticks:61,type:sport,luontipvm:6.6.2015

@@ -5,19 +5,22 @@ from datetime import date
 
 class Kayttoliittyma:
 
-    def __init__(self):
+    def valinta1(self):
         print("\n 1 = Kalliot")
         print(" 2 = Reitit")
-        self.kallio_vai_reitti = input("Valitse 1 tai 2  ")
-
-    def valinta1(self):
-        return self.kallio_vai_reitti
+        return input("Valitse 1 tai 2  ")
 
     def kallioValinnat(self):
         print("\n 1 = Mikä ilmansuunta")
         print(" 2 = Printtaa tietyn kallion reitit")
         self.kalliovalinta = input("Valitse 1 tai 2  ")
         return self.kalliovalinta
+
+    def reittiValinnat(self):
+        print("\n 1 = Etsi")
+        print(" 2 = Järjestä")
+        self.reittivalinta = input("Valitse 1 tai 2  ")
+        return self.reittivalinta
     
 
 class Kiipeilyreitti:

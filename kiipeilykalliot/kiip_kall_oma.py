@@ -20,8 +20,7 @@ def openfile():
             else:
                 reittilista.append(pari)
         if reittilista != [] and kallion_nimi != '':   
-            reittilista.append(kallio_data)    
-            print("reittilista", reittilista)
+            reittilista.append(kallio_data)  
             kalliot[kallion_nimi].lisaa_reitti(Kiipeilyreitti(reittilista)) 
             reittilista = []        
     kallion_nimi = ""
@@ -32,7 +31,6 @@ def muodosta_kaikki_reitit():   # häviää tieto mihin kallioon liittyvät
     kaikki_reitit = []
     for kallio in kalliot.values():
         for reitti in kallio.reitit:
-            print(reitti)
             kaikki_reitit.append(reitti)
     return kaikki_reitit
 
@@ -83,24 +81,59 @@ def etsi_sitten_jarjesta_reitit(mika_attribuutti1, mita_etsitaan1, mika_attribuu
 
 
 def kallioValinnat(valinta):
-    if valinta == "1":     
+    if valinta == "1":    
+        ilmansuunta = input("\n Mitä ilmansuuntaa haet?  ") 
         for kallio in kalliot.values(): 
-            if "etel" in kallio.ilmansuunta :
-                print("JESS")
+            if ilmansuunta.upper() in kallio.ilmansuunta.upper() :
+                print(kallio.nimi)
+    if valinta == "2":           
+        vaihtoehdot = ""
+        print("\n Minkä kallion reitit printataan? Vaihtoehdot ovat:")
+        for kallio in kalliot.values(): 
+            vaihtoehdot += kallio.nimi + ", "
+        nimi = input(" " + vaihtoehdot[:-2] + "  ")
+        for kallio in kalliot.values(): 
+            if nimi.upper() in kallio.nimi.upper() :
+                for reitti in kallio.reitit:
+                    print(reitti)
 
+
+def reittiValinnat(valinta):  # TODO
+    # Etsi
+    if valinta == "1":    
+        print("\n Millä hakusanalla etsitään? Kategoriat ovat:")
+        print("nimi, sektori, pituus, grade, ticks, type, luontipvm. ")
+        hakusanat = input("Kirjoita hakusanat (1 tai 2 sanaa), esim. spo 6 tuottaa sport-reitit greideillä 6A-6C+  ")
+        hakusanat = hakusanat.split(" ")
+
+        def search(lookup, reitti):
+            for value in reitti.sanakirja.values():
+                if lookup in str(value):
+                    return True
+
+        if len(hakusanat) == 1:
+            reitit = [reitti for reitti in kaikki_reitit if search(hakusanat[0], reitti)]   
+        if len(hakusanat) == 2:
+            reitit = [reitti for reitti in kaikki_reitit if search(hakusanat[0], reitti) and search(hakusanat[1], reitti)]   
+        for reitti in reitit:
+            print(reitti)
+    # Järjestä
 
 
 if __name__ == "__main__":
 
-    k = Kayttoliittyma()
-    kallio_vai_reitti = k.valinta1()
-    if kallio_vai_reitti == "1":        
-        kallioValinnat(k.kallioValinnat())
-    else:
-        pass
-
     kalliot = {}    
     openfile()
     kaikki_reitit = muodosta_kaikki_reitit()
-    
+
+    k = Kayttoliittyma()
+
+    while True:
+        kallio_vai_reitti = k.valinta1()
+        if kallio_vai_reitti == "1":        
+            kallioValinnat(k.kallioValinnat())
+        elif kallio_vai_reitti == "2":        
+            reittiValinnat(k.reittiValinnat())
+            pass
+
     
