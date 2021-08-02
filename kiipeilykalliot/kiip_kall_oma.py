@@ -14,13 +14,14 @@ def openfile():
         for item in rivi:   # kallio:olhava   <-- item
             pari = item.split(":")             
             if pari[0] == "kallio":   
-                kallion_nimi, ilmansuunta = pari[1].split("#")                      
-                kalliot[kallion_nimi] = Kiipeilykallio(kallion_nimi, ilmansuunta)   
+                kallion_nimi, ilmansuunta, sijainti = pari[1].split("#")                      
+                kalliot[kallion_nimi] = Kiipeilykallio(kallion_nimi, ilmansuunta, sijainti)   
                 kallio_data = pari
             else:
                 reittilista.append(pari)
         if reittilista != [] and kallion_nimi != '':   
             reittilista.append(kallio_data)  
+            print("kallio_data", kallio_data)
             kalliot[kallion_nimi].lisaa_reitti(Kiipeilyreitti(reittilista)) 
             reittilista = []        
     kallion_nimi = ""
@@ -68,7 +69,33 @@ def kallioValinnat(valinta):
         for kallio in kalliot.values(): 
             if ilmansuunta.upper() in kallio.ilmansuunta.upper() :
                 print(kallio.nimi)
-    if valinta == "2":           
+    elif valinta == "2":    
+        sijainti = input("\n Kirjoita sijainti joko tarkasti esim. Lohja tai laajemmin, esim. Etelä-Suomi?  ") 
+        for kallio in kalliot.values(): 
+            if sijainti.upper() in kallio.sijainti.upper() :
+                print(kallio.nimi)
+    elif valinta == "3":           
+        vaihtoehdot = ""
+        print("\n Minkä kallion statistiikka printataan? Vaihtoehdot ovat:")
+        for kallio in kalliot.values(): 
+            vaihtoehdot += kallio.nimi + ", "
+        nimi = input(" " + vaihtoehdot[:-2] + "  ")
+        for kallio in kalliot.values(): 
+            if nimi.upper() in kallio.nimi.upper() :
+                print(kallio.grade_statistics())
+    """
+    elif valinta == "4":           
+        vaihtoehdot = ""
+        print("\n Anna kallion nimi ja hakusana, voi olla osa sanasta. Kalliovaihtoehdot ovat:")
+        for kallio in kalliot.values(): 
+            vaihtoehdot += kallio.nimi + ", "
+        nimi = input(" " + vaihtoehdot[:-2] + "  ")
+        haettava_kallio = ""
+        for kallio in kalliot.values(): 
+            if nimi.upper() in kallio.nimi.upper() :
+                haettava_kallio = kallio
+            haettava_kallio. 
+    elif valinta == "5":           
         vaihtoehdot = ""
         print("\n Minkä kallion reitit printataan? Vaihtoehdot ovat:")
         for kallio in kalliot.values(): 
@@ -76,8 +103,7 @@ def kallioValinnat(valinta):
         nimi = input(" " + vaihtoehdot[:-2] + "  ")
         for kallio in kalliot.values(): 
             if nimi.upper() in kallio.nimi.upper() :
-                for reitti in kallio.reitit:
-                    print(reitti)
+                print(kallio.grade_statistics())"""
 
 
 def reittiValinnat(valinta):  # TODO
@@ -91,7 +117,7 @@ def reittiValinnat(valinta):  # TODO
 
         def search(lookup, reitti):
             for value in reitti.sanakirja.values():
-                if lookup.upper() in str(value).upper():    # HUOM! Jotkut arvot int
+                if lookup.upper() in str(value).upper():    # HUOM! Jotkut arvot int,  osasanat
                     return True
 
         if len(hakusanat) == 1:
@@ -150,11 +176,8 @@ def reittiValinnat(valinta):  # TODO
 
     # Näytä reitin henk.koht. tiedot
     if valinta == "7":
-        reitin_nimi = input("\n Minkä reitin omat tietosi haluat? Voit antaa osan reitin nimestä  ")
-        def search(lookup, reitti):
-            if lookup.upper() in reitti.nimi.upper():    # HUOM! Jotkut arvot int
-                return True
-        reitit = [reitti for reitti in kaikki_reitit if search(reitin_nimi, reitti)]   
+        reitin_nimi = input("\n Minkä reitin omat tietosi haluat? Voit antaa osan reitin nimestä  ")        
+        reitit = [reitti for reitti in kaikki_reitit if reitin_nimi.upper() in reitti.nimi.upper()]   
         for reitti in reitit:
             print(reitti.nayta_henk_koht_tiedot())
 

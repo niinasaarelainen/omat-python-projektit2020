@@ -12,8 +12,11 @@ class Kayttoliittyma:
 
     def kallioValinnat(self):
         print("\n 1 = Mikä ilmansuunta")
-        print(" 2 = Printtaa tietyn kallion reitit")
-        self.kalliovalinta = input("Valitse 1 tai 2  ")
+        print(" 2 = Mikä sijainti Suomessa")
+        print(" 3 = Printtaa tietyn kallion reittistatistiikka")
+        print(" 4 = Etsi kallioin reiteistä hakusanalla") 
+        print(" 5 = Printtaa kallion kaikki reitit") 
+        self.kalliovalinta = input("Valitse 1 - 5  ")
         return self.kalliovalinta
 
     def reittiValinnat(self):
@@ -48,9 +51,9 @@ class Kiipeilyreitti:
         self.sanakirja["tikkauspvm"] = None
         self.projektina = False
         self.sanakirja["projektina"] = None
-        self.grade_opinion = None
-        self.sanakirja["grade_opinion"] = None
-        self.rating = None
+        self.grade_opinion = "-"
+        self.sanakirja["grade_opinion"] = "-"
+        self.rating = "-"
         self.sanakirja["rating"] = "-1"
 
     
@@ -89,12 +92,17 @@ class Kiipeilyreitti:
         self.projektina = False
 
     def nayta_henk_koht_tiedot(self):
-        return f"{self.nimi}: {self.tikkausvuosi()}, projektina:{self.projektina}, greidi noinniinku omasta mielestä:{self.grade_opinion}, arvosana: {self.rating}"
+        return f"{self.nimi}: {self.tikkausvuosi()}, {self.projekti()}, greidi noinniinku omasta mielestä: {self.grade_opinion}, arvosana: {self.rating}"
 
     def tikkausvuosi (self):
         if self.tikkauspvm == None:
             return "Ei ole kiivetty"
         return f"kiivetty {self.tikkauspvm.year}"
+
+    def projekti(self):
+        if self.projektina == False:
+            return "ei työn alla"
+        return "projektina"
 
     def pvm(self):
         if self.tikkauspvm == None:
@@ -102,16 +110,17 @@ class Kiipeilyreitti:
         return f"  tikattu: {self.tikkauspvm.day}.{self.tikkauspvm.month}.{self.tikkauspvm.year}"
 
     def __str__(self):
-        if self.rating != None:
+        if self.rating != "-":
             return f"{self.nimi}, pituus {self.pituus} metriä, grade {self.grade}, ticks {self.ticks}, oma arvosana {self.rating} ({self.kallio})"
         return f"{self.nimi}, pituus {self.pituus} metriä, grade {self.grade}, ticks {self.ticks} ({self.kallio})"
 
 
 ########################################################################################################
 class Kiipeilykallio:
-    def __init__(self, nimi, ilmansuunta: str):
+    def __init__(self, nimi, ilmansuunta, sijainti: str):
         self.nimi = nimi
         self.ilmansuunta = ilmansuunta
+        self.sijainti = sijainti
         self.reitit = []
         self.grade_statistics_dict = {}
 
