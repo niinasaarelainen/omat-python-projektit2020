@@ -21,7 +21,6 @@ def openfile():
                 reittilista.append(pari)
         if reittilista != [] and kallion_nimi != '':   
             reittilista.append(kallio_data)  
-            print("kallio_data", kallio_data)
             kalliot[kallion_nimi].lisaa_reitti(Kiipeilyreitti(reittilista)) 
             reittilista = []        
     kallion_nimi = ""
@@ -80,7 +79,7 @@ def kallioValinnat(valinta):
         print("\n Minkä kallion statistiikka printataan? Vaihtoehdot ovat:")
         for kallio in kalliot.values(): 
             vaihtoehdot += kallio.nimi + ", "
-        nimi = input(" " + vaihtoehdot[:-2] + "  ")
+        nimi = input(" " + vaihtoehdot[:-2] + "  (ENTER= kaikkien kallioiden statistiikat)")
         for kallio in kalliot.values(): 
             if nimi.upper() in kallio.nimi.upper() :
                 print(kallio.grade_statistics())
@@ -116,6 +115,7 @@ def kallioValinnat(valinta):
             if nimi.upper() in kallio.nimi.upper() :
                 for reitti in kallio.reitit:
                     print(reitti)
+                    print(reitti.nayta_henk_koht_tiedot())
 
 
 def reittiValinnat(valinta): 

@@ -14,7 +14,7 @@ class Kayttoliittyma:
         print("\n 1 = Mikä ilmansuunta")
         print(" 2 = Mikä sijainti Suomessa")
         print(" 3 = Printtaa tietyn kallion reittistatistiikka")
-        print(" 4 = Etsi kallioin reiteistä hakusanalla") 
+        print(" 4 = Etsi kallion reiteistä hakusanalla") 
         print(" 5 = Printtaa kallion kaikki reitit") 
         self.kalliovalinta = input("Valitse 1 - 5  ")
         return self.kalliovalinta
@@ -65,7 +65,7 @@ class Kiipeilyreitti:
                 self.sanakirja[pari[0]]= pari[1]
         if "sektori" not in self.sanakirja:
              self.sanakirja["sektori"] = ""
-        print(self.sanakirja)
+        #print(self.sanakirja)
 
     def kasittele_luontipvm(self):
         osat = self.luontipvm.split(".")
@@ -132,7 +132,7 @@ class Kiipeilykallio:
                 self.grade_statistics_dict[reitti.grade] += 1
         s_key = sorted(self.grade_statistics_dict.items(), key=lambda x: x[0])
         s_value = sorted(self.grade_statistics_dict.items(), key=lambda x: x[1], reverse=True)
-        palautus_str = self.nimi + "n reitit greidijärjestyksessä:\n"
+        palautus_str = "\n" + self.nimi + "n reitit greidijärjestyksessä:\n"
         for key, value in s_key:
             palautus_str += key + ": " + str(value) + "kpl, "
         palautus_str = palautus_str[:-2]
