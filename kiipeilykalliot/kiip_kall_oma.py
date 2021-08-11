@@ -74,6 +74,7 @@ def kallioValinnat(valinta):
         for kallio in kalliot.values(): 
             if sijainti.upper() in kallio.sijainti.upper() :
                 print(kallio.nimi)
+
     elif valinta == "3":           
         vaihtoehdot = ""
         print("\n Minkä kallion statistiikka printataan? Vaihtoehdot ovat:")
@@ -83,18 +84,28 @@ def kallioValinnat(valinta):
         for kallio in kalliot.values(): 
             if nimi.upper() in kallio.nimi.upper() :
                 print(kallio.grade_statistics())
-    """
+    
     elif valinta == "4":           
         vaihtoehdot = ""
         print("\n Anna kallion nimi ja hakusana, voi olla osa sanasta. Kalliovaihtoehdot ovat:")
         for kallio in kalliot.values(): 
             vaihtoehdot += kallio.nimi + ", "
-        nimi = input(" " + vaihtoehdot[:-2] + "  ")
+        hakusanat = input(" " + vaihtoehdot[:-2] + "  ")
+        nimi, hakusana = hakusanat.split(" ")
         haettava_kallio = ""
+
+        def search(lookup, reitti):
+            for value in reitti.sanakirja.values():
+                if lookup.upper() in str(value).upper():    # HUOM! Jotkut arvot int,  osasanat
+                    return True
+
         for kallio in kalliot.values(): 
             if nimi.upper() in kallio.nimi.upper() :
                 haettava_kallio = kallio
-            haettava_kallio. 
+        reitit = [reitti for reitti in haettava_kallio.reitit if search(nimi, reitti) and search(hakusana, reitti)] 
+        for reitti in reitit:
+                print(reitti)
+    
     elif valinta == "5":           
         vaihtoehdot = ""
         print("\n Minkä kallion reitit printataan? Vaihtoehdot ovat:")
@@ -103,10 +114,11 @@ def kallioValinnat(valinta):
         nimi = input(" " + vaihtoehdot[:-2] + "  ")
         for kallio in kalliot.values(): 
             if nimi.upper() in kallio.nimi.upper() :
-                print(kallio.grade_statistics())"""
+                for reitti in kallio.reitit:
+                    print(reitti)
 
 
-def reittiValinnat(valinta):  # TODO
+def reittiValinnat(valinta): 
     # Etsi
     if valinta == "1":    
         print("\n Millä hakusanalla etsitään? Kategoriat ovat:")

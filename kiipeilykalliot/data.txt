@@ -3,14 +3,17 @@ nimi:Kantti,sektori:1,pituus:38,grade:6A+,ticks:31,type:sport,luontipvm:6.6.1970
 nimi:TestiKantti,sektori:1,pituus:38,grade:6A+,ticks:1,type:sport,luontipvm:5.6.1970
 nimi:Suurileikkaus,sektori:2,pituus:36,grade:6B,ticks:31,type:sport,luontipvm:4.6.1970
 nimi:Ruotsalaistenreitti,sektori:2,pituus:42,grade:5+,ticks:55,type:sport,luontipvm:3.6.1970
+nimi:vuoden_2021_reitti,sektori:2,pituus:41,grade:5+,ticks:5,type:sport,luontipvm:3.6.2021
 
 kallio:Nalkkila#etelä#Askola-Etelä-Suomi
 nimi:Pieniäaskelia,pituus:12,grade:6A+,ticks:61,type:sport,luontipvm:6.6.2015
 nimi:Smoothoperator,pituus:11,grade:7A,ticks:11,type:sport,luontipvm:27.7.2015
 nimi:Possueipidä,pituus:12,grade:6B+,ticks:45,type:sport,luontipvm:29.8.2016
+nimi:vuoden_2021_reitti2,sektori:2,pituus:41,grade:5+,ticks:5,type:sport,luontipvm:3.6.2021
 
 kallio:Nummi#itä-etelä#Lohja-Etelä-Suomi
 nimi:Syncro,pituus:14,grade:8C+,ticks:4,type:sport,luontipvm:6.9.1980
 nimi:PidempiSyncro,pituus:15,grade:8C+,ticks:4,type:sport,luontipvm:6.9.1990
 nimi:TrädiPädi,pituus:16,grade:8C+,ticks:4,type:trad,luontipvm:6.9.1970
+nimi:vuoden_2021_reitti3,pituus:41,grade:5+,ticks:5,type:sport,luontipvm:3.6.2021
     
