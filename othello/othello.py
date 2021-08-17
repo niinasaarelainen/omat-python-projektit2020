@@ -1,23 +1,24 @@
-import pygame, vakiot
+import pygame
+from vakiot import *
 
 
-class punainensininen:
+class Othello:
     def __init__(self):
         pygame.init()
         self.uusi_peli()
         
-        self.korkeus = len(self.kartta)
+        self.korkeus = len(self.kartta)  # tekstikenttä alhaalla
         self.leveys = len(self.kartta[0])
-        self.skaala = 50
+        self.skaala = 57
 
         self.nayton_korkeus = self.skaala * self.korkeus
         self.nayton_leveys = self.skaala * self.leveys
-        self.naytto = pygame.display.set_mode((self.nayton_leveys, self.nayton_korkeus + self.skaala * 2))
+        self.naytto = pygame.display.set_mode((self.nayton_leveys, self.nayton_korkeus + 60))
 
         self.fontti_iso = pygame.font.SysFont("Arial", 25)
         self.fontti_pieni = pygame.font.SysFont("Arial", 22)
 
-        pygame.display.set_caption("punainensininen")
+        pygame.display.set_caption("Othello")
         self.silmukka()
     
 
@@ -31,7 +32,7 @@ class punainensininen:
         for i in range(3):
             self.kartta.append([0, 0, 0, 0, 0, 0, 0, 0])
         self.siirrot = 0
-        self.vuorossa = "punainen"
+        self.vuorossa = PUNAINEN
 
     def silmukka(self):
         while True:
@@ -47,12 +48,12 @@ class punainensininen:
                 self.sarake  = x // self.skaala
                 self.rivi  = y // self.skaala
                 if self.kartta[self.rivi][self.sarake] == 0:
-                    if self.vuorossa == "punainen":
-                        self.kartta[self.rivi][self.sarake] = 1   # ["tyhja", "punainen", "sininen"]
-                        self.vuorossa = "sininen"
+                    if self.vuorossa == PUNAINEN:
+                        self.kartta[self.rivi][self.sarake] = 1   # ["tyhja", PUNAINEN, SININEN]
+                        self.vuorossa = SININEN
                     else:
                         self.kartta[self.rivi][self.sarake] = 2
-                        self.vuorossa = "punainen"
+                        self.vuorossa = PUNAINEN
 
             elif tapahtuma.type == pygame.KEYDOWN:
                 if tapahtuma.key == pygame.K_F2:
@@ -63,27 +64,27 @@ class punainensininen:
    
 
     def piirra_naytto(self):
-        self.naytto.fill((0, 0, 0))
+        self.naytto.blit(lauta, (0,0))
 
         for y in range(self.korkeus):
             for x in range(self.leveys):
                 ruutu = self.kartta[y][x]
-                pygame.draw.circle(naytto, vari, (x, y), P_KOKO)  
-                self.naytto.blit(self.kuvat[ruutu], (x * self.skaala, y * self.skaala))
+                pygame.draw.circle(self.naytto, self.vuorossa[0], (x, y), P_KOKO)  
 
-        teksti = self.fontti_pieni.render(f"Vuorossa: {self.vuorossa}", True, (255, 0, 0))
-        self.naytto.blit(teksti, (35, self.nayton_korkeus - 50))
+        teksti = self.fontti_pieni.render(f"Vuorossa: {self.vuorossa[1]}", True, (255, 0, 0))
+        self.naytto.blit(teksti, (33, self.nayton_korkeus + 20))
 
         teksti = self.fontti_pieni.render("F2 = uusi peli", True, (255, 0, 0))
-        self.naytto.blit(teksti, (229, self.nayton_korkeus - 50))
+        self.naytto.blit(teksti, (300, self.nayton_korkeus + 20))
 
+        """
         lapi, lapi_teksti = self.peli_lapi()
         if lapi:
             teksti = self.fontti_iso.render(lapi_teksti, True, (255, 0, 0))
             teksti_x = self.skaala * self.leveys / 2 - teksti.get_width() / 2
             teksti_y = self.skaala * self.korkeus / 2 - teksti.get_height() / 2
             pygame.draw.rect(self.naytto, (0, 0, 0), (teksti_x, teksti_y, teksti.get_width(), teksti.get_height()))
-            self.naytto.blit(teksti, (teksti_x, teksti_y))            
+            self.naytto.blit(teksti, (teksti_x, teksti_y))    """        
 
         pygame.display.flip()
 
@@ -173,14 +174,14 @@ class punainensininen:
                         perakkaisia = 0   
             return False  
 
-        if onko_vaaka(1) or onko_pysty(1) or onko_diagonaali(1):   # ["tyhja", "punainen", "sininen"]
+        if onko_vaaka(1) or onko_pysty(1) or onko_diagonaali(1):   # ["tyhja", PUNAINEN, SININEN]
             return True, "punainen voitti"
 
-        if onko_vaaka(2) or onko_pysty(2) or onko_diagonaali(2):   # ["tyhja", "punainen", "sininen"]
+        if onko_vaaka(2) or onko_pysty(2) or onko_diagonaali(2):   # ["tyhja", PUNAINEN, SININEN]
             return True, "sininen voitti"
         
         return False, ""
 
 
 if __name__ == "__main__":
-    punainensininen()
+    Othello()

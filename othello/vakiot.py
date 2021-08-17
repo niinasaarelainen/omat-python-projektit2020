@@ -4,13 +4,13 @@ WIDTH = 630
 HEIGHT = 690
 REUNAN_KOKO = 10
 RUUDUN_KOKO = WIDTH // 8
+P_KOKO = 20
 
 lauta = pygame.image.load('lauta.png')
-naytto = pygame.display.set_mode((WIDTH, HEIGHT))
 kello = pygame.time.Clock()
 
-punainen = (190, 7, 7) 
-sininen = (7, 7, 190) 
+PUNAINEN = [(190, 7, 7), "punainen"]
+SININEN = [(7, 7, 190), "sininen"]
 
 
 
