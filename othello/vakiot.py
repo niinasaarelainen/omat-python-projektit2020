@@ -2,9 +2,9 @@ import pygame
 
 WIDTH = 630
 HEIGHT = 690
-REUNAN_KOKO = 10
+REUNAN_KOKO = 12
 RUUDUN_KOKO = WIDTH // 8
-P_KOKO = 20
+P_KOKO = 23
 
 lauta = pygame.image.load('lauta.png')
 kello = pygame.time.Clock()

@@ -7,13 +7,13 @@ class Othello:
         pygame.init()
         self.uusi_peli()
         
-        self.korkeus = len(self.kartta)  # tekstikenttä alhaalla
+        self.korkeus = len(self.kartta)  
         self.leveys = len(self.kartta[0])
-        self.skaala = 57
+        self.skaala = 56
 
-        self.nayton_korkeus = self.skaala * self.korkeus
-        self.nayton_leveys = self.skaala * self.leveys
-        self.naytto = pygame.display.set_mode((self.nayton_leveys, self.nayton_korkeus + 60))
+        self.nayton_korkeus = self.skaala * self.korkeus + REUNAN_KOKO
+        self.nayton_leveys = self.skaala * self.leveys + REUNAN_KOKO
+        self.naytto = pygame.display.set_mode((self.nayton_leveys, self.nayton_korkeus + 60)) # tekstikenttä alhaalla
 
         self.fontti_iso = pygame.font.SysFont("Arial", 25)
         self.fontti_pieni = pygame.font.SysFont("Arial", 22)
@@ -27,8 +27,8 @@ class Othello:
         self.kartta = []
         for i in range(3):
             self.kartta.append([0, 0, 0, 0, 0, 0, 0, 0])
-        self.kartta.append([0, 0, 0, 1, 2, 0, 0, 0])
-        self.kartta.append([0, 0, 0, 2, 1, 0, 0, 0])
+        self.kartta.append([0, 0, 0, PUNAINEN, SININEN, 0, 0, 0])
+        self.kartta.append([0, 0, 0, SININEN, PUNAINEN, 0, 0, 0])
         for i in range(3):
             self.kartta.append([0, 0, 0, 0, 0, 0, 0, 0])
         self.siirrot = 0
@@ -37,22 +37,44 @@ class Othello:
     def silmukka(self):
         while True:
             self.tutki_tapahtumat()
-            self.piirra_naytto()
+            self.piirra_naytto()            
 
+    def laillinen(self, sarake, rivi):
+        #vieressä vastustaja:
+        aloitussarake = max(sarake - 1, 0)
+        aloitusrivi = max(rivi - 1, 0)
+        vastustaja = PUNAINEN
+        if self.vuorossa == PUNAINEN:
+            vastustaja = SININEN
+        laillinen = False
+        vastustajien_sijainnit = []
+        for x in range(3):
+            for y in range(3): 
+                if self.kartta[min(aloitusrivi, len(self.kartta) - 1)][min(aloitussarake, len(self.kartta) - 1)] == vastustaja:
+                    laillinen = True
+                    vastustajien_sijainnit.append((min(aloitusrivi, len(self.kartta) - 1), min(aloitussarake, len(self.kartta) - 1)))
+                aloitusrivi += 1
+                print("aloitusrivi:", aloitusrivi, "aloitussarake", aloitussarake)
+            aloitussarake += 1
+            aloitusrivi = max(rivi - 1, 0)
+
+        # oma väri tulee vastaan
+        print(vastustajien_sijainnit)
+        return laillinen
 
     def tutki_tapahtumat(self):
         for tapahtuma in pygame.event.get():
             if tapahtuma.type == pygame.MOUSEBUTTONDOWN:
                 x = tapahtuma.pos[0]
                 y = tapahtuma.pos[1]
-                self.sarake  = x // self.skaala
+                self.sarake  =  x // self.skaala
                 self.rivi  = y // self.skaala
-                if self.kartta[self.rivi][self.sarake] == 0:
+                if self.kartta[self.rivi][self.sarake] == 0 and self.laillinen(self.sarake, self.rivi):
                     if self.vuorossa == PUNAINEN:
-                        self.kartta[self.rivi][self.sarake] = 1   # ["tyhja", PUNAINEN, SININEN]
+                        self.kartta[self.rivi][self.sarake] = PUNAINEN   # ["tyhja", PUNAINEN, SININEN]
                         self.vuorossa = SININEN
                     else:
-                        self.kartta[self.rivi][self.sarake] = 2
+                        self.kartta[self.rivi][self.sarake] = SININEN
                         self.vuorossa = PUNAINEN
 
             elif tapahtuma.type == pygame.KEYDOWN:
@@ -68,13 +90,14 @@ class Othello:
 
         for y in range(self.korkeus):
             for x in range(self.leveys):
-                ruutu = self.kartta[y][x]
-                pygame.draw.circle(self.naytto, self.vuorossa[0], (x, y), P_KOKO)  
+                vari = self.kartta[y][x]
+                if vari == SININEN or vari == PUNAINEN:
+                    pygame.draw.circle(self.naytto, vari[0], (x*self.skaala + P_KOKO + REUNAN_KOKO, y*self.skaala + P_KOKO + REUNAN_KOKO), P_KOKO)  
 
-        teksti = self.fontti_pieni.render(f"Vuorossa: {self.vuorossa[1]}", True, (255, 0, 0))
+        teksti = self.fontti_pieni.render(f"Vuorossa: {self.vuorossa[1]}", True, self.vuorossa[0])
         self.naytto.blit(teksti, (33, self.nayton_korkeus + 20))
 
-        teksti = self.fontti_pieni.render("F2 = uusi peli", True, (255, 0, 0))
+        teksti = self.fontti_pieni.render("F2 = uusi peli", True, self.vuorossa[0])
         self.naytto.blit(teksti, (300, self.nayton_korkeus + 20))
 
         """
@@ -87,6 +110,7 @@ class Othello:
             self.naytto.blit(teksti, (teksti_x, teksti_y))    """        
 
         pygame.display.flip()
+        kello.tick(1000)   
 
 
     def peli_lapi(self):
@@ -174,10 +198,10 @@ class Othello:
                         perakkaisia = 0   
             return False  
 
-        if onko_vaaka(1) or onko_pysty(1) or onko_diagonaali(1):   # ["tyhja", PUNAINEN, SININEN]
+        if onko_vaaka(PUNAINEN) or onko_pysty(PUNAINEN) or onko_diagonaali(PUNAINEN):   # ["tyhja", PUNAINEN, SININEN]
             return True, "punainen voitti"
 
-        if onko_vaaka(2) or onko_pysty(2) or onko_diagonaali(2):   # ["tyhja", PUNAINEN, SININEN]
+        if onko_vaaka(SININEN) or onko_pysty(SININEN) or onko_diagonaali(SININEN):   # ["tyhja", PUNAINEN, SININEN]
             return True, "sininen voitti"
         
         return False, ""
