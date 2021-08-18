@@ -138,12 +138,21 @@ class Othello:
             elif tapahtuma.type == pygame.KEYDOWN:
                 if tapahtuma.key == pygame.K_F2:
                     self.uusi_peli()
+                elif tapahtuma.key == pygame.K_F5:                   
+                    if self.vuorossa == SININEN:
+                        self.vuorossa = PUNAINEN
+                    else:
+                         self.vuorossa = SININEN
 
             if tapahtuma.type == pygame.QUIT:
                 exit()
 
         if self.peli_lapiko():
             print("peli_lapi")
+            if self.vuorossa == SININEN:
+                self.vuorossa = PUNAINEN
+            else:
+                self.vuorossa = SININEN
             self.peli_lapi()
             self.uusi_peli()
 
@@ -172,11 +181,17 @@ class Othello:
 
         
 
-        teksti = self.fontti_pieni.render(f"Vuorossa: {self.vuorossa[1]}", True, self.vuorossa[0])
-        self.naytto.blit(teksti, (33, self.nayton_korkeus + 20))
+        teksti = self.fontti_pieni.render(f"Vuoro: {self.vuorossa[1]}", True, self.vuorossa[0])
+        self.naytto.blit(teksti, (25, self.nayton_korkeus + 20))
+
+        teksti = self.fontti_pieni.render("F5 = en pysty siirtämään", True, self.vuorossa[0])
+        self.naytto.blit(teksti, (210, self.nayton_korkeus + 8))     
 
         teksti = self.fontti_pieni.render("F2 = uusi peli", True, self.vuorossa[0])
-        self.naytto.blit(teksti, (300, self.nayton_korkeus + 20))         
+        self.naytto.blit(teksti, (210, self.nayton_korkeus + 36))    
+
+            
+     
 
         pygame.display.flip()
         kello.tick(1000)   
@@ -184,7 +199,13 @@ class Othello:
 
     def peli_lapi(self):
 
-        self.naytto.blit(lauta, (0,0))       
+        self.naytto.blit(lauta, (0,0))  
+        for y in range(self.korkeus):
+            for x in range(self.leveys):
+                vari = self.kartta[y][x]
+                if vari == SININEN or vari == PUNAINEN:
+                    pygame.draw.circle(self.naytto, vari[0], (x*self.skaala + P_KOKO + REUNAN_KOKO, y*self.skaala + P_KOKO + REUNAN_KOKO), P_KOKO)  
+     
         sinisia = 0
         punaisia = 0 
 
@@ -192,16 +213,13 @@ class Othello:
             sinisia += rivi.count(SININEN)
             punaisia += rivi.count(PUNAINEN)
 
-        voittoteksti = "punainen !"
+        voittoteksti = f"Voiton vei punainen: {punaisia} - {sinisia}"  
         if sinisia > punaisia:
-            voittoteksti = "sininen !"
+            voittoteksti = f"Voiton vei sininen: {sinisia} - {punaisia} !"  
             
 
-        teksti = self.fontti_pieni.render(f"Voiton vei: {voittoteksti}", True, self.vuorossa[0])
-        self.naytto.blit(teksti, (33, self.nayton_korkeus + 20))
-
-        teksti = self.fontti_pieni.render("F2 = uusi peli", True, self.vuorossa[0])
-        self.naytto.blit(teksti, (300, self.nayton_korkeus + 20))
+        teksti = self.fontti_iso.render(voittoteksti, True, self.vuorossa[0])
+        self.naytto.blit(teksti, (30, self.nayton_korkeus + 20))
 
         pygame.display.flip()
         time.sleep(4)
