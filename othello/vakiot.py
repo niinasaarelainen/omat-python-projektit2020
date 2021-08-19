@@ -2,7 +2,7 @@ import pygame
 
 WIDTH = 630
 HEIGHT = 690
-REUNAN_KOKO = 12
+REUNAN_KOKO = 13
 RUUDUN_KOKO = WIDTH // 8
 P_KOKO = 23
 

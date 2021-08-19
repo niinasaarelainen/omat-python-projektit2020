@@ -9,11 +9,10 @@ class Othello:
         
         self.korkeus = len(self.kartta)  
         self.leveys = len(self.kartta[0])
-        self.skaala = 56
-        self.vaihda_vari = []
+        self.skaala = 55.7        
 
-        self.nayton_korkeus = self.skaala * self.korkeus + REUNAN_KOKO
-        self.nayton_leveys = self.skaala * self.leveys + REUNAN_KOKO
+        self.nayton_korkeus = int(self.skaala * self.korkeus) + REUNAN_KOKO
+        self.nayton_leveys = int(self.skaala * self.leveys) + REUNAN_KOKO
         self.naytto = pygame.display.set_mode((self.nayton_leveys, self.nayton_korkeus + 60)) # tekstikenttä alhaalla
 
         self.fontti_iso = pygame.font.SysFont("Arial", 25)
@@ -25,6 +24,7 @@ class Othello:
 
     def uusi_peli(self):
         self.kartta = []
+        self.vaihda_vari = []
         
         """
         for i in range(8):
@@ -32,15 +32,14 @@ class Othello:
 
         """
         for i in range(3):
-            #self.kartta.append([0, 0, 0, 0, 0, 0, 0, 0])
-            self.kartta.append([PUNAINEN, PUNAINEN, PUNAINEN, PUNAINEN, SININEN, PUNAINEN, PUNAINEN, PUNAINEN])
+            self.kartta.append([0, 0, 0, 0, 0, 0, 0, 0])
+            #self.kartta.append([PUNAINEN, PUNAINEN, PUNAINEN, PUNAINEN, SININEN, PUNAINEN, PUNAINEN, PUNAINEN])
 
         self.kartta.append([0, 0, 0, PUNAINEN, SININEN, 0, 0, 0])
         self.kartta.append([0, 0, 0, SININEN, PUNAINEN, 0, 0, 0])
         for i in range(3):
-            #self.kartta.append([0, 0, 0, 0, 0, 0, 0, 0])
-            self.kartta.append([PUNAINEN, PUNAINEN, PUNAINEN, PUNAINEN, SININEN, PUNAINEN, PUNAINEN, PUNAINEN])
-
+            self.kartta.append([0, 0, 0, 0, 0, 0, 0, 0])
+            #self.kartta.append([PUNAINEN, PUNAINEN, PUNAINEN, PUNAINEN, SININEN, PUNAINEN, PUNAINEN, PUNAINEN])
         
         self.siirrot = 0
         self.vuorossa = PUNAINEN
@@ -49,12 +48,11 @@ class Othello:
     def silmukka(self):
         while True:
             self.tutki_tapahtumat()
-            self.piirra_naytto()            
+            self.piirra_naytto()        
+
 
     def laillinen(self, sarake, rivi):
-
         print()
-
         #vieressä vastustaja:
         aloitussarake = sarake - 1
         aloitusrivi = rivi - 1
@@ -63,7 +61,7 @@ class Othello:
             vastustaja = SININEN
         laillinen_vastustaja = False
         vastustajien_sijainnit = []
-        for x in range(3):   # TODO ylin rivi !! ei saa tehdä 3 riviä alasp.
+        for x in range(3):   
             for y in range(3): 
                 if  0 <= aloitusrivi < len(self.kartta) and 0 <= aloitussarake < len(self.kartta) and self.kartta[min(aloitusrivi, len(self.kartta) - 1)][min(aloitussarake, len(self.kartta) - 1)] == vastustaja:
                     laillinen_vastustaja = True
@@ -71,10 +69,9 @@ class Othello:
                     vastustajien_sijainnit.append((min(aloitusrivi, len(self.kartta) - 1), min(aloitussarake, len(self.kartta) - 1)))
                 aloitusrivi += 1
             aloitussarake += 1
-            aloitusrivi = max(rivi - 1, 0)
+            aloitusrivi = rivi - 1
 
-        # oma väri tulee vastaan
-          # ei tiedä nappulan tutkintahetkellä onko siirto laillinen
+        # oma väri tulee vastaan,  ei tiedä nappulan tutkintahetkellä onko siirto laillinen
         laillinen_oma_tulee_vastaan = False
         for y, x in vastustajien_sijainnit:    
             vaihda_vari_temp = [] 
@@ -102,14 +99,11 @@ class Othello:
             
             for x in range(7):
                 while  0 <= aloitusrivi <= len(self.kartta) - 1 and 0 <= aloitussarake <= len(self.kartta) - 1:
-                    #print("aloitusrivi:", aloitusrivi, "aloitussarake", aloitussarake)
                     if self.kartta[aloitusrivi][aloitussarake] == self.vuorossa:
                         laillinen_oma_tulee_vastaan = True
                         for y, x in vaihda_vari_temp:
-                            self.vaihda_vari.append((y, x))
-                            #print("self.vaihda_vari.append((y, x))", y, x)   
-                        break                     
-                        # return laillinen_vastustaja and laillinen_oma_tulee_vastaan
+                            self.vaihda_vari.append((y, x)) 
+                        break       
                     else: 
                         vaihda_vari_temp.append((aloitusrivi,aloitussarake))
                     aloitusrivi += suunta_y
@@ -123,8 +117,8 @@ class Othello:
             if tapahtuma.type == pygame.MOUSEBUTTONDOWN:
                 x = tapahtuma.pos[0]
                 y = tapahtuma.pos[1]
-                self.sarake  =  x // self.skaala
-                self.rivi  = y // self.skaala
+                self.sarake  =  int(x // self.skaala)
+                self.rivi  = int(y // self.skaala)
                 if self.kartta[self.rivi][self.sarake] == 0 and self.laillinen(self.sarake, self.rivi):
                     if self.vuorossa == PUNAINEN:
                         self.kartta[self.rivi][self.sarake] = PUNAINEN   # ["tyhja", PUNAINEN, SININEN]  
@@ -147,12 +141,7 @@ class Othello:
             if tapahtuma.type == pygame.QUIT:
                 exit()
 
-        if self.peli_lapiko():
-            print("peli_lapi")
-            if self.vuorossa == SININEN:
-                self.vuorossa = PUNAINEN
-            else:
-                self.vuorossa = SININEN
+        if self.peli_lapiko():        
             self.peli_lapi()
             self.uusi_peli()
 
@@ -177,54 +166,46 @@ class Othello:
             for x in range(self.leveys):
                 vari = self.kartta[y][x]
                 if vari == SININEN or vari == PUNAINEN:
-                    pygame.draw.circle(self.naytto, vari[0], (x*self.skaala + P_KOKO + REUNAN_KOKO, y*self.skaala + P_KOKO + REUNAN_KOKO), P_KOKO)  
-
-        
+                    pygame.draw.circle(self.naytto, vari[0], (int(x*self.skaala) + P_KOKO + REUNAN_KOKO, int(y*self.skaala) + P_KOKO + REUNAN_KOKO), P_KOKO)  
 
         teksti = self.fontti_pieni.render(f"Vuoro: {self.vuorossa[1]}", True, self.vuorossa[0])
-        self.naytto.blit(teksti, (25, self.nayton_korkeus + 20))
+        self.naytto.blit(teksti, (25, self.nayton_korkeus + 18))
 
         teksti = self.fontti_pieni.render("F5 = en pysty siirtämään", True, self.vuorossa[0])
         self.naytto.blit(teksti, (210, self.nayton_korkeus + 8))     
 
         teksti = self.fontti_pieni.render("F2 = uusi peli", True, self.vuorossa[0])
-        self.naytto.blit(teksti, (210, self.nayton_korkeus + 36))    
-
-            
-     
+        self.naytto.blit(teksti, (210, self.nayton_korkeus + 36))      
 
         pygame.display.flip()
         kello.tick(1000)   
 
 
     def peli_lapi(self):
-
         self.naytto.blit(lauta, (0,0))  
         for y in range(self.korkeus):
             for x in range(self.leveys):
                 vari = self.kartta[y][x]
                 if vari == SININEN or vari == PUNAINEN:
-                    pygame.draw.circle(self.naytto, vari[0], (x*self.skaala + P_KOKO + REUNAN_KOKO, y*self.skaala + P_KOKO + REUNAN_KOKO), P_KOKO)  
+                    pygame.draw.circle(self.naytto, vari[0], (int(x*self.skaala) + P_KOKO + REUNAN_KOKO, int(y*self.skaala) + P_KOKO + REUNAN_KOKO), P_KOKO)  
      
         sinisia = 0
         punaisia = 0 
-
         for rivi in self.kartta:
             sinisia += rivi.count(SININEN)
             punaisia += rivi.count(PUNAINEN)
 
         voittoteksti = f"Voiton vei punainen: {punaisia} - {sinisia}"  
+        vari = PUNAINEN[0]
         if sinisia > punaisia:
-            voittoteksti = f"Voiton vei sininen: {sinisia} - {punaisia} !"  
-            
+            voittoteksti = f"Voiton vei sininen: {sinisia} - {punaisia} !" 
+            vari = SININEN[0]             
 
-        teksti = self.fontti_iso.render(voittoteksti, True, self.vuorossa[0])
+        teksti = self.fontti_iso.render(voittoteksti, True, vari)
         self.naytto.blit(teksti, (30, self.nayton_korkeus + 20))
 
         pygame.display.flip()
-        time.sleep(4)
-        
-        
+        time.sleep(5)
        
 
 
