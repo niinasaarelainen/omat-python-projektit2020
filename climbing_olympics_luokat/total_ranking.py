@@ -1,4 +1,4 @@
-import speed, boulder, lead, kokonaistulos
+import speed, boulder, lead, kokonaistulos, pygame
 from operator import itemgetter
 
 class Kilpailija:
@@ -70,11 +70,10 @@ def luo_kilpailijat_miehet():
     kilpailijat["YuFei Pan"].painotukset(5, 5, 8)
 
 
-
 def luo_kilpailijat_naiset():
     # 20 naista olympialaisissa 2021:
     kilpailijat["Janja Garnbret"] = Kilpailija("Janja Garnbret", 164, 47, 1, "Slovenia", 22, "1st (Boulder)")    
-    kilpailijat["Janja Garnbret"].painotukset(6, 10, 10)
+    kilpailijat["Janja Garnbret"].painotukset(7, 10, 10)
     kilpailijat["Mia Krampl"] = Kilpailija("Mia Krampl", 163, 51, 2, "Slovenia", 20, "9th (Lead)")
     kilpailijat["Mia Krampl"].painotukset(6, 9, 9)
     kilpailijat["Jessica Pilz"] = Kilpailija("Jessica Pilz", 163, 51, -2, "Austria", 24, "5th (Boulder)") 
@@ -88,7 +87,7 @@ def luo_kilpailijat_naiset():
     kilpailijat["Miho Nonaka"] = Kilpailija("Miho Nonaka", 162, 53, 2, "Japan", 23, "15th (Boulder)") 
     kilpailijat["Miho Nonaka"].painotukset(9, 10, 6)
     kilpailijat["Akiyo Noguchi"] = Kilpailija("Akiyo Noguchi", 165, 49, 2, "Japan", 31, "2nd (Boulder)") 
-    kilpailijat["Akiyo Noguchi"].painotukset(6, 9, 9)
+    kilpailijat["Akiyo Noguchi"].painotukset(7, 9, 9)
     kilpailijat["Alannah Yip"] = Kilpailija("Alannah Yip", 166, 51, 2, "Canada", 27, "12th (Boulder)") 
     kilpailijat["Alannah Yip"].painotukset(6, 9, 6)
     kilpailijat["Brooke Raboutou"] = Kilpailija("Brooke Raboutou", 154, 46, 3, "USA", 20, "46th (Lead)") 
@@ -193,10 +192,67 @@ def kilpailu():
     print("\nL E A D -- FINAALI")
     for tulos in leadKilpailu.jarjesta_sijoitukset(leadKilpailu.pisteet_finaali(karsintatulos, kilpailijat)):    
         t = tulokset[tulos[0].nimi]    
-        t.lisaa_lead(tulos[1])   # täällä saattaa olla tasasijoituksia, eri systeemi kuin speed/lead
-        
+        t.lisaa_lead(tulos[1])   # täällä saattaa olla tasasijoituksia, eri systeemi kuin speed/lead        
 
     printtaa_tulokset("FINAALI -- TOTAL POINTS")
+    palkintopalli()
+
+
+def palkintopalli():
+    pygame.init()
+    koktulos = tulokset.values()
+    s = sorted(koktulos, key=lambda tulos: (tulos.yhteispisteet(), -tulos.voitot(), tulos.paras_sijoitus(), tulos.karsinnansijoitus))
+    WINDOW_HEIGHT = 410
+    WINDOW_WIDTH = 900
+    SCREEN = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+    CLOCK = pygame.time.Clock()
+    fontti = pygame.font.SysFont("FreeMono", 38)
+    palli = pygame.image.load('palli.jpg')
+    palli = pygame.transform.scale(palli, (WINDOW_WIDTH - 40, WINDOW_HEIGHT -40))
+    TEKSTIN_VARI  = (222, 22, 122)
+    
+    while True:   
+        SCREEN.fill((249, 249, 249))  
+        SCREEN.blit(palli, (0, 111))
+
+        ekan_etunimi = s[0].nimi.split(" ")[0]
+        eka = fontti.render(f"{ekan_etunimi} ", True, TEKSTIN_VARI)
+        SCREEN.blit(eka, (WINDOW_WIDTH //2 - 80, 5))
+        try:
+            kuva = pygame.image.load("kiipeilijoiden_kuvat/" + ekan_etunimi + ".png")
+            kuva = pygame.transform.scale(kuva, (100, 120))       
+            SCREEN.blit(kuva, (WINDOW_WIDTH //2 - 80, 45))
+        except:
+            pass
+
+        tokan_etunimi = s[1].nimi.split(" ")[0]
+        toka = fontti.render(f"{tokan_etunimi} ", True, TEKSTIN_VARI)
+        SCREEN.blit(toka, (100, 76))
+        try:
+            kuva = pygame.image.load("kiipeilijoiden_kuvat/" + tokan_etunimi + ".png")
+            kuva = pygame.transform.scale(kuva, (100, 120))       
+            SCREEN.blit(kuva, (100, 116))
+        except:
+            pass
+
+        kolmannen_etunimi = s[2].nimi.split(" ")[0]
+        kolmas = fontti.render(f"{kolmannen_etunimi} ", True, TEKSTIN_VARI)
+        SCREEN.blit(kolmas, (WINDOW_WIDTH - 270, 126))
+        try:
+            kuva = pygame.image.load("kiipeilijoiden_kuvat/" + kolmannen_etunimi + ".png")
+            kuva = pygame.transform.scale(kuva, (100, 120))       
+            SCREEN.blit(kuva, (WINDOW_WIDTH - 270, 166))
+        except:
+            pass
+           
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+
+        pygame.display.flip()     
+        CLOCK.tick(4)    # = 4 kertaa sekunnissa
+
+
 
 
 
