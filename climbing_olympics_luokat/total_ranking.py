@@ -41,7 +41,7 @@ def luo_kilpailijat_miehet():
     kilpailijat["Colin Duffy"] = Kilpailija("Colin Duffy", 168, 55, 4,"USA", 17) 
     kilpailijat["Colin Duffy"] .painotukset(6, 9, 8)   
     kilpailijat["Nathaniel Coleman"] = Kilpailija("Nathaniel Coleman", 182, 74, 5,"USA",24, "20th (Boulder)")
-    kilpailijat["Nathaniel Coleman"].painotukset(8, 8, 6)
+    kilpailijat["Nathaniel Coleman"].painotukset(8, 10, 6)
     kilpailijat["Adam Ondra"] = Kilpailija("Adam Ondra", 186, 70, 9, "Czeck", 28, "1st (Lead)") 
     kilpailijat["Adam Ondra"].painotukset(4, 10, 10)
     kilpailijat["Jan Hojer"] = Kilpailija("Jan Hojer", 188, 77, 4, "Germany", 29,"6th (Boulder)")
@@ -61,7 +61,7 @@ def luo_kilpailijat_miehet():
     kilpailijat["Bassa Mawem"] = Kilpailija("Bassa Mawem", 177, 71, 2, "France", 36, "1st (Speed)")
     kilpailijat["Bassa Mawem"] .painotukset(10, 4, 5)
     kilpailijat["Alberto Ginéz López"] = Kilpailija("Alberto Ginéz López", 169, 58, 3,"Spain", 18,"2nd (Lead)")
-    kilpailijat["Alberto Ginéz López"].painotukset(7, 6, 10)
+    kilpailijat["Alberto Ginéz López"].painotukset(9, 6, 10)
     kilpailijat["Tom O'Halloran"] = Kilpailija("Tom O'Halloran", 177, 62, 4, "Australia", 28, "78th (Speed)")
     kilpailijat["Tom O'Halloran"].painotukset(8, 3, 4)
     kilpailijat["Christopher Cosser"] = Kilpailija("Christopher Cosser", 177, 71, -1, "South Africa", 20)
@@ -227,11 +227,11 @@ def palkintopalli():
 
         tokan_etunimi = s[1].nimi.split(" ")[0]
         toka = fontti.render(f"{tokan_etunimi} ", True, TEKSTIN_VARI)
-        SCREEN.blit(toka, (100, 76))
+        SCREEN.blit(toka, (108, 76))
         try:
             kuva = pygame.image.load("kiipeilijoiden_kuvat/" + tokan_etunimi + ".png")
             kuva = pygame.transform.scale(kuva, (100, 120))       
-            SCREEN.blit(kuva, (100, 116))
+            SCREEN.blit(kuva, (108, 116))
         except:
             pass
 
