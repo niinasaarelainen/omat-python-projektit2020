@@ -49,7 +49,7 @@ def luo_kilpailijat_miehet():
     kilpailijat["Rishat Khaibullin"] = Kilpailija("Rishat Khaibullin", 177, 66, -2, "Kazakhstan", 25, "29th (Speed)") 
     kilpailijat["Rishat Khaibullin"].painotukset(10, 2, 2)
     kilpailijat["Mickael Mawem"] = Kilpailija("Mickael Mawem", 177, 68, 7, "France", 30, "30th (Boulder)") 
-    kilpailijat["Mickael Mawem"].painotukset(3, 8, 5)
+    kilpailijat["Mickael Mawem"].painotukset(7, 10, 5)
     kilpailijat["Alexander Megos"] = Kilpailija("Alexander Megos", 173, 57, 8, "Germany", 28, "7th (Lead)") 
     kilpailijat["Alexander Megos"].painotukset(6, 8, 8)
     kilpailijat["Ludovico Fossali"] = Kilpailija("Ludovico Fossali", 177, 68, 2, "Italy", 24, "15th (Speed)") 
@@ -206,7 +206,7 @@ def palkintopalli():
     WINDOW_WIDTH = 900
     SCREEN = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
     CLOCK = pygame.time.Clock()
-    fontti = pygame.font.SysFont("FreeMono", 38)
+    fontti = pygame.font.SysFont("FreeMono", 33)
     palli = pygame.image.load('palli.jpg')
     palli = pygame.transform.scale(palli, (WINDOW_WIDTH - 40, WINDOW_HEIGHT -40))
     TEKSTIN_VARI  = (222, 22, 122)
@@ -220,8 +220,8 @@ def palkintopalli():
         SCREEN.blit(eka, (WINDOW_WIDTH //2 - 80, 5))
         try:
             kuva = pygame.image.load("kiipeilijoiden_kuvat/" + ekan_etunimi + ".png")
-            kuva = pygame.transform.scale(kuva, (100, 120))       
-            SCREEN.blit(kuva, (WINDOW_WIDTH //2 - 80, 45))
+            kuva = pygame.transform.scale(kuva, (105, 125))       
+            SCREEN.blit(kuva, (WINDOW_WIDTH //2 - 80, 42))
         except:
             pass
 
@@ -230,8 +230,8 @@ def palkintopalli():
         SCREEN.blit(toka, (108, 76))
         try:
             kuva = pygame.image.load("kiipeilijoiden_kuvat/" + tokan_etunimi + ".png")
-            kuva = pygame.transform.scale(kuva, (100, 120))       
-            SCREEN.blit(kuva, (108, 116))
+            kuva = pygame.transform.scale(kuva, (105, 125))           
+            SCREEN.blit(kuva, (108, 113))
         except:
             pass
 
@@ -240,8 +240,8 @@ def palkintopalli():
         SCREEN.blit(kolmas, (WINDOW_WIDTH - 270, 126))
         try:
             kuva = pygame.image.load("kiipeilijoiden_kuvat/" + kolmannen_etunimi + ".png")
-            kuva = pygame.transform.scale(kuva, (100, 120))       
-            SCREEN.blit(kuva, (WINDOW_WIDTH - 270, 166))
+            kuva = pygame.transform.scale(kuva, (105, 125))       
+            SCREEN.blit(kuva, (WINDOW_WIDTH - 270, 163))
         except:
             pass
            
