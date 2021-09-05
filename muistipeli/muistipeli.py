@@ -71,6 +71,7 @@ def tutki_valinnat(valinnat):  # valinnat = x, y
 def main(korttien_lkm):     
     klikkaus_nro = 1
     valinnat =[]   
+    siirto = 0
 
     while len(pois_pelista) < korttien_lkm:       
         naytto.fill(LILA)           
@@ -84,19 +85,22 @@ def main(korttien_lkm):
                 if mika_kuva(x, y) not in valinnat:
                     valinnat.append(mika_kuva(x, y))   # kuvan indeksi x = 0-9 , y = 0-7                
                     klikkaus_nro += 1                
-
+                    
                 
         piirra(valinnat, korttien_lkm) 
+        
         pygame.display.flip() 
 
         if klikkaus_nro == 3:
             klikkaus_nro = 1 
+            siirto += 1 
+            pygame.display.set_caption(f"\tsiirtoja: {siirto}")    
             eka, toka = tutki_valinnat(valinnat)  # kuva 0-69
             if kuvat[eka] == kuvat[toka]:
                 pois_pelista.append(valinnat[0])
                 pois_pelista.append(valinnat[1])
             valinnat = []       
-            pygame.time.delay(1500)             
+            pygame.time.delay(1700)             
         
         kello.tick(2000)              
     
@@ -123,6 +127,7 @@ taka = pygame.transform.scale(taka, (90, 111) )
 while True:
     kuvat = []
     pois_pelista = []
+    pygame.display.set_caption(f"\tsiirtoja: 0") 
     korttien_lkm = alkukysely()
     lataa_kuvat(korttien_lkm)   
     main(korttien_lkm)
