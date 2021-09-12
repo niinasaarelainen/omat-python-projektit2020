@@ -11,7 +11,7 @@ def alkukysely():
         naytto.fill(LILA)          
         lkm = fontti.render(f"Montako korttia? Paina 1 - 7 ", True, VIHREE)
         naytto.blit(lkm, (78, 46))
-        lkm = fontti.render(f"1 = 10,  2 = 20, ...  7 = 70 ", True, VIHREE)
+        lkm = fontti.render(f"1 = 10,  2 = 20, ...  max.7 = 70 ", True, VIHREE)
         naytto.blit(lkm, (138, 139))
         for tapahtuma in pygame.event.get():
             if tapahtuma.type == pygame.QUIT:
@@ -111,15 +111,14 @@ def main(korttien_lkm):
  # # # # # #     MAIN     # # # # # # # # # #
 
 pygame.init()
-WIDTH = 990
-HEIGHT = 880
+WIDTH = 990   # korkeus riippuu korttien määrästä
 VALI_X = 100
 VALI_Y = 128
 
 LILA = (155, 95, 155)
 VIHREE =  (13, 223, 23)
 
-naytto = pygame.display.set_mode((WIDTH, HEIGHT))
+naytto = pygame.display.set_mode((WIDTH, 300))
 kello = pygame.time.Clock()
 
 taka = pygame.image.load("kortin_takapuoli.png")
@@ -129,7 +128,9 @@ taka = pygame.transform.scale(taka, (90, 111) )
 while True:
     kuvat = []
     pois_pelista = []
-    pygame.display.set_caption(f"\tsiirtoja: 0") 
+    pygame.display.set_caption(f"\tsiirtoja: 0")     
+    naytto = pygame.display.set_mode((WIDTH, 300))
     korttien_lkm = alkukysely()
+    naytto = pygame.display.set_mode((WIDTH, VALI_Y * (korttien_lkm // 10)))
     lataa_kuvat(korttien_lkm)   
     main(korttien_lkm)
