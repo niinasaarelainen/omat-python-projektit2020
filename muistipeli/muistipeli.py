@@ -9,36 +9,38 @@ def alkukysely():
     
     while True:   
         naytto.fill(LILA)          
-        lkm = fontti.render(f"Montako korttia? Valitse 1, 2, tai 3 ", True, VIHREE)
+        lkm = fontti.render(f"Montako korttia? Paina 1 - 7 ", True, VIHREE)
         naytto.blit(lkm, (78, 46))
-        lkm = fontti.render(f"1 = 20,  2 = 40,  3 = 70 ", True, VIHREE)
+        lkm = fontti.render(f"1 = 10,  2 = 20, ...  7 = 70 ", True, VIHREE)
         naytto.blit(lkm, (138, 139))
         for tapahtuma in pygame.event.get():
             if tapahtuma.type == pygame.QUIT:
                 pygame.quit()                
-            if tapahtuma.type == pygame.KEYDOWN:
-                if tapahtuma.key == pygame.K_1:
-                    valinta = 20
-                if tapahtuma.key == pygame.K_2:
-                    valinta = 40
-                if tapahtuma.key == pygame.K_3:
-                    valinta = 70
-                return valinta
+            if tapahtuma.type == pygame.KEYDOWN:  
+                print(tapahtuma.key)
+                if tapahtuma.key < 49:
+                    tapahtuma.key = 49   
+                if tapahtuma.key > 55:
+                    tapahtuma.key = 55             
+                return (tapahtuma.key - 48) * 10
         pygame.display.flip() 
 
 
 
 def lataa_kuvat(korttien_lkm):
     i = 0
-    for filename in glob.iglob('t:/python/climbing_olympics_luokat/kiipeilijoiden_kuvat' + '**/*.png', recursive=True):
-        if i == korttien_lkm // 2:
-            break
+    kuvat_temp = []
+    for filename in glob.iglob('t:/python/climbing_olympics_luokat/kiipeilijoiden_kuvat' + '**/*.png', recursive=True):          
         kuva = pygame.image.load(filename)
         kuva = pygame.transform.scale(kuva, (90, 111) )
-        kuvat.append(kuva) 
-        kuvat.append(kuva)
-        random.shuffle(kuvat)
+        kuvat_temp.append(kuva) 
+        kuvat_temp.append(kuva)        
         i += 1
+    for i in range(korttien_lkm // 2):
+        r = random.randint(0, len(kuvat_temp)//2 -1)
+        kuvat.append(kuvat_temp[r * 2])
+        kuvat.append(kuvat_temp[r * 2 + 1])
+    random.shuffle(kuvat)
         
 
 def piirra(valinnat, korttien_lkm): 
