@@ -6,6 +6,7 @@ class Ukko:
         self.osat = []
         self.monesko_virhe = 0
 
+
     def osat_taulukkoon(self):
         #naru
         self.osat.append([200, 0, 200, 50])         
@@ -21,6 +22,7 @@ class Ukko:
         self.osat.append([200, 250, 50, 450])
         # o jalka
         self.osat.append([200, 250, 350, 450])
+        
 
     def piirra(self, naytto, montako):
         sininen = (0, 0, 100)

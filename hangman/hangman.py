@@ -18,13 +18,16 @@ def viivat():
         pygame.draw.line(naytto, ruskea, (x, SANA_Y), (x + 31, SANA_Y), 3)
         x += 44
 
+
 def  eiole_naytolle():
-    naytto.blit(fontti_pieni.render("Sanassa ei ole:", True, ruskea), (SANA_X, SANA_Y + 50))
+    if len(eiolesanassa) > 0:
+        naytto.blit(fontti_pieni.render("Sanassa ei ole:", True, ruskea), (SANA_X, SANA_Y + 50))
     x = SANA_X
     y = SANA_Y + 100
     for kirjain in eiolesanassa:
         naytto.blit(fontti_pieni.render(kirjain, True, ruskea), (x, y))
         x += 29
+
 
 def  on_sanassa():
     y = SANA_Y - 80
@@ -33,13 +36,17 @@ def  on_sanassa():
             if sana.valittusana[i] == kirjain:
                 naytto.blit(fontti.render(kirjain, True, ruskea), (SANA_X + i * 44, y))
 
+
 def lopetus(teksti):
     global eiolesanassa
     while True:
         naytto.fill(vihrea)
         naytto.blit(fontti.render(teksti, True, ruskea), (30, 80))
         naytto.blit(fontti_pieni.render("Uusi peli = ", True, ruskea), (30, 220))
-        naytto.blit(fontti_pieni.render("any key", True, ruskea), (30, 290))
+        naytto.blit(fontti_pieni.render("any key", True, ruskea), (30, 280))
+        if teksti == "Hävisit!!":
+            naytto.blit(fontti_pieni.render("Sana oli:", True, ruskea), (30, 430))
+            naytto.blit(fontti_pieni.render(sana.valittusana, True, ruskea), (30, 490))
         for tapahtuma in pygame.event.get():
                 if tapahtuma.type == pygame.QUIT:
                     pygame.quit()                
@@ -51,9 +58,11 @@ def lopetus(teksti):
         kello.tick(10)   
 
 
-def main():
-    
+def main():    
     while len(eiolesanassa) < len(ukko.osat) :
+        if set(onsanassa) == set(sana.valittusana) and len(set(onsanassa)) != 0:
+            kello.tick(1)  # sekunti
+            lopetus("Voitit!!")
         naytto.fill(vihrea)
         for tapahtuma in pygame.event.get():
                 if tapahtuma.type == pygame.QUIT:
@@ -65,7 +74,7 @@ def main():
                         elif tapahtuma.key == 59:
                             onsanassa.append('ö')
                         else:
-                            onsanassa.append(chr(tapahtuma.key))
+                            onsanassa.append(chr(tapahtuma.key))                        
                     else:
                         if tapahtuma.key == 39:
                             eiolesanassa.append('ä')
@@ -80,10 +89,10 @@ def main():
         on_sanassa()        
         eiole_naytolle()
         pygame.display.flip() 
-        kello.tick(10)   
-        if set(onsanassa) == set(sana.valittusana) and len(set(onsanassa)) != 0:
-            lopetus("Voitit!!")
-    
+        kello.tick(10)   # 1/10 sekunti
+        
+        
+    kello.tick(1) 
     lopetus("Hävisit!!")
     
 
@@ -96,6 +105,7 @@ ukko = Ukko()
 ukko.osat_taulukkoon()
 sana = Sana()
 sana.sanalista()
+sana.valitsesana()
 
 onsanassa = []
 eiolesanassa = []
