@@ -7,6 +7,8 @@ class Ukko:
         self.monesko_virhe = 0
 
     def osat_taulukkoon(self):
+        #naru
+        self.osat.append([200, 0, 200, 50])         
         #pää
         self.osat.append([200, 50, 25]) 
         #yläruumis

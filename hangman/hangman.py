@@ -53,16 +53,26 @@ def lopetus(teksti):
 
 def main():
     
-    while len(eiolesanassa) < 6:
+    while len(eiolesanassa) < len(ukko.osat) :
         naytto.fill(vihrea)
         for tapahtuma in pygame.event.get():
                 if tapahtuma.type == pygame.QUIT:
                     pygame.quit()                
                 if tapahtuma.type == pygame.KEYDOWN:
-                    if chr(tapahtuma.key) in sana.valittusana:
-                        onsanassa.append(chr(tapahtuma.key))
+                    if chr(tapahtuma.key) in sana.valittusana or "ä" in sana.valittusana or "ö" in sana.valittusana:
+                        if tapahtuma.key == 39:
+                            onsanassa.append('ä')
+                        elif tapahtuma.key == 59:
+                            onsanassa.append('ö')
+                        else:
+                            onsanassa.append(chr(tapahtuma.key))
                     else:
-                        eiolesanassa.append(chr(tapahtuma.key))
+                        if tapahtuma.key == 39:
+                            eiolesanassa.append('ä')
+                        elif tapahtuma.key == 59:
+                            eiolesanassa.append('ö')
+                        else:
+                            eiolesanassa.append(chr(tapahtuma.key))
                         
 
         viivat()
