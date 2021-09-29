@@ -68,13 +68,12 @@ def main():
                 if tapahtuma.type == pygame.QUIT:
                     pygame.quit()                
                 if tapahtuma.type == pygame.KEYDOWN:
-                    if chr(tapahtuma.key) in sana.valittusana or "ä" in sana.valittusana or "ö" in sana.valittusana:
-                        if tapahtuma.key == 39:
-                            onsanassa.append('ä')
-                        elif tapahtuma.key == 59:
-                            onsanassa.append('ö')
-                        else:
-                            onsanassa.append(chr(tapahtuma.key))                        
+                    if tapahtuma.key == 39 and "ä" in sana.valittusana:
+                        onsanassa.append('ä')
+                    if tapahtuma.key == 59 and "ö" in sana.valittusana:
+                        onsanassa.append('ö')
+                    if chr(tapahtuma.key) in sana.valittusana:
+                        onsanassa.append(chr(tapahtuma.key))                        
                     else:
                         if tapahtuma.key == 39:
                             eiolesanassa.append('ä')
@@ -89,7 +88,7 @@ def main():
         on_sanassa()        
         eiole_naytolle()
         pygame.display.flip() 
-        kello.tick(10)   # 1/10 sekunti
+        kello.tick(10)   # 1/10 sekuntia
         
         
     kello.tick(1) 
