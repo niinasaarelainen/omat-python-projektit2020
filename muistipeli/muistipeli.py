@@ -28,19 +28,17 @@ def alkukysely():
 
 
 def lataa_kuvat(korttien_lkm):
-    i = 0
-    kuvat_temp = []
+    kuvat_temp = []  
     for filename in glob.iglob('t:/python/climbing_olympics_luokat/kiipeilijoiden_kuvat' + '**/*.png', recursive=True):          
         kuva = pygame.image.load(filename)
         kuva = pygame.transform.scale(kuva, (90, 111) )
-        kuvat_temp.append(kuva) 
-        kuvat_temp.append(kuva)        
-        i += 1
+        kuvat_temp.append(kuva)  
+    random.shuffle(kuvat_temp)     # !! Ei tarvitse poistaa valittuja !!
+
     for i in range(korttien_lkm // 2):
-        r = random.randint(0, len(kuvat_temp)//2 -1)
-        kuvat.append(kuvat_temp[r * 2])
-        kuvat.append(kuvat_temp[r * 2 + 1])
-    random.shuffle(kuvat)
+        kuvat.append(kuvat_temp[i])
+        kuvat.append(kuvat_temp[i])
+    random.shuffle(kuvat)  
         
 
 def piirra(valinnat, korttien_lkm): 
@@ -104,11 +102,10 @@ def main(korttien_lkm):
             valinnat = []       
             pygame.time.delay(1700)             
         
-        kello.tick(2000)              
-    
-                        
+        kello.tick(2000)    
 
- # # # # # #     MAIN     # # # # # # # # # #
+ # # # # # #    END MAIN     # # # # # # # # # #
+
 
 pygame.init()
 WIDTH = 990   # korkeus riippuu korttien määrästä
