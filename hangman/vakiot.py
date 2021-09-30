@@ -10,5 +10,6 @@ kello = pygame.time.Clock()
 
 vihrea = (0, 170, 96) 
 ruskea = (120, 80, 33) 
+sininen = (0, 0, 100)
 
 

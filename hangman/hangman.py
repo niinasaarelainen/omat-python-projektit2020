@@ -13,7 +13,7 @@ def alustus():
     
 
 def viivat():
-    x = SANA_X
+    x = SANA_X + 4
     for i in range(8):   # kaikki sanat 8 kirjainta
         pygame.draw.line(naytto, ruskea, (x, SANA_Y), (x + 31, SANA_Y), 3)
         x += 44
@@ -30,7 +30,7 @@ def  eiole_naytolle():
 
 
 def  on_sanassa():
-    y = SANA_Y - 80
+    y = SANA_Y - 77
     for kirjain in onsanassa:
         for i in range(8):
             if sana.valittusana[i] == kirjain:
@@ -91,7 +91,14 @@ def main():
         kello.tick(10)   # 1/10 sekuntia
         
         
-    kello.tick(1) 
+    kello.tick(2) 
+    naytto.fill(vihrea)    # vilkkuu
+    pygame.display.flip() 
+    kello.tick(2) 
+    on_sanassa() 
+    ukko.piirra(naytto, len(eiolesanassa))   
+    pygame.display.flip() 
+    kello.tick(2)       
     lopetus("Hävisit!!")
     
 
