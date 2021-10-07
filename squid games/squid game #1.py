@@ -1,5 +1,6 @@
 # TEE RATKAISUSI TÄHÄN:
 import pygame, random
+from mixer import *
   
 
 pygame.init()
@@ -19,52 +20,85 @@ vasemmalle = False
 vauhti = 0.8
 jarrutan = -1
 vauhdinpudotus = 0
+askeleita = 0
+musa_paused = False
+
+jarrutusmatka = 30  # n. 20-60 sykliä, lasketaan KEYUP:ssa
+DANGER_TIME = 50
+danger_time = DANGER_TIME
+RED = (200, 0, 0)
 
 kello = pygame.time.Clock()
 
 while True:
 
+    naytto.fill((0, 0, 0))
+        
+    if musa_paused and danger_time > 0:
+        danger_time -= 1
+        pygame.draw.rect(naytto, RED, (LEVEYS // 2 - 30, 20, danger_time * 2, 30))
+        if danger_time == 0:
+            print("0")
+            mixer.music.unpause()   
+            musa_paused = False  
+            danger_time = DANGER_TIME 
+    else:
+        r = random.randint(0, 250)
+        if r == 0:
+            mixer.music.pause()    
+            musa_paused = True 
+
     
     if jarrutan > 0 :
+        if askeleita < 10:
+            print(askeleita)
+            vauhti = 0.8
+            jarrutan = -1
+            oikealle = False 
+            askeleita = 0
         jarrutan -= 1
-        print(vauhti)
-        print(vauhdinpudotus)
-    if jarrutan == 20 :
+        #print(vauhti)
+        #print(vauhdinpudotus)
+    if jarrutan == jarrutusmatka - 1  :
         vauhdinpudotus = vauhti - 0.8
-        vauhti -= vauhdinpudotus / 20
-        print("10")
+        vauhti -= vauhdinpudotus / jarrutusmatka
     elif jarrutan > 0 :
-        vauhti -= vauhdinpudotus / 20
+        vauhti -= vauhdinpudotus / jarrutusmatka
     elif jarrutan == 0:
         vauhti = 0.8
         jarrutan = -1
+        askeleita = 0
         oikealle = False 
 
 
     for tapahtuma in pygame.event.get():
         if tapahtuma.type == pygame.QUIT:
-            pygame.quit()        
+            pygame.quit()    
+            mixer.music.stop()    
 
         elif tapahtuma.type == pygame.KEYDOWN:
             stopped = False
             if tapahtuma.key == pygame.K_RIGHT:
                 oikealle = True
-                vauhti += 0.2 
+                vauhti += 0.2  
 
         elif tapahtuma.type == pygame.KEYUP:  
-            jarrutan = 21   # 5 sykliä jarrutusta  
+            jarrutan = int(vauhti * 10)
+            print(jarrutan)
+            
                 
             
     keys=pygame.key.get_pressed()   # tämä ei saa olla for tapahtuma in pygame.event.get(): sisällä !!! 
     if keys[pygame.K_RIGHT]:
         vauhti += 0.06  
+        askeleita += 1
         
         
         
     if oikealle and x <= LEVEYS - robon_leveys - vauhti :    #  ei saa mennä reunojen yli !
         x += vauhti  
                 
-    naytto.fill((0, 0, 0))
+    
     naytto.blit(robo, (x, y))
     pygame.display.flip()
-    kello.tick(90)
+    kello.tick(60)
