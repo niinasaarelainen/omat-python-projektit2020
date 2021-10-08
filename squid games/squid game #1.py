@@ -5,17 +5,22 @@ from mixer import *
 
 pygame.init()
 LEVEYS =  1220
-KORKEUS = 200
+KORKEUS = 250
 naytto = pygame.display.set_mode((LEVEYS, KORKEUS))
 pygame.display.set_caption("Squid Game #1")
 
 robo = pygame.image.load("robo.png")
+robo_broken = pygame.image.load("robo_broken.png")
+robo_broken = pygame.transform.scale(robo_broken, (150, 220))
+robo_win = pygame.image.load("robo_win.png")
+robo_win = pygame.transform.scale(robo_win, (210, 170))
 robon_leveys = robo.get_width()
 robon_korkeus = robo.get_height()
 
 
 
 def main():
+    global r, g
     x = 0
     time = 0
     sec = SEKUNTIMAARA
@@ -29,20 +34,27 @@ def main():
     danger_time = DANGER_TIME
     mixer.music.play()
     liikkeella = False
+    palkin_vari = (r, g, 10) 
+
 
     while True:
         naytto.fill(BLACK)
             
-        if musa_paused and danger_time > 0:
+        if musa_paused and danger_time > 0:            
             danger_time -= 1
-            pygame.draw.rect(naytto, RED, (LEVEYS // 2 - 30, 20, danger_time * 2, 30))
+            pygame.draw.rect(naytto, palkin_vari, (LEVEYS // 2 - 30, 20, danger_time * 2, 30))
+            r += 4
+            g -= 4
+            palkin_vari = (r, g, 10) 
         if danger_time == 0:
             danger_time = DANGER_TIME 
             musa_paused = False  
+            pygame.time.delay(600)
             mixer.music.unpause()   
-            #kello.tick(360)
+            r = 10
+            g = 200   # värien RGB .muuttujia palkissa
             if jarrutan >= 0 or liikkeella:
-                lopetus('H Ä V I S I T !!!')
+                lopetus('H Ä V I S I T !!!', robo_broken)
                 
         else:
             r = random.randint(0, 210)  # oli 210
@@ -96,7 +108,7 @@ def main():
             x += vauhti  
 
         if x >= LEVEYS - robon_leveys - vauhti:
-            lopetus('V O I T I T !!!')
+            lopetus('V O I T I T !!!', robo_win)
                     
         
         naytto.blit(robo, (x, y))        
@@ -104,21 +116,22 @@ def main():
         if time % 60 == 0:
             sec -= 1    
             if sec == 0:
-                lopetus('H Ä V I S I T !!!')
+                lopetus('H Ä V I S I T !!!', robo_broken)
             textsurface = myfont.render(f"{sec}", True, (100, 30, 30)) 
         naytto.blit(textsurface, (320, 20))  
         pygame.display.flip()          
         kello.tick(60)
 
 
-def lopetus(teksti):
+def lopetus(teksti, kuva):
     textsurface = myfont.render(teksti, True, (100, 30, 30))
     mixer.music.pause()     
 
     
     while True:
-        naytto.fill(BLACK)        
+        naytto.fill((255, 255, 255))        
         naytto.blit(textsurface, (20, 100))    
+        naytto.blit(kuva, (510, 10))
 
         for tapahtuma in pygame.event.get():
             if tapahtuma.type == pygame.QUIT:
@@ -128,19 +141,24 @@ def lopetus(teksti):
                 main()
 
         pygame.display.flip()
-        kello.tick(60)
+        kello.tick(70)
 
 
 
 y = KORKEUS - 100
 jarrutusmatka = 35  # n. 20-60 sykliä, lasketaan KEYUP:ssa
 DANGER_TIME = 40
-RED = (200, 0, 0)
 BLACK = (0, 0, 0)
 SEKUNTIMAARA = 30  # aikaa suorittaa peli
+
+r = 10
+g = 200   # värien RGB .muuttujia palkissa
 
 kello = pygame.time.Clock()
 pygame.font.init()
 myfont = pygame.font.SysFont('Comic Sans MS', 50)
 
+
 main()
+#lopetus('V O I T I T !!!', robo_win)
+#lopetus('H Ä V I S I T !!!', robo_broken)
