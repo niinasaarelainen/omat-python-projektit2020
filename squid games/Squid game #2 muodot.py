@@ -1,18 +1,16 @@
-import pygame, math
-from datetime import datetime
-
+import pygame, random
 
 
 pygame.init()
 WIDTH = 400
 HEIGHT = 400
 naytto = pygame.display.set_mode((WIDTH, HEIGHT))
-keskus = (int(WIDTH/2), int(HEIGHT/2))
+keskus = (WIDTH//2, HEIGHT//2)
 sisainen_kello = pygame.time.Clock()
+
 
 pygame.font.init()
 myfont = pygame.font.SysFont('Comic Sans MS', 40)
-
 
 
 def voittoko():
@@ -26,6 +24,7 @@ def voittoko():
 
 def main():
     klikkaukset = []
+    time = 0
     while True:
         for tapahtuma in pygame.event.get():
             if tapahtuma.type == pygame.QUIT:
@@ -40,17 +39,26 @@ def main():
 
             
         naytto.fill((0, 0, 0)) 
-        pygame.draw.circle(naytto, (255, 0, 0), keskus, 100)
-        pygame.draw.circle(naytto, (0, 0, 0), keskus, 97)
+
+        if time > 100:
+            r1 = random.randint(-2, 2)
+            r2 = random.randint(-2, 2)
+        else:
+            r1 = random.randint(-1, 1)
+            r2 = random.randint(-1, 1)
+        x, y = keskus
+        pygame.draw.circle(naytto, (255, 0, 0), (x + r1, y + r2), 100)
+        pygame.draw.circle(naytto, (0, 0, 0), (x + r2, y + r1), 95)
 
         for klikkaus in klikkaukset:
-            pygame.draw.circle(naytto, (0, 0, 0), klikkaus, 15)
+            pygame.draw.circle(naytto, (0, 0, 0), klikkaus, 11)
 
         if voittoko():
-            lopetus("Mahtavuutta. Voitit !!!! Click = Uusi peli")
+            lopetus("Mahtavuutta. Voitit !!!!. Click = Uusi peli")
                     
         pygame.display.flip()     
         sisainen_kello.tick(10)
+        time += 1
 
 
 def lopetus(teksti):
@@ -72,8 +80,8 @@ def lopetus(teksti):
             elif tapahtuma.type == pygame.MOUSEBUTTONDOWN:
                 main()
 
-        pygame.display.flip()
-        sisainen_kello.tick(70)
+        pygame.display.flip()        
+        sisainen_kello.tick(10)
 
     
 main()
