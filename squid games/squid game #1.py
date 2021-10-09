@@ -25,7 +25,6 @@ def main():
     time = 0
     sec = SEKUNTIMAARA
     textsurface = myfont.render(f"{sec}", True, (100, 30, 30))  
-    oikealle = False
     vauhti = 0.5
     jarrutan = -1
     vauhdinpudotus = 0
@@ -36,15 +35,14 @@ def main():
     liikkeella = False
     palkin_vari = (r, g, 10) 
 
-
     while True:
         naytto.fill(BLACK)
             
         if musa_paused and danger_time > 0:            
             danger_time -= 1
             pygame.draw.rect(naytto, palkin_vari, (LEVEYS // 2 - 30, 20, danger_time * 2, 30))
-            r += 4
-            g -= 4
+            r += 5
+            g -= 5
             palkin_vari = (r, g, 10) 
         if danger_time == 0:
             danger_time = DANGER_TIME 
@@ -61,14 +59,12 @@ def main():
             if r == 0:
                 mixer.music.pause()    
                 musa_paused = True 
-            
                 
         
         if jarrutan > 0  :
             if askeleita < 10:
                 vauhti = 0.5
                 jarrutan = -1
-                oikealle = False 
                 askeleita = 0
                 liikkeella = False
             else:
@@ -79,7 +75,6 @@ def main():
             vauhti = 0.5
             jarrutan = -1
             askeleita = 0
-            oikealle = False 
             liikkeella = False
 
         for tapahtuma in pygame.event.get():
@@ -89,7 +84,6 @@ def main():
 
             elif tapahtuma.type == pygame.KEYDOWN:
                 if tapahtuma.key == pygame.K_RIGHT:
-                    oikealle = True
                     vauhti += 0.2  
                     liikkeella = True
 
@@ -104,7 +98,7 @@ def main():
                 vauhti += 0.05  
             askeleita += 1  
             
-        if oikealle and x < LEVEYS - robon_leveys - vauhti :    #  ei saa mennä reunojen yli !
+        if liikkeella and x < LEVEYS - robon_leveys - vauhti :    #  ei saa mennä reunojen yli !
             x += vauhti  
 
         if x >= LEVEYS - robon_leveys - vauhti:
