@@ -94,7 +94,7 @@ def main():
                 
         keys=pygame.key.get_pressed()   # tämä ei saa olla for tapahtuma in pygame.event.get(): sisällä !!! 
         if keys[pygame.K_RIGHT]:
-            if vauhti <= 5.5:
+            if vauhti <= 5:
                 vauhti += 0.05  
             askeleita += 1  
             
