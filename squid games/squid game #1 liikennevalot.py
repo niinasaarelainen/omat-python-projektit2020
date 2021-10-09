@@ -119,8 +119,7 @@ def main():
 
 def lopetus(teksti, kuva):
     textsurface = myfont.render(teksti, True, (100, 30, 30))
-    mixer.music.pause()     
-
+    mixer.music.pause()  
     
     while True:
         naytto.fill((255, 255, 255))        
