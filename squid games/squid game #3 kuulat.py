@@ -57,22 +57,27 @@ def main():
         if vuoro % 6 == 0:
             kys = myfont.render("Montako kuulaa valitset?", True, BLUE)     
             naytto.blit(kys, (20, 130))  
+
         elif vuoro % 6 == 1:
             r = random.randint(0, 1)
             if r == 0:
                 tietokone_parillinenko = "pariton"
             else:
                 tietokone_parillinenko = "parillinen"
-            r = random.randint(1, vihreita)            
+            r = random.randint(1, 4)            
             if pelaaja_parillinenko == tietokone_parillinenko:
-               sinisia -= r 
+               sinisia -= r   # TODO  vähennetään hankittuja vihreitä jos on . Jos ei kuolema 
             vuoro += 1
+
         elif vuoro % 6 == 2:
+            naytto.fill((252, 252, 252)) 
             kys = myfont.render(f"Tietokone valitsi {tietokone_parillinenko}, panos: {r}", True, GREEN)     
             naytto.blit(kys, (20, 300)) 
-            pygame.display.flip()       
+            kuvat_naytolle(sinisia, vihreita)
+            pygame.display.flip()     
             time.sleep(2) 
             vuoro += 1
+
         elif vuoro % 6 == 3:
             kys = myfont.render("Parillinen(2) vai pariton(1)?", True, BLUE)     
             naytto.blit(kys, (20, 130))  
@@ -81,10 +86,13 @@ def main():
                 tietokone_parillinenko = "pariton"
             else:
                 tietokone_parillinenko = "parillinen"
+
         elif vuoro % 6 == 4:
-            kys = myfont.render("Paljonko panostat?", True, BLUE)     
+            kys = myfont.render("Paljonko panostat? (1-4)", True, BLUE)     
             naytto.blit(kys, (20, 130)) 
-        elif vuoro % 6 == 5:
+
+        elif vuoro % 6 == 5:            
+            naytto.fill((252, 252, 252)) 
             kys = myfont.render(f"Tietokoneen valinta oli {tietokone_parillinenko}", True, BLUE)     
             naytto.blit(kys, (20, 130)) 
             if pelaaja_parillinenko == tietokone_parillinenko:
@@ -98,7 +106,6 @@ def main():
         for tapahtuma in pygame.event.get():
             if tapahtuma.type == pygame.QUIT:
                 pygame.quit()    
-                mixer.music.stop()    
 
             elif tapahtuma.type == pygame.KEYDOWN:  
                 lkm = tapahtuma.key - 48
