@@ -31,6 +31,7 @@ def kuvat_naytolle(sinisia, vihreita):
     if vihreita < 0:
         vihreita = 0
     x = 25
+
     # pelaaja 1
     for i in range(sinisia):
         naytto.blit(sin, (x, 50))
@@ -40,7 +41,7 @@ def kuvat_naytolle(sinisia, vihreita):
         naytto.blit(vih, (x, 90))
         x += 38
 
-    # pelaaja 2  = tietokone
+    # pelaaja 2 = tietokone
     x = 25
     for i in range(vihreita):
         naytto.blit(vih, (x, 220))
@@ -58,10 +59,11 @@ def main():
     vuoro = 0
     sinisia = 10   # omistajan määrät
     vihreita = 10
-    tietokone_parillinenko = "pariton"
-    pelaaja_parillinenko = "pariton"
+    
 
     while True:
+        tietokone_parillinenko = "parillinen"
+        pelaaja_parillinenko = "parillinen"
         naytto.fill((252, 252, 252)) 
         sinisia, vihreita = kuvat_naytolle(sinisia, vihreita)
 
@@ -72,9 +74,7 @@ def main():
         elif vuoro % 6 == 1:
             r = random.randint(0, 1)
             if r == 0:
-                tietokone_parillinenko = "pariton"
-            else:
-                tietokone_parillinenko = "parillinen"
+                tietokone_parillinenko = "pariton"  # muutoin oletusarvo parillinen
             r = random.randint(1, 4)  
             # tietokone arvasi oikein:          
             if pelaaja_parillinenko == tietokone_parillinenko:
@@ -103,19 +103,17 @@ def main():
 
         elif vuoro % 6 == 3:
             kys = font.render("Parillinen(2) vai pariton(1)?", True, BLUE)     
-            naytto.blit(kys, (25, 130))  
-            r = random.randint(0, 1)
-            if r == 0:
-                tietokone_parillinenko = "pariton"
-            else:
-                tietokone_parillinenko = "parillinen"
+            naytto.blit(kys, (35, 130))              
 
         elif vuoro % 6 == 4:
             kys = font.render("Paljonko panostat? (1-4)", True, BLUE)     
-            naytto.blit(kys, (25, 130)) 
+            naytto.blit(kys, (35, 130)) 
 
         elif vuoro % 6 == 5:            
             naytto.fill((252, 252, 252)) 
+            r = random.randint(0, 1)
+            if r == 0:
+                tietokone_parillinenko = "pariton"
             kys = font.render(f"Tietokoneen valinta oli {tietokone_parillinenko}", True, GREEN)     
             naytto.blit(kys, (25, 300)) 
             # tietokone arvasi oikein:          
@@ -146,12 +144,9 @@ def main():
 
             elif tapahtuma.type == pygame.KEYDOWN:  
                 lkm = tapahtuma.key - 48
-                if lkm % 2 == 0 and (vuoro % 6 == 3 or vuoro % 6 == 0):
-                    pelaaja_parillinenko = "parillinen"
-                    print(pelaaja_parillinenko)
-                elif vuoro % 6 == 3 or vuoro % 6 == 0:
-                    pelaaja_parillinenko = "pariton"
-                    print(pelaaja_parillinenko)
+                if lkm % 2 == 1 and (vuoro % 6 == 3 or vuoro % 6 == 0):
+                    pelaaja_parillinenko = "pariton"   # default parillinen
+                    print(pelaaja_parillinenko)                
                 vuoro += 1
 
 
