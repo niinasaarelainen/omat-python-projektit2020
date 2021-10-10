@@ -22,25 +22,35 @@ GREEN = (0, 232, 0)
 
 
 def kuvat_naytolle(sinisia, vihreita):
+    if sinisia > 10:
+        sinisia = 10
+    if vihreita > 10:
+        vihreita = 10
+    if sinisia < 0:
+        sinisia = 0
+    if vihreita < 0:
+        vihreita = 0
     x = 25
     # pelaaja 1
-    for i in range(min(sinisia, 10)):
+    for i in range(sinisia):
         naytto.blit(sin, (x, 50))
         x += 38
     x = 25
-    for i in range(10 - max(0, vihreita)):
+    for i in range(10 - vihreita):
         naytto.blit(vih, (x, 90))
         x += 38
 
     # pelaaja 2  = tietokone
     x = 25
-    for i in range(min(vihreita, 10)):
+    for i in range(vihreita):
         naytto.blit(vih, (x, 220))
         x += 38
     x = 25
-    for i in range(10 - max(0, sinisia)):
+    for i in range(10 - sinisia):
         naytto.blit(sin, (x, 260))
         x += 38
+
+    return sinisia, vihreita
 
 
 def main():
@@ -53,7 +63,7 @@ def main():
 
     while True:
         naytto.fill((252, 252, 252)) 
-        kuvat_naytolle(sinisia, vihreita)
+        sinisia, vihreita = kuvat_naytolle(sinisia, vihreita)
 
         if vuoro % 6 == 0:
             kys = font.render("Montako kuulaa valitset?", True, BLUE)     
@@ -69,14 +79,14 @@ def main():
             # tietokone arvasi oikein:          
             if pelaaja_parillinenko == tietokone_parillinenko:
                sinisia -= r   
-               if sinisia < 0:
+               if sinisia <= 0:
                    vihreita -= sinisia   
                    if vihreita >= 10:
                        lopetus("Lose !!  Any key = New Game")
             # tietokone arvasi väärin:      
             else:
                 vihreita -= r
-                if vihreita < 0:
+                if vihreita <= 0:
                    sinisia -= vihreita
                    if sinisia >= 10:
                        lopetus("Win !!   Any key = New Game")                 
@@ -86,7 +96,7 @@ def main():
             naytto.fill((252, 252, 252)) 
             kys = font.render(f"Tietokone valitsi {tietokone_parillinenko}, panos: {r}", True, GREEN)     
             naytto.blit(kys, (25, 300)) 
-            kuvat_naytolle(sinisia, vihreita)
+            sinisia, vihreita = kuvat_naytolle(sinisia, vihreita)
             pygame.display.flip()     
             time.sleep(2) 
             vuoro += 1
@@ -111,7 +121,7 @@ def main():
             # tietokone arvasi oikein:          
             if pelaaja_parillinenko == tietokone_parillinenko:
                vihreita -= lkm
-               if vihreita < 0:
+               if vihreita <= 0:
                    sinisia -= vihreita                   
                    print("tietokone arvasi oikein...lkm:", lkm, "  vihreita:", vihreita, "  sinisia:", sinisia)
                    if sinisia >= 10:
@@ -119,12 +129,12 @@ def main():
             # tietokone arvasi väärin:          
             else:
                sinisia -= lkm   
-               if sinisia < 0: 
+               if sinisia <= 0: 
                    vihreita -= sinisia
                    print("lkm:", lkm, "  vihreita:", vihreita, "  sinisia:", sinisia)
                    if vihreita >= 10:
                        lopetus("Lose !!  Any key = New Game")
-            kuvat_naytolle(sinisia, vihreita)
+            sinisia, vihreita = kuvat_naytolle(sinisia, vihreita)
             pygame.display.flip()       
             time.sleep(2) 
             vuoro += 1
