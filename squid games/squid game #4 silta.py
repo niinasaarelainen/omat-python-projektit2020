@@ -28,6 +28,11 @@ KORKEUS = 250
 naytto = pygame.display.set_mode((LEVEYS, KORKEUS))
 pygame.display.set_caption("Squid Game #4  Bridge")
 
+robo_broken = pygame.image.load("robo_broken.png")
+robo_broken = pygame.transform.scale(robo_broken, (150, 220))
+robo_win = pygame.image.load("robo_win.png")
+robo_win = pygame.transform.scale(robo_win, (210, 170))
+
 silta = []  # 15 kpl True/False
 robot = []
 
@@ -85,19 +90,23 @@ def main():
                 for robo in robot:
                     if robo.monesko == robo_nro:
                         robo.liiku(x, y)
-                        if silta[robo.ruutu] == False:
-                            robo.voitto = False
+                        if robo.ruutu < 30:
+                            if silta[robo.ruutu] == False:
+                                robo.voitto = False
+                                robot.remove(robo)
+                        else:
+                            lopetus('V O I T I T !!!', robo_win)
 
             elif tapahtuma.type == pygame.KEYDOWN:
                 robo_nro = tapahtuma.key - 48
   
         
-                    
+        if len(robot) == 0:
+            lopetus('H Ä V I S I T !!!', robo_broken)          
         for robo in robot:
-            if robo.voitto == True:
-                naytto.blit(robo.pic, (robo.x, robo.y))  
-                textsurface = myfont.render(f"{robo.monesko}", True, (0, 30, 30))  
-                naytto.blit(textsurface, (robo.x + 20, robo.y + 35))               
+            naytto.blit(robo.pic, (robo.x, robo.y))  
+            textsurface = myfont.render(f"{robo.monesko}", True, (0, 30, 30))  
+            naytto.blit(textsurface, (robo.x + 20, robo.y + 35))               
         #        lopetus('H Ä V I S I T !!!', robo_broken)
         # textsurface = myfont.render(f"{sec}", True, (100, 30, 30)) 
         #naytto.blit(textsurface, (320, 20))  
@@ -120,7 +129,7 @@ def lopetus(teksti, kuva):
                 pygame.quit()    
                 
             elif tapahtuma.type == pygame.MOUSEBUTTONDOWN :
-                x, y = tapahtuma.pos
+                main()
 
         pygame.display.flip()
         kello.tick(70)
@@ -138,5 +147,3 @@ myfont = pygame.font.SysFont('Comic Sans MS', 20)
 rakenna_silta()
 rakenna_robot()
 main()
-#lopetus('V O I T I T !!!', robo_win)
-#lopetus('H Ä V I S I T !!!', robo_broken)
