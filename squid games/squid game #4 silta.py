@@ -5,16 +5,21 @@ from mixer import *
 class Robo:
 
     def __init__(self, offset, monesko):
+
         self.x = 20 + offset
         self.y = 80
-        self.voitto = False
+        self.voitto = True
         self.pic = pygame.image.load("robo.png")
         self.monesko  = monesko
         
 
     def liiku(self, x, y):
-        self.x = x
-        self.y = y
+        self.x = x - 20
+        self.y = y - 80   
+        self.ruutu = ((x - 170) // 55 ) * 2
+        if y > 165 :  # alarivi
+            self.ruutu += 1
+        print(self.ruutu)
 
 
 pygame.init()
@@ -39,16 +44,17 @@ def rakenna_silta():
     for i in range(15):
         r = random.randint(0, 1)  
         if r == 0:
-            silta.append(False)
+            silta.append(False)                        
         else:
             silta.append(True)
+        silta.append(not silta[-1])
 
 
 def piirra_silta():
     rect_leveys = 35
     rect_pituus = 45
     x = 170
-    y = 70
+    y = 90
     for i in range(15):
         pygame.draw.rect(naytto, BLUE, pygame.Rect(x, y, rect_pituus, rect_leveys))
         x += 55
@@ -77,8 +83,10 @@ def main():
             elif tapahtuma.type == pygame.MOUSEBUTTONDOWN :
                 x, y = tapahtuma.pos   
                 for robo in robot:
-                    if robo.monesko = robo_nro:
+                    if robo.monesko == robo_nro:
                         robo.liiku(x, y)
+                        if silta[robo.ruutu] == False:
+                            robo.voitto = False
 
             elif tapahtuma.type == pygame.KEYDOWN:
                 robo_nro = tapahtuma.key - 48
@@ -86,9 +94,10 @@ def main():
         
                     
         for robo in robot:
-            naytto.blit(robo.pic, (robo.x, robo.y))  
-            textsurface = myfont.render(f"{robo.monesko}", True, (0, 30, 30))  
-            naytto.blit(textsurface, (robo.x + 20, robo.y + 35))               
+            if robo.voitto == True:
+                naytto.blit(robo.pic, (robo.x, robo.y))  
+                textsurface = myfont.render(f"{robo.monesko}", True, (0, 30, 30))  
+                naytto.blit(textsurface, (robo.x + 20, robo.y + 35))               
         #        lopetus('H Ä V I S I T !!!', robo_broken)
         # textsurface = myfont.render(f"{sec}", True, (100, 30, 30)) 
         #naytto.blit(textsurface, (320, 20))  
