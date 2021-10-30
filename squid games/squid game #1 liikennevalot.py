@@ -1,4 +1,3 @@
-# TEE RATKAISUSI TÄHÄN:
 import pygame, random
 from mixer import *
 

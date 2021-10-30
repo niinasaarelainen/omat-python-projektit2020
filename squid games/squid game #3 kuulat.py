@@ -6,7 +6,7 @@ pygame.init()
 LEVEYS =  440
 KORKEUS = 360
 naytto = pygame.display.set_mode((LEVEYS, KORKEUS))
-pygame.display.set_caption("Squid Game #1")
+pygame.display.set_caption("Squid Game #3  Marbles")
 kello = pygame.time.Clock()
 pygame.font.init()
 font = pygame.font.SysFont('Comic Sans MS', 22)
@@ -109,7 +109,8 @@ def main():
             kys = font.render("Paljonko panostat? (1-4)", True, BLUE)     
             naytto.blit(kys, (35, 130)) 
 
-        elif vuoro % 6 == 5:            
+        elif vuoro % 6 == 5:    
+            print("pelaaja_parillinenko", pelaaja_parillinenko)               
             naytto.fill((252, 252, 252)) 
             r = random.randint(0, 1)
             if r == 0:
@@ -145,10 +146,9 @@ def main():
             elif tapahtuma.type == pygame.KEYDOWN:  
                 lkm = tapahtuma.key - 48
                 if lkm % 2 == 1 and (vuoro % 6 == 3 or vuoro % 6 == 0):
-                    pelaaja_parillinenko = "pariton"   # default parillinen
-                    print(pelaaja_parillinenko)                
+                    pelaaja_parillinenko = "pariton"   # default parillinen                             
                 vuoro += 1
-
+                print("pelaaja_parillinenko", pelaaja_parillinenko)       
 
         pygame.display.flip()          
         kello.tick(60)

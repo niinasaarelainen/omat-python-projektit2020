@@ -5,6 +5,7 @@ pygame.init()
 WIDTH = 400
 HEIGHT = 400
 naytto = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Squid Game #3  Shapes")
 keskus = (WIDTH//2, HEIGHT//2)
 sisainen_kello = pygame.time.Clock()
 
