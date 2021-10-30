@@ -31,10 +31,12 @@ pygame.display.set_caption("Squid Game #4  Bridge")
 robo_broken = pygame.image.load("robo_broken.png")
 robo_broken = pygame.transform.scale(robo_broken, (150, 220))
 robo_win = pygame.image.load("robo_win.png")
-robo_win = pygame.transform.scale(robo_win, (210, 170))
+robo_win = pygame.transform.scale(robo_win, (180, 170))
 
 silta = []  # 15 kpl True/False
+silta_rikki = []
 robot = []
+
 
 
 
@@ -61,20 +63,28 @@ def piirra_silta():
     x = 170
     y = 90
     for i in range(15):
-        pygame.draw.rect(naytto, BLUE, pygame.Rect(x, y, rect_pituus, rect_leveys))
+        if i * 2 not in silta_rikki:
+            pygame.draw.rect(naytto, BLUE, pygame.Rect(x, y, rect_pituus, rect_leveys))
         x += 55
     x = 170
     y = 170
     for i in range(15):
-        pygame.draw.rect(naytto, BLUE, pygame.Rect(x, y, rect_pituus, rect_leveys))
+        if i * 2 + 1 not in silta_rikki:
+            pygame.draw.rect(naytto, BLUE, pygame.Rect(x, y, rect_pituus, rect_leveys))
         x += 55  
 
 def main():
+    global silta, robot, silta_rikki
     # textsurface = myfont.render(f"{sec}", True, (100, 30, 30))  
     #mixer.music.play()
     x = 110
     y = 80
     robo_nro = 0
+    silta = []  # 15 kpl True/False
+    silta_rikki = []
+    robot = []
+    rakenna_silta()
+    rakenna_robot()
 
     while True:
         naytto.fill(BLACK)
@@ -94,6 +104,7 @@ def main():
                             if silta[robo.ruutu] == False:
                                 robo.voitto = False
                                 robot.remove(robo)
+                                silta_rikki.append(robo.ruutu)
                         else:
                             lopetus('V O I T I T !!!', robo_win)
 
@@ -106,10 +117,7 @@ def main():
         for robo in robot:
             naytto.blit(robo.pic, (robo.x, robo.y))  
             textsurface = myfont.render(f"{robo.monesko}", True, (0, 30, 30))  
-            naytto.blit(textsurface, (robo.x + 20, robo.y + 35))               
-        #        lopetus('H Ä V I S I T !!!', robo_broken)
-        # textsurface = myfont.render(f"{sec}", True, (100, 30, 30)) 
-        #naytto.blit(textsurface, (320, 20))  
+            naytto.blit(textsurface, (robo.x + 20, robo.y + 35))  
         pygame.display.flip()          
         kello.tick(60)
 
@@ -120,8 +128,14 @@ def lopetus(teksti, kuva):
     
     while True:
         naytto.fill((255, 255, 255))        
-        naytto.blit(textsurface, (20, 100))    
-        naytto.blit(kuva, (510, 10))        
+        naytto.blit(textsurface, (20, 100))   
+        x = 0
+        if len(robot) == 0:
+            naytto.blit(kuva, (510, 10))    
+        else:
+            for robo in robot: 
+                naytto.blit(kuva, (300 + x, 10))      
+                x += 180  
         
 
         for tapahtuma in pygame.event.get():
@@ -135,8 +149,6 @@ def lopetus(teksti, kuva):
         kello.tick(70)
 
 
-
-y = KORKEUS - 100
 BLACK = (0, 0, 0)
 BLUE = (0, 0, 210)
 
@@ -144,6 +156,5 @@ kello = pygame.time.Clock()
 pygame.font.init()
 myfont = pygame.font.SysFont('Comic Sans MS', 20)
 
-rakenna_silta()
-rakenna_robot()
+
 main()
