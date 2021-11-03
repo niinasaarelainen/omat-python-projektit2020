@@ -6,7 +6,7 @@ class Robo:
 
     def __init__(self, offset, monesko):
 
-        self.x = 20 + offset
+        self.x = 15 + offset
         self.y = 80
         self.voitto = True
         self.pic = pygame.image.load("robo.png")
@@ -23,7 +23,7 @@ class Robo:
 
 
 pygame.init()
-LEVEYS =  1111
+LEVEYS =  1120
 KORKEUS = 250
 naytto = pygame.display.set_mode((LEVEYS, KORKEUS))
 pygame.display.set_caption("Squid Game #4  Bridge")
@@ -31,9 +31,10 @@ pygame.display.set_caption("Squid Game #4  Bridge")
 robo_broken = pygame.image.load("robo_broken.png")
 robo_broken = pygame.transform.scale(robo_broken, (150, 220))
 robo_win = pygame.image.load("robo_win.png")
-robo_win = pygame.transform.scale(robo_win, (180, 170))
+robo_win = pygame.transform.scale(robo_win, (170, 160))
 
-RUUTUJA = 15
+RUUTUJA = 16
+ROBOTTEJA = 10
 silta = []  # 15 kpl True/False
 silta_rikki = []
 robot = []
@@ -44,8 +45,8 @@ etummaisen_sijainti = 0    # maali = 15
 
 def rakenna_robot():
     offset = 0
-    for i in range(9):
-        robot.append(Robo(offset, abs(i - 9)))
+    for i in range(ROBOTTEJA):
+        robot.append(Robo(offset, abs(i - ROBOTTEJA)))
         offset += 12
 
 
@@ -76,11 +77,11 @@ def piirra_silta():
         x += 55  
 
 
-def onko_laillinen(robo_nro, x):
+def onko_laillinen(x):
     global etummaisen_sijainti
     yritetty_sijainti = ((x - 170) // 55 )   
     x = x - 20    # jotta saadaan robotti keskemmäs hiiren sijaintia
-    if yritetty_sijainti > etummaisen_sijainti :    # TODO
+    if yritetty_sijainti > etummaisen_sijainti :    
         return False
     else:
         etummaisen_sijainti += 1
@@ -92,7 +93,7 @@ def main():
     global silta, robot, silta_rikki, etummaisen_sijainti
     x = 110
     y = 80
-    robo_nro = 0
+    robo_nro = 1
     silta = []  # 15 kpl True/False
     silta_rikki = []
     robot = []
@@ -100,6 +101,7 @@ def main():
     rakenna_robot()
     etummaisen_sijainti = 0 
     valitus = myfont.render(f" ", True, (0, 30, 30)) 
+    mixer.music.pause()
 
     while True:
         naytto.fill(BLACK)
@@ -113,51 +115,54 @@ def main():
             elif tapahtuma.type == pygame.MOUSEBUTTONDOWN :
                 x, y = tapahtuma.pos   
                 for robo in robot:
-                    if robo.monesko == robo_nro and onko_laillinen(robo_nro, x):    
+                    if robo.monesko == robo_nro and onko_laillinen(x):    
                         valitus = myfont.render(f" ", True, BLACK)                      
                         robo.liiku(x, y)
-                        if robo.ruutu < 30:
+                        if robo.ruutu < RUUTUJA * 2:
                             if silta[robo.ruutu] == False:
                                 robo.voitto = False
                                 robot.remove(robo)
+                                robo_nro += 1
                                 silta_rikki.append(robo.ruutu)
                         else:
-                            lopetus('V O I T I T !!!', robo_win)
+                            lopetus('V O I T I T !!!', robo_win, robo_nro)
                     #laiton
                     else:
                         valitus = myfont.render(f"Saat siirtyä vain yhden ruudun eteenpäin", True, (220, 30, 30))  
                         
-
-            elif tapahtuma.type == pygame.KEYDOWN:
-                robo_nro = tapahtuma.key - 48
   
         
         if len(robot) == 0:
-            lopetus('H Ä V I S I T !!!', robo_broken)          
+            lopetus('H Ä V I S I T !!!', robo_broken, robo_nro)          
         for robo in robot:
             naytto.blit(robo.pic, (robo.x, robo.y))  
-            textsurface = myfont.render(f"{robo.monesko}", True, (0, 30, 30))  
-            naytto.blit(textsurface, (robo.x + 20, robo.y + 35))  
+            monesko = myfont.render(f"{robo.monesko}", True, (0, 30, 30))  
+            naytto.blit(monesko, (robo.x + 16, robo.y + 35))  
 
         naytto.blit(valitus, (x + 50, 35))  
         pygame.display.flip()          
         kello.tick(60)
 
 
-def lopetus(teksti, kuva):
+def lopetus(teksti, kuva, robo_nro):
     textsurface = myfont.render(teksti, True, (100, 30, 30))
-    mixer.music.pause()  
+    mixer.music.play()
     
     while True:
+        nro = robo_nro
         naytto.fill((255, 255, 255))        
         naytto.blit(textsurface, (20, 100))   
         x = 0
         if len(robot) == 0:
             naytto.blit(kuva, (510, 10))    
-        else:
+            mixer.music.pause()
+        else:   
             for robo in robot: 
-                naytto.blit(kuva, (300 + x, 10))      
+                naytto.blit(kuva, (230 + x, 10))    
+                monesko = myfont.render(f"{nro}", True, (0, 30, 30))  
+                naytto.blit(monesko, (302 + x, 98))    
                 x += 180  
+                nro += 1
         
 
         for tapahtuma in pygame.event.get():
@@ -178,5 +183,13 @@ kello = pygame.time.Clock()
 pygame.font.init()
 myfont = pygame.font.SysFont('Comic Sans MS', 20)
 
+mixer.init()
+mixer.music.load("win.mp3")
+mixer.music.set_volume(0.6)
 
-main()
+
+# test lopetus:
+rakenna_robot()
+lopetus('V O I T I T !!!', robo_win, 7)   
+
+# main()
