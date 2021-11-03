@@ -110,7 +110,7 @@ def main():
             naytto.blit(kys, (35, 130)) 
 
         elif vuoro % 6 == 5:    
-            print("pelaaja_parillinenko", pelaaja_parillinenko)               
+            #print("pelaaja_parillinenko", pelaaja_parillinenko)               
             naytto.fill((252, 252, 252)) 
             r = random.randint(0, 1)
             if r == 0:
@@ -122,7 +122,7 @@ def main():
                vihreita -= lkm
                if vihreita <= 0:
                    sinisia -= vihreita                   
-                   print("tietokone arvasi oikein...lkm:", lkm, "  vihreita:", vihreita, "  sinisia:", sinisia)
+                   #print("tietokone arvasi oikein...lkm:", lkm, "  vihreita:", vihreita, "  sinisia:", sinisia)
                    if sinisia >= 10:
                        lopetus("Win !!   Any key = New Game")
             # tietokone arvasi väärin:          
@@ -130,7 +130,7 @@ def main():
                sinisia -= lkm   
                if sinisia <= 0: 
                    vihreita -= sinisia
-                   print("lkm:", lkm, "  vihreita:", vihreita, "  sinisia:", sinisia)
+                   #print("lkm:", lkm, "  vihreita:", vihreita, "  sinisia:", sinisia)
                    if vihreita >= 10:
                        lopetus("Lose !!  Any key = New Game")
             sinisia, vihreita = kuvat_naytolle(sinisia, vihreita)
@@ -148,7 +148,7 @@ def main():
                 if lkm % 2 == 1 and (vuoro % 6 == 3 or vuoro % 6 == 0):
                     pelaaja_parillinenko = "pariton"   # default parillinen                             
                 vuoro += 1
-                print("pelaaja_parillinenko", pelaaja_parillinenko)       
+                #print("pelaaja_parillinenko", pelaaja_parillinenko)       
 
         pygame.display.flip()          
         kello.tick(60)
