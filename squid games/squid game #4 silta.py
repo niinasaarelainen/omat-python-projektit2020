@@ -15,7 +15,7 @@ class Robo:
 
     def liiku(self, x, y):
         self.x = x - 20    # jotta saadaan robotti keskemmäs hiiren sijaintia
-        self.y = y - 80   
+        self.y = y - 110   
         self.ruutu = ((x - 170) // 55 ) * 2
         if y > 165 :  # alarivi
             self.ruutu += 1
@@ -59,16 +59,17 @@ def rakenna_silta():
             silta.append(True)
         silta.append(not silta[-1])
 
+
 def pala_murtuu(x, y, rect_pituus, rect_leveys):
     global murtunut_pala
     pygame.draw.rect(naytto, BLUE, pygame.Rect(x, y, rect_pituus, rect_leveys))
+    piirra_robot()
     for i in range(4):        
-        pygame.draw.line(naytto, BLACK, (x, y), (x + 14, y + 3),  3)
+        pygame.draw.line(naytto, BLACK, (x, y + 10), (x + 14, y + 13),  4)
         pygame.display.flip()          
-        kello.tick(60)
+        kello.tick(12)
         x += 10
-        y += 10
-        print("yeah")
+        y += 5
     murtunut_pala = -1
 
 
@@ -77,9 +78,14 @@ def piirra_silta(murtunut_pala):
     rect_pituus = 45
     x = 170
     y = 90
+    x_murtunut = 170
+    y_murtunut = 90
+    murtuuko = False
     for i in range(RUUTUJA):
         if i * 2 == murtunut_pala:
-            pala_murtuu(x, y, rect_pituus, rect_leveys)
+            x_murtunut = x
+            y_murtunut = y
+            murtuuko = True
         if i * 2 not in silta_rikki:
             pygame.draw.rect(naytto, BLUE, pygame.Rect(x, y, rect_pituus, rect_leveys))
         x += 55
@@ -87,10 +93,14 @@ def piirra_silta(murtunut_pala):
     y = 170
     for i in range(RUUTUJA):
         if i * 2 + 1 == murtunut_pala:
-            pass    # TODO
+            x_murtunut = x
+            y_murtunut = y
+            murtuuko = True
         if i * 2 + 1 not in silta_rikki:
             pygame.draw.rect(naytto, BLUE, pygame.Rect(x, y, rect_pituus, rect_leveys))
         x += 55  
+    if murtuuko:
+        pala_murtuu(x_murtunut, y_murtunut, rect_pituus, rect_leveys)
 
 
 def onko_laillinen(x):
@@ -104,17 +114,25 @@ def onko_laillinen(x):
         return True
 
 
+def piirra_robot():
+    for robo in robot:
+        naytto.blit(robo.pic, (robo.x, robo.y))  
+        monesko = myfont.render(f"{robo.monesko}", True, (0, 30, 30))  
+        naytto.blit(monesko, (robo.x + 16, robo.y + 35))  
+
+
 
 def main():
     global silta, robot, silta_rikki, etummaisen_sijainti, murtunut_pala
     x = 110
     y = 80
-    robo_nro = 1
+    robo_nro = 1    
     silta = []  # 15 kpl True/False
     silta_rikki = []
     robot = []
     rakenna_silta()
     rakenna_robot()
+    robo_muistiin = None
     etummaisen_sijainti = 0 
     valitus = myfont.render(f" ", True, (0, 30, 30)) 
     mixer.music.pause()
@@ -136,7 +154,7 @@ def main():
                         if robo.ruutu < RUUTUJA * 2:
                             if silta[robo.ruutu] == False:
                                 robo.voitto = False
-                                robot.remove(robo)
+                                robo_muistiin = robo                         
                                 robo_nro += 1
                                 murtunut_pala = robo.ruutu
                                 silta_rikki.append(robo.ruutu)
@@ -151,10 +169,10 @@ def main():
             lopetus('H Ä V I S I T !!!', robo_broken, robo_nro)          
         
         piirra_silta(murtunut_pala)
-        for robo in robot:
-            naytto.blit(robo.pic, (robo.x, robo.y))  
-            monesko = myfont.render(f"{robo.monesko}", True, (0, 30, 30))  
-            naytto.blit(monesko, (robo.x + 16, robo.y + 35))  
+        piirra_robot()
+        if robo_muistiin != None:
+            robot.remove(robo_muistiin)
+            robo_muistiin = None
 
         naytto.blit(valitus, (x + 50, 35))  
         pygame.display.flip()          
