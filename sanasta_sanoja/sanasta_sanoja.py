@@ -181,7 +181,7 @@ def onko_laillinen(arvottu_sana, sana):
         if kirjain.upper() in arvottu_sana_list:
             arvottu_sana_list.remove(kirjain.upper())
         else:
-            error_msg = f"{arvottu_sana} ei tuota yrittämääsi sanaa"
+            error_msg = f"{arvottu_sana} Ei tuota yrittämääsi sanaa"
             return False
     if f"{s}" not in wordlist:
         error_msg = "Ei ole englannin sana"

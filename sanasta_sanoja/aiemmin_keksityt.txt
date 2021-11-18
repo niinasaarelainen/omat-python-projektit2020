@@ -1,3 +1,14 @@
+VISUAL
+visa
+al
+la
+vs
+val
+us
+is
+a
+ail
+SEURAAVA SANA:
 MATINEE
 tine
 at
@@ -10,16 +21,15 @@ teen
 mean
 man
 a
-SEURAAVA SANA:
-VISUAL
-visa
-al
-la
-vs
-val
-us
-is
-a
+int
+mint
+tin
+in
+eat
+ante
+etna
+na
+ma
 SEURAAVA SANA:
 RABBITS
 rabbit
@@ -34,6 +44,19 @@ bib
 rabbi
 stab
 at
+its
+bat
+bats
+sitar
+tar
+rat
+rats
+tars
+ars
+art
+arts
+bar
+bast
 SEURAAVA SANA:
 STUDIOS
 studio
@@ -49,6 +72,11 @@ outs
 dis
 toss
 is
+its
+dot
+dots
+sit
+sits
 SEURAAVA SANA:
 ATOMBOMB
 atom
