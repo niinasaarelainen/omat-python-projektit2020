@@ -14,8 +14,7 @@ class TicTac:
         self.skaala = self.kuvat[3].get_width()   # kolmantena isoin kuva
         self.alkupiste = (0, 0)
         self.loppupiste = (0, 0)
-        self.viivansuunta = "" 
-        self.koko = 0  # maatuskat 0 = pienin
+        self.viivansuunta = ""         
 
         nayton_korkeus = self.skaala * self.korkeus
         nayton_leveys = self.skaala * self.leveys
@@ -40,6 +39,7 @@ class TicTac:
 
 
     def uusi_peli(self):
+        self.koko = 0  # maatuskat 0 = pienin
         self.kartta = []
         for i in range(3):
             self.kartta.append([0, 0, 0])
@@ -61,15 +61,14 @@ class TicTac:
                 y = tapahtuma.pos[1]
                 self.sarake  = x // self.skaala
                 self.rivi  = y // self.skaala
-                if self.kartta[self.rivi][self.sarake] == 0:
-                    if self.vuorossa == "sininen":
+                if self.vuorossa == "sininen"  and (self.kartta[self.rivi][self.sarake] == self.koko + 3 or self.kartta[self.rivi][self.sarake] == 0): 
                         self.kartta[self.rivi][self.sarake] = 1 + self.koko  # ["tyhja", "sininen", "punainen"]
                         self.pelaaja1_nappulat.remove(self.koko)
                         self.vuorossa = "punainen"
-                    else:
-                        self.kartta[self.rivi][self.sarake] = 4 + self.koko
-                        self.pelaaja2_nappulat.remove(self.koko)
-                        self.vuorossa = "sininen"
+                elif self.vuorossa == "punainen" and self.kartta[self.rivi][self.sarake] == self.koko:
+                    self.kartta[self.rivi][self.sarake] = 4 + self.koko
+                    self.pelaaja2_nappulat.remove(self.koko)
+                    self.vuorossa = "sininen"
 
             elif tapahtuma.type == pygame.KEYDOWN:
                 if tapahtuma.key == pygame.K_F2:
@@ -139,11 +138,11 @@ class TicTac:
     def peli_lapi(self):
         alkupiste = []     # piirretään voittoviiva
 
-        def onko_vaaka(pelaaja):
+        def onko_vaaka(numerot):
             perakkaisia = 0         
             for y in range(self.korkeus):
                 for x in range(self.leveys):
-                    if self.kartta[y][x] == pelaaja:
+                    if self.kartta[y][x] in numerot:
                         if perakkaisia == 1:
                             alkupiste.append((y, x))
                         perakkaisia += 1    
@@ -157,11 +156,11 @@ class TicTac:
                             alkupiste = []   
             return False    
 
-        def onko_pysty(pelaaja):
+        def onko_pysty(numerot):
             perakkaisia = 0
             for y in range(self.korkeus):
                 for x in range(self.leveys):
-                    if self.kartta[x][y] == pelaaja:
+                    if self.kartta[x][y] in numerot:
                         perakkaisia += 1
                         if perakkaisia == 1:
                             alkupiste.append((y, x))
@@ -175,12 +174,12 @@ class TicTac:
                         alkupiste = []  
             return False    
 
-        def onko_diagonaali(pelaaja):
+        def onko_diagonaali(numerot):
             perakkaisia = 0
             alkupiste = [] 
             #  diagonaali #1 oikealle:
             for i in range(3):
-                if self.kartta[i][i] == pelaaja:
+                if self.kartta[i][i] in numerot:
                     perakkaisia += 1
                     if perakkaisia == 1:
                         alkupiste.append((i, i))
@@ -189,12 +188,13 @@ class TicTac:
                         self.loppupiste = (i, i) 
                         self.viivansuunta = "diagonaali"  
                         return True
-                else:
-                    perakkaisia = 0    
-                    alkupiste = []  
+                    else:
+                        perakkaisia = 0    
+                        alkupiste = []  
             #  diagonaali #2 vasemmalle:
             for i in range(3, 0):       # TODO  oikea synbtaksi !=!??!?
-                if self.kartta[i][i] == pelaaja:
+                print(i)
+                if self.kartta[i][i] in numerot:
                     perakkaisia += 1
                     if perakkaisia == 1:
                         alkupiste.append((i, i))
@@ -208,10 +208,10 @@ class TicTac:
                     alkupiste = []              
             return False  
 
-        if onko_vaaka(1) or onko_pysty(1) or onko_diagonaali(1):   # ["tyhja", "robo", "nolla"]
+        if onko_vaaka([1,2,3]) or onko_pysty([1,2,3]) or onko_diagonaali([1,2,3]):   
             return True, "Sininen voitti"
 
-        if onko_vaaka(2) or onko_pysty(2) or onko_diagonaali(2):   # ["tyhja", "robo", "nolla"]
+        if onko_vaaka([4,5,6]) or onko_pysty([4,5,6]) or onko_diagonaali([4,5,6]):   
             return True, "Punainen voitti"
         
         return False, ""
