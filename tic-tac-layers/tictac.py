@@ -112,10 +112,10 @@ class TicTac:
             self.naytto.blit(teksti, (teksti_x, teksti_y))
 
             if self.viivansuunta == "vaaka":
-                alku_x = self.alkupiste[0] * self.skaala
-                alku_y = self.alkupiste[1] * self.skaala + (self.skaala//2)
-                loppu_x = self.loppupiste[0] * self.skaala + self.skaala 
-                loppu_y = self.loppupiste[1] * self.skaala + (self.skaala//2)
+                alku_y = self.alkupiste[0] * self.skaala + (self.skaala//2)
+                alku_x = self.alkupiste[1] * self.skaala 
+                loppu_y = self.loppupiste[0] * self.skaala + (self.skaala//2)
+                loppu_x = self.loppupiste[1] * self.skaala + self.skaala
                 pygame.draw.line(self.naytto, (0, 0, 0), (alku_x, alku_y ), (loppu_x, loppu_y), 4)
             elif self.viivansuunta == "pysty":
                 alku_x = self.alkupiste[0] * self.skaala + (self.skaala//2)
@@ -123,11 +123,17 @@ class TicTac:
                 loppu_x = self.loppupiste[0] * self.skaala + (self.skaala//2)
                 loppu_y = self.loppupiste[1] * self.skaala + self.skaala
                 pygame.draw.line(self.naytto, (0, 0, 0), (alku_x, alku_y ), (loppu_x, loppu_y), 4)
-            elif self.viivansuunta == "diagonaali":
-                alku_x = self.alkupiste[0] * self.skaala 
-                alku_y = self.alkupiste[1] * self.skaala 
-                loppu_x = self.loppupiste[0] * self.skaala + self.skaala
-                loppu_y = self.loppupiste[1] * self.skaala + self.skaala
+            elif self.viivansuunta == "diagonaali_vas":
+                alku_y = self.alkupiste[0] * self.skaala 
+                alku_x = self.alkupiste[1] * self.skaala + self.skaala
+                loppu_y = self.loppupiste[0] * self.skaala + self.skaala
+                loppu_x = self.loppupiste[1] * self.skaala 
+                pygame.draw.line(self.naytto, (0, 0, 0), (alku_x, alku_y ), (loppu_x, loppu_y), 4)
+            elif self.viivansuunta == "diagonaali_oik":
+                alku_y = self.alkupiste[0] * self.skaala 
+                alku_x = self.alkupiste[1] * self.skaala 
+                loppu_y = self.loppupiste[0] * self.skaala + self.skaala
+                loppu_x = self.loppupiste[1] * self.skaala + self.skaala
                 pygame.draw.line(self.naytto, (0, 0, 0), (alku_x, alku_y ), (loppu_x, loppu_y), 4)
             
 
@@ -136,24 +142,21 @@ class TicTac:
 
 
     def peli_lapi(self):
-        alkupiste = []     # piirretään voittoviiva
 
         def onko_vaaka(numerot):
             perakkaisia = 0         
             for y in range(self.korkeus):
                 for x in range(self.leveys):
                     if self.kartta[y][x] in numerot:
+                        perakkaisia += 1  
                         if perakkaisia == 1:
-                            alkupiste.append((y, x))
-                        perakkaisia += 1    
-                        if perakkaisia == 3:   
-                            self.alkupiste = alkupiste[0]
+                            self.alkupiste = (y, x)                        
+                        if perakkaisia == 3:  
                             self.loppupiste = (y, x) 
                             self.viivansuunta = "vaaka"               
                             return True
-                        else:
-                            perakkaisia = 0   
-                            alkupiste = []   
+                    else:
+                        perakkaisia = 0 
             return False    
 
         def onko_pysty(numerot):
@@ -163,9 +166,8 @@ class TicTac:
                     if self.kartta[x][y] in numerot:
                         perakkaisia += 1
                         if perakkaisia == 1:
-                            alkupiste.append((y, x))
+                            self.alkupiste = (y, x)
                         if perakkaisia == 3:
-                            self.alkupiste = alkupiste[0]
                             self.loppupiste = (y, x) 
                             self.viivansuunta = "pysty"  
                             return True
@@ -176,36 +178,24 @@ class TicTac:
 
         def onko_diagonaali(numerot):
             perakkaisia = 0
-            alkupiste = [] 
             #  diagonaali #1 oikealle:
             for i in range(3):
-                if self.kartta[i][i] in numerot:
+                if self.kartta[i][i] in numerot:                    
                     perakkaisia += 1
                     if perakkaisia == 1:
-                        alkupiste.append((i, i))
-                    if perakkaisia == 3:
-                        self.alkupiste = alkupiste[0]
+                         self.alkupiste = (i, i)
+                    if perakkaisia == 3: 
                         self.loppupiste = (i, i) 
-                        self.viivansuunta = "diagonaali"  
-                        return True
-                    else:
-                        perakkaisia = 0    
-                        alkupiste = []  
+                        self.viivansuunta = "diagonaali_oik"  
+                        return True                        
+                        
             #  diagonaali #2 vasemmalle:
-            for i in range(3, 0):       # TODO  oikea synbtaksi !=!??!?
-                print(i)
-                if self.kartta[i][i] in numerot:
-                    perakkaisia += 1
-                    if perakkaisia == 1:
-                        alkupiste.append((i, i))
-                    if perakkaisia == 3:
-                        self.alkupiste = alkupiste[0]
-                        self.loppupiste = (i, i) 
-                        self.viivansuunta = "diagonaali"  
-                        return True
-                else:
-                    perakkaisia = 0    
-                    alkupiste = []              
+            perakkaisia = 0 
+            if self.kartta[0][2] in numerot and self.kartta[1][1] in numerot and self.kartta[2][0] in numerot:
+                self.alkupiste = (0,2)
+                self.loppupiste = (2, 0) 
+                self.viivansuunta = "diagonaali_vas"  
+                return True         
             return False  
 
         if onko_vaaka([1,2,3]) or onko_pysty([1,2,3]) or onko_diagonaali([1,2,3]):   
