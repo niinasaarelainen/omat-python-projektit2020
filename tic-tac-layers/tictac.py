@@ -25,6 +25,8 @@ class TicTac:
         self.fontti_pieni = pygame.font.SysFont("Arial", 20)
 
         pygame.display.set_caption("RoboNolla")
+        self.varoitusteksti = self.fontti_pieni.render(f"Valitse ensin koko 1-3 !", True, self.varit[self.vuorossa])
+        self.varoitus = False
         self.silmukka()
 
     def lataa_kuvat(self):
@@ -39,7 +41,7 @@ class TicTac:
 
 
     def uusi_peli(self):
-        self.koko = 0  # maatuskat 0 = pienin
+        self.koko = -1 # = kokoa ei valittu, (koot 0-2) 
         self.kartta = []
         for i in range(3):
             self.kartta.append([0, 0, 0])
@@ -48,7 +50,7 @@ class TicTac:
         self.pelaaja1_nappulat = [0, 0, 0, 1, 1, 1, 2, 2, 2]   # joka kokoa 3kpl
         self.pelaaja2_nappulat = [0, 0, 0, 1, 1, 1, 2, 2, 2]
 
-    def silmukka(self):
+    def silmukka(self):        
         while True:
             self.tutki_tapahtumat()
             self.piirra_naytto()
@@ -57,23 +59,29 @@ class TicTac:
     def tutki_tapahtumat(self):        
         for tapahtuma in pygame.event.get():
             if tapahtuma.type == pygame.MOUSEBUTTONDOWN:
-                x = tapahtuma.pos[0]
-                y = tapahtuma.pos[1]
-                self.sarake  = x // self.skaala
-                self.rivi  = y // self.skaala
-                if self.vuorossa == "sininen"  and (self.kartta[self.rivi][self.sarake] == self.koko + 3 or self.kartta[self.rivi][self.sarake] == 0): 
-                        self.kartta[self.rivi][self.sarake] = 1 + self.koko  # ["tyhja", "sininen", "punainen"]
-                        self.pelaaja1_nappulat.remove(self.koko)
-                        self.vuorossa = "punainen"
-                elif self.vuorossa == "punainen" and self.kartta[self.rivi][self.sarake] == self.koko:
-                    self.kartta[self.rivi][self.sarake] = 4 + self.koko
-                    self.pelaaja2_nappulat.remove(self.koko)
-                    self.vuorossa = "sininen"
+                if self.koko == -1:
+                    self.varoitus = True
+                    self.varoitus_y = tapahtuma.pos[1]
+                else:                    
+                    x = tapahtuma.pos[0]
+                    y = tapahtuma.pos[1]
+                    self.sarake  = x // self.skaala
+                    self.rivi  = y // self.skaala
+                    if self.vuorossa == "sininen"  and (self.kartta[self.rivi][self.sarake] in [0, 4, 5]): 
+                            self.kartta[self.rivi][self.sarake] = 1 + self.koko  
+                            self.pelaaja1_nappulat.remove(self.koko)
+                            self.vuorossa = "punainen"
+                    elif self.vuorossa == "punainen" and self.kartta[self.rivi][self.sarake] in [0, 1, 2]:
+                        self.kartta[self.rivi][self.sarake] = 4 + self.koko
+                        self.pelaaja2_nappulat.remove(self.koko)
+                        self.vuorossa = "sininen"
+                    self.koko = -1                     
 
             elif tapahtuma.type == pygame.KEYDOWN:
                 if tapahtuma.key == pygame.K_F2:
-                    self.uusi_peli()
-                else :
+                    self.uusi_peli()                
+                else:
+                    self.varoitus = False
                     self.koko = tapahtuma.key - 49   
                     if self.vuorossa == "sininen":
                         if self.koko not in self.pelaaja1_nappulat:
@@ -86,13 +94,15 @@ class TicTac:
                 exit()
    
 
-    def piirra_naytto(self):
+    def piirra_naytto(self):        
         self.naytto.fill((244, 244, 244))
-
         for y in range(self.korkeus):
             for x in range(self.leveys):
                 ruutu = self.kartta[y][x]
                 self.naytto.blit(self.kuvat[ruutu], (x * self.skaala, y * self.skaala))        
+
+        if self.varoitus:
+            self.naytto.blit(self.varoitusteksti, (15, self.varoitus_y ))
 
         teksti = self.fontti_pieni.render(f"Vuoro: {self.vuorossa}", True, self.varit[self.vuorossa])
         self.naytto.blit(teksti, (15, self.korkeus * self.skaala + 40))
@@ -138,7 +148,7 @@ class TicTac:
             
 
         pygame.display.flip()
-        self.CLOCK.tick(2) 
+        self.CLOCK.tick(1) 
 
 
     def peli_lapi(self):
