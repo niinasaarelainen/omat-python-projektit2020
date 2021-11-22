@@ -28,6 +28,7 @@ class TicTac:
         pygame.display.set_caption("RoboNolla")
         self.varoitusteksti = self.fontti_pieni.render(f"Valitse ensin koko 1-3 !", True, self.varit[self.vuorossa])
         self.varoitus = False
+        self.varoitus_y = 280
         self.silmukka()
 
     def lataa_kuvat(self):
@@ -68,19 +69,18 @@ class TicTac:
                     y = tapahtuma.pos[1]
                     self.sarake  = x // self.skaala
                     self.rivi  = y // self.skaala
-                    if self.vuorossa == "sininen"  and (self.kartta[self.rivi][self.sarake] in [0, 4, 5]): 
+                    if self.vuorossa == "sininen"  and (self.kartta[self.rivi][self.sarake] in [0, 4, 5]):                   
                         self.kartta[self.rivi][self.sarake] = 1 + self.koko  
-                        while self.koko not in self.pelaaja1_nappulat:
-                            self.tutki_tapahtumat()
-                        self.pelaaja1_nappulat.remove(self.koko)
-                        self.vuorossa = "punainen"
-                    elif self.vuorossa == "punainen" and self.kartta[self.rivi][self.sarake] in [0, 1, 2]:
+                        if self.koko in self.pelaaja1_nappulat:
+                            self.pelaaja1_nappulat.remove(self.koko)
+                            self.vuorossa = "punainen"
+                    elif self.vuorossa == "punainen" and self.kartta[self.rivi][self.sarake] in [0, 1, 2]:   
                         self.kartta[self.rivi][self.sarake] = 4 + self.koko
-                        while self.koko not in self.pelaaja2_nappulat:
-                            self.tutki_tapahtumat()
-                        self.pelaaja2_nappulat.remove(self.koko)
-                        self.vuorossa = "sininen"   
-                self.koko = -1                                 
+                        if self.koko in self.pelaaja2_nappulat:
+                            self.pelaaja2_nappulat.remove(self.koko)
+                            self.vuorossa = "sininen"   
+                self.koko = -1   
+                self.varoitus = False                              
 
             elif tapahtuma.type == pygame.KEYDOWN:
                 if tapahtuma.key == pygame.K_F2:
@@ -89,14 +89,19 @@ class TicTac:
                     self.varoitus = False
                     self.koko = tapahtuma.key - 49   
                     if self.vuorossa == "sininen":
-                        if self.koko not in self.pelaaja1_nappulat: 
+                        while self.koko not in self.pelaaja1_nappulat:
+                            self.varoitus_y = 280                            
                             self.varoitusteksti = self.fontti_pieni.render(f"Tuota kokoa ei enää ole", True, self.varit[self.vuorossa])
                             self.varoitus = True
+                            self.piirra_naytto()
+                            self.tutki_tapahtumat()
                     if self.vuorossa == "punainen":
-                        if self.koko not in self.pelaaja2_nappulat: 
+                        while self.koko not in self.pelaaja2_nappulat:
+                            self.varoitus_y = 280                      
                             self.varoitusteksti = self.fontti_pieni.render(f"Tuota kokoa ei enää ole", True, self.varit[self.vuorossa])
                             self.varoitus = True
-                    
+                            self.piirra_naytto()
+                            self.tutki_tapahtumat()
                 
             if tapahtuma.type == pygame.QUIT:
                 exit()
