@@ -3,9 +3,7 @@ import pygame
 
 class TicTac:
     def __init__(self):
-        pygame.init()
-        self.CLOCK = pygame.time.Clock()
-        
+        pygame.init()        
         self.lataa_kuvat()
         self.uusi_peli()
         
@@ -25,11 +23,12 @@ class TicTac:
         self.fontti_iso = pygame.font.SysFont("Arial", 25)
         self.fontti_pieni = pygame.font.SysFont("Arial", 20)
 
-        pygame.display.set_caption("RoboNolla")
+        pygame.display.set_caption("TicTac Maatushka")
         self.varoitusteksti = self.fontti_pieni.render(f"Valitse ensin koko 1-3 !", True, self.varit[self.vuorossa])
         self.varoitus = False
         self.varoitus_y = 280
         self.silmukka()
+
 
     def lataa_kuvat(self):
         self.kuvat = []
@@ -37,20 +36,21 @@ class TicTac:
         self.kuvat.append(pygame.transform.scale(kuva, (78, 78))) 
         for i in range(1,3):
             kuva = pygame.image.load("maatuska" + str(i) + ".png")   #1 = sininen, 2 = pun
-            self.kuvat.append(pygame.transform.scale(kuva, (40, 40))) 
-            self.kuvat.append(pygame.transform.scale(kuva, (60, 60)))
+            self.kuvat.append(pygame.transform.scale(kuva, (32, 32))) 
+            self.kuvat.append(pygame.transform.scale(kuva, (56, 56)))
             self.kuvat.append(pygame.transform.scale(kuva, (80, 80)))
 
 
     def uusi_peli(self):
         self.koko = -1 # = kokoa ei valittu, (koot 0-2) 
+        self.varoitus = False   
         self.kartta = []
         for i in range(3):
             self.kartta.append([0, 0, 0])
-        self.siirrot = 0
         self.vuorossa = "sininen"
         self.pelaaja1_nappulat = [0, 0, 0, 1, 1, 1, 2, 2, 2]   # joka kokoa 3kpl
         self.pelaaja2_nappulat = [0, 0, 0, 1, 1, 1, 2, 2, 2]
+
 
     def silmukka(self):        
         while True:
@@ -69,18 +69,19 @@ class TicTac:
                     y = tapahtuma.pos[1]
                     self.sarake  = x // self.skaala
                     self.rivi  = y // self.skaala
-                    if self.vuorossa == "sininen"  and (self.kartta[self.rivi][self.sarake] in [0, 4, 5]):                   
-                        self.kartta[self.rivi][self.sarake] = 1 + self.koko  
+                    ruutu = self.kartta[self.rivi][self.sarake]
+                    if self.vuorossa == "sininen"  and ( ruutu == 0 or (ruutu - self.koko <= 3 and ruutu - self.koko >= 1)):    
                         if self.koko in self.pelaaja1_nappulat:
                             self.pelaaja1_nappulat.remove(self.koko)
                             self.vuorossa = "punainen"
-                    elif self.vuorossa == "punainen" and self.kartta[self.rivi][self.sarake] in [0, 1, 2]:   
-                        self.kartta[self.rivi][self.sarake] = 4 + self.koko
+                            self.kartta[self.rivi][self.sarake] = 1 + self.koko  
+                    elif self.vuorossa == "punainen" and ( ruutu == 0 or ruutu - self.koko <= 0 ):    
                         if self.koko in self.pelaaja2_nappulat:
                             self.pelaaja2_nappulat.remove(self.koko)
                             self.vuorossa = "sininen"   
+                            self.kartta[self.rivi][self.sarake] = 4 + self.koko
                 self.koko = -1   
-                self.varoitus = False                              
+                                          
 
             elif tapahtuma.type == pygame.KEYDOWN:
                 if tapahtuma.key == pygame.K_F2:
@@ -95,6 +96,7 @@ class TicTac:
                             self.varoitus = True
                             self.piirra_naytto()
                             self.tutki_tapahtumat()
+                        self.varoitus = False    
                     if self.vuorossa == "punainen":
                         while self.koko not in self.pelaaja2_nappulat:
                             self.varoitus_y = 280                      
@@ -102,7 +104,7 @@ class TicTac:
                             self.varoitus = True
                             self.piirra_naytto()
                             self.tutki_tapahtumat()
-                
+                        self.varoitus = False    
             if tapahtuma.type == pygame.QUIT:
                 exit()
    
@@ -126,12 +128,12 @@ class TicTac:
         teksti = self.fontti_pieni.render(f"1=pienin 2=keski 3=isoin", True,  self.varit[self.vuorossa])
         self.naytto.blit(teksti, (15, self.korkeus * self.skaala + 70))
 
-        teksti = self.fontti_pieni.render("F2 = uusi peli", True, (255, 0, 220))
-        self.naytto.blit(teksti, (15, self.korkeus * self.skaala + 100))
+        teksti = self.fontti_pieni.render("F2 = uusi peli", True, (55, 211, 120))
+        self.naytto.blit(teksti, (15, self.korkeus * self.skaala + 110))
 
-        lapi, lapi_teksti = self.peli_lapi()
+        lapi, lapi_teksti, vari = self.peli_lapi()
         if lapi:
-            teksti = self.fontti_iso.render(lapi_teksti, True, (255, 0, 0))
+            teksti = self.fontti_iso.render(lapi_teksti, True, vari)
             teksti_x = self.skaala * self.leveys / 2 -15 - teksti.get_width() / 2
             teksti_y = self.skaala * self.korkeus / 2 - 15 - teksti.get_height() / 2
             pygame.draw.rect(self.naytto, (252, 252, 252), (teksti_x, teksti_y, teksti.get_width(), teksti.get_height()))
@@ -160,15 +162,12 @@ class TicTac:
                 alku_x = self.alkupiste[1] * self.skaala 
                 loppu_y = self.loppupiste[0] * self.skaala + self.skaala
                 loppu_x = self.loppupiste[1] * self.skaala + self.skaala
-                pygame.draw.line(self.naytto, (0, 0, 0), (alku_x, alku_y ), (loppu_x, loppu_y), 4)
-            
+                pygame.draw.line(self.naytto, (0, 0, 0), (alku_x, alku_y ), (loppu_x, loppu_y), 4)            
 
         pygame.display.flip()
-        self.CLOCK.tick(1)    # ei saa olla desimaalia
 
 
     def peli_lapi(self):
-
         def onko_vaaka(numerot):
             perakkaisia = 0         
             for y in range(self.korkeus):
@@ -226,12 +225,12 @@ class TicTac:
             return False  
 
         if onko_vaaka([1,2,3]) or onko_pysty([1,2,3]) or onko_diagonaali([1,2,3]):   
-            return True, "Sininen voitti"
+            return True, "Sininen voitti", (0, 0, 255)
 
         if onko_vaaka([4,5,6]) or onko_pysty([4,5,6]) or onko_diagonaali([4,5,6]):   
-            return True, "Punainen voitti"
+            return True, "Punainen voitti", (255, 0, 0)
         
-        return False, ""
+        return False, "", ""
 
 
 if __name__ == "__main__":
