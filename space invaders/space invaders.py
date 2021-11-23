@@ -6,10 +6,13 @@ class Robotti:   # ohjataan nuolinäppäimillä
         self.x = int(WIDTH/2)
         self.y = HEIGHT-robo.get_height()
         self.nopeus = 1
+        self.robon_oik_reuna = robo.get_width() - 1
+
+    def nollaa(self):
+        self.ammutut = []
+        self.ammuksia = 88
         self.oikealle = False           
         self.vasemmalle = False
-        self.robon_oik_reuna = robo.get_width() - 1
-        self.ammutut = []
    
     def key_events(self, tapahtuma):
         if tapahtuma.type == pygame.KEYDOWN:     
@@ -19,11 +22,15 @@ class Robotti:   # ohjataan nuolinäppäimillä
                 self.vasemmalle = True
             if tapahtuma.key ==  pygame.K_SPACE:
                 self.ammutut.append([self.x + 15, HEIGHT - 28])  #('tuple' object does not support item assignment)
+                self.ammuksia -= 1
+                if self.ammuksia == 0:
+                    return False
         if tapahtuma.type == pygame.KEYUP:
             if tapahtuma.key ==  pygame.K_RIGHT:
                 self.oikealle = False
             if tapahtuma.key ==  pygame.K_LEFT:
                 self.vasemmalle = False
+        return True
                 
     def liiku(self):
         if self.oikealle and self.x <= WIDTH - self.robon_oik_reuna - self.nopeus:
@@ -64,7 +71,7 @@ def game_over(status, pisteet):
     naytto.blit(teksti, (140, 140))
     
     teksti = fontti.render(f"Score: {pisteet}", True, (205, 205, 205))
-    naytto.blit(teksti, (255, 220))
+    naytto.blit(teksti, (255, 230))
 
     teksti = fontti.render(f"New Game: Arrows", True, (205, 205, 205))
     naytto.blit(teksti, (205, 270))
@@ -109,12 +116,14 @@ def pelaa():
     asteroidien_ammukset = []
     pisteet = 0
     r.ammutut = []
+    r.nollaa()
     while True:
         kierros_nro += 1
         for tapahtuma in pygame.event.get():
             if tapahtuma.type == pygame.QUIT:
                 pygame.quit()
-            r.key_events(tapahtuma)
+            if r.key_events(tapahtuma) == False:
+                game_over("Out of Ammo", 0)
 
         naytto.fill((0, 0, 0))          
         r.liiku()      
@@ -124,7 +133,7 @@ def pelaa():
         for asteroidi in asteroidit:            
             if kierros_nro % 20 == 0:                
                 asteroidi.liiku(liike)
-                rand = random.randint(0, 80)
+                rand = random.randint(0, 70)
                 if  rand == 0:
                     asteroidien_ammukset.append([asteroidi.x, asteroidi.y])
             
@@ -135,7 +144,7 @@ def pelaa():
                     pisteet += 1
                     asteroidit.remove(asteroidi)
                     if len(asteroidit) == 0:
-                        game_over("Winner !!!", pisteet)
+                        game_over("Winner !!!", pisteet + r.ammuksia)
                     r.ammutut.remove(ammus)
             
             naytto.blit(ast, (asteroidi.x, asteroidi.y))
@@ -157,7 +166,11 @@ def pelaa():
         
         pist = "Pisteet: " + str(pisteet)
         teksti = fontti.render(pist, True, (255, 0, 0))
-        naytto.blit(teksti, (510, 40))
+        naytto.blit(teksti, (480, 10))
+
+        amm = f"Ammuksia: {r.ammuksia}"
+        teksti = fontti.render(amm, True, (255, 0, 0))
+        naytto.blit(teksti, (480, 30))
 
         pygame.display.flip()     
         kello.tick(70)
