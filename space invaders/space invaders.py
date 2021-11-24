@@ -10,7 +10,7 @@ class Robotti:   # ohjataan nuolinäppäimillä
 
     def nollaa(self):
         self.ammutut = []
-        self.ammuksia = 88
+        self.ammuksia = 70
         self.oikealle = False           
         self.vasemmalle = False
    
@@ -43,14 +43,15 @@ class Robotti:   # ohjataan nuolinäppäimillä
 
 class Asteroidi:  # 11 x 4  rivistö
     
-    def __init__(self, x, y):
+    def __init__(self, x, y, level):
         self.x = x
         self.y = y
-        self.nopeus = 0.3        
+        self.nopeus = 0.3       
+        self.level = level
     
     def liiku(self, liike):
         if liike == 0:
-            self.y += 8
+            self.y += 8 * self.level
         else:
             self.x += liike
 
@@ -59,10 +60,10 @@ class Asteroidi:  # 11 x 4  rivistö
 #######################################################################################
 
 def luo_asteroidit():
-    global asteroidit
+    global asteroidit, level
     for rivissa in range(11):
         for riveja in range(4):
-            asteroidit.append(Asteroidi(rivissa * 50 + 85, riveja * 50))
+            asteroidit.append(Asteroidi(rivissa * 50 + 85, riveja * 50, level))
 
 
 def game_over(status, pisteet):
@@ -71,10 +72,10 @@ def game_over(status, pisteet):
     naytto.blit(teksti, (140, 140))
     
     teksti = fontti.render(f"Score: {pisteet}", True, (205, 205, 205))
-    naytto.blit(teksti, (255, 230))
+    naytto.blit(teksti, (215, 230))
 
     teksti = fontti.render(f"New Game: Arrows", True, (205, 205, 205))
-    naytto.blit(teksti, (205, 270))
+    naytto.blit(teksti, (200, 270))
     pygame.display.update()
     
     while True:
@@ -106,16 +107,15 @@ GREEN = (10, 255, 10)
 r = Robotti()
 asteroidit = []
 pygame.mouse.set_pos([WIDTH+1, HEIGHT+1])  # hiiri pois ruudulta
-
+level = 1
+pisteet = 0
 
 def pelaa():
-    global asteroidit
+    global asteroidit, level, pisteet
     asteroidit = []
     luo_asteroidit()
     kierros_nro = 0
-    asteroidien_ammukset = []
-    pisteet = 0
-    r.ammutut = []
+    asteroidien_ammukset = []    
     r.nollaa()
     while True:
         kierros_nro += 1
@@ -143,8 +143,12 @@ def pelaa():
                 if ammus[1] <= asteroidi.y + ast.get_height() and ammus[1] >= asteroidi.y + ast.get_height()- 4 and ammus[0] >= asteroidi.x  and ammus[0] <= asteroidi.x + ast.get_width():
                     pisteet += 1
                     asteroidit.remove(asteroidi)
-                    if len(asteroidit) == 0:
-                        game_over("Winner !!!", pisteet + r.ammuksia)
+                    if len(asteroidit) == 0 and level == 2:
+                        game_over("Winner !!!", pisteet + r.ammuksia)                        
+                    elif len(asteroidit) == 0 and level == 1:
+                        level = 2
+                        r.ammuksia = 70
+                        pelaa()
                     r.ammutut.remove(ammus)
             
             naytto.blit(ast, (asteroidi.x, asteroidi.y))
