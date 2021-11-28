@@ -51,7 +51,7 @@ class Asteroidi:  # 11 x 4  rivistö
     
     def liiku(self, liike):
         if liike == 0:
-            self.y += 8 * self.level
+            self.y += 9 * self.level
         else:
             self.x += liike
 
@@ -146,8 +146,8 @@ def pelaa():
             if kierros_nro % 20 == 0:                
                 asteroidi.liiku(liike)
                 if asteroidi.y + 15 <= r.y and asteroidi.y + 24 >= r.y:
-                    game_over("Game Over", pisteet)                
-                rand = random.randint(0, 60)
+                    game_over("Game Over", pisteet)  
+                rand = random.randint(0, int(len(asteroidit) * 1.7))
                 if  rand == 0:
                     asteroidien_ammukset.append([asteroidi.x +  ast.get_width() // 2, asteroidi.y + ast.get_height()])
             
