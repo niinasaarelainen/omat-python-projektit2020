@@ -1,4 +1,4 @@
-import pygame, random
+import pygame, random, pygame.midi
 
 class Robotti:   # ohjataan nuolinäppäimillä
 
@@ -63,7 +63,7 @@ def luo_asteroidit():
     global asteroidit, level
     for rivissa in range(11):
         for riveja in range(4):
-            asteroidit.append(Asteroidi(rivissa * 50 + 85, riveja * 50, level))
+            asteroidit.append(Asteroidi(rivissa * 50 + 77, riveja * 50, level))
 
 
 def game_over(status, pisteet):
@@ -89,6 +89,10 @@ def game_over(status, pisteet):
                
 
 pygame.init()
+pygame.midi.init()
+port = pygame.midi.get_default_output_id()
+midi_out = pygame.midi.Output(port, 0)
+
 WIDTH = 650
 HEIGHT = 450
 naytto = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -109,6 +113,14 @@ asteroidit = []
 pygame.mouse.set_pos([WIDTH+1, HEIGHT+1])  # hiiri pois ruudulta
 level = 1
 pisteet = 0
+
+
+def midi_play():
+    midi_out.set_instrument(14)
+    rand = random.randint(53, 61)
+    midi_out.note_on(rand, 110)    
+    pygame.time.delay(70)
+    midi_out.note_off(rand, 110)
 
 def pelaa():
     global asteroidit, level, pisteet
@@ -133,15 +145,18 @@ def pelaa():
         for asteroidi in asteroidit:            
             if kierros_nro % 20 == 0:                
                 asteroidi.liiku(liike)
-                rand = random.randint(0, 70)
+                if asteroidi.y + 15 <= r.y and asteroidi.y + 24 >= r.y:
+                    game_over("Game Over", pisteet)                
+                rand = random.randint(0, 60)
                 if  rand == 0:
-                    asteroidien_ammukset.append([asteroidi.x, asteroidi.y])
+                    asteroidien_ammukset.append([asteroidi.x +  ast.get_width() // 2, asteroidi.y + ast.get_height()])
             
             # robotin ampumat
             for ammus in r.ammutut:
                 pygame.draw.circle(naytto, WHITE, (ammus),  3)        
                 if ammus[1] <= asteroidi.y + ast.get_height() and ammus[1] >= asteroidi.y + ast.get_height()- 4 and ammus[0] >= asteroidi.x  and ammus[0] <= asteroidi.x + ast.get_width():
                     pisteet += 1
+                    midi_play()
                     asteroidit.remove(asteroidi)
                     if len(asteroidit) == 0 and level == 2:
                         game_over("Winner !!!", pisteet + r.ammuksia)                        
