@@ -1,16 +1,19 @@
+import sys
+
 data = []
-arvotut_numerot = []   # stringejä !!!
+voittonumerot = []   # stringejä !!!
 bingo_kentat = []
-viimeisin_arvottu = None
+viimeisin_arvottu = 0
+jatketaan = True
 
 def readfile():
-    global arvotut_numerot, bingo_kentat
+    global voittonumerot, bingo_kentat
     f = open("data_easy2.txt", "r") 
     i = 0
     for rivi in f:
         if i == 0:
-            arvotut_numerot.append(rivi.strip().split(","))
-            arvotut_numerot = arvotut_numerot[0]
+            voittonumerot.append(rivi.strip().split(","))
+            voittonumerot = voittonumerot[0]
         else:
             if rivi.strip() == '':
                bingo_kentat.append([]) 
@@ -20,23 +23,30 @@ def readfile():
 
 
 def loytyyko_numero():
-    global viimeisin_arvottu
-    for i in range(len(arvotut_numerot)):
-        viimeisin_arvottu = arvotut_numerot.pop(0).strip()
-        for kentta in range(len(bingo_kentat)):
-            for rivi in range(len(bingo_kentat[kentta])):
-                if viimeisin_arvottu in bingo_kentat[kentta][rivi]:   #TODO  2 --> 22 --> **, pitäisi pysyä 22:na
-                    bingo_kentat[kentta][rivi] = bingo_kentat[kentta][rivi].replace(viimeisin_arvottu, " * ")
-                    bingo_kentat[kentta][rivi] = bingo_kentat[kentta][rivi].replace("  ", " ")
-        print(bingo_kentat)
+        global viimeisin_arvottu, jatketaan  
+        
+        for nro in voittonumerot:
+            viimeisin_arvottu = voittonumerot.pop(0).strip()
+            print(viimeisin_arvottu)
+            for kentta in range(len(bingo_kentat)):
+                for rivi in range(len(bingo_kentat[kentta])):                
+                    if viimeisin_arvottu in bingo_kentat[kentta][rivi].split(" "):  # TODO  1 --> 14 --> * 4  EIIII
+                        bingo_kentat[kentta][rivi] = bingo_kentat[kentta][rivi].replace(viimeisin_arvottu, " * ")
+                        bingo_kentat[kentta][rivi] = bingo_kentat[kentta][rivi].replace("  ", " ")
+                    if voittoko() != 0:
+                        print(voittoko() * int(viimeisin_arvottu))
+                        sys.exit()
+            print(bingo_kentat)
 
 
-def voittoko():    
+def voittoko():  
+    global jatketaan   
     #vaakatarkistus:
     for kentta in range(len(bingo_kentat)):
         for rivi in range(len(bingo_kentat[kentta])):
             if bingo_kentat[kentta][rivi].count(' *') == 5:
-                #print("vaakatykki")
+                print("vaakatykki")
+                jatketaan = False
                 return laske_summa(kentta)                
 
     # pystytarkistus
@@ -46,11 +56,12 @@ def voittoko():
             for rivi in range(len(bingo_kentat[kentta])):
                 splitted = bingo_kentat[kentta][rivi].split(" ")
                 pystyrivi.append(splitted[ind])
-            print("pystyrivi", pystyrivi)
             if pystyrivi.count('*') == 5:   
                 print("pystytykki")
+                jatketaan = False
                 return laske_summa(kentta)                
             pystyrivi =  []
+    return 0
 
 def laske_summa(kentta):
     unmarked_numbers = 0
@@ -65,4 +76,3 @@ def laske_summa(kentta):
 
 readfile()
 loytyyko_numero()
-print(voittoko() * int(viimeisin_arvottu))
