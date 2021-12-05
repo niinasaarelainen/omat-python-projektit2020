@@ -1,7 +1,7 @@
 import sys
 
 data = []
-voittonumerot = []   # stringejä !!!
+voittonumerot = []   # stringejä !!!                väärä tulos : 2744
 bingo_kentat = []
 viimeisin_arvottu = 0
 voittonumerot_lkm = 0
@@ -24,40 +24,46 @@ def readfile():
 
 
 def loytyyko_numero():
-        global viimeisin_arvottu, voittonumerot_lkm 
-        poistettava_kentta = 0        
-        
-        #print("(bingo_kentat aluksi", bingo_kentat)
-
-        for i in range(voittonumerot_lkm):
-            viimeisin_arvottu = voittonumerot.pop(0).strip()
+        global viimeisin_arvottu, voittonumerot_lkm  
+        summa = 0
+        for i in range(voittonumerot_lkm):         
+            if len(voittonumerot) > 0:
+                viimeisin_arvottu = voittonumerot.pop(0).strip()
             print("viimeisin_arvottu", viimeisin_arvottu)
             for kentta in range(len(bingo_kentat)):
                 for rivi in range(len(bingo_kentat[kentta])):  
                     #print("rivi", bingo_kentat[kentta][rivi]) 
-                    yksittaiset_numerot = bingo_kentat[kentta][rivi].split(" ")
-                    for nro in yksittaiset_numerot:  
-                        if viimeisin_arvottu == nro.strip():  
-                            bingo_kentat[kentta][rivi] = bingo_kentat[kentta][rivi].replace(viimeisin_arvottu, "*")
-                        if voittoko() != 0:
-                            poistettava_kentta = kentta
-                            bingo_kentat.remove(bingo_kentat[poistettava_kentta])
-                            voittonumerot_lkm = len(voittonumerot)    
-                            if len(bingo_kentat) > 1:
-                                loytyyko_numero()
-                                #print("(bingo_kentat)", bingo_kentat)
-                            else:                                
-                                print(laske_summa(0) * int(viimeisin_arvottu))
-                                sys.exit()
+                    yksittaiset_numerot = bingo_kentat[kentta][rivi].split(" ")                    
+                    for nro in range(len(yksittaiset_numerot)):  
+                        if viimeisin_arvottu == yksittaiset_numerot[nro].strip():  
+                            yksittaiset_numerot[nro] = "*"                            
+                            uusi_rivi = ' '.join(yksittaiset_numerot)
+                            bingo_kentat[kentta][rivi] = uusi_rivi
+                            #bingo_kentat[kentta][rivi] = bingo_kentat[kentta][rivi].replace(viimeisin_arvottu, "*")               
+            voittokentat = voittoko()
+            voittokentat.sort(reverse = True)
+            print("voittokentat", voittokentat)        
+            for kentta in voittokentat:
+                print("     poistettiin kenttä", bingo_kentat[kentta])
+                summa = laske_summa(kentta)
+                bingo_kentat.remove(bingo_kentat[kentta])
+                if len(bingo_kentat) == 0:
+                    print(" V I K A   ", summa * int(viimeisin_arvottu))
+                    sys.exit()  
+            #print("len(bingo_kentat)", len(bingo_kentat))              
 
-
+        
+            
+                
 def voittoko():    
+    voittokentat = []
     #vaakatarkistus:
     for kentta in range(len(bingo_kentat)):
         for rivi in range(len(bingo_kentat[kentta])):
             if bingo_kentat[kentta][rivi].count('*') == 5:
-                print("vaakatykki")
-                return laske_summa(kentta)                
+                #print("vaakatykki")
+                if kentta not in voittokentat:
+                    voittokentat.append(kentta)            
 
     # pystytarkistus
     for kentta in range(len(bingo_kentat)):
@@ -67,12 +73,14 @@ def voittoko():
                 splitted = bingo_kentat[kentta][rivi].split(" ")
                 pystyrivi.append(splitted[ind])
             if pystyrivi.count('*') == 5:   
-                print("pystytykki")
-                return laske_summa(kentta)                
+                #print("pystytykki")
+                if kentta not in voittokentat:
+                    voittokentat.append(kentta)         
             pystyrivi =  []
-    return 0
+    return voittokentat
 
 def laske_summa(kentta):
+    print(bingo_kentat[kentta])
     unmarked_numbers = 0
     for rivi in range(len(bingo_kentat[kentta])):
         splitted = bingo_kentat[kentta][rivi].split(" ")
