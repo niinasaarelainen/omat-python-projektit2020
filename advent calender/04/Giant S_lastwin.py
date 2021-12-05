@@ -4,7 +4,6 @@ data = []
 voittonumerot = []   # stringejä !!!
 bingo_kentat = []
 viimeisin_arvottu = 0
-jatketaan = True
 voittonumerot_lkm = 0
 
 def readfile():
@@ -25,10 +24,11 @@ def readfile():
 
 
 def loytyyko_numero():
-        global viimeisin_arvottu, jatketaan  
+        global viimeisin_arvottu, voittonumerot_lkm 
+        poistettava_kentta = 0        
+        
+        #print("(bingo_kentat aluksi", bingo_kentat)
 
-        
-        
         for i in range(voittonumerot_lkm):
             viimeisin_arvottu = voittonumerot.pop(0).strip()
             print("viimeisin_arvottu", viimeisin_arvottu)
@@ -40,18 +40,23 @@ def loytyyko_numero():
                         if viimeisin_arvottu == nro.strip():  
                             bingo_kentat[kentta][rivi] = bingo_kentat[kentta][rivi].replace(viimeisin_arvottu, "*")
                         if voittoko() != 0:
-                            print(voittoko() * int(viimeisin_arvottu))
-                            sys.exit() 
+                            poistettava_kentta = kentta
+                            bingo_kentat.remove(bingo_kentat[poistettava_kentta])
+                            voittonumerot_lkm = len(voittonumerot)    
+                            if len(bingo_kentat) > 1:
+                                loytyyko_numero()
+                                #print("(bingo_kentat)", bingo_kentat)
+                            else:                                
+                                print(laske_summa(0) * int(viimeisin_arvottu))
+                                sys.exit()
 
 
-def voittoko():  
-    global jatketaan   
+def voittoko():    
     #vaakatarkistus:
     for kentta in range(len(bingo_kentat)):
         for rivi in range(len(bingo_kentat[kentta])):
             if bingo_kentat[kentta][rivi].count('*') == 5:
                 print("vaakatykki")
-                jatketaan = False
                 return laske_summa(kentta)                
 
     # pystytarkistus
@@ -63,7 +68,6 @@ def voittoko():
                 pystyrivi.append(splitted[ind])
             if pystyrivi.count('*') == 5:   
                 print("pystytykki")
-                jatketaan = False
                 return laske_summa(kentta)                
             pystyrivi =  []
     return 0
