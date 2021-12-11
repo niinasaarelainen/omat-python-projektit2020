@@ -30,11 +30,11 @@ b    .  b    .  .    c  b    c  b    c
  8: a - g           =7kpl
  9: a- g, paitsi e  =6kpl   
 
-2 kirjainta : "1"   HELPOIN MUOTO
-3 kirjainta : "7"   2. HELPOIN MUOTO --> EI YLÄRIVIÄ = 4 (ykkönen jo selvitetty)
-4 kirjainta : "4"
-5 kirjainta : "2", "3", "5"
-6 kirjainta : "0", "6", "9"
+2 kirjainta : "1"   HELPOIN MUOTO ( c ja f, kumpi on kumpi ??)
+3 kirjainta : "7"    7 = 1+a
+4 kirjainta : "4"    4= 1+ b ja d
+5 kirjainta : "2", "3", "5"    2 ainoa jossa ei f
+6 kirjainta : "0", "6", "9"    0= 8-d ,  6=5+e  ja 8-c , 9 = 8-e
 7 kirjainta : "8"
 
 """
@@ -42,6 +42,8 @@ b    .  b    .  .    c  b    c  b    c
 alut_ja_loput = []
 output_values = []
 vastaus = 0
+vastaavuudet = {"a": None, "b":  None, "c": None, "d": None, "e": None, "f": None, "g": None }
+x_kpl_kirjainta = []
 
 
 def readfile():   # a-kohta
@@ -66,6 +68,38 @@ def montako_1478():
     print(vastaus)
 
 
+def readfile2():   # a-kohta    
+    global output_values
+    f = open("data_rivi.txt", "r")         
+    for rivi in f:
+        alut_ja_loput.append(rivi.split(" | "))
+    print("alut_ja_loput", alut_ja_loput)
+    for i in range(len(alut_ja_loput)):
+        #output_values.append(alut_ja_loput[i][0].split(" "))
+        #output_values.append(alut_ja_loput[i][1].split(" "))
+        pass
+    #print()
+    #print(output_values)
+    
 
-readfile()
-montako_1478()
+def muodosta_x_kpl_kirjainta():
+    global x_kpl_kirjainta
+    temp_kaikki_erilaiset_kerran = []
+    for lista in output_values:
+        for str in lista:
+            if sorted(str.strip()) not in temp_kaikki_erilaiset_kerran:
+                temp_kaikki_erilaiset_kerran.append(sorted(str.strip()))
+    
+    print(temp_kaikki_erilaiset_kerran)
+
+
+
+def b_kohta():
+    readfile2()
+    muodosta_x_kpl_kirjainta()
+
+
+#readfile()
+#montako_1478()
+
+b_kohta()
