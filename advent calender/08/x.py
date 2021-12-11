@@ -43,6 +43,7 @@ alut_ja_loput = []
 output_values = []
 vastaus = 0
 vastaavuudet = {"a": None, "b":  None, "c": None, "d": None, "e": None, "f": None, "g": None }
+pituudet = {2: [], 3: [], 4: [], 5: [], 6: [], 7: []}
 x_kpl_kirjainta = []
 
 
@@ -75,22 +76,31 @@ def readfile2():   # a-kohta
         alut_ja_loput.append(rivi.split(" | "))
     print("alut_ja_loput", alut_ja_loput)
     for i in range(len(alut_ja_loput)):
-        #output_values.append(alut_ja_loput[i][0].split(" "))
-        #output_values.append(alut_ja_loput[i][1].split(" "))
-        pass
-    #print()
-    #print(output_values)
+        output_values.append(alut_ja_loput[i][0].split(" "))
+        output_values.append(alut_ja_loput[i][1].split(" "))
+    print()
+    print("output_values", output_values)
     
 
 def muodosta_x_kpl_kirjainta():
-    global x_kpl_kirjainta
+    global x_kpl_kirjainta, pituudet
     temp_kaikki_erilaiset_kerran = []
     for lista in output_values:
+        print("lista", lista)
         for str in lista:
             if sorted(str.strip()) not in temp_kaikki_erilaiset_kerran:
                 temp_kaikki_erilaiset_kerran.append(sorted(str.strip()))
-    
-    print(temp_kaikki_erilaiset_kerran)
+
+    for item in temp_kaikki_erilaiset_kerran:
+        pituudet[len(item)] += [item]
+
+    for montako, kirjainsarjat in pituudet.items():
+        for sarja in kirjainsarjat:
+            for kirjain in sarja:
+                for item in  pituudet[2]:
+                    if len(sarja) == 3 and kirjain not in item:
+                        vastaavuudet["a"] = kirjain
+    print(vastaavuudet)
 
 
 
