@@ -42,7 +42,6 @@ b    .  b    .  .    c  b    c  b    c
 alut_ja_loput = []
 output_values = []
 vastaus = 0
-vastaavuudet = {"a": None, "b":  None, "c": None, "d": None, "e": None, "f": None, "g": None }
 pituudet = {2: [], 3: [], 4: [], 5: [], 6: [], 7: []}
 x_kpl_kirjainta = []
 
@@ -84,23 +83,34 @@ def readfile2():   # a-kohta
 
 def muodosta_x_kpl_kirjainta():
     global x_kpl_kirjainta, pituudet
-    temp_kaikki_erilaiset_kerran = []
-    for lista in output_values:
-        print("lista", lista)
-        for str in lista:
-            if sorted(str.strip()) not in temp_kaikki_erilaiset_kerran:
-                temp_kaikki_erilaiset_kerran.append(sorted(str.strip()))
 
-    for item in temp_kaikki_erilaiset_kerran:
-        pituudet[len(item)] += [item]
 
-    for montako, kirjainsarjat in pituudet.items():
-        for sarja in kirjainsarjat:
-            for kirjain in sarja:
-                for item in  pituudet[2]:
-                    if len(sarja) == 3 and kirjain not in item:
-                        vastaavuudet["a"] = kirjain
-    print(vastaavuudet)
+    for str in output_values[0]:
+        pituudet[len(str)].append(str)
+
+    oikeat_vastaukset = [-1,-1,-1,-1, -1,-1, -1,-1, -1,-1]
+    oikeat_vastaukset[1] = pituudet[2][0]
+    oikeat_vastaukset[7] = pituudet[3][0]
+    oikeat_vastaukset[4] = pituudet[4][0]
+    oikeat_vastaukset[8] = pituudet[7][0]
+
+    for str in pituudet[6]:
+        etsittava = set(pituudet[2][0])
+        if not etsittava.issubset(set(str)):
+            print(etsittava, "not in set", set(str))
+            oikeat_vastaukset[6] = str
+    
+    
+    for str in pituudet[5]:
+        etsittava = set(oikeat_vastaukset[6])
+        print("set(str), etsittava", set(str), etsittava)
+        if set(str).issubset(etsittava):
+            oikeat_vastaukset[5] = str 
+
+    print(oikeat_vastaukset)
+            
+
+    
 
 
 
