@@ -43,8 +43,6 @@ alut_ja_loput = []
 output_values = []
 vastaus = 0
 pituudet = {2: [], 3: [], 4: [], 5: [], 6: [], 7: []}
-x_kpl_kirjainta = []
-
 
 def readfile():   # a-kohta
     global output_values
@@ -53,9 +51,11 @@ def readfile():   # a-kohta
         alut_ja_loput.append(rivi.split(" | "))
     print(alut_ja_loput)
     for i in range(len(alut_ja_loput)):
+        output_values.append(alut_ja_loput[i][0].split(" "))
         output_values.append(alut_ja_loput[i][1].split(" "))
     print()
-    print(output_values)
+    print("output_values", output_values)
+    
     
     
 
@@ -68,23 +68,19 @@ def montako_1478():
     print(vastaus)
 
 
-def readfile2():   # a-kohta    
+def readfile2():   # b-kohta    
     global output_values
-    f = open("data_rivi.txt", "r")         
+    f = open("data_easy.txt", "r")         
     for rivi in f:
         alut_ja_loput.append(rivi.split(" | "))
     print("alut_ja_loput", alut_ja_loput)
-    for i in range(len(alut_ja_loput)):
-        output_values.append(alut_ja_loput[i][0].split(" "))
-        output_values.append(alut_ja_loput[i][1].split(" "))
-    print()
-    print("output_values", output_values)
     
 
 def muodosta_x_kpl_kirjainta():
-    global x_kpl_kirjainta, pituudet
+    global pituudet, output_values
 
-
+    print()
+    print("output_values", output_values)
     for str in output_values[0]:
         pituudet[len(str)].append(str)
 
@@ -94,29 +90,86 @@ def muodosta_x_kpl_kirjainta():
     oikeat_vastaukset[4] = pituudet[4][0]
     oikeat_vastaukset[8] = pituudet[7][0]
 
+    # "2" ainoa jossa ei f, eli ainoa jossa count(x) == 9
+    for kirjain in "abcdefg":
+        montako = 0
+        str_talteet = ""
+        vastaus = ""
+        for val in pituudet.values():
+            for str in val:
+                if kirjain in str:
+                    montako += 1
+                else:
+                    str_talteet = str
+                    #print(str_talteet)
+        #print(kirjain, montako, str_talteet)
+        if montako == 9 and str_talteet != "":
+            vastaus = str_talteet
+            break
+    print("vastaus", vastaus)
+    oikeat_vastaukset[2] = vastaus
+    #print("pituudet[5]", pituudet[5])
+    pituudet[5].remove(vastaus)
+
+
     for str in pituudet[6]:
         etsittava = set(pituudet[2][0])
+        #if etsittava.issubset(set(str)):
+        #    print(" TESTIMOI")
         if not etsittava.issubset(set(str)):
-            print(etsittava, "not in set", set(str))
+            #print("    kutosen etsintaä:  ", etsittava, "not in set", set(str))
             oikeat_vastaukset[6] = str
+            pituudet[6].remove(str)
     
     
     for str in pituudet[5]:
         etsittava = set(oikeat_vastaukset[6])
-        print("set(str), etsittava", set(str), etsittava)
+        print("    vitosen etsintaä:   set(str), etsittava", set(str), etsittava)
         if set(str).issubset(etsittava):
             oikeat_vastaukset[5] = str 
+            pituudet[5].remove(str)
 
-    print(oikeat_vastaukset)
-            
+    oikeat_vastaukset[3] = pituudet[5][0]   # vain yksi jäljellä
+
+    for str in pituudet[6]:
+        etsittava = set(pituudet[4][0])
+        if etsittava.issubset(set(str)):
+            print(etsittava, "issubset", set(str))
+            oikeat_vastaukset[9] = str
+            pituudet[6].remove(str)
+            oikeat_vastaukset[0] = pituudet[6][0]
 
     
+    return oikeat_vastaukset
+            
+
+def vastaus(oikeat_vastaukset):
+    vastaus = ""
+    print(oikeat_vastaukset)
+    for value in output_values[1]:
+        value = value.strip()
+        print("value ", value)
+        for i in range(len(oikeat_vastaukset)):
+            
+            if set(oikeat_vastaukset[i]) == set(value):
+                vastaus += str(i)
+    print(vastaus)
 
 
 
 def b_kohta():
-    readfile2()
-    muodosta_x_kpl_kirjainta()
+    global output_values
+    readfile2()   
+
+    
+    for i in range(len(alut_ja_loput)):
+            output_values = []
+            output_values.append(alut_ja_loput[i][0].split(" "))
+            print("alut_ja_loput[i][0]", alut_ja_loput[i][0])
+            output_values.append(alut_ja_loput[i][1].split(" ")) 
+            print("alut_ja_loput[i][1]", alut_ja_loput[i][1])
+            print("output_values", output_values)
+            vastaus(muodosta_x_kpl_kirjainta())
 
 
 #readfile()
