@@ -1,12 +1,29 @@
 
 data = []
+verkko = {}
 
 def readfile():   # a-kohta
     global data
     f = open("data_easy.txt", "r") # a-kohta !!!!      
     for rivi in f:
-        data.append(rivi.split("-"))
-    print(data)
+        data.append(rivi.split("-"))     # ['start', 'A\n'] x 7
+
+
+def luo_verkko():
+    global verkko
+    for a, b in data:
+        a = a.strip()
+        b = b.strip()
+        if a not in verkko:
+            verkko[a] = [b]
+        if b not in verkko:
+            verkko[b] = [a]
+        if b not in verkko[a]:
+            verkko[a].append(b) 
+        if a not in verkko[b]:
+            verkko[b].append(a) 
+
+    print(verkko)
 
 
 """
@@ -17,7 +34,7 @@ c--A-----b--d
      end
 """
 
-verkko = {
+verkko2 = {
   "start": ["A", "b"],
   "A": ["end", "b", "c"],
   "b": ["end", "A"],
@@ -29,7 +46,7 @@ verkko = {
 
 polut = []
 
-def kay_lapi(solmu, polku):  
+def kay_lapi_a(solmu, polku):  
   global montako
   if solmu in polku and solmu[0] in "abcdefghijklmnopqrstuwxyz":  
       return 
@@ -45,8 +62,35 @@ def kay_lapi(solmu, polku):
   # muuta seuraava
   for s in verkko[solmu]:  # = seuraajat
       uusi_polku = polku[:]
-      kay_lapi(s, uusi_polku)
+      kay_lapi_a(s, uusi_polku)
+
+
+def kay_lapi_b(solmu, polku):  
+  global montako
+  # a single small cave can be visited at most twice, and the remaining small caves can be visited at most once. 
+  if solmu != "start":
+    eka_kirjain = solmu[0]
+  # [ for kirjain in  if eka_kirjain in ]
+    if solmu in polku and eka_kirjain in "abcdefghijklmnopqrstuvwxyz":  
+        return 
+
+  polku.append(solmu)
+  
+
+  if solmu == 'end':
+      #print('->'.join(polku))
+      polut.append(polku)
+      return 
+  
+  # muuta seuraava
+  for s in verkko[solmu]:  # = seuraajat
+      uusi_polku = polku[:]
+      kay_lapi_b(s, uusi_polku)
+
 
 readfile()
-kay_lapi("start", [])
+luo_verkko()
+#kay_lapi_a("start", [])
+kay_lapi_b("start", [])
 print(len(polut))
+print(polut)
