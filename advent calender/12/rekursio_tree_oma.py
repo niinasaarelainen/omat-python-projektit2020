@@ -65,13 +65,21 @@ def kay_lapi_a(solmu, polku):
       kay_lapi_a(s, uusi_polku)
 
 
-def kay_lapi_b(solmu, polku):  
-  global montako
-  # a single small cave can be visited at most twice, and the remaining small caves can be visited at most once. 
-  if solmu != "start":
-    eka_kirjain = solmu[0]
-  # [ for kirjain in  if eka_kirjain in ]
-    if solmu in polku and eka_kirjain in "abcdefghijklmnopqrstuvwxyz":  
+def tutki_duplikaatit(polku):
+     # a single small cave can be visited at most twice, and the remaining small caves can be visited at most once. 
+     # [ for kirjain in  if eka_kirjain in ]
+     #print("polku", polku)    # ['start', 'A']
+     maarat = {}
+     for tunnus in polku:
+        montako = polku.count(tunnus) 
+        maarat[tunnus] = montako
+     print(maarat)
+
+
+def kay_lapi_b(solmu, polku):   
+  eka_kirjain = solmu[0]
+  if solmu in polku and eka_kirjain in "abcdefghijklmnopqrstuvwxyz":  
+        tutki_duplikaatit(polku)
         return 
 
   polku.append(solmu)
