@@ -16,7 +16,7 @@ def readfile():   # a-kohta
 
 
 def flash(rivi_nro, monesko):
-    global data, flashes
+    global data, flashes 
     # any octopus with an energy level greater than 9 flashes. This increases the energy level of all adjacent octopuses by 1, 
     # including octopuses that are diagonally adjacent. If this causes an octopus to have an energy level greater than 9, 
     # it also flashes. This process continues as long as new octopuses keep having their energy level increased beyond 9. 
@@ -27,19 +27,17 @@ def flash(rivi_nro, monesko):
             monesk = monesko + x
             #print("rivi_nro", rivi_nr, "monesko", monesk)
             if data[rivi_nr][monesk] != None:
-                data[rivi_nr][monesk] += 1   
+                data[rivi_nr][monesk] += 1    
             if rivi_nr >= 0 and monesk  >= 0 and data[rivi_nr][monesk] == 10:
                 flash_cordinates.append([rivi_nr,monesk] )                
                 flashes += 1
-                data[rivi_nr][monesk] = None   # None = olen jo flashahtanyt 
-
-   
-    print(data)
+                data[rivi_nr][monesk] = None   # None = olen jo flashahtanyt    
+    #print(data)
+    
 
 
 def nollaa():
     # Finally, any octopus that flashed during this step has its energy level set to 0
-
     for rivi_nro in range(len(data)):
         for monesko in range(len(data[rivi_nro])):  
             if data[rivi_nro][monesko] == None:
@@ -47,24 +45,32 @@ def nollaa():
     print("nollauksen jälk", data)  
 
 
-def flash_proseduuri():
-    global data
+def flash_1_step():
+    global data, flash_cordinates
     # First, the energy level of each octopus increases by 1.
     for rivi_nro in range(len(data)):
-        for monesko in range(len(data[rivi_nro])):                     
+        for monesko in range(len(data[rivi_nro])):                         
             if data[rivi_nro][monesko] == None:
                 flash(rivi_nro, monesko)
-            elif data[rivi_nro][monesko] >= 9: 
-                flash(rivi_nro, monesko)
-    nollaa()
+            else:
+                data[rivi_nro][monesko] += 1           
+                if data[rivi_nro][monesko] > 9: 
+                    flash(rivi_nro, monesko)
 
-    print(data)
+    print("flash_cordinates", flash_cordinates)
+    for y2, x2 in flash_cordinates:
+        print("y2, x2", y2, x2)
+        flash(y2, x2)
+        #flash_cordinates = []
+            
+    nollaa()
+    print("final data", data)
 
     
 
    
 readfile()
-flash_proseduuri()
+flash_1_step()
 ()
 
 

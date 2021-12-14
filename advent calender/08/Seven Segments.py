@@ -43,10 +43,11 @@ alut_ja_loput = []
 output_values = []
 vastaus = 0
 pituudet = {2: [], 3: [], 4: [], 5: [], 6: [], 7: []}
+total_answer = []
 
 def readfile():   # a-kohta
     global output_values
-    f = open("data.txt", "r")         
+    f = open("data.txt", "r") # a-kohta !!!!      
     for rivi in f:
         alut_ja_loput.append(rivi.split(" | "))
     print(alut_ja_loput)
@@ -70,10 +71,10 @@ def montako_1478():
 
 def readfile2():   # b-kohta    
     global output_values
-    f = open("data_easy.txt", "r")         
+    f = open("data.txt", "r")      # b-kohta         
     for rivi in f:
         alut_ja_loput.append(rivi.split(" | "))
-    print("alut_ja_loput", alut_ja_loput)
+    #print("alut_ja_loput", alut_ja_loput)
     
 
 def muodosta_x_kpl_kirjainta():
@@ -106,7 +107,7 @@ def muodosta_x_kpl_kirjainta():
         if montako == 9 and str_talteet != "":
             vastaus = str_talteet
             break
-    print("vastaus", vastaus)
+    #print("2-etsintä vastaus", vastaus)
     oikeat_vastaukset[2] = vastaus
     #print("pituudet[5]", pituudet[5])
     pituudet[5].remove(vastaus)
@@ -117,7 +118,7 @@ def muodosta_x_kpl_kirjainta():
         #if etsittava.issubset(set(str)):
         #    print(" TESTIMOI")
         if not etsittava.issubset(set(str)):
-            #print("    kutosen etsintaä:  ", etsittava, "not in set", set(str))
+            print("    kutosen etsintaä:  ", etsittava, "not in set", set(str))
             oikeat_vastaukset[6] = str
             pituudet[6].remove(str)
     
@@ -134,7 +135,7 @@ def muodosta_x_kpl_kirjainta():
     for str in pituudet[6]:
         etsittava = set(pituudet[4][0])
         if etsittava.issubset(set(str)):
-            print(etsittava, "issubset", set(str))
+            #print(etsittava, "issubset", set(str))
             oikeat_vastaukset[9] = str
             pituudet[6].remove(str)
             oikeat_vastaukset[0] = pituudet[6][0]
@@ -143,7 +144,7 @@ def muodosta_x_kpl_kirjainta():
     return oikeat_vastaukset
             
 
-def vastaus(oikeat_vastaukset):
+def vastaus_def(oikeat_vastaukset):
     vastaus = ""
     print(oikeat_vastaukset)
     for value in output_values[1]:
@@ -153,26 +154,29 @@ def vastaus(oikeat_vastaukset):
             
             if set(oikeat_vastaukset[i]) == set(value):
                 vastaus += str(i)
-    print(vastaus)
+    total_answer.append(vastaus)
 
 
 
 def b_kohta():
-    global output_values
+    global output_values, alut_ja_loput, vastaus, pituudet
     readfile2()   
-
+    
     
     for i in range(len(alut_ja_loput)):
-            output_values = []
+            output_values = []            
+            vastaus = 0
+            pituudet = {2: [], 3: [], 4: [], 5: [], 6: [], 7: []}
             output_values.append(alut_ja_loput[i][0].split(" "))
-            print("alut_ja_loput[i][0]", alut_ja_loput[i][0])
+            #print("alut_ja_loput[i][0]", alut_ja_loput[i][0])
             output_values.append(alut_ja_loput[i][1].split(" ")) 
-            print("alut_ja_loput[i][1]", alut_ja_loput[i][1])
+            #print("alut_ja_loput[i][1]", alut_ja_loput[i][1])
             print("output_values", output_values)
-            vastaus(muodosta_x_kpl_kirjainta())
+            vastaus_def(muodosta_x_kpl_kirjainta())
 
 
 #readfile()
 #montako_1478()
 
 b_kohta()
+print(sum(int(i)  for i in total_answer))
