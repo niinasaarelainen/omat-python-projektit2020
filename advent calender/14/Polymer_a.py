@@ -5,7 +5,7 @@ maarat = {}
 
 def readfile():   # a-kohta
     global data, muunnettava, muunnokset
-    f = open("data.txt", "r")         
+    f = open("data_easy.txt", "r")         
     for rivi in f:
         if "->" in rivi:
             key, value = rivi.split("->")
@@ -42,7 +42,7 @@ def laske():
 readfile()
 print(muunnokset, muunnettava)
 
-for i in range(10):
+for i in range(11):
     muunna()
 
 laske()

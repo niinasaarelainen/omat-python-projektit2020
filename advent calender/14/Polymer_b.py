@@ -6,7 +6,7 @@ maarat = {}
 
 def readfile():   # b-kohta
     global data, lahtokohta, muunnokset
-    f = open("data_easy.txt", "r")         
+    f = open("data_easy.txt", "r")       # easy = 1588  
     for rivi in f:
         if "->" in rivi:
             key, value = rivi.split("->")
@@ -34,18 +34,17 @@ def muunna():
         uusi_kirjain = muunnokset[sarja]
         uusi_kaksonen1 = sarja[0] + uusi_kirjain
         uusi_kaksonen2 = uusi_kirjain + sarja[1] 
-        print("uusi_kaksonen1", uusi_kaksonen1, "uusi_kaksonen2", uusi_kaksonen2)
+        #print("uusi_kaksonen1", uusi_kaksonen1, "uusi_kaksonen2", uusi_kaksonen2)
         if uusi_kaksonen1 not in uusi_kahden_sarjat:
-            uusi_kahden_sarjat[uusi_kaksonen1] = 1
+            uusi_kahden_sarjat[uusi_kaksonen1] = kahden_sarjat[sarja]
         else:
-            uusi_kahden_sarjat[uusi_kaksonen1] += 1
+            uusi_kahden_sarjat[uusi_kaksonen1] += kahden_sarjat[sarja]
         if uusi_kaksonen2 not in uusi_kahden_sarjat:
-            uusi_kahden_sarjat[uusi_kaksonen2] = 1
+            uusi_kahden_sarjat[uusi_kaksonen2] = kahden_sarjat[sarja]
         else:
-            uusi_kahden_sarjat[uusi_kaksonen2] += 1
+            uusi_kahden_sarjat[uusi_kaksonen2] += kahden_sarjat[sarja]
 
     kahden_sarjat = uusi_kahden_sarjat
-
     print("kahden_sarjat@muunna end", kahden_sarjat)
 
 
@@ -65,15 +64,17 @@ def laske():
     print("maarat", maarat)
     mi = min(maarat.values())
     ma = max(maarat.values())
-    print(ma - mi)
+    mami = ma - mi
+    print(mami // 2 + 3)
 
 
 readfile()
 #print(muunnokset, lahtokohta)
 
 
-for i in range(3):
+for i in range(11):
     muunna()
-
-
+    
 laske()  
+
+
