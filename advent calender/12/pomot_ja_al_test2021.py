@@ -1,18 +1,3 @@
-"""
-def kay_lapi(solmu, polku):
-    if solmu=='pieniKirjain' and solmu in polku:
-        return
-
-    if solmu=='end':
-        print('->'.join(polku))
-        pass
-
-    for s in solmu.seuraavat:
-        kay_lapi(s, polku+s)
-
-kay_lapi('start',[])   """
-
-
 
 class Tyontekija:
     def __init__(self, nimi: str):
@@ -23,9 +8,28 @@ class Tyontekija:
         self.alaiset.append(tyontekija)
 
 
+
+
+
+def laske_alaiskerrokset(solmu, polku):  
+  global polut
+
+  polku.append(solmu)
+
+  if solmu not in alaiset:
+      print('->'.join(polku))
+      polut.append(polku)
+      return 
+  
+  for a in alaiset[solmu]:  # = seuraajat
+      uusi_polku = polku[:]
+      laske_alaiskerrokset(a, uusi_polku)
+
+
+
 def laske_alaiset(tyontekija: Tyontekija):
-    if tyontekija.alaiset == []:   
-        return 0
+    #if tyontekija.alaiset == []:   
+    #    return 0
 
     summa = len(tyontekija.alaiset)
     for alainen in tyontekija.alaiset:
@@ -36,6 +40,8 @@ def laske_alaiset(tyontekija: Tyontekija):
 
 
 
+
+polut = []
 
 if __name__ == "__main__":
     t1 = Tyontekija("Sasu")
@@ -55,9 +61,23 @@ if __name__ == "__main__":
 
     print("\nt1:")
     print(laske_alaiset(t1))   #6
+    print("\nt3:")
+    print(laske_alaiset(t3))   #1
     print("\nt4:")
     print(laske_alaiset(t4))   #3
     print("\nt5:")
     print(laske_alaiset(t5))   #0
+
+    alaiset = {
+    "Matti": ["Ville", "Sasu", "testialainen" ],
+    "Sasu": ["kääpiö"],
+    "kääpiö": ["superkääpiö"],
+    #"kääpiö": ["end"]
+    #"b": ["end", "A"],
+    }
+
+    laske_alaiskerrokset("Matti", [])
+    # Mattia ei lasketa
+    print(max([len(polku) - 1 for polku in polut]))
 
     

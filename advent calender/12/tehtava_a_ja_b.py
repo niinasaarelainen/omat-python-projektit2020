@@ -109,7 +109,7 @@ def kay_lapi_b(solmu, polku):
 
 readfile()
 luo_verkko()
-#kay_lapi_a("start", [])
-kay_lapi_b("start", [])
+kay_lapi_a("start", [])
+#kay_lapi_b("start", [])
 print(len(polut))
 print(polut)
