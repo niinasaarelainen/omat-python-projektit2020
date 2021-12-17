@@ -6,7 +6,7 @@ maarat = {}
 
 def readfile():   # b-kohta
     global data, lahtokohta, muunnokset
-    f = open("data_easy.txt", "r")       # easy = 1588  
+    f = open("data.txt", "r")       # easy = 1588  
     for rivi in f:
         if "->" in rivi:
             key, value = rivi.split("->")
@@ -20,7 +20,10 @@ def readfile():   # b-kohta
 def tee_kaksoset(lahtokohta):
     pit = len(lahtokohta)
     for i in range(pit - 1):
-        kahden_sarjat[lahtokohta[i:i+2]] = 1
+        if lahtokohta[i:i+2] not in kahden_sarjat:
+            kahden_sarjat[lahtokohta[i:i+2]] = 1
+        else:
+            kahden_sarjat[lahtokohta[i:i+2]] += 1
     
     print(kahden_sarjat)
 
@@ -50,6 +53,8 @@ def muunna():
 
 def laske():
     global kahden_sarjat
+    #eka_kirj = muunnettava[0]
+    #vika_kirj = muunnettava[-1]
     for sarja in kahden_sarjat:
         #print("sarja", sarja, "kahden_sarjat[sarja]", kahden_sarjat[sarja])
         if sarja[0] not in maarat:
@@ -61,18 +66,24 @@ def laske():
         else:
             maarat[sarja[1]] += kahden_sarjat[sarja]    
 
-    print("maarat", maarat)
+    print("\nmaarat", maarat)
+    # puolet pois, paitsi eka ja vika kirjain:
+    for k in maarat:
+        maarat[k] = (maarat[k] + 1) // 2
+        #if k in [eka_kirj, vika_kirj]:
+        #    maarat[k]
+
+    print("\nmaarat puolituksen jälk", maarat)
     mi = min(maarat.values())
     ma = max(maarat.values())
-    mami = ma - mi
-    print(mami // 2 + 3)
+    print(ma - mi)
 
 
 readfile()
-#print(muunnokset, lahtokohta)
+#print(len(muunnokset), lahtokohta)
 
 
-for i in range(11):
+for i in range(40):
     muunna()
     
 laske()  
