@@ -78,18 +78,19 @@ def tutki_duplikaatit(solmu, polku):
         print(tunnus, polku, montako)
         eka_kirjain = solmu[0]
         if "start" in polku and solmu == "start":
-            return True
-        elif "end" in polku and solmu == "end":
+            print("start")
             return True
         elif montako == 2 and eka_kirjain in "abcdefghijklmnopqrstuvwxyz":
-            return True
+            print("montako == 2 and eka_kirjain in")
+            return False
         else:
-            return False  
+            return True
+       
 
 
 def kay_lapi_b(solmu, polku):   
   eka_kirjain = solmu[0]
-  if solmu in polku and eka_kirjain in "abcdefghijklmnopqrstuvwxyz":        
+  if solmu in polku and eka_kirjain in "abcdefghijklmnopqrstuvwxyz": 
         if tutki_duplikaatit(solmu, polku):
             return 
 
@@ -109,7 +110,7 @@ def kay_lapi_b(solmu, polku):
 
 readfile()
 luo_verkko()
-kay_lapi_a("start", [])
-#kay_lapi_b("start", [])
+#kay_lapi_a("start", [])
+kay_lapi_b("start", [])
 print(len(polut))
 print(polut)
