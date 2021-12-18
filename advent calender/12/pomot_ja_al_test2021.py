@@ -69,15 +69,22 @@ if __name__ == "__main__":
     print(laske_alaiset(t5))   #0
 
     alaiset = {
-    "Matti": ["Ville", "Sasu", "testialainen" ],
+    "Matti": ["Ville", "Sasu", "testialainen", "Kjell" ],
     "Sasu": ["kääpiö"],
     "kääpiö": ["superkääpiö"],
     #"kääpiö": ["end"]
     #"b": ["end", "A"],
     }
 
+    print()
     laske_alaiskerrokset("Matti", [])
-    # Mattia ei lasketa
+    # Mattia ei lasketa = -1
     print(max([len(polku) - 1 for polku in polut]))
 
-    
+    polut = []
+    laske_alaiskerrokset("Sasu", [])
+    print(max([len(polku) - 1 for polku in polut]))
+
+    polut = []
+    laske_alaiskerrokset("superkääpiö", [])
+    print(max([len(polku) - 1 for polku in polut]))

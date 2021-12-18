@@ -75,16 +75,19 @@ def tutki_duplikaatit(solmu, polku):
      for tunnus in polku:
         
         montako = polku.count(tunnus) 
-        print(tunnus, polku, montako)
+        #print("montako", montako, "tunnus", tunnus)
         eka_kirjain = solmu[0]
-        if "start" in polku and solmu == "start":
-            print("start")
-            return True
-        elif montako == 2 and eka_kirjain in "abcdefghijklmnopqrstuvwxyz":
+
+        if solmu == "start":
+            continue
+        if montako == 2 and eka_kirjain in "abcdefghijklmnopqrstuvwxyz":
             print("montako == 2 and eka_kirjain in")
+            return True
+        elif montako == 3 and eka_kirjain in "abcdefghijklmnopqrstuvwxyz":
+            print("montako == 3 and eka_kirjain in")
             return False
         else:
-            return True
+            return False
        
 
 
@@ -93,6 +96,7 @@ def kay_lapi_b(solmu, polku):
   if solmu in polku and eka_kirjain in "abcdefghijklmnopqrstuvwxyz": 
         if tutki_duplikaatit(solmu, polku):
             return 
+  
 
   polku.append(solmu)
   

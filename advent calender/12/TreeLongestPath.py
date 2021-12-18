@@ -4,27 +4,30 @@ class TreeLongestPath:
         self.left = None
         self.right = None 
 
+
+
 def inorderTraversal(root):   # KESKEN,  EI  TOIMI !!!!!!!!!!!!!!
-    longest = []
 
-    inorderTraversalUtil(root, longest)
-    return longest
+    inorderTraversalUtil(root, [])
+    return 
 
 
-def inorderTraversalUtil(root, longest):
+def inorderTraversalUtil(root, path):
     if root is None:
+        all_paths.append(path)
         return
 
-    inorderTraversalUtil(root.left, longest)
-    longest.append(root.val)
-    inorderTraversalUtil(root.right, longest)
+    inorderTraversalUtil(root.left, path)
+    path.append(root.val)
+    inorderTraversalUtil(root.right, path)
     return
 
-
+all_paths = []
 root = TreeLongestPath(1)
 root.left = TreeLongestPath(2)
 root.right = TreeLongestPath(3)
 root.left.left = TreeLongestPath(4)
 root.left.right = TreeLongestPath(5)
 
-print(inorderTraversal(root))
+inorderTraversal(root)
+print(all_paths)
