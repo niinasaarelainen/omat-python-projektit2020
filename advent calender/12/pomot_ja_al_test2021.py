@@ -88,3 +88,10 @@ if __name__ == "__main__":
     polut = []
     laske_alaiskerrokset("superkääpiö", [])
     print(max([len(polku) - 1 for polku in polut]))
+
+
+
+
+    print()
+
+    
