@@ -64,8 +64,13 @@ def lisatutkimukset(hlo, kentta):
     #If in, the number must be at least 59 and at most 76.
     elif kentta == "hgt":
         pituus_ja_mittayksikko = hlo[kentta]
+        if len(pituus_ja_mittayksikko) < 4:
+            return False
+        print("pituus_ja_mittayksikko", pituus_ja_mittayksikko)
         mittayksikko = pituus_ja_mittayksikko[-2:]
         pituus = int(pituus_ja_mittayksikko[:-2])
+        if mittayksikko not in ["cm", "in"]:
+            return False
         if mittayksikko == "cm":
             if not 150 <= pituus <= 193:
                 print("cm false")

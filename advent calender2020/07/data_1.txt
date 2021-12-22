@@ -1,0 +1,9 @@
+light red bags contain bright white, 2 muted yellow 
+dark orange bags contain 3 bright white, 4 muted yellow 
+bright white bags contain 1 shiny gold 
+muted yellow bags contain 2 shiny gold, 9 faded blue 
+shiny gold bags contain 1 dark olive, 2 vibrant plum 
+dark olive bags contain 3 faded blue, 4 dotted black 
+vibrant plum bags contain 5 faded blue, 6 dotted black 
+faded blue bags contain no other bags
+dotted black bags contain no other bags 
