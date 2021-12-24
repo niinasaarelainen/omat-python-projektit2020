@@ -1,12 +1,8 @@
 
-laukkujen_sisalto_key_on_value = {}
-laukkujen_sisalto = {}
-polut = []
-laukkuja_yht = 0
 
 
 def readfile():   
-    f = open("data_b.txt", "r")         
+    f = open("data_easy.txt", "r")         
     for rivi in f:
         split1 = rivi.split(" bags contain ")
         laukkujen_sisalto[split1[0]] = split1[1].strip().split(", ")
@@ -67,26 +63,33 @@ def etsi(l):   # easy toimii, b ei: tulee 22, pitäisi tulla 126
         print(lkm * laukkujen_sisalto_key_on_value[laukku])
         etsi(laukku)    """
         
-def etsi(l, lkm):    # TODO
-    global laukkuja_yht
+def etsi(l, lkm, max):    # TODO
+    global laukkuja_max
     for laukku in laukkujen_sisalto[l]:
-        print(laukku)        
+              
         if "other bags" in laukku:
             break
         splitted = laukku.split(" ")
         laukku = splitted[1] + " " + splitted[2]
         if splitted[0] != "no":
             lkm += int(splitted[0])
-        laukkuja_yht += lkm * laukkujen_sisalto_key_on_value[laukku]
-        print(lkm * laukkujen_sisalto_key_on_value[laukku])
-        etsi(laukku, lkm)
+            lkm *=  laukkujen_sisalto_key_on_value[laukku]   
+            if lkm > laukkuja_max:
+                laukkuja_max = lkm
+        etsi(laukku, lkm, laukkuja_max)
+    print("lopussa max", laukkuja_max )
         
 
+
+laukkujen_sisalto_key_on_value = {}
+laukkujen_sisalto = {}
+polut = []
+laukkuja_max = 0
 
 readfile()
 muodosta_dict()
 #print(len(laukkujen_sisalto_key_on_value))
 #kay_lapi("shiny gold", [], 1)
-etsi("shiny gold", 0)
-laukkuja_yht += laukkujen_sisalto_key_on_value["shiny gold"]
-print(laukkuja_yht)   # 837  too low
+etsi("shiny gold", 0, 0)
+laukkuja_max += laukkujen_sisalto_key_on_value["shiny gold"]
+print("laukkuja_yht", laukkuja_max)   # 837  too low
