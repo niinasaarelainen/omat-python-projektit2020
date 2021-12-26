@@ -4,7 +4,7 @@ facing = "E"
 suunnat = ["N", "E", "S", "W"]
 ship_x = 0
 ship_y = 0
-waypoint_x = 10   # välietappi
+waypoint_x = 10   # välietappi, relative to the ship !!!!!
 waypoint_y = 1
 
 
