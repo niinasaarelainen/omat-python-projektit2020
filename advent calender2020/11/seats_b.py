@@ -15,7 +15,7 @@ varatut_total = 0
 
 def readfile():   # a-kohta
     global data
-    f = open("data_1.txt", "r")         
+    f = open("data.txt", "r")         
     for rivi in f: 
         rivi_uusi = []        
         for kirjain in rivi.strip():
@@ -26,9 +26,7 @@ def readfile():   # a-kohta
 def tutki_8_suuntaa(row_nro, seat_nro, status):
     global data, data_copy
     occupied = 0
-
-    print(row_nro, seat_nro, status)
-
+    #print(row_nro, seat_nro, status)
     
     # 1) ylös
     for ylos in range(row_nro -1, -1, -1):       
@@ -49,8 +47,7 @@ def tutki_8_suuntaa(row_nro, seat_nro, status):
             elif data[rw_nr][seat_nro + oikealle] == "L" :
                 break
 
-    # 3) oik.
-    
+    # 3) oik.    
     for oikealle in range(seat_nro +1, len(data[0])):
         if data[row_nro][oikealle] == "#" :
             occupied += 1  
@@ -82,8 +79,7 @@ def tutki_8_suuntaa(row_nro, seat_nro, status):
         st_nr = seat_nro
         if row_nro + alas <= len(data) - 1 and st_nr - alas >= 0 :
             st_nr -= alas  
-            if data[row_nro + alas][st_nr] == "#" :
-                
+            if data[row_nro + alas][st_nr] == "#" :                
                 occupied += 1
                 break
             elif data[row_nro + alas][st_nr] == "L" :
@@ -99,22 +95,20 @@ def tutki_8_suuntaa(row_nro, seat_nro, status):
 
     # 8)  vas. d ylös
     for vasemmalle in range(1, len(data[0])):
-        rw_nr = row_nro
-         
+        rw_nr = row_nro         
         if rw_nr - vasemmalle >= 0 and seat_nro - vasemmalle >= 0 :
-            print("         ", rw_nr - vasemmalle, seat_nro - vasemmalle)  
+            #print("         ", rw_nr - vasemmalle, seat_nro - vasemmalle)  
             rw_nr -= vasemmalle 
             if data[rw_nr][seat_nro - vasemmalle] == "#" :
-                print("      hep", rw_nr , seat_nro - vasemmalle)
+                #print("      hep", rw_nr , seat_nro - vasemmalle)
                 occupied += 1
                 break
             elif data[rw_nr][seat_nro - vasemmalle] == "L" :
                 break
 
+    #print(occupied)
 
-    print(occupied)
-
-    if status == "#" and occupied >= 4:
+    if status == "#" and occupied >= 5:
         data_copy[row_nro][seat_nro] = "L"
     elif status == "L" and occupied == 0:
         data_copy[row_nro][seat_nro] = "#"
@@ -131,14 +125,33 @@ def tutki():
     data = copy.deepcopy(data_copy)
 
 
+def vastaus():
+    f = open("vastaus.txt", "r")   
+    v = []      
+    for rivi in f: 
+        rivi_uusi = []        
+
+        for kirjain in rivi.strip():
+            rivi_uusi.append(kirjain)
+        v.append(rivi_uusi)  
+    return v
+
+
    
 readfile()
-for i in range(1):  # 99 liian vähän, 199 jo liikaa, mutta ei haittaa
+for i in range(233):  # 191 
     varatut_total = 0
     tutki()
     for rivi in data:
         #print(rivi)  
         varatut_total += rivi.count("#")
-    #print("varatut_total", varatut_total)
+    print("varatut_total", varatut_total)
+
+""" vain data_easy:n kanssa
+vastaus = vastaus()
+for i in range(len(data)):
+    if vastaus[i] != data[i]:
+        print("ERI")  """
+
 
 
