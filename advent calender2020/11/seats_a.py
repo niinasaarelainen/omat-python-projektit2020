@@ -2,6 +2,7 @@ import copy
 
 data = []  
 data_copy = []
+varatut_total = 0
 
 """
 * If a seat is empty (L) and there are no occupied seats adjacent to it, the seat becomes occupied.
@@ -14,7 +15,7 @@ data_copy = []
 
 def readfile():   # a-kohta
     global data
-    f = open("data_easy.txt", "r")         
+    f = open("data.txt", "r")         
     for rivi in f: 
         rivi_uusi = []        
         for kirjain in rivi.strip():
@@ -26,8 +27,6 @@ def readfile():   # a-kohta
 def tutki_viereiset(row_nro, seat_nro, status):
     global data, data_copy
     occupied = 0
-    
-    print("ow_nro, seat_nro", row_nro, seat_nro)
     for i in range(row_nro -1, row_nro + 2):
         for j in range(seat_nro -1, seat_nro + 2):
             if i >= 0 and j >= 0 and i <= len(data)- 1 and j <= len(data[0]) - 1:
@@ -48,16 +47,17 @@ def tutki():
         for seat_nro in range(len(data[0])):
             if data[row_nro][seat_nro] in ["L", "#"]:
                 tutki_viereiset(row_nro, seat_nro, data[row_nro][seat_nro])
-            elif data[row_nro][seat_nro] == ".":
-                print("floor")
     data = copy.deepcopy(data_copy)
 
 
    
 readfile()
-for i in range(2):
+for i in range(199):  # 99 liian vähän, 199 jo liikaa, mutta ei haittaa
+    varatut_total = 0
     tutki()
     for rivi in data:
-        print(rivi)  
+        #print(rivi)  
+        varatut_total += rivi.count("#")
+    print("varatut_total", varatut_total)
 
 
