@@ -1,7 +1,5 @@
-start-A
-start-b
-A-c
-A-b
-b-d
-A-end
-b-end
+F10
+N3
+F7
+R270
+F11
