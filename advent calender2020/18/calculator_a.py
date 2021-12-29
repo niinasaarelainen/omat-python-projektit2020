@@ -37,7 +37,7 @@ def calculate(tulos):
             else: 
                 suluton_data.append(data[rivi][i])
 
-    print(alkusulut, loppusulut, suluton_data)   # sulkujen indeksit eivät päde tänne
+    print(alkusulut, loppusulut, suluton_data)   # sulkujen indeksit eivät päde suluton_data:an
 
     for rivi in data:
         for i in range(len(rivi) - 1):
