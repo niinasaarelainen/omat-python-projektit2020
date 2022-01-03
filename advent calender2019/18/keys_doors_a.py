@@ -1,47 +1,71 @@
 
 data = []
-keys = []
-doors = []
-kohteet = []
-olet_nyt_tassa = []
+olet_nyt_tassa_x = 0
+olet_nyt_tassa_y = 0
+askeleet = 0
+askeleet_kaikki = []
 
 def readfile():
+    global olet_nyt_tassa_x, olet_nyt_tassa_y
     f = open("data_easy.txt", "r") 
+    i = 0
     for rivi in f:
         data.append([])
+        j = 0
         for merkki in rivi.strip():
             data[-1].append(merkki)
+            if merkki == "@":
+                olet_nyt_tassa_y = i
+                olet_nyt_tassa_x = j
+            j += 1
+        i += 1
 
  
-def find_keys_and_doors():
-    for rivi in range(len(data)):
-        for merkki in range(len(data[rivi])):
-           if data[rivi][merkki] in ['#', '.']:
-               pass
-           elif data[rivi][merkki] == '@':
-               olet_nyt_tassa.append(rivi)
-               olet_nyt_tassa.append(merkki) 
-           elif data[rivi][merkki].lower() == data[rivi][merkki]:
-               keys.append([rivi, merkki])
-           else:
-               doors.append([rivi, merkki])
+def find_2_lahinta(y, x):
+    global askeleet
+    lahimmat_avaimet = {}  # avaimen x : askeleet @:sta
+
+    # oikealle:
+    if x < len(data[y]) -1:
+        for merkki in range(x +1, len(data[y])):            
+            if data[y][merkki] in ['.', '#']:
+                pass 
+            elif data[y][merkki].islower():
+                lahimmat_avaimet[(data[y][merkki])] = abs(merkki - x)
+                break
+            else: 
+                break
+        
+
+    # vasemmalle
+    if x > 0:
+        for merkki in range(x - 1, -1, -1):
+            if data[y][merkki] in ['.', '#']:
+                pass 
+            elif data[y][merkki].islower():
+                lahimmat_avaimet[(data[y][merkki])] = abs(merkki - x)
+                break
+            else:
+                break
+
+    return lahimmat_avaimet
     
 
-def calculate_distances(y, x):
-    pienin_k = 1000
-    pienin_key = keys[0]
-    for key in keys:
-        if key[0] == y:
-            if abs(key[1] - x) < pienin_k:
-                pienin_k = abs(key[1] - x)
-                pienin_key = key
-    print(pienin_k, pienin_key)
+
 
 
 readfile()
 print(data)
-find_keys_and_doors()
-print("alkupiste", olet_nyt_tassa)
-print("keys: ", keys)
-print("doors: ", doors)
-calculate_distances(olet_nyt_tassa[0], olet_nyt_tassa[1])
+print("olet_nyt_tassa_y, olet_nyt_tassa_x", olet_nyt_tassa_y, olet_nyt_tassa_x)
+avaimet = find_2_lahinta(olet_nyt_tassa_y, olet_nyt_tassa_x)
+#avaimet = find_2_lahinta(1, 3)
+for avain in avaimet:
+    ind = data[olet_nyt_tassa_y].index(avain)
+    olet_nyt_tassa_x = ind
+    data[olet_nyt_tassa_y][ind] = "."
+    askeleet += avaimet[avain]
+    
+    ind = data[olet_nyt_tassa_y].index(avain.upper())
+    data[olet_nyt_tassa_y][ind] = "."
+print(data)
+print("askeleet", askeleet)
