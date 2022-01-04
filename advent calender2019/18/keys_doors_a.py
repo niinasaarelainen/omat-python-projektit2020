@@ -114,45 +114,34 @@ def etsi_kirjainpari(k):
         r += 1  
 
 def loytyi_2_avainta(avaimet_eri_kerros, askeleet):
-    eka = ""
     askeleet_local = askeleet
+    dictionary_items = avaimet_eri_kerros.items()
+    sorted_items = sorted(dictionary_items)
 
     # eka kombo
-    for key in avaimet_eri_kerros:
-        print("eka kombo key", key)
-        eka = key
-        etsi_kirjainpari(key)
-        askeleet_local += avaimet_eri_kerros[key]
-        
+    for item in avaimet_eri_kerros:
+        print("eka kombo key", item[0])
+        etsi_kirjainpari(item[0])
+        askeleet_local += avaimet_eri_kerros[item[0]]        
         print(data[1])
         print(data[3])
         data[olet_nyt_tassa_y][olet_nyt_tassa_x] = "."
-    askeleet_kaikki.append(askeleet)
+        main(askeleet_local)    
 
-    # toka kombo    # TODO tässä pitäisi palauttaa tilanne  ENNEN ekaa komboa !!!!!!!!!!!!!!!!!!!!!
+    # toka kombo   
     askeleet_local = askeleet
-    print("toka kombo key", eka)
-    etsi_kirjainpari(eka)    
-    askeleet_local += avaimet_eri_kerros[eka]
-    k = avaimet_eri_kerros.pop(eka)
-    print("avaimet_eri_kerros pop", avaimet_eri_kerros)
-    
-    print(data[1])
-    print(data[3])
-    data[olet_nyt_tassa_y][olet_nyt_tassa_x] = "."
-    for key in avaimet_eri_kerros:   # jäljellä enää 1
-        etsi_kirjainpari(key)
-        askeleet_local += avaimet_eri_kerros[key]
-        
+    for item in reversed(sorted_items):        
+        print("toka kombo key", item[0])
+        etsi_kirjainpari(item[0])
+        askeleet_local += avaimet_eri_kerros[item[0]]        
         print(data[1])
         print(data[3])
         data[olet_nyt_tassa_y][olet_nyt_tassa_x] = "."
-    askeleet_kaikki.append(askeleet)
-    print("      askeleet_kaikki", askeleet_kaikki)
+        main(askeleet_local)
 
-def main():
+
+def main(askeleet):
     global olet_nyt_tassa_y, olet_nyt_tassa_x
-    askeleet = 0
     for i in range(8):
         print("olet_nyt_tassa_y, olet_nyt_tassa_x", olet_nyt_tassa_y, olet_nyt_tassa_x)
         avaimet_eri_kerros = avain_eri_kerroksessa(olet_nyt_tassa_y, olet_nyt_tassa_x)   # TODO
@@ -161,6 +150,10 @@ def main():
         data[olet_nyt_tassa_y][olet_nyt_tassa_x] = "."
         if len(avaimet_eri_kerros) == 2:
             loytyi_2_avainta(avaimet_eri_kerros, askeleet)
+        elif len(avaimet_eri_kerros) == 0:
+            askeleet_kaikki.append(askeleet)            
+            print("  !! !! !! askeleet_kaikki", askeleet_kaikki)
+            break
         else:
             for avain in avaimet_eri_kerros:
                 etsi_kirjainpari(avain)
@@ -168,11 +161,13 @@ def main():
                 data[olet_nyt_tassa_y][olet_nyt_tassa_x] = "."
                 print(data[1])
                 print(data[3])
-        print("askeleet", askeleet)
+        print("main-for-loopin lopussa askeleet  ", askeleet)
+
+    
 
 
 
 readfile()
 print(data[1])
-main()
+main(0)  # 0 askelta
 
