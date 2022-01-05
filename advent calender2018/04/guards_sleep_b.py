@@ -52,12 +52,15 @@ def kasittele():
                     guards_parempi[id].append(minute)
 
 
-def laske_maarat(minuutit):
-    print(minuutit)
-    tulos = max([(minuutit.count(minut), minut)  for minut in minuutit])
-    print("tulos: ", tulos)   
+def laske_maarat():
+    tulokset = []
+    for id, mins in guards_parempi.items():
+        if mins != []:
+            tulos = max([(mins.count(minut), minut, id) for minut in mins ])
+            print("tulos: ", tulos)  
+            tulokset.append(tulos) 
 
-    return tulos[1]
+    return max(tulokset)
 
 
 
@@ -69,8 +72,5 @@ print(guards)
 kasittele()
 print(guards_parempi)
 
-eniten_nukkumista = max([(len(tiedot), id)  for id, tiedot in guards_parempi.items()])
-id = eniten_nukkumista[1]
-
-minuutti = laske_maarat(guards_parempi[id])
+maara, minuutti, id = laske_maarat()
 print(minuutti * int(id))  

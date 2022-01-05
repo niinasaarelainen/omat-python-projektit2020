@@ -1,2 +1,6 @@
-ecl:gry pid:860033327 eyr:2020 hcl:#fffffd
-byr:1957 iyr:2021 cid:147 hgt:183cm
+[1518-05-28 00:59] wakes up
+[1518-06-29 00:54] falls asleep
+[1518-08-22 00:16] falls asleep
+[1518-07-04 00:46] wakes up
+[1518-09-02 00:00] Guard #2137 begins shift
+[1518-05-01 00:45] falls asleep
