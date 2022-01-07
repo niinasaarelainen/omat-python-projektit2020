@@ -1,6 +1,7 @@
 
 data = []
 jarjestykset = {}
+must_be_finished = {}
 start = "L"
 end = ""
 vastaus = ""
@@ -29,19 +30,34 @@ def readfile():
         else:
             jarjestykset[eka] = [toka]
 
+        #toinen hash:
+        if toka in must_be_finished:
+            must_be_finished[toka].append(eka)
+        else:
+            must_be_finished[toka] = [eka]
+
 
 
 def etsi(etsittava, vaihtoehtoja):
     global end, vastaus    
     
     vaihtoehtoja = vaihtoehtoja + jarjestykset[etsittava]
+    for va in vaihtoehtoja:
+        print(va)
+        if va in must_be_finished:
+            for item in must_be_finished[va]:
+                if item not in vastaus:
+                    vaihtoehtoja.append(item)
+                    if va in vaihtoehtoja:   # on saatettu poistaa aiemmin tässä luupissa
+                        vaihtoehtoja.remove(va)
+                        if va == "I":
+                            print("poistettiin", va)
     vaihtoehtoja = list(dict.fromkeys(vaihtoehtoja)) 
     if etsittava in vaihtoehtoja :
         vaihtoehtoja.remove(etsittava)
         if len(vaihtoehtoja) == 0:
             return
     if end in vaihtoehtoja and len(vaihtoehtoja) == 1:
-        vastaus += etsittava
         return 
 
     print("vaihtoehtoja", vaihtoehtoja, "etsittava", etsittava)
@@ -50,7 +66,6 @@ def etsi(etsittava, vaihtoehtoja):
     while v in vastaus:
         vaihtoehtoja.remove(v)
         if len(vaihtoehtoja) == 0:
-            #vastaus += etsittava
             return
         v = min(vaihtoehtoja)
     if v not in jarjestykset or v == etsittava:   # eli B ei ole avain (data.txt) ja on myös end
@@ -67,7 +82,7 @@ def etsi(etsittava, vaihtoehtoja):
     else:        
         vaihtoehtoja.remove(v)
         vastaus += v
-        print(etsittava, v)
+        print("alin else, etsittava, v", etsittava, v)
         etsi(v, vaihtoehtoja)
 
 def etsi_alut():
@@ -76,6 +91,8 @@ def etsi_alut():
         if k not in valuet:
             alut.append(k)
     return alut
+
+
 
 def etsi_loput():
     loput = []
@@ -95,6 +112,9 @@ valuet = list(dict.fromkeys(valuet))
 loput = etsi_loput()  # B
 end = loput[0]
 alut = etsi_alut()   # ['G', 'L', 'J', 'N']
+
+print("jotta pääsee key:hyn valuet pitää olla finishoitu")
+print(must_be_finished)
 
 """
 start = "N"
@@ -121,4 +141,13 @@ print(len(vastaus+end))
 tulos =  "GJICKLDFEHNAOPQRSTMUVWXYZB"
 tulos2 = "GJICKLDFEHNAOPQRSTMUVWXYZB"
 print(tulos == tulos2)
-print( [ c for c in tulos if tulos.count(c) > 1])
+print( [ c for c in tulos if tulos.count(c) > 1])  
+
+
+
+"""
+start = "C"
+vastaus = start
+print(etsi(start, jarjestykset[start]))
+print(vastaus+end)    #!!! vastauksetn pitäisi olla 25 / 26 kirjainta !!!
+print(len(vastaus+end))     """
