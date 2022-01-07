@@ -9,11 +9,15 @@ class Cart:
         self.kaantosuunnat = [-1, 0, 1]    # left, straight, right
         self.kaanto_nro = 2
         self.kaantosuunta = self.kaantosuunnat[self.kaanto_nro]
-
+        self.symbolit = ["^", ">", "v", "<"]
+        self.symboli = self.symbolit[self.direction]
+        
     def next_direction(self):
         self.kaanto_nro += 1
         self.kaanto_nro = self.kaanto_nro % 3
-        self.direction = self.direction + self.directions[self.kaanto_nro]
+        self.kaantosuunta = self.kaantosuunnat[self.kaanto_nro]
+        self.direction = self.direction + self.kaantosuunta
+        self.symboli = self.symbolit[self.direction]
 
 
     def liiku(self):
@@ -24,5 +28,5 @@ class Cart:
         if self.direction == 1:
             self.x += 1
         if self.direction == 3:
-            self.x += 1
+            self.x -= 1
 
