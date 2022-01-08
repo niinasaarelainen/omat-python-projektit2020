@@ -1,11 +1,12 @@
 
 class Cart:
 
-    def __init__(self, x, y, direction):
+    def __init__(self, x, y, myota):
         self.x = x
         self.y = y
+        self.myota = myota
         self.directions = [0, 1, 2, 3] # ylös, oik, alas, vas 
-        self.direction = direction
+        self.direction = self.directions[self.myota]
         self.kaantosuunnat = [-1, 0, 1]    # left, straight, right
         self.kaanto_nro = 2
         self.kaantosuunta = self.kaantosuunnat[self.kaanto_nro]
@@ -18,6 +19,11 @@ class Cart:
         self.kaantosuunta = self.kaantosuunnat[self.kaanto_nro]
         self.direction = self.direction + self.kaantosuunta
         self.symboli = self.symbolit[self.direction]
+
+    def turn(self):
+        self.direction = (self.direction + self.myota)  % 4
+        self.symboli = self.symbolit[self.direction]
+
 
 
     def liiku(self):
