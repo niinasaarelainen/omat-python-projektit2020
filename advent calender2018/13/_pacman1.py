@@ -6,6 +6,7 @@ korkeus = 100
 leveys = 100
 carts = []
 carts_old = []
+orkit = []
 omenat = []     # @
 syodyt_omenat = []  
 pygame.init()
@@ -18,7 +19,7 @@ WIDTH = 900
 HEIGHT = 600
 vali = 18
 font = pygame.font.SysFont("Arial", vali )
-font_pac = pygame.font.SysFont("Arial", vali + 5)
+font_pac = pygame.font.SysFont("Arial", vali + 8)
 pac = None
 
 
@@ -35,11 +36,11 @@ def readfile():
                 pac = Pacman(j, i, merkki) 
                 carts.append(pac)
                 matriisi[-1].append("-")
-            elif merkki == "^":   
-                print("hep")             
+            elif merkki == "^":        
                 orkki = Pacman(j, i, merkki) 
+                orkit.append(orkki)
                 carts.append(orkki)
-                matriisi[-1].append("-")
+                matriisi[-1].append("|")
             elif merkki == "@":
                 omenat.append([j, i])
                 matriisi[-1].append(merkki)
@@ -90,12 +91,12 @@ def piirra(c, pac_kaantymispyynto):
     osuiko_omenaan(c)                
 
     #peita vanha:
-    pygame.draw.rect(naytto,  BLACK, pygame.Rect(2 + c.x_wanha * vali, 2+ c.y_wanha * vali, vali, vali))
+    pygame.draw.rect(naytto,  BLACK, pygame.Rect(2 + c.x_wanha * vali, 6 + c.y_wanha * vali, vali, vali))
     teksti = font.render(matriisi[c.y_wanha][c.x_wanha], True, WHITE)
     naytto.blit(teksti, (2 + c.x_wanha * vali, 2 + c.y_wanha * vali))       
 
     # peita uuden paikan polku, sitten uusi symboli
-    pygame.draw.rect(naytto,  BLACK, pygame.Rect(2+ c.x * vali, 2+ c.y * vali, vali, vali))
+    pygame.draw.rect(naytto,  BLACK, pygame.Rect(2+ c.x * vali, 6 + c.y * vali, vali, vali))
     teksti = font_pac.render(c.symboli, True, c.vari)
     naytto.blit(teksti, (2 + c.x * vali, 2 + c.y * vali))
 
@@ -126,28 +127,16 @@ def main():
                 if tapahtuma.key == pygame.K_LEFT: # self.directions = [0, 1, 2, 3] # ylös, oik, alas, vas      
                     pac_kaantymispyynto = 3                
 
-        carts.sort(key = lambda x: (x.y, x.x))
-        carts_kopio = carts[:]
+
+        for orkki in orkit:            
+            orkki.liiku()
+            piirra(orkki, orkki.missa_suunnassa_pac(pac))
         
-        for c in carts:
-            c.liiku() 
-               
-            for c_verrokki in carts:
-                if c.x == c_verrokki.x and c.y == c_verrokki.y and c is not c_verrokki:
-                    print("HIT")
-                    if c not in tuhoa_nama:
-                        tuhoa_nama.append(c)
-                    if c_verrokki not in tuhoa_nama:
-                        tuhoa_nama.append(c_verrokki)
-            for tuhottava in tuhoa_nama:
-                carts_kopio.remove(tuhottava)
-                tuhottava.symboli = "X"                    
-                piirra(c, pac_kaantymispyynto)                    
-                tuhoa_nama = []
-            piirra(c, pac_kaantymispyynto)
+        
+        pac.liiku() 
+        piirra(pac, pac_kaantymispyynto)
                 
-          
-        carts = carts_kopio[:]
+        
         """
         if len(carts) == 1:
             pygame.display.flip() 

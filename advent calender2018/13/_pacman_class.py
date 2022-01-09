@@ -39,3 +39,15 @@ class Pacman:
             self.x -= 1
         
        
+    def missa_suunnassa_pac(self, pac):
+        x_ero = self.x - pac.x
+        y_ero = self.y - pac.y
+        x_vai_y = (max((abs(x_ero), "x"), (abs(y_ero), "y")))
+        if x_vai_y[1] == "x" and x_ero < 0:
+            return 1
+        elif x_vai_y[1] == "x" and x_ero > 0:
+            return 3
+        elif x_vai_y[1] == "y" and x_ero > 0:
+            return 2
+        else:
+            return 0
