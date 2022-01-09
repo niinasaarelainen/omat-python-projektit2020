@@ -1,65 +1,79 @@
-from cart_class import *
+from _pacman_class import *
 import pygame
 
 matriisi = []
+korkeus = 100
+leveys = 100
 carts = []
 carts_old = []
+omenat = []     # @
+syodyt_omenat = []  
 pygame.init()
 
 WHITE = (211, 211, 211)   
 BLACK = (11, 11, 11)   
 RED = (233, 3, 3)
-WIDTH = 1200
-HEIGHT = 1200
-vali = 19
+GREEN = (3, 233, 3)
+WIDTH = 900
+HEIGHT = 600
+vali = 18
 font = pygame.font.SysFont("Arial", vali )
+font_pac = pygame.font.SysFont("Arial", vali + 5)
+pac = None
 
 
 
 def readfile():
-    f = open("data.txt", "r")  # e riviä
+    global pac
+    f = open("data_oma.txt", "r")  # e riviä
     i = 0
     for rivi in f:
         matriisi.append([])
         j = 0
-        for merkki in rivi:
-            
+        for merkki in rivi:            
             if merkki == ">":                
-                carts.append(Cart(j, i, merkki) )
+                pac = Pacman(j, i, merkki) 
+                carts.append(pac)
                 matriisi[-1].append("-")
-            elif merkki == "<":                
-                carts.append(Cart(j, i, merkki) )
+            elif merkki == "^":   
+                print("hep")             
+                orkki = Pacman(j, i, merkki) 
+                carts.append(orkki)
                 matriisi[-1].append("-")
-            elif merkki == "v":                
-                carts.append(Cart(j, i, merkki) )
-                matriisi[-1].append("|")
-            elif merkki == "^":                
-                carts.append(Cart(j, i, merkki) )
-                matriisi[-1].append("|")
+            elif merkki == "@":
+                omenat.append([j, i])
+                matriisi[-1].append(merkki)
             else:
                 matriisi[-1].append(merkki)
             j += 1
         i += 1
 
-    #test:
-    #carts.append(Cart(3, 0, ">") )  
-    #carts.append(Cart(9, 3, "v") )  
-    #carts.append(Cart(5, 5, ">") )  
-    #carts.append(Cart(4, 0, "<") )  
-
 
 def piirra_kartta():
     naytto.fill(BLACK)
-    for r in range(korkeus):
-        for s in range(leveys):
+    for r in range(korkeus-1):
+        for s in range(leveys-1):
             teksti = font.render(matriisi[r][s], True, WHITE)
             naytto.blit(teksti, (2 + s * vali, 2 + r * vali))   
 
 
-def piirra(c):    
+def osuiko_omenaan(c):
+    for o in omenat:
+        if o[1] == c.y and o[0] == c.x:
+            print("osui")
+            matriisi[c.y][c.x] = "-"
+            syodyt_omenat.append(o)
+    for o in syodyt_omenat:
+        pygame.draw.rect(naytto,  BLACK, pygame.Rect(2 + c.x_wanha * vali, 6 + c.y_wanha * vali, vali, vali))
+        teksti = font.render(matriisi[o[1]][o[0]], True, WHITE)
+        naytto.blit(teksti, (2 + o[0] * vali, 2 + o[1] * vali))
+    pygame.display.flip()        
 
+
+
+def piirra(c, pac_kaantymispyynto):  
     if matriisi[c.y][c.x] == "+":
-        c.next_direction()
+        c.next_direction(pac_kaantymispyynto)
 
     if c.symboli in [">", "<"]:                    
         if matriisi[c.y][c.x] == "\\":
@@ -73,6 +87,8 @@ def piirra(c):
         if matriisi[c.y][c.x] ==  "/" :
             c.turn(1)    
 
+    osuiko_omenaan(c)                
+
     #peita vanha:
     pygame.draw.rect(naytto,  BLACK, pygame.Rect(2 + c.x_wanha * vali, 2+ c.y_wanha * vali, vali, vali))
     teksti = font.render(matriisi[c.y_wanha][c.x_wanha], True, WHITE)
@@ -80,7 +96,7 @@ def piirra(c):
 
     # peita uuden paikan polku, sitten uusi symboli
     pygame.draw.rect(naytto,  BLACK, pygame.Rect(2+ c.x * vali, 2+ c.y * vali, vali, vali))
-    teksti = font.render(c.symboli, True, RED)
+    teksti = font_pac.render(c.symboli, True, c.vari)
     naytto.blit(teksti, (2 + c.x * vali, 2 + c.y * vali))
 
 
@@ -88,23 +104,34 @@ def piirra(c):
 def main():
     global carts
     for c in carts:
-        piirra(c)
+        piirra(c, pac.direction)
     pygame.display.flip() 
     kello.tick(1)  
-
     kesken = True
     tuhoa_nama = []
-    while kesken:       
+    pac_kaantymispyynto = pac.direction
+
+    while kesken:      
         
         for tapahtuma in pygame.event.get():
             if tapahtuma.type == pygame.QUIT:
                 pygame.quit()  
+            elif tapahtuma.type == pygame.KEYDOWN:
+                if tapahtuma.key == pygame.K_UP: # self.directions = [0, 1, 2, 3] # ylös, oik, alas, vas  
+                    pac_kaantymispyynto = 0
+                if tapahtuma.key == pygame.K_RIGHT: # self.directions = [0, 1, 2, 3] # ylös, oik, alas, vas      
+                    pac_kaantymispyynto = 1
+                if tapahtuma.key == pygame.K_DOWN: # self.directions = [0, 1, 2, 3] # ylös, oik, alas, vas      
+                    pac_kaantymispyynto = 2
+                if tapahtuma.key == pygame.K_LEFT: # self.directions = [0, 1, 2, 3] # ylös, oik, alas, vas      
+                    pac_kaantymispyynto = 3                
 
         carts.sort(key = lambda x: (x.y, x.x))
         carts_kopio = carts[:]
         
         for c in carts:
-            c.liiku()            
+            c.liiku() 
+               
             for c_verrokki in carts:
                 if c.x == c_verrokki.x and c.y == c_verrokki.y and c is not c_verrokki:
                     print("HIT")
@@ -115,28 +142,28 @@ def main():
             for tuhottava in tuhoa_nama:
                 carts_kopio.remove(tuhottava)
                 tuhottava.symboli = "X"                    
-                piirra(c)                    
+                piirra(c, pac_kaantymispyynto)                    
                 tuhoa_nama = []
-            piirra(c)
+            piirra(c, pac_kaantymispyynto)
                 
           
         carts = carts_kopio[:]
-        
+        """
         if len(carts) == 1:
             pygame.display.flip() 
             kello.tick(50)    
             print(carts[0].x, carts[0].y)
-            pygame.quit()  
+            pygame.quit()   """
             
 
         pygame.display.flip() 
-        kello.tick(100)   
+        kello.tick(5)   
 
      
     
 
 readfile()
-leveys= len(matriisi[-1])
+leveys= len(matriisi[0])
 korkeus = len(matriisi)
 naytto = pygame.display.set_mode((WIDTH, HEIGHT))
 kello = pygame.time.Clock()
