@@ -2,31 +2,33 @@ from _pacman_class import *
 import pygame
 
 matriisi = []
-korkeus = 100
-leveys = 100
+korkeus = 0
+leveys = 0
 carts = []
 carts_old = []
 orkit = []
 omenat = []     # @
 syodyt_omenat = []  
+omenoita = 0
 pygame.init()
 
 WHITE = (211, 211, 211)   
 BLACK = (11, 11, 11)   
 RED = (233, 3, 3)
 GREEN = (3, 233, 3)
-WIDTH = 900
-HEIGHT = 600
-vali = 18
-font = pygame.font.SysFont("Arial", vali )
-font_pac = pygame.font.SysFont("Arial", vali + 8)
+WIDTH = 1080
+HEIGHT = 444
+vali_x = 14
+vali_y = 23
+font = pygame.font.SysFont("Arial", (vali_x + vali_y) // 2 )
+font_pac = pygame.font.SysFont("Arial", vali_y + 3)
 pac = None
 
 
 
 def readfile():
-    global pac
-    f = open("data_oma.txt", "r")  # e riviä
+    global pac, omenoita
+    f = open("level1.txt", "r")  # e riviä
     i = 0
     for rivi in f:
         matriisi.append([])
@@ -47,15 +49,20 @@ def readfile():
             else:
                 matriisi[-1].append(merkki)
             j += 1
+            if j == 77:
+                break
         i += 1
+
+    omenoita = len(omenat)
 
 
 def piirra_kartta():
     naytto.fill(BLACK)
-    for r in range(korkeus-1):
-        for s in range(leveys-1):
+    for r in range(korkeus):
+        for s in range(leveys):
+            print(r, s)
             teksti = font.render(matriisi[r][s], True, WHITE)
-            naytto.blit(teksti, (2 + s * vali, 2 + r * vali))   
+            naytto.blit(teksti, (2 + s * vali_x, 2 + r * vali_y))   
 
 
 def osuiko_omenaan(c):
@@ -64,43 +71,55 @@ def osuiko_omenaan(c):
             print("osui")
             matriisi[c.y][c.x] = "-"
             syodyt_omenat.append(o)
+            if len(syodyt_omenat) == omenoita:
+                next_level()
+            omenat.remove(o)
     for o in syodyt_omenat:
-        pygame.draw.rect(naytto,  BLACK, pygame.Rect(2 + c.x_wanha * vali, 6 + c.y_wanha * vali, vali, vali))
+        pygame.draw.rect(naytto,  BLACK, pygame.Rect(2 + c.x_wanha * vali_x, 6 + c.y_wanha * vali_y, vali_x, vali_y))
         teksti = font.render(matriisi[o[1]][o[0]], True, WHITE)
-        naytto.blit(teksti, (2 + o[0] * vali, 2 + o[1] * vali))
+        naytto.blit(teksti, (2 + o[0] * vali_x, 2 + o[1] * vali_y))
     pygame.display.flip()        
 
 
 
 def piirra(c, pac_kaantymispyynto):  
-    if matriisi[c.y][c.x] == "+":
-        c.next_direction(pac_kaantymispyynto)
+    if c.y < korkeus and c.x < leveys:
+        if matriisi[c.y][c.x] == "+":
+            c.next_direction(pac_kaantymispyynto)
 
-    if c.symboli in [">", "<"]:                    
-        if matriisi[c.y][c.x] == "\\":
-            c.turn(1)
-        if matriisi[c.y][c.x] ==  "/" :
-            c.turn(-1)     
-    
-    elif c.symboli in["v", "^"]:
-        if matriisi[c.y][c.x] == "\\":
-            c.turn(-1)
-        if matriisi[c.y][c.x] ==  "/" :
-            c.turn(1)    
+        if c.symboli in [">", "<"]:                    
+            if matriisi[c.y][c.x] == "\\":
+                c.turn(1)
+            if matriisi[c.y][c.x] ==  "/" :
+                c.turn(-1)     
+        
+        elif c.symboli in["v", "^"]:
+            if matriisi[c.y][c.x] == "\\":
+                c.turn(-1)
+            if matriisi[c.y][c.x] ==  "/" :
+                c.turn(1)    
 
-    osuiko_omenaan(c)                
+        osuiko_omenaan(c)                
 
-    #peita vanha:
-    pygame.draw.rect(naytto,  BLACK, pygame.Rect(2 + c.x_wanha * vali, 6 + c.y_wanha * vali, vali, vali))
-    teksti = font.render(matriisi[c.y_wanha][c.x_wanha], True, WHITE)
-    naytto.blit(teksti, (2 + c.x_wanha * vali, 2 + c.y_wanha * vali))       
+        #peita vanha:
+        pygame.draw.rect(naytto,  BLACK, pygame.Rect(2 + c.x_wanha * vali_x, 6 + c.y_wanha * vali_y, vali_x, vali_y))
+        teksti = font.render(matriisi[c.y_wanha][c.x_wanha], True, WHITE)
+        naytto.blit(teksti, (2 + c.x_wanha * vali_x, 2 + c.y_wanha * vali_y))       
 
-    # peita uuden paikan polku, sitten uusi symboli
-    pygame.draw.rect(naytto,  BLACK, pygame.Rect(2+ c.x * vali, 6 + c.y * vali, vali, vali))
-    teksti = font_pac.render(c.symboli, True, c.vari)
-    naytto.blit(teksti, (2 + c.x * vali, 2 + c.y * vali))
+        # peita uuden paikan polku, sitten uusi symboli
+        pygame.draw.rect(naytto,  BLACK, pygame.Rect(2+ c.x * vali_x, 6 + c.y * vali_y, vali_x, vali_y))
+        teksti = font_pac.render(c.symboli, True, c.vari)
+        naytto.blit(teksti, (2 + c.x * vali_x, 2 + c.y * vali_y))
 
 
+def score():
+        pygame.draw.rect(naytto,  BLACK, pygame.Rect(100, 15, vali_x + 5, vali_y + 5))
+        teksti = font_pac.render(f"{len(syodyt_omenat)} / {omenoita} ", True, GREEN)
+        naytto.blit(teksti, (100, 52))
+
+
+def next_level():
+    print("next_level")
 
 def main():
     global carts
@@ -130,11 +149,13 @@ def main():
 
         for orkki in orkit:            
             orkki.liiku()
-            piirra(orkki, orkki.missa_suunnassa_pac(pac))
-        
+            piirra(orkki, orkki.missa_suunnassa_pac(pac))        
         
         pac.liiku() 
         piirra(pac, pac_kaantymispyynto)
+
+        score()
+
                 
         
         """
@@ -152,8 +173,9 @@ def main():
     
 
 readfile()
-leveys= len(matriisi[0])
+leveys= len(matriisi[3]) 
 korkeus = len(matriisi)
+print(leveys, korkeus)
 naytto = pygame.display.set_mode((WIDTH, HEIGHT))
 kello = pygame.time.Clock()
 
