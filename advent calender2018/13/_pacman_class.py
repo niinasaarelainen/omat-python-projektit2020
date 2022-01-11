@@ -42,6 +42,8 @@ class Pacman:
     def missa_suunnassa_pac(self, pac):
         x_ero = self.x - pac.x
         y_ero = self.y - pac.y
+        if x_ero == 0 and y_ero == 0:
+            return "game_over"
         x_vai_y = (max((abs(x_ero), "x"), (abs(y_ero), "y")))
         if x_vai_y[1] == "x" and x_ero < 0:
             return 1
