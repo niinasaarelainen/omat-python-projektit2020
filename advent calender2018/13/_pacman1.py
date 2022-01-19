@@ -3,7 +3,6 @@ import pygame
 
 matriisi = []
 korkeus = 0
-leveys = 0
 carts = []
 orkit = []
 omenat = []     # @
@@ -38,7 +37,7 @@ level = 5
 
 
 def alkutoiminnot():
-    global leveys, korkeus, matriisi, carts, orkit, omenat, syodyt_omenat, omenoita, naytto
+    global korkeus, matriisi, carts, orkit, omenat, syodyt_omenat, omenoita, naytto
     matriisi = []
     carts = []
     orkit = []
@@ -46,7 +45,6 @@ def alkutoiminnot():
     syodyt_omenat = []  
     omenoita = 0
     readfile()
-    leveys= len(matriisi[3]) 
     korkeus = len(matriisi)
     naytto = pygame.display.set_mode((WIDTH, HEIGHT))
     piirra_kartta()  # tämä piirretään vain kerran
@@ -84,10 +82,11 @@ def readfile():
 
 
 def piirra_kartta():
+    print(korkeus, rivin_pit)
     global matriisi, naytto
     naytto.fill(BLACK)
     for r in range(korkeus):
-        for s in range(leveys):
+        for s in range(rivin_pit):
             if matriisi[r][s] == "@":
                 teksti = font.render(matriisi[r][s], True, ORANGE)
                 naytto.blit(teksti, (s * vali_x - 3, 2 + r * vali_y)) 
@@ -111,7 +110,7 @@ def osuiko_omenaan(c):
 
 
 def piirra(c, pac_kaantymispyynto):  
-    if c.y < korkeus and c.x < leveys:
+    if c.y < korkeus and c.x < rivin_pit:
         if matriisi[c.y][c.x] == "+":
             c.next_direction(pac_kaantymispyynto)
 
@@ -148,9 +147,9 @@ def piirra(c, pac_kaantymispyynto):
 
 
 def score():
-    pygame.draw.rect(naytto,  BLACK, pygame.Rect(100, 52, vali_x + 5, vali_y + 5))
+    pygame.draw.rect(naytto,  BLACK, pygame.Rect(WIDTH - 100, HEIGHT - 52, vali_x + 5, vali_y + 5))
     teksti = font_pac.render(f"{len(syodyt_omenat)} / {omenoita} ", True, GREEN)
-    naytto.blit(teksti, (100, 52))
+    naytto.blit(teksti, (WIDTH - 100, HEIGHT - 52))
 
 
 def next_level():
@@ -212,7 +211,7 @@ def gameover():
     if level == 5:
         WIDTH = 1200 
         HEIGHT = 600
-        rivin_pit = 99
+        rivin_pit = 97
     alkutoiminnot()         
     main()
 
