@@ -9,8 +9,8 @@ orkit = []
 omenat = []     # @
 syodyt_omenat = []  
 omenoita = 0
-pygame.init()
 
+pygame.init()
 kello = pygame.time.Clock()
 
 WHITE = (211, 211, 211)   
@@ -19,19 +19,26 @@ RED = (233, 3, 3)
 GREEN = (3, 233, 3)
 ORANGE = (190, 190, 10)
 
-WIDTH = 1080
+WIDTH = 1080  # level 1-4
 HEIGHT = 444
+WIDTH = 1180   #level 5
+HEIGHT = 580
 vali_x = 14
+vali_x = 12
 vali_y = 23
 font = pygame.font.SysFont("Arial", (vali_x + vali_y) // 2 + 2)
 font_pac = pygame.font.SysFont("Arial", (vali_x + vali_y) // 2 + 2 )
 pac = None
-level = 1
 naytto = None
+rivin_pit = 77 # level 1-4
+rivin_pit = 97  #level 5
+
+level = 5
+
 
 
 def alkutoiminnot():
-    global leveys, korkeus, matriisi,carts, orkit, omenat, syodyt_omenat, omenoita, naytto
+    global leveys, korkeus, matriisi, carts, orkit, omenat, syodyt_omenat, omenoita, naytto
     matriisi = []
     carts = []
     orkit = []
@@ -47,7 +54,7 @@ def alkutoiminnot():
     
 
 def readfile():
-    global pac, omenoita, matriisi    
+    global pac, omenoita, matriisi, carts, omenat, orkit, rivin_pit 
     f = open( "level" + str(level) + ".txt", "r")  # e riviä
     i = 0
     for rivi in f:
@@ -69,7 +76,7 @@ def readfile():
             else:
                 matriisi[-1].append(merkki)
             j += 1
-            if j == 77:
+            if j == rivin_pit:
                 break
         i += 1
 
@@ -77,6 +84,7 @@ def readfile():
 
 
 def piirra_kartta():
+    global matriisi, naytto
     naytto.fill(BLACK)
     for r in range(korkeus):
         for s in range(leveys):
@@ -127,7 +135,10 @@ def piirra(c, pac_kaantymispyynto):
 
         #peita vanha:
         pygame.draw.rect(naytto,  BLACK, pygame.Rect(c.x_wanha * vali_x, 6 + c.y_wanha * vali_y, vali_x+2, vali_y+2))
-        teksti = font.render(matriisi[c.y_wanha][c.x_wanha], True, WHITE)
+        if matriisi[c.y_wanha][c.x_wanha] == "@":
+            teksti = font.render("@", True, ORANGE)
+        else:
+            teksti = font.render(matriisi[c.y_wanha][c.x_wanha], True, WHITE)
         naytto.blit(teksti, (2 + c.x_wanha * vali_x, 2 + c.y_wanha * vali_y))       
 
         # peita uuden paikan polku, sitten uusi symboli
@@ -184,23 +195,28 @@ def main():                 ###    main   start          main   start
         piirra(pac, pac_kaantymispyynto)
         score()            
 
-        pygame.display.flip() 
+        pygame.display.flip()                                       
+        kello.tick(5) 
         for orkki in orkit: 
             if orkki.missa_suunnassa_pac(pac) == "game_over":  # pitää kaksi kertaa, jotteivat pac ja orkki vain
-                gameover()                                      # vaihda paikkaa törmäämättä
-        kello.tick(5)   
+                gameover()                                      # vaihda paikkaa liikkuessa
                                     ###    main    end        main   end   
 
 def gameover():
+    global HEIGHT, WIDTH, rivin_pit
     naytto.fill(BLACK)
     teksti = font_pac.render(f"  G A M E    O V E R ", True, ORANGE)
     naytto.blit(teksti, (300, HEIGHT // 2))
     pygame.display.flip() 
-    pygame.time.delay(4000)
-    alkutoiminnot()
+    pygame.time.delay(3000)
+    if level == 5:
+        WIDTH = 1200 
+        HEIGHT = 600
+        rivin_pit = 99
+    alkutoiminnot()         
+    main()
 
     
-
 alkutoiminnot()
 main()
 

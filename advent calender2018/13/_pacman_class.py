@@ -10,7 +10,7 @@ class Pacman:
         self.symboli = symboli
         self.directions = [0, 1, 2, 3] # ylös, oik, alas, vas 
         self.direction = self.directions[self.symbolit.index(self.symboli)]
-        if symboli == "^":
+        if symboli == "^":    # luontihetken symboli
             self.vari = (233, 3, 3)
         if symboli == ">":
             self.vari = (3, 233, 3)
