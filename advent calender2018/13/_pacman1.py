@@ -18,10 +18,6 @@ RED = (233, 3, 3)
 GREEN = (3, 233, 3)
 ORANGE = (190, 190, 10)
 
-WIDTH = 1080  # level 1-4
-HEIGHT = 444
-WIDTH = 1180   #level 5
-HEIGHT = 580
 vali_x = 14
 vali_x = 12
 vali_y = 23
@@ -29,8 +25,6 @@ font = pygame.font.SysFont("Arial", (vali_x + vali_y) // 2 + 2)
 font_pac = pygame.font.SysFont("Arial", (vali_x + vali_y) // 2 + 2 )
 pac = None
 naytto = None
-rivin_pit = 77 # level 1-4
-rivin_pit = 97  #level 5
 
 level = 5
 
@@ -49,30 +43,44 @@ def alkutoiminnot():
     naytto = pygame.display.set_mode((WIDTH, HEIGHT))
     piirra_kartta()  # tämä piirretään vain kerran
 
-    
+
+def selvita_rivin_pituus(f):
+    global WIDTH, HEIGHT
+    ind = 0
+    for rivi in f:
+        j = 0
+        matriisi.append([])
+        for merkki in rivi: 
+            if merkki ==  "L":
+                ind = j
+                matriisi[-1].append("|")
+            else:
+                matriisi[-1].append(merkki)
+            j += 1
+    WIDTH = int(ind * 12.6)
+    HEIGHT = int(len(matriisi) * 28)
+    return ind + 1
 
 def readfile():
     global pac, omenoita, matriisi, carts, omenat, orkit, rivin_pit 
-    f = open( "level" + str(level) + ".txt", "r")  # e riviä
+    f = open( "level" + str(level) + ".txt", "r")  # e riviä 
+    rivin_pit = selvita_rivin_pituus(f)
+
     i = 0
-    for rivi in f:
-        matriisi.append([])
+    for rivi in matriisi:
         j = 0
         for merkki in rivi:            
             if merkki == ">":                
                 pac = Pacman(j, i, merkki) 
                 carts.append(pac)
-                matriisi[-1].append("-")
+                matriisi[i][j] = "-"
             elif merkki == "^":        
                 orkki = Pacman(j, i, merkki) 
                 orkit.append(orkki)
                 carts.append(orkki)
-                matriisi[-1].append("|")
+                matriisi[i][j] = "|"
             elif merkki == "@":
                 omenat.append([j, i])
-                matriisi[-1].append(merkki)
-            else:
-                matriisi[-1].append(merkki)
             j += 1
             if j == rivin_pit:
                 break
@@ -87,6 +95,7 @@ def piirra_kartta():
     naytto.fill(BLACK)
     for r in range(korkeus):
         for s in range(rivin_pit):
+            print(r, s)
             if matriisi[r][s] == "@":
                 teksti = font.render(matriisi[r][s], True, ORANGE)
                 naytto.blit(teksti, (s * vali_x - 3, 2 + r * vali_y)) 
