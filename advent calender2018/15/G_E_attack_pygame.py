@@ -6,8 +6,8 @@ e_y = 0
 gs = []    # [y, x]
 steps_all = {}
 
-WIDTH = 400
-HEIGHT = 500
+WIDTH = 500
+HEIGHT = 600
 
 
 BLACK = (11, 11, 11)   
@@ -16,14 +16,14 @@ GREEN = (3, 233, 3)
 ORANGE = (190, 190, 10)
 
 pygame.init()
-font = pygame.font.SysFont("Arial", 32)
-font_pieni = pygame.font.SysFont("Arial", 22)
+font = pygame.font.SysFont("Arial", 30)
+font_pieni = pygame.font.SysFont("Arial", 20)
 kello = pygame.time.Clock()
 naytto = pygame.display.set_mode((WIDTH, HEIGHT))
 
 
 def readfile():
-    # TODO   data_3-case: liiku sivulle vaikka diagonaali sanoo False 
+    # TODO   data_3: alin G jää jumiin
     f = open( "data_3.txt", "r") 
     for rivi in f:
         rivi = rivi.strip()
