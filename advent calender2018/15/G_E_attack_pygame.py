@@ -1,10 +1,25 @@
-import copy
+import copy, pygame
 
 data = []
 e_x = 0
 e_y = 0
 gs = []    # [y, x]
 steps_all = {}
+
+WIDTH = 400
+HEIGHT = 500
+
+
+BLACK = (11, 11, 11)   
+RED = (233, 3, 3)
+GREEN = (3, 233, 3)
+ORANGE = (190, 190, 10)
+
+pygame.init()
+font = pygame.font.SysFont("Arial", 32)
+font_pieni = pygame.font.SysFont("Arial", 22)
+kello = pygame.time.Clock()
+naytto = pygame.display.set_mode((WIDTH, HEIGHT))
 
 
 def readfile():
@@ -29,7 +44,7 @@ def find_E_and_G():
 
 def loppuko(y, x):
     if 'G' in [data[e_y -1][e_x], data[e_y +1][e_x], data[e_y][e_x -1], data[e_y][e_x +1]]:
-        print("   END")
+        draw()
         return True
 
 def in_range():   # ?
@@ -49,54 +64,47 @@ def in_range():   # ?
             data[g_y][g_x +1] = "?"
 
 
-def diagonaalit(r, m):    # reachable alafunktio
+def diagonaali1(r, m):    # reachable alafunktio, # ensin x-akseli
     steps = 0
-    ok = True
     alkuloppu_x = sorted([e_x, m])
     alkuloppu_y = sorted([e_y, r])
-    for x in range(alkuloppu_x[0] +1, alkuloppu_x[1] + 1):
+    
+    for x in range(alkuloppu_x[0] +1, alkuloppu_x[1]):          
         if data[e_y][x] != ".":
-            ok = False
-            break
-        else:
-            steps += 1
-            #data[e_y][x] = "T" 
-    if ok:      
-        for y in range(alkuloppu_y[0] +1, alkuloppu_y[1]):
-            if data[y][m] != ".":
-                ok = False
-                break   
-            else:
-                steps += 1
-                #data[y][m] = "T" 
-    if ok:      
-        key = f"{r},{m}"
-        steps_all[key] = steps + 1
-        print(steps + 1)
+            return False       
+        steps += 1   
+        #print("diag-x", steps)  
+        #data[e_y][x] = "T" 
+    #if ok:  
+    for y in range(alkuloppu_y[0] +1, alkuloppu_y[1]):
+        if data[y][m] != ".":
+            print(data[y][m])  
+            return False 
+        steps += 1 
+    key = f"{r},{m}"
+    steps_all[key] = steps + 1
+    return True
 
-# diagonaaliin ensin alas   
-    ok = True
+def diagonaali2(r, m):    # reachable alafunktio, # diagonaaliin ensin alas   
     steps = 0
-    for y in range(alkuloppu_y[0] +1, alkuloppu_y[1] + 1):
+    alkuloppu_x = sorted([e_x, m])
+    alkuloppu_y = sorted([e_y, r])
+
+    for y in range(alkuloppu_y[0] +1, alkuloppu_y[1]):
         if data[y][e_x] != ".":
-            ok = False
-            break   
-        else:
-            steps += 1
-            #data[y][e_x] = "T" 
-    if ok:
-        for x in range(alkuloppu_x[0] +1, alkuloppu_x[1]):
-            if data[r][x] != ".":
-                ok = False
-                break
-            else:
-                steps += 1
-                #data[r][x] = "T"  
-    if ok:   
-        key = f"{r},{m}"
-        if key not in steps_all:
-            steps_all[key] = steps + 1
-        print(steps + 1)
+            return False
+        steps += 1
+        #data[y][e_x] = "T" 
+    for x in range(alkuloppu_x[0] +1, alkuloppu_x[1]):
+        if data[r][x] != ".":
+            return False
+        steps += 1
+        #data[r][x] = "T"  
+     
+    key = f"{r},{m}"
+    if key not in steps_all:
+        steps_all[key] = steps + 1
+    return True
 
 
 def reachable():   # @   
@@ -108,7 +116,7 @@ def reachable():   # @
                 ok = True
                 if r == e_y:
                     alkuloppu = sorted([e_x, m])
-                    for x in range(alkuloppu[0] +1, alkuloppu[1]):                        
+                    for x in range(alkuloppu[0] +1, alkuloppu[1]):                                        
                         if data[r][x] != ".":
                             ok = False
                             break
@@ -130,16 +138,14 @@ def reachable():   # @
                     if ok:        
                         key = f"{r},{m}"
                         steps_all[key] = steps + 1
-
-                # diagonaaliin ensin suoraan     
+                 
                 else:
-                    diagonaalit(r, m)
+                    if diagonaali1(r, m) == False:  #  ensin suoraan   
+                        diagonaali2(r, m)           #  ensin alas   
                     
                 data[r][m] = "."
-            
-
-
-
+                
+                
 """
 Targets:      In range:     Reachable:    Nearest:      Chosen:
 #######       #######       #######       #######       #######
@@ -163,10 +169,6 @@ def liiku(y, x):
             e_x -= 1
     data[e_y][e_x] = "E"
 
-    print()
-    for rivi in data:
-        print(rivi)
-
     for g in gs:
         if loppuko(g[0], g[1]):
             return "end"
@@ -178,7 +180,6 @@ def g_t_liikkuu():
     gs = []
     siirto_tehty = False
 
-    print("len(gs_copy)", len(gs_copy))
     for g in gs_copy:
         siirto_tehty = False
         data[g[0]][g[1]] = "."
@@ -192,7 +193,6 @@ def g_t_liikkuu():
                 gs.append([g[0] + 1, g[1]])
                 siirto_tehty = True
         if siirto_tehty == False:
-            #print("siirto_tehty == False")
             if g[1] - e_x > 0 and data[g[0]][g[1] -1] == ".":
                 data[g[0]][g[1] -1] = "G"
                 gs.append([g[0], g[1] - 1])
@@ -213,37 +213,55 @@ def g_t_liikkuu():
         if siirto_tehty == False:
             data[g[0]][g[1]] = "G" 
 
-    print()
-    for rivi in data:
-        print(rivi)
+    draw()
 
     for g in gs:
         if loppuko(g[0], g[1]):
             return "end"
+
+def draw():
+    global naytto
+    for r in range(len(data)):
+        for s in range(len(data[r])):
+            teksti = font.render(data[r][s], True, ORANGE)
+            naytto.blit(teksti, (s * 40, r * 40))   
+    pygame.display.flip()                                       
+    kello.tick(1)  
+
+
+def main():
+    draw()
+    i = 0
+
+    while i < 5:
+        naytto.fill(BLACK)  
+        for tapahtuma in pygame.event.get():
+                if tapahtuma.type == pygame.QUIT:
+                    pygame.quit()  
+
+        i += 1
+        if in_range() == "end":
+            break
         
-    
+        reachable() 
+        st = [k for k, v in sorted(steps_all.items(), key=lambda item: (item[1], item[0]))]
+        y_x = st[0].split(",")
+
+        if liiku(int(y_x[0]), int(y_x[1])) == "end":
+            break
+        if g_t_liikkuu() == "end":
+            break
+
+        
+
 
 ### MAIN ###################################
 
 readfile()
 find_E_and_G() 
+main()
 
-#while True:
-for i in range(3):     
-    if in_range() == "end":
-        break
-    
-    reachable()
-    
-    print(steps_all)
-    st = [k for k, v in sorted(steps_all.items(), key=lambda item: (item[1], item[0]))]
-    y_x = st[0].split(",")
-    print(y_x)
 
-    if liiku(int(y_x[0]), int(y_x[1])) == "end":
-        break
-    if g_t_liikkuu() == "end":
-        break
     
     
 
