@@ -150,11 +150,25 @@ def reachable():   # @
                  
                 else:   
                     if diagonaali1(r, m) == False:  #  ensin suoraan   
-                        diagonaali2(r, m)           #  ensin alas   
+                        diagonaali2(r, m)          #  ensin alas   
+                            
                     
                 data[r][m] = "."  # "?" tilalle .
                 
-                
+
+def tarkista_voiko_ylipäänsä_liikkua():
+    global e_x, e_y
+    data[e_y][e_x] = "."
+    if '.' == data[e_y -1][e_x]:
+        e_y -= 1
+    elif '.' ==  data[e_y +1][e_x]:
+        e_y += 1
+    elif '.' ==  data[e_y][e_x -1]:
+        e_x -= 1
+    elif '.' == data[e_y][e_x +1]:
+        e_x += 1
+    data[e_y][e_x] = "E"
+
 """
 Targets:      In range:     Reachable:    Nearest:      Chosen:
 #######       #######       #######       #######       #######
@@ -257,16 +271,17 @@ def main():
             break
         
         reachable() 
-        st = [k for k, v in sorted(steps_all.items(), key=lambda item: (item[1][0], item[0]))]
-        y_x = st[0].split(",")
+        if len(steps_all) == 0:
+            tarkista_voiko_ylipäänsä_liikkua()
+        else:
+            st = [k for k, v in sorted(steps_all.items(), key=lambda item: (item[1][0], item[0]))]
+            y_x = st[0].split(",")
 
-        st2 = [v for k, v in sorted(steps_all.items(), key=lambda item: (item[1][0], item[0]))]
-        suunta = st2[0][1]
+            st2 = [v for k, v in sorted(steps_all.items(), key=lambda item: (item[1][0], item[0]))]
+            suunta = st2[0][1]
 
-        print("suunta", suunta)
-
-        if liiku(int(y_x[0]), int(y_x[1]), suunta) == "end":
-            break
+            if liiku(int(y_x[0]), int(y_x[1]), suunta) == "end":
+                break
         if g_t_liikkuu() == "end":
             break
 
