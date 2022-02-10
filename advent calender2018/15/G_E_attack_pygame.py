@@ -23,8 +23,7 @@ naytto = pygame.display.set_mode((WIDTH, HEIGHT))
 
 
 def readfile():
-    # TODO   data_3: alin G jää jumiin
-    f = open( "data_3.txt", "r") 
+    f = open( "data_6.txt", "r") 
     for rivi in f:
         rivi = rivi.strip()
         data.append([])
@@ -67,22 +66,16 @@ def in_range():   # ?
 
 
 def diagonaali1(r, m):    # reachable alafunktio, # ensin x-akseli
-    print(data[r][m])
     steps = 0
     alkuloppu_x = sorted([e_x, m])
     alkuloppu_y = sorted([e_y, r])
     
     for x in range(alkuloppu_x[0] +1, alkuloppu_x[1]):          
         if data[e_y][x] != ".":
-            print("@1x", data[e_y][m])  
             return False       
         steps += 1   
-        #print("diag-x", steps)  
-        #data[e_y][x] = "T" 
-    #if ok:  
     for y in range(alkuloppu_y[0] +1, alkuloppu_y[1]):
         if data[y][m] != ".":
-            print("@1y", data[y][m])  
             return False  
         steps += 1 
     key = f"{r},{m}"
@@ -90,14 +83,12 @@ def diagonaali1(r, m):    # reachable alafunktio, # ensin x-akseli
     return True
 
 def diagonaali2(r, m):    # reachable alafunktio, # diagonaaliin ensin alas   
-    print(" diag 2")
     steps = 0
     alkuloppu_x = sorted([e_x, m])
     alkuloppu_y = sorted([e_y, r])
 
     for y in range(alkuloppu_y[0] +1, alkuloppu_y[1]):
         if data[y][e_x] != '.':
-            print("@2x", data[y][e_x])  
             return False
         steps += 1
         #data[y][e_x] = "T" 
@@ -121,8 +112,7 @@ def reachable():   # @
                 steps = 0
                 ok = True
 
-                #samalla rivillä:    
-                print("r", r, "e_y", e_y)           
+                #samalla rivillä:       
                 if r == e_y:
                     alkuloppu = sorted([e_x, m])
                     for x in range(alkuloppu[0] +1, alkuloppu[1]):                                        
@@ -239,6 +229,7 @@ def g_t_liikkuu():
                 siirto_tehty = True
         if siirto_tehty == False:
             data[g[0]][g[1]] = "G" 
+            gs.append([g[0], g[1]]) 
 
     draw()
 
