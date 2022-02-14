@@ -5,7 +5,7 @@ class Nuotti:
 
     def __init__(self):        
         self.alin_nuotti = 1 
-        self.ylin_nuotti = 11  
+        self.ylin_nuotti = 16  
 
     def arvo_nuotti(self):
         self.arvottu_indeksi = random.randint(self.alin_nuotti, self.ylin_nuotti)
