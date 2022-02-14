@@ -18,19 +18,12 @@ fontti_pieni_bold = pygame.font.SysFont("Arial", 24, bold = True)
 nuotit = []
 obsticles = []
 
-def luo_obsticlet():
-    
-    obsticles.append(Obsticle(30, 30, 200, 10))
-    obsticles.append(Obsticle(330, 40, 120, 80))
-    obsticles.append(Obsticle(330, 130, -100, 110))
-    obsticles.append(Obsticle(220, 300, 400, 80)) 
-    obsticles.append(Obsticle(550, 130, -120, 120))  # PROBLEM, jos sama lopetus x/y kuin toisella esteellä
-    obsticles.append(Obsticle(230, 230, -100, 110))  
-    
 
 def draw_obsticles():
-    for obst in obsticles:
-        pygame.draw.line(naytto, turkoosi, (obst.x_aloitus ,obst.y_aloitus ),(obst.x_lopetus,obst.y_lopetus ), 1)
+    points = [(120, 150), (200, 110), (260, 140), (210, 250)]
+    pygame.draw.polygon(naytto, turkoosi, points, 1)
+    points = [(250, 250), (280, 120), (360, 340), (310, 350)]
+    pygame.draw.polygon(naytto, turkoosi, points, 1)
 
 def osuuko_esteeseen(nuotti):
     for obst in obsticles:
@@ -40,25 +33,25 @@ def osuuko_esteeseen(nuotti):
     return 0
 
 def osuuko_turkoosiin(nuotti):
-    palautus_x = 0
-    palautus_y = 1
-    for obst in obsticles:
-        if nuotti.x in [obst.x_aloitus, obst.x_lopetus] and nuotti.y in [obst.y_aloitus, obst.y_lopetus]:
-            return palautus_x, palautus_y
+    turkoosit = []
     try:
         vari = naytto.get_at((nuotti.x, nuotti.y))[:3]
-        if vari == turkoosi:      
-            for x in range(-1, 2):   # oli 12
-                for y in range(0, 2):  # oli (1, -1, -1)             
-                    if x != 0:
-                        if naytto.get_at((nuotti.x + x, nuotti.y + y))[:3] == turkoosi:
-                            palautus_x = x
-                            palautus_y = y
+        if vari == turkoosi:      # huom! voi verrata turkoosiin jos pisarat piirtää kaikki vasta lopuksi
+                                  # muutenhan ruudulla olisi myös sinistä
+            for x in range(-1, 2):  
+                for y in range(0,2):  # oli  --> 0 1 0 1...  
+                    if naytto.get_at((nuotti.x + x, nuotti.y + y))[:3] == turkoosi:
+                        turkoosit.append([x, y])
     except:
         print(nuotti.x, nuotti.y)
     
-                    
-    return palautus_x, palautus_y
+    
+    if len(turkoosit) > 1:
+        s = sorted(turkoosit, key=lambda x: (x[1], abs(x[0])), reverse=True)  
+        print(s[0])
+        return s[0][0], s[0][1]
+    else:
+        return 0,1
 
 def arvo_nuotti():
     nuotti = Nuotti()
@@ -68,8 +61,7 @@ def arvo_nuotti():
 
 def liikuta_nuotit():
     for nuotti in nuotit: 
-        x, y = osuuko_turkoosiin(nuotti)   
-        print(x, y)
+        x, y = osuuko_turkoosiin(nuotti) 
         nuotti.x += x
         nuotti.y += y  
         
@@ -82,7 +74,7 @@ def liikuta_nuotit():
 
 
 def main():
-    vauhti = 49   # ticks  
+    vauhti = 69   # ticks  
     i = 0
 
     while True:
@@ -93,7 +85,7 @@ def main():
                 pygame.quit()
     
         draw_obsticles()
-        if i % 10 == 0:
+        if i % 17 == 0:
             arvo_nuotti() 
         i += 1
         liikuta_nuotit()
@@ -105,5 +97,4 @@ def main():
         kello.tick(vauhti)
             
 
-luo_obsticlet()
 main()
