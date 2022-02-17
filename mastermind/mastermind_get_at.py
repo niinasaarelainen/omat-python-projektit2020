@@ -55,6 +55,7 @@ def varivalikoima():
 
 
 def  mika_vari(y):
+    
     # värivalikoima oikealla:
     y = (y - Y_ALOITUS + P_KOKO) // (P_KOKO * 2 + VALI) 
     if y >= 0 and y <= len(varit) -1:
@@ -153,10 +154,12 @@ def uusi_peli():
                     silmukka()
 
 
+  
+
+
 def silmukka(): 
-    x_kohdennettu = -30
-    y_kohdennettu = Y_ALOITUS + monesko_arvaus * (P_KOKO * 2 + VALI)   
-    vari = val      
+    global vari
+    y_kohdennettu = Y_ALOITUS + monesko_arvaus * (P_KOKO * 2 + VALI)  
     alateksti = True 
     kaikki_oikein = False
     
@@ -164,7 +167,8 @@ def silmukka():
         naytto.fill((val))
         naytto.blit(ok,  (480, y_kohdennettu - 10))
         y_kohdennettu = Y_ALOITUS + (monesko_arvaus * (P_KOKO * 2 + VALI)) 
-        varivalikoima()        
+        varivalikoima() 
+        piirra_lukitut_pallot(nykyinen_arvaus, y_kohdennettu)          
         for tapahtuma in pygame.event.get():
                 if tapahtuma.type == pygame.QUIT:
                     pygame.quit()  
@@ -181,22 +185,20 @@ def silmukka():
                         tuomiot.append(tuomio)
                         if tuomio[0] == palloja:
                             kaikki_oikein = True
-                            alateksti = False
-                    # oikea reuna        
-                    elif x >= WIDTH - 60 - P_KOKO: 
-                        print("elif")
-                        if y != None:
-                            vari = varit[mika_vari(y)]
-                    # muu alue
-                    else:      
+                            alateksti = False                           
+                    
+                    # uusin rivi
+                    elif y >= y_kohdennettu -22 and y <= y_kohdennettu + 22 and x < 480 :  
                         monesko_pallo = mika_paikka(x)  # voi olla None
                         if monesko_pallo != None:
                             nykyinen_arvaus[monesko_pallo] = vari
-                            x_kohdennettu = X_ALOITUS + monesko_pallo * (P_KOKO * 2 + VALI)
 
-        
-        pygame.draw.circle(naytto, (vari), (x_kohdennettu, y_kohdennettu), P_KOKO) 
-        piirra_lukitut_pallot(nykyinen_arvaus, y_kohdennettu)           
+                    # ota väri
+                    else:
+                        vari = naytto.get_at((x, y))[:3]
+                            
+        piirra_lukitut_pallot(nykyinen_arvaus, y_kohdennettu)   
+                
         if kaikki_oikein:
             teksti = fontti_iso.render("JESS!! Kaikki oikein", True, vih)
             naytto.blit(teksti, (X_ALOITUS -30, y_kohdennettu + 35))
@@ -214,7 +216,7 @@ def silmukka():
         y_kohdennettu =  y_kohdennettu - (P_KOKO * 2 + VALI)
         piira_tuomiot()  
         pygame.display.flip() 
-        kello.tick(2000)   
+        kello.tick(4000)   
 
     lopputeksti()
 
@@ -228,5 +230,6 @@ voittorivi = arvo_voittorivi(palloja)
 monesko_arvaus = 0
 nykyinen_arvaus = {0:val, 1:val, 2:val, 3:val, 4:val, 5:val}
 arvaukset = []
-tuomiot = []      
+tuomiot = []    
+vari = val  
 silmukka()
