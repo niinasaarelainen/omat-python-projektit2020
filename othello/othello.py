@@ -91,11 +91,7 @@ class Othello:
                 aloitusrivi = rivi
             else:
                 aloitusrivi = min(rivi + suunta_y, len(self.kartta) - 1)
-
-            """
-            print("vastustaja: y", y, "x", x) 
-            print("pelaaja: rivi", rivi, "sarake", sarake)
-            print("suunta_y", suunta_y, "suunta_x", suunta_x)       """                     
+                        
             
             for x in range(7):
                 while  0 <= aloitusrivi <= len(self.kartta) - 1 and 0 <= aloitussarake <= len(self.kartta) - 1:
@@ -147,9 +143,16 @@ class Othello:
 
 
     def peli_lapiko(self):
+        pun_lkm = 0
+        sin_lkm = 0
+        for rivi in self.kartta:
+             pun_lkm += rivi.count(PUNAINEN)
+             sin_lkm += rivi.count(SININEN)
+        if pun_lkm == 0 or sin_lkm == 0:
+            return True
         for rivi in self.kartta:
             if 0 in rivi:
-                return False
+                return False              
         return True
 
 

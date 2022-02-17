@@ -20,9 +20,9 @@ class Ukko:
         # o käsi
         self.osat.append([200, 100, 250, 200]) 
         # v jalka
-        self.osat.append([200, 250, 50, 450])
+        self.osat.append([200, 250, 50, 420])
         # o jalka
-        self.osat.append([200, 250, 350, 450])
+        self.osat.append([200, 250, 350, 420])
         # ilme
         self.osat.append([188, 47, 5, 212, 47, 5, 200, 59, 9]) 
 
