@@ -20,17 +20,14 @@ obsticles = []
 
 
 def draw_obsticles():
-    points = [(120, 150), (200, 110), (260, 140), (210, 250)]
+    points = [(100, 150), (200, 110), (260, 140), (210, 250)]
     pygame.draw.polygon(naytto, turkoosi, points, 1)
-    points = [(250, 250), (280, 120), (360, 340), (310, 350)]
+    points = [(270, 250), (300, 120), (390, 340), (310, 350)]
+    pygame.draw.polygon(naytto, turkoosi, points, 1)
+    points = [(400, 150), (480, 130), (560, 12), (510, 250)]   
     pygame.draw.polygon(naytto, turkoosi, points, 1)
 
-def osuuko_esteeseen(nuotti):
-    for obst in obsticles:
-        if nuotti.y >= obst.y_aloitus and nuotti.x >= obst.x_aloitus and nuotti.x <= obst.x_lopetus and nuotti.y <= obst.y_lopetus:
-            if nuotti.y == nuotti.x:
-                return 1
-    return 0
+
 
 def osuuko_turkoosiin(nuotti):
     turkoosit = []
@@ -45,10 +42,13 @@ def osuuko_turkoosiin(nuotti):
     except:
         print(nuotti.x, nuotti.y)
     
-    
     if len(turkoosit) > 1:
         s = sorted(turkoosit, key=lambda x: (x[1], abs(x[0])), reverse=True)  
-        print(s[0])
+        if nuotti.x + s[0][0] == nuotti.x_w and nuotti.y + s[0][1] == nuotti.y_w:
+            print(s[1])
+            if s[1] != [0,0]:
+                return s[1][0], s[1][1]
+            return 0,1
         return s[0][0], s[0][1]
     else:
         return 0,1
@@ -62,8 +62,14 @@ def arvo_nuotti():
 def liikuta_nuotit():
     for nuotti in nuotit: 
         x, y = osuuko_turkoosiin(nuotti) 
-        nuotti.x += x
-        nuotti.y += y  
+        # älä jankkaa 2 paikkaa edestakaisin vaan mene alas
+        if nuotti.x + x == nuotti.x_w  and nuotti.y + y == nuotti.y_w :
+            nuotti.y += 1  
+        else:
+            nuotti.x_w = nuotti.x
+            nuotti.x += x
+            nuotti.y_w = nuotti.y
+            nuotti.y += y  
         
     for nuotti in nuotit:  
         if nuotti.y >= HEIGHT - 1 or nuotti.x >= WIDTH - 1:
@@ -74,7 +80,7 @@ def liikuta_nuotit():
 
 
 def main():
-    vauhti = 69   # ticks  
+    vauhti = 89   # ticks  
     i = 0
 
     while True:
@@ -85,13 +91,13 @@ def main():
                 pygame.quit()
     
         draw_obsticles()
-        if i % 17 == 0:
+        if i % 7 == 0:
             arvo_nuotti() 
         i += 1
         liikuta_nuotit()
         for nuotti in nuotit:
             vari = nuotti.arvo_vari()   
-            pygame.draw.ellipse(naytto, vari, [nuotti.x, nuotti.y , KOKO, KOKO*2], 6)
+            pygame.draw.ellipse(naytto, vari, [nuotti.x, nuotti.y , KOKO, KOKO*2], 4)
 
         pygame.display.flip()
         kello.tick(vauhti)

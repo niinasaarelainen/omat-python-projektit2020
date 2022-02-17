@@ -4,12 +4,14 @@ from yhteiset import *
 class Nuotti:
 
     def __init__(self):        
-        self.alin_nuotti = 12
-        self.ylin_nuotti = 12    # oli 16
+        self.alin_nuotti = 5  #5
+        self.ylin_nuotti =  28 #28    
+        self.x_w = 0
+        self.y_w = 0
 
     def arvo_nuotti(self):
         self.arvottu_indeksi = random.randint(self.alin_nuotti, self.ylin_nuotti)
-        self.x = self.arvottu_indeksi  * 30
+        self.x = self.arvottu_indeksi  * 20
         self.y = 1
         return self.y   
 

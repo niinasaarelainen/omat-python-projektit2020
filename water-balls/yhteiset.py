@@ -1,9 +1,9 @@
 import pygame
 
-WIDTH = 600
-HEIGHT = 410
+WIDTH = 640
+HEIGHT = 440
 NUOTTIAV_SIJAINTI = 111
-KOKO = 12
+KOKO = 10
 
 naytto = pygame.display.set_mode((WIDTH, HEIGHT))
 kello = pygame.time.Clock()
