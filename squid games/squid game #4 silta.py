@@ -15,7 +15,7 @@ class Robo:
 
     def liiku(self, x, y):
         self.x = x - 20    # jotta saadaan robotti keskemmäs hiiren sijaintia
-        self.y = y - 110   
+        self.y = y - 100   
         self.ruutu = ((x - 170) // 55 ) * 2
         if y > 165 :  # alarivi
             self.ruutu += 1
@@ -65,7 +65,8 @@ def pala_murtuu(x, y, rect_pituus, rect_leveys):
     pygame.draw.rect(naytto, BLUE, pygame.Rect(x, y, rect_pituus, rect_leveys))
     piirra_robot()
     for i in range(4):        
-        pygame.draw.line(naytto, BLACK, (x, y + 10), (x + 14, y + 13),  4)
+        pygame.draw.line(naytto, BLACK, (x, y + 10), (x + 14, y + 13),  3)
+        pygame.draw.line(naytto, BLACK, (x, y + 15), (x  + 14, y + 18),  3)
         pygame.display.flip()          
         kello.tick(12)
         x += 10
@@ -174,7 +175,7 @@ def main():
             robot.remove(robo_muistiin)
             robo_muistiin = None
 
-        naytto.blit(valitus, (x + 50, 35))  
+        naytto.blit(valitus, (50, 35))  
         pygame.display.flip()          
         kello.tick(60)
 
