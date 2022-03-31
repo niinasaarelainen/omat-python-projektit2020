@@ -70,6 +70,7 @@ def main():
     arvottu_sana_orig, arvottu_sana, oikea_vastaus, vaara1, vaara2 = arvo()
     vaihtoehdot = [oikea_vastaus, vaara1, vaara2]
     random.shuffle(vaihtoehdot)
+    oikein = None
 
     while len(dict) > 3:
         naytto.fill(valkoinen)
@@ -87,14 +88,20 @@ def main():
                         if oikea_vastaus == vaihtoehdot[arvaus - 1]:
                             pisteet += 1
                             dict.pop(arvottu_sana_orig)
-                        arvottu_sana, oikea_vastaus, vaara1, vaara2 = arvo()
+                            oikein = True 
+                        else:
+                            oikein = False  
+                        arvottu_sana_orig, arvottu_sana, oikea_vastaus, vaara1, vaara2 = arvo()
                         vaihtoehdot = [oikea_vastaus, vaara1, vaara2]
-                        random.shuffle(vaihtoehdot)
+                        random.shuffle(vaihtoehdot)        
                     elif tapahtuma.key == pygame.K_2:
                         arvaus = 2
                         if oikea_vastaus == vaihtoehdot[arvaus - 1]:
                             pisteet += 1
                             dict.pop(arvottu_sana_orig)
+                            oikein = True 
+                        else:
+                            oikein = False  
                         arvottu_sana_orig, arvottu_sana, oikea_vastaus, vaara1, vaara2 = arvo()
                         vaihtoehdot = [oikea_vastaus, vaara1, vaara2]
                         random.shuffle(vaihtoehdot)
@@ -103,11 +110,19 @@ def main():
                         if oikea_vastaus == vaihtoehdot[arvaus - 1]:
                             pisteet += 1
                             dict.pop(arvottu_sana_orig)
+                            oikein = True 
+                        else:
+                            oikein = False  
                         arvottu_sana_orig, arvottu_sana, oikea_vastaus, vaara1, vaara2 = arvo()
                         vaihtoehdot = [oikea_vastaus, vaara1, vaara2]
                         random.shuffle(vaihtoehdot)
+                         
+                        
         
-
+        if oikein:
+            naytto.blit(up, (130, 190))            
+        elif oikein == False:
+            naytto.blit(down, (130, 190))        
         pygame.display.flip()
         kello.tick(400)
 
@@ -131,9 +146,8 @@ vari  = valkoinen
 error_msg = ""
 
 muunnokset = {"Ã¤": "ä", "Ã\xa0": "à", "Ã©": "é", "Ã¶": "ö", "Ã¢": "á", "Ãª":"ê"}
-
-
-#arvottu_sana= sanastaSanoja.arvo_sana()   
+up = pygame.image.load('up.png')
+down = pygame.image.load('down.png')
 
 dict = open_file()
 print(dict)
