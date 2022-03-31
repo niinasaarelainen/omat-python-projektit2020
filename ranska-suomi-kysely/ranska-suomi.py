@@ -7,7 +7,7 @@ def open_file():
 
     f = open("mots.txt", "r")  
     rivit= []
-    for rivi in f:    
+    for rivi in f:          
         rivit.append(rivi.strip())  
 
     d = {}
@@ -23,19 +23,33 @@ def muut_tekstit_nakyviin(pisteet, maksimi):
 
 def arvo():
     lista = list(dict)
-    arvottu_sana = random.choice(lista)    
+    l2 = []
+    vastaus = []
+    arvottu_sana = random.choice(lista)   
+    print(arvottu_sana) 
     oikea_vastaus = dict[arvottu_sana]  
+    l2.append(arvottu_sana)
+    l2.append(oikea_vastaus)
     lista.remove(arvottu_sana)  
 
     s = random.choice(lista)    
     vaara1 = dict[s]   
+    l2.append(vaara1)
     lista.remove(s)  
 
     s = random.choice(lista)    
-    vaara2 = dict[s]  
-    lista.remove(s)   
+    vaara2 = dict[s] 
+    l2.append(vaara2)
+    lista.remove(s)  
+
+    for sana in l2:
+        for muunnos in muunnokset:
+            if muunnos in sana:                
+                sana = sana.replace(muunnos, muunnokset[muunnos])
+       
+        vastaus.append(sana)
     
-    return arvottu_sana, oikea_vastaus, vaara1, vaara2
+    return arvottu_sana, vastaus[0], vastaus[1], vastaus[2], vastaus[3]
 
 
 def sanat_nakyviin(arvottu_sana, vaihtoehdot ) :
@@ -53,7 +67,7 @@ def main():
     maksimi = len(dict) 
     pisteet = 0
     arvaus = 0
-    arvottu_sana, oikea_vastaus, vaara1, vaara2 = arvo()
+    arvottu_sana_orig, arvottu_sana, oikea_vastaus, vaara1, vaara2 = arvo()
     vaihtoehdot = [oikea_vastaus, vaara1, vaara2]
     random.shuffle(vaihtoehdot)
 
@@ -72,7 +86,7 @@ def main():
                         arvaus = 1
                         if oikea_vastaus == vaihtoehdot[arvaus - 1]:
                             pisteet += 1
-                            dict.pop(arvottu_sana)
+                            dict.pop(arvottu_sana_orig)
                         arvottu_sana, oikea_vastaus, vaara1, vaara2 = arvo()
                         vaihtoehdot = [oikea_vastaus, vaara1, vaara2]
                         random.shuffle(vaihtoehdot)
@@ -80,16 +94,16 @@ def main():
                         arvaus = 2
                         if oikea_vastaus == vaihtoehdot[arvaus - 1]:
                             pisteet += 1
-                            dict.pop(arvottu_sana)
-                        arvottu_sana, oikea_vastaus, vaara1, vaara2 = arvo()
+                            dict.pop(arvottu_sana_orig)
+                        arvottu_sana_orig, arvottu_sana, oikea_vastaus, vaara1, vaara2 = arvo()
                         vaihtoehdot = [oikea_vastaus, vaara1, vaara2]
                         random.shuffle(vaihtoehdot)
                     elif tapahtuma.key == pygame.K_3:
                         arvaus = 3
                         if oikea_vastaus == vaihtoehdot[arvaus - 1]:
                             pisteet += 1
-                            dict.pop(arvottu_sana)
-                        arvottu_sana, oikea_vastaus, vaara1, vaara2 = arvo()
+                            dict.pop(arvottu_sana_orig)
+                        arvottu_sana_orig, arvottu_sana, oikea_vastaus, vaara1, vaara2 = arvo()
                         vaihtoehdot = [oikea_vastaus, vaara1, vaara2]
                         random.shuffle(vaihtoehdot)
         
@@ -106,8 +120,8 @@ HEIGHT = 400
 naytto = pygame.display.set_mode((WIDTH, HEIGHT))
 kello = pygame.time.Clock()
 
-fontti_iso = pygame.font.SysFont("FreeMono", 36, bold = True)
-fontti_keski = pygame.font.SysFont("FreeMono", 26)
+fontti_iso = pygame.font.SysFont("Arial", 36, bold = True)
+fontti_keski = pygame.font.SysFont("Arial", 26)
 fontti_pieni_bold = pygame.font.SysFont("Arial", 16, bold = True)
 
 valkoinen = (255, 255, 255)
@@ -115,6 +129,8 @@ musta = (3, 3, 3)                                   # CTRL + F5  !!!!!!!!!!
 punainen = (255, 0, 0)
 vari  = valkoinen
 error_msg = ""
+
+muunnokset = {"Ã¤": "ä", "Ã\xa0": "à", "Ã©": "é", "Ã¶": "ö", "Ã¢": "á", "Ãª":"ê"}
 
 
 #arvottu_sana= sanastaSanoja.arvo_sana()   

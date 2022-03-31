@@ -88,3 +88,7 @@ jurer
 vannoa
 mal à l'aise
 epämukava
+précédent
+edellinen
+avenir
+tuleva
