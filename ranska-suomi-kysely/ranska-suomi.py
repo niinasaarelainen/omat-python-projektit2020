@@ -5,7 +5,7 @@ import pygame, random
 
 def open_file():
 
-    f = open("mots.txt", "r")  
+    f = open("mots_matkustus.txt", "r")  
     rivit= []
     for rivi in f:          
         rivit.append(rivi.strip())  
@@ -25,31 +25,28 @@ def arvo():
     lista = list(dict)
     l2 = []
     vastaus = []
-    arvottu_sana = random.choice(lista)   
-    print(arvottu_sana) 
+    arvottu_sana = random.choice(lista) 
+    vastaus.append(arvottu_sana)  
     oikea_vastaus = dict[arvottu_sana]  
     l2.append(arvottu_sana)
     l2.append(oikea_vastaus)
     lista.remove(arvottu_sana)  
 
-    s = random.choice(lista)    
-    vaara1 = dict[s]   
+    vaara1 = random.choice(kaikki_suomeksi)  
     l2.append(vaara1)
-    lista.remove(s)  
+    kaikki_suomeksi.remove(vaara1)  
 
-    s = random.choice(lista)    
-    vaara2 = dict[s] 
+    vaara2 = random.choice(kaikki_suomeksi)  
     l2.append(vaara2)
-    lista.remove(s)  
+    kaikki_suomeksi.append(vaara1)
 
     for sana in l2:
         for muunnos in muunnokset:
             if muunnos in sana:                
-                sana = sana.replace(muunnos, muunnokset[muunnos])
-       
+                sana = sana.replace(muunnos, muunnokset[muunnos])       
         vastaus.append(sana)
     
-    return arvottu_sana, vastaus[0], vastaus[1], vastaus[2], vastaus[3]
+    return vastaus
 
 
 def sanat_nakyviin(arvottu_sana, vaihtoehdot ) :
@@ -72,7 +69,7 @@ def main():
     random.shuffle(vaihtoehdot)
     oikein = None
 
-    while len(dict) > 3:
+    while len(dict) > 0:
         naytto.fill(valkoinen)
         sanat_nakyviin(arvottu_sana, vaihtoehdot )        
         muut_tekstit_nakyviin(pisteet, maksimi)   
@@ -145,10 +142,11 @@ punainen = (255, 0, 0)
 vari  = valkoinen
 error_msg = ""
 
-muunnokset = {"Ã¤": "ä", "Ã\xa0": "à", "Ã©": "é", "Ã¶": "ö", "Ã¢": "á", "Ãª":"ê"}
+muunnokset = {"Ã¤": "ä", "Ã\xa0": "à", "Ã©": "é", "Ã¶": "ö", "Ã¢": "á", "Ãª":"ê", "Ã§": "ç", "Ã¨": "è", "Ã´": "ô"}
 up = pygame.image.load('up.png')
 down = pygame.image.load('down.png')
 
 dict = open_file()
-print(dict)
+kaikki_suomeksi = list(dict.values())
+print(kaikki_suomeksi)
 main()
