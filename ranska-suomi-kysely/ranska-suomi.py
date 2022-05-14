@@ -5,7 +5,7 @@ import pygame, random
 
 def open_file():
 
-    f = open("mots_matkustus.txt", "r")  
+    f = open("mots.txt", "r")  
     rivit= []
     for rivi in f:          
         rivit.append(rivi.strip())  
@@ -18,10 +18,11 @@ def open_file():
 
 
 def muut_tekstit_nakyviin(pisteet, maksimi):
-    t = fontti_keski.render(f"{pisteet}/{maksimi}", True, musta)
+    t = fontti_keski.render(f"{pisteet}/{maksimi}", True, vihrea)
     naytto.blit(t, (WIDTH - 90, 20))
 
 def arvo():
+    print(len(dict))
     lista = list(dict)
     l2 = []
     vastaus = []
@@ -30,7 +31,7 @@ def arvo():
     oikea_vastaus = dict[arvottu_sana]  
     l2.append(arvottu_sana)
     l2.append(oikea_vastaus)
-    lista.remove(arvottu_sana)  
+    kaikki_suomeksi.remove(oikea_vastaus)  
 
     vaara1 = random.choice(kaikki_suomeksi)  
     l2.append(vaara1)
@@ -39,6 +40,7 @@ def arvo():
     vaara2 = random.choice(kaikki_suomeksi)  
     l2.append(vaara2)
     kaikki_suomeksi.append(vaara1)
+    kaikki_suomeksi.append(oikea_vastaus)
 
     for sana in l2:
         for muunnos in muunnokset:
@@ -60,10 +62,24 @@ def sanat_nakyviin(arvottu_sana, vaihtoehdot ) :
     t = fontti_keski.render(f"3) {vaihtoehdot[2]}", True, musta)
     naytto.blit(t, (130, 150))
 
+def lopetusko():
+    if len(dict) == 0:
+        naytto.fill(valkoinen)
+        t = fontti_iso.render(f"Kaikki sanat kyselty. ", True, musta)
+        naytto.blit(t, (90, 45))
+        t = fontti_iso.render(f"Uusi kierros alkaa 2 s kuluttua", True, musta)
+        naytto.blit(t, (90, 85))
+        pygame.display.flip()
+        pygame.time.delay(2100)
+        main()
+
+
 def main():
-    maksimi = len(dict) 
+    global dict     
     pisteet = 0
-    arvaus = 0
+    arvaus = 0    
+    dict = open_file()
+    maksimi = len(dict)
     arvottu_sana_orig, arvottu_sana, oikea_vastaus, vaara1, vaara2 = arvo()
     vaihtoehdot = [oikea_vastaus, vaara1, vaara2]
     random.shuffle(vaihtoehdot)
@@ -85,6 +101,7 @@ def main():
                         if oikea_vastaus == vaihtoehdot[arvaus - 1]:
                             pisteet += 1
                             dict.pop(arvottu_sana_orig)
+                            lopetusko()
                             oikein = True 
                         else:
                             oikein = False  
@@ -96,6 +113,7 @@ def main():
                         if oikea_vastaus == vaihtoehdot[arvaus - 1]:
                             pisteet += 1
                             dict.pop(arvottu_sana_orig)
+                            lopetusko()
                             oikein = True 
                         else:
                             oikein = False  
@@ -107,13 +125,13 @@ def main():
                         if oikea_vastaus == vaihtoehdot[arvaus - 1]:
                             pisteet += 1
                             dict.pop(arvottu_sana_orig)
+                            lopetusko()
                             oikein = True 
                         else:
                             oikein = False  
                         arvottu_sana_orig, arvottu_sana, oikea_vastaus, vaara1, vaara2 = arvo()
                         vaihtoehdot = [oikea_vastaus, vaara1, vaara2]
                         random.shuffle(vaihtoehdot)
-                         
                         
         
         if oikein:
@@ -139,6 +157,7 @@ fontti_pieni_bold = pygame.font.SysFont("Arial", 16, bold = True)
 valkoinen = (255, 255, 255)
 musta = (3, 3, 3)                                   # CTRL + F5  !!!!!!!!!!
 punainen = (255, 0, 0)
+vihrea = (22, 200, 22)
 vari  = valkoinen
 error_msg = ""
 

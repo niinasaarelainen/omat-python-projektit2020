@@ -2,6 +2,8 @@ perdu
 eksynyt
 blessé
 loukkaantunut
+bon marché
+halpa
 la gare routière
 bussiasema
 saucisses
@@ -10,5 +12,3 @@ rôtis
 paahtoleipä
 pinte
 tuoppi
-bon marché
-halpa
