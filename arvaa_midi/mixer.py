@@ -15,6 +15,6 @@ def valitse_biisi(mids, mids_9kpl):
     mids_9kpl.append(biisi)
     mids.pop(r)
 
-    return mids_9kpl, mids
+    return biisi, mids_9kpl, mids
 
   
