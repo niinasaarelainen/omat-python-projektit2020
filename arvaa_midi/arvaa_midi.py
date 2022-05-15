@@ -49,9 +49,7 @@ def arvaus(time):
         textsurface = font_pieni.render(f" {i}) {biisi}", True, (100, 130, 130))           
         naytto.blit(textsurface, (130, i * 40))  
         i += 1  
-   
-    textsurface = font_pieni.render(f" RETURN = lopetan", True, (100, 30, 30))           
-    naytto.blit(textsurface, (130, i * 40 + 40)) 
+
 
     pygame.display.flip()  
     while True:
@@ -61,11 +59,8 @@ def arvaus(time):
                 mixer.music.stop()    
 
             elif tapahtuma.type == pygame.KEYDOWN:
-                if tapahtuma.key == pygame.K_RETURN:
-                    lopetus(False, time, True)
-                else:
-                    nro = tapahtuma.key - 49
-                    lopetus(mids_9kpl[nro] == oikea_vastaus, time, False)
+                nro = tapahtuma.key - 49
+                lopetus(mids_9kpl[nro] == oikea_vastaus, time, False)
 
         kello.tick(100)
 
@@ -89,17 +84,23 @@ def main():
             if tapahtuma.type == pygame.QUIT:
                 pygame.quit()    
                 mixer.music.stop()    
-
             elif tapahtuma.type == pygame.KEYDOWN:
                 if tapahtuma.key == pygame.K_SPACE:
                     mixer.music.stop()   
                     stopped = True
+                elif tapahtuma.key == pygame.K_RETURN:
+                    mixer.music.stop()   
+                    stopped = True
+                    lopetus(False, time, True)   # oikeinko, time, keskytys
           
                     
-        textsurface = myfont.render(f" Paina SPACE kun tunnistat kappaleen ", True, (100, 30, 30))  
+        textsurface = myfont.render(f" Paina SPACE kun tunnistat kappaleen ", True, (100, 230, 230))  
         naytto.blit(textsurface, (30, 20))  
         textsurface = myfont.render(f"   {time:.1f} ", True, (100, 130, 130))  
-        naytto.blit(textsurface, (LEVEYS - 120, 20)) 
+        naytto.blit(textsurface, (LEVEYS - 130, 20)) 
+        textsurface = font_pieni.render(f" RETURN = lopetan", True, (100, 30, 30))           
+        naytto.blit(textsurface, (130, 340)) 
+
         pygame.display.flip()  
         if not stopped:
             time += 0.01   
