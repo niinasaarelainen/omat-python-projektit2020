@@ -1,3 +1,4 @@
+from calendar import timegm
 import pygame, glob, copy, random
 from mixer import *
 
@@ -10,12 +11,14 @@ pygame.display.set_caption("Arvaa MIDI")
 
 mids = []
 mids_9kpl = []
+times = []
 kierros = 0
+oikein  = 0
+vaarin = 0
 
 for filename in glob.iglob("mids" + '**/*.mid', recursive=True):
     kansio, nimi = filename.split("\\")
     mids.append(nimi)
-    kierroksia_max = len(mids) - 9
 
 
 def arvo_9():
@@ -32,7 +35,7 @@ def arvo_9():
         mids_9kpl.append(mids_copy.pop(r))
 
 
-def arvaus(time):     # TODO  ajat muistiin ?
+def arvaus(time):     
     global kierros
     global mids_9kpl 
     naytto.fill(BLACK)    
@@ -43,9 +46,13 @@ def arvaus(time):     # TODO  ajat muistiin ?
     random.shuffle(mids_9kpl)
     for biisi in mids_9kpl:
         biisi = biisi.split(".")[0]
-        textsurface = font_pieni.render(f" {i}) {biisi}", True, (100, 30, 30))           
+        textsurface = font_pieni.render(f" {i}) {biisi}", True, (100, 130, 130))           
         naytto.blit(textsurface, (130, i * 40))  
         i += 1  
+   
+    textsurface = font_pieni.render(f" RETURN = lopetan", True, (100, 30, 30))           
+    naytto.blit(textsurface, (130, i * 40 + 40)) 
+
     pygame.display.flip()  
     while True:
         for tapahtuma in pygame.event.get(): 
@@ -54,8 +61,11 @@ def arvaus(time):     # TODO  ajat muistiin ?
                 mixer.music.stop()    
 
             elif tapahtuma.type == pygame.KEYDOWN:
-                nro = tapahtuma.key - 49
-                lopetus(mids_9kpl[nro] == oikea_vastaus)
+                if tapahtuma.key == pygame.K_RETURN:
+                    lopetus(False, time, True)
+                else:
+                    nro = tapahtuma.key - 49
+                    lopetus(mids_9kpl[nro] == oikea_vastaus, time, False)
 
         kello.tick(100)
 
@@ -82,13 +92,14 @@ def main():
 
             elif tapahtuma.type == pygame.KEYDOWN:
                 if tapahtuma.key == pygame.K_SPACE:
-                    print(time)  
                     mixer.music.stop()   
                     stopped = True
           
                     
-        textsurface = myfont.render(f" Paina SPACE kun tunnistat kappaleen   {time:.2f} ", True, (100, 30, 30))  
+        textsurface = myfont.render(f" Paina SPACE kun tunnistat kappaleen ", True, (100, 30, 30))  
         naytto.blit(textsurface, (30, 20))  
+        textsurface = myfont.render(f"   {time:.1f} ", True, (100, 130, 130))  
+        naytto.blit(textsurface, (LEVEYS - 120, 20)) 
         pygame.display.flip()  
         if not stopped:
             time += 0.01   
@@ -97,30 +108,44 @@ def main():
         kello.tick(100)
 
 
-def lopetus(oikeinko):
+def lopetus(oikeinko, time, keskytys):
+    global oikein, vaarin
 
     if oikeinko:
-        textsurface = myfont.render("Oikein !!", True, (200, 30, 30))
+        textsurface = myfont.render("Oikein !!", True, (20, 230, 30))
+        oikein += 1
+        times.append(time)
     else:
         textsurface = myfont.render("Väärin !!", True, (200, 30, 30))
+        vaarin += 1
     
     while True:
         naytto.fill((255, 255, 255))        
-        naytto.blit(textsurface, (20, 100)) 
-        uusi = myfont.render("Any key = uusi peli", True, (200, 30, 30))
-        naytto.blit(uusi, (20, 300)) 
+        naytto.blit(textsurface, (120, 100)) 
+        uusi = myfont.render("Any key = seuraava biisi", True, (120, 130, 130))
+        naytto.blit(uusi, (120, 300)) 
+
+        if len(mids) == 8 or keskytys:
+            if len(times) > 0:
+                keski = sum(times) / len(times)
+                
+            naytto.fill((255, 255, 255))      
+            lop = myfont.render("Kyselty tarpeeksi ! Lopetetaan.", True, (200, 30, 30))
+            naytto.blit(lop, (20, 120)) 
+            if oikein > 0:
+                lop2 = myfont.render(f"Oikein {oikein} kpl  keskimäärin ajassa {keski:.2f}", True, (20, 230, 30))
+                naytto.blit(lop2, (60, 240)) 
+            lop2 = myfont.render(f"Väärin {vaarin} kpl", True, (220, 30, 30))
+            naytto.blit(lop2, (60, 310)) 
+            uusi = myfont.render("Any key = uusi peli", True, (120, 230, 130))
+            naytto.blit(uusi, (120, 440)) 
 
         for tapahtuma in pygame.event.get():
             if tapahtuma.type == pygame.QUIT:
                 pygame.quit()    
                 
-            elif tapahtuma.type == pygame.KEYDOWN:
-                if kierros < kierroksia_max:
-                    main()
-                else:
-                    naytto.fill((255, 255, 255))      
-                    lop = myfont.render("Kyselty tarpeeksi ! Lopetetaan.", True, (200, 30, 30))
-                    naytto.blit(lop, (20, 300)) 
+            elif tapahtuma.type == pygame.KEYDOWN:                    
+                main()
 
 
         pygame.display.flip()
