@@ -50,7 +50,6 @@ def arvaus(time):
         naytto.blit(textsurface, (130, i * 40))  
         i += 1  
 
-
     pygame.display.flip()  
     while True:
         for tapahtuma in pygame.event.get(): 
@@ -60,7 +59,8 @@ def arvaus(time):
 
             elif tapahtuma.type == pygame.KEYDOWN:
                 nro = tapahtuma.key - 49
-                lopetus(mids_9kpl[nro] == oikea_vastaus, time, False)
+                if 0 <= nro <= 8:
+                    lopetus(mids_9kpl[nro] == oikea_vastaus, time)
 
         kello.tick(100)
 
@@ -91,7 +91,7 @@ def main():
                 elif tapahtuma.key == pygame.K_RETURN:
                     mixer.music.stop()   
                     stopped = True
-                    lopetus(False, time, True)   # oikeinko, time, keskytys
+                    lopetus(None, time)   # oikeinko, time
           
                     
         textsurface = myfont.render(f" Paina SPACE kun tunnistat kappaleen ", True, (100, 230, 230))  
@@ -109,24 +109,25 @@ def main():
         kello.tick(100)
 
 
-def lopetus(oikeinko, time, keskytys):
+def lopetus(oikeinko, time):
     global oikein, vaarin
 
-    if oikeinko:
+    if oikeinko :
         textsurface = myfont.render("Oikein !!", True, (20, 230, 30))
         oikein += 1
         times.append(time)
-    else:
+    elif oikeinko == False:
         textsurface = myfont.render("Väärin !!", True, (200, 30, 30))
         vaarin += 1
     
     while True:
-        naytto.fill((255, 255, 255))        
-        naytto.blit(textsurface, (120, 100)) 
-        uusi = myfont.render("Any key = seuraava biisi", True, (120, 130, 130))
-        naytto.blit(uusi, (120, 300)) 
+        naytto.fill((255, 255, 255))       
+        if oikeinko != None: 
+            naytto.blit(textsurface, (120, 100)) 
+            uusi = myfont.render("Any key = seuraava biisi", True, (120, 130, 130))
+            naytto.blit(uusi, (120, 300)) 
 
-        if len(mids) == 8 or keskytys:
+        if len(mids) == 8 or oikeinko == None:
             if len(times) > 0:
                 keski = sum(times) / len(times)
                 
