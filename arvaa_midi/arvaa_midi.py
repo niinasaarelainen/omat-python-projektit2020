@@ -10,46 +10,51 @@ naytto = pygame.display.set_mode((LEVEYS, KORKEUS))
 pygame.display.set_caption("Arvaa MIDI")
 
 mids = []
-mids_9kpl = []
+mids_valitut = []
 times = []
 kierros = 0
 oikein  = 0
 vaarin = 0
+puolitettu = False   # tämän voi tehdä vain kerran pelin aikana
 
 for filename in glob.iglob("mids" + '**/*.mid', recursive=True):
     kansio, nimi = filename.split("\\")
     mids.append(nimi)
 
 
-def arvo_9():
-    global oikea_vastaus, mids_9kpl, mids  
+def arvo_valitut(montako):
+    global oikea_vastaus, mids_valitut, mids  
 
     print(len(mids))
-    oikea_vastaus, mids_9kpl, mids = valitse_biisi(mids, mids_9kpl)
-    mids_copy = copy.deepcopy(mids)      
-    print(len(mids), len(mids_9kpl))
+    oikea_vastaus, mids_valitut, mids = valitse_biisi(mids, mids_valitut)   # @mixer.py
+    
+    mids_copy = copy.deepcopy(mids)  
     print(oikea_vastaus)
 
-    for i in range(8):   # on jo oikea vastaus
+    for i in range(montako):   # on jo oikea vastaus
         r = random.randint(0, len(mids_copy) - 1)
-        mids_9kpl.append(mids_copy.pop(r))
+        mids_valitut.append(mids_copy.pop(r))
+
+    
 
 
 def arvaus(time):     
-    global kierros
-    global mids_9kpl 
+    global kierros, mids_valitut, puolitettu 
     naytto.fill(BLACK)    
     kierros += 1
-    print(len(mids_9kpl))  
+    print(len(mids_valitut))  
 
     i  = 1
-    random.shuffle(mids_9kpl)
-    for biisi in mids_9kpl:
+    random.shuffle(mids_valitut)
+    for biisi in mids_valitut:
         biisi = biisi.split(".")[0]
         textsurface = font_pieni.render(f" {i}) {biisi}", True, (100, 130, 130))           
         naytto.blit(textsurface, (130, i * 40))  
         i += 1  
 
+    if not puolitettu:
+        textsurface = myfont.render(f" P = Puolita kappalelista ", True, (100, 230, 230))  
+        naytto.blit(textsurface, (30, i * 40 + 40))  
     pygame.display.flip()  
     while True:
         for tapahtuma in pygame.event.get(): 
@@ -58,24 +63,35 @@ def arvaus(time):
                 mixer.music.stop()    
 
             elif tapahtuma.type == pygame.KEYDOWN:
+                # PUOLITUS
+                if tapahtuma.key == pygame.K_p:
+                    puolitettu = True
+                    nro = tapahtuma.key - 49
+                    #mids_valitut = []
+                    mids_valitut = mids_valitut[0:4]
+                    if oikea_vastaus not in mids_valitut:
+                        mids_valitut.pop(0)
+                        mids_valitut.append(oikea_vastaus)
+                    print(mids_valitut)
+                    arvaus(time)
+
                 nro = tapahtuma.key - 49
-                if 0 <= nro <= 8:
-                    lopetus(mids_9kpl[nro] == oikea_vastaus, time)
+                if 0 <= nro <= len(mids_valitut) - 1:
+                    lopetus(mids_valitut[nro] == oikea_vastaus, time)
 
         kello.tick(100)
 
 
 def main():
-    global mids_9kpl, mids
+    global mids_valitut, mids
     global r, g
     time = 0.0
     textsurface = myfont.render(f"{time}", True, (100, 30, 30))      
     stopped = False
-    mids_9kpl = []       
-    arvo_9() 
+    mids_valitut = []       
+    arvo_valitut(8) 
     
     mixer.music.play()
-
 
     while True :
         naytto.fill(BLACK)  
