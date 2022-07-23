@@ -16,10 +16,52 @@ kierros = 0
 oikein  = 0
 vaarin = 0
 puolitettu = False   # tämän voi tehdä vain kerran pelin aikana
+montako = 0
 
 for filename in glob.iglob("mids" + '**/*.mid', recursive=True):
     kansio, nimi = filename.split("\\")
     mids.append(nimi)
+
+
+def nollaus():
+    global kierros, oikein, vaarin, puolitettu, montako
+    kierros = 0
+    oikein  = 0
+    vaarin = 0
+    puolitettu = False   # tämän voi tehdä vain kerran pelin aikana
+    montako = 0
+
+
+def alkukysely():
+    global montako
+    jatketaan = True
+
+    while jatketaan :
+        naytto.fill(BLACK)  
+
+        for tapahtuma in pygame.event.get():
+            if tapahtuma.type == pygame.QUIT:
+                pygame.quit()    
+                mixer.music.stop()    
+            elif tapahtuma.type == pygame.KEYDOWN:
+                jatketaan = False
+                if tapahtuma.key == pygame.K_1:
+                    montako = 5
+                elif tapahtuma.key == pygame.K_2:
+                    montako = 10
+                elif tapahtuma.key == pygame.K_2:
+                    montako = 15
+          
+                    
+        textsurface = myfont.render(f" 1) kysellään 5 kappaletta ", True, (100, 230, 230))  
+        naytto.blit(textsurface, (30, 20))  
+        textsurface = myfont.render(f" 2) kysellään 10 kappaletta ", True, (100, 230, 230))  
+        naytto.blit(textsurface, (30, 120)) 
+        textsurface = myfont.render(f" 3) kysellään 15 kappaletta ", True, (100, 230, 230))  
+        naytto.blit(textsurface, (30, 220)) 
+
+        pygame.display.flip() 
+        kello.tick(100)
 
 
 def arvo_valitut(montako):
@@ -67,7 +109,6 @@ def arvaus(time):
                 if tapahtuma.key == pygame.K_p:
                     puolitettu = True
                     nro = tapahtuma.key - 49
-                    #mids_valitut = []
                     mids_valitut = mids_valitut[0:4]
                     if oikea_vastaus not in mids_valitut:
                         mids_valitut.pop(0)
@@ -83,17 +124,17 @@ def arvaus(time):
 
 
 def main():
-    global mids_valitut, mids
+    global mids_valitut, mids, montako, kierros
     global r, g
     time = 0.0
     textsurface = myfont.render(f"{time}", True, (100, 30, 30))      
     stopped = False
-    mids_valitut = []       
+    mids_valitut = []   
     arvo_valitut(8) 
-    
     mixer.music.play()
 
-    while True :
+
+    while kierros < montako :
         naytto.fill(BLACK)  
 
         for tapahtuma in pygame.event.get():
@@ -104,6 +145,7 @@ def main():
                 if tapahtuma.key == pygame.K_SPACE:
                     mixer.music.stop()   
                     stopped = True
+                    print(kierros, montako)
                 elif tapahtuma.key == pygame.K_RETURN:
                     mixer.music.stop()   
                     stopped = True
@@ -122,15 +164,16 @@ def main():
             time += 0.01   
         else:
             arvaus(time)     
+
         kello.tick(100)
 
 
 def lopetus(oikeinko, time):
-    global oikein, vaarin
+    global oikein, vaarin, montako
 
-    if oikeinko :
-        textsurface = myfont.render("Oikein !!", True, (20, 230, 30))
+    if oikeinko :        
         oikein += 1
+        textsurface = myfont.render(f"Oikein !! {oikein} / {montako}", True, (20, 230, 30))
         times.append(time)
     elif oikeinko == False:
         textsurface = myfont.render("Väärin !!", True, (200, 30, 30))
@@ -143,10 +186,9 @@ def lopetus(oikeinko, time):
             uusi = myfont.render("Any key = seuraava biisi", True, (120, 130, 130))
             naytto.blit(uusi, (120, 300)) 
 
-        if len(mids) == 8 or oikeinko == None:
+        if kierros == montako or oikeinko == None:            
             if len(times) > 0:
-                keski = sum(times) / len(times)
-                
+                keski = sum(times) / len(times)                
             naytto.fill((255, 255, 255))      
             lop = myfont.render("Kyselty tarpeeksi ! Lopetetaan.", True, (200, 30, 30))
             naytto.blit(lop, (20, 120)) 
@@ -154,15 +196,16 @@ def lopetus(oikeinko, time):
                 lop2 = myfont.render(f"Oikein {oikein} kpl  keskimäärin ajassa {keski:.2f}", True, (20, 230, 30))
                 naytto.blit(lop2, (60, 240)) 
             lop2 = myfont.render(f"Väärin {vaarin} kpl", True, (220, 30, 30))
-            naytto.blit(lop2, (60, 310)) 
+            naytto.blit(lop2, (60, 310))             
             uusi = myfont.render("Any key = uusi peli", True, (120, 230, 130))
             naytto.blit(uusi, (120, 440)) 
+            nollaus()   # älä laita alkuun, jotta oikein-väärin tilasto ei ruinaannu
 
         for tapahtuma in pygame.event.get():
             if tapahtuma.type == pygame.QUIT:
                 pygame.quit()    
                 
-            elif tapahtuma.type == pygame.KEYDOWN:                    
+            elif tapahtuma.type == pygame.KEYDOWN:                               
                 main()
 
 
@@ -181,5 +224,7 @@ pygame.font.init()
 font_pieni = pygame.font.SysFont('Comic Sans MS', 30)
 myfont = pygame.font.SysFont('Comic Sans MS', 45)
 
-
+nollaus()
+alkukysely()
+print(montako)
 main()
