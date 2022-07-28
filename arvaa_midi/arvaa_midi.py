@@ -16,7 +16,7 @@ kierros = 0
 oikein  = 0
 vaarin = 0
 puolitettu = False   # tämän voi tehdä vain kerran pelin aikana
-montako = 0
+montako = 5
 
 for filename in glob.iglob("mids" + '**/*.mid', recursive=True):
     kansio, nimi = filename.split("\\")
@@ -29,7 +29,7 @@ def nollaus():
     oikein  = 0
     vaarin = 0
     puolitettu = False   # tämän voi tehdä vain kerran pelin aikana
-    montako = 0
+    montako = 5
 
 
 def alkukysely():
@@ -106,7 +106,7 @@ def arvaus(time):
 
             elif tapahtuma.type == pygame.KEYDOWN:
                 # PUOLITUS
-                if tapahtuma.key == pygame.K_p:
+                if tapahtuma.key == pygame.K_p and not puolitettu:
                     puolitettu = True
                     nro = tapahtuma.key - 49
                     mids_valitut = mids_valitut[0:4]
@@ -145,7 +145,6 @@ def main():
                 if tapahtuma.key == pygame.K_SPACE:
                     mixer.music.stop()   
                     stopped = True
-                    print(kierros, montako)
                 elif tapahtuma.key == pygame.K_RETURN:
                     mixer.music.stop()   
                     stopped = True
@@ -199,13 +198,15 @@ def lopetus(oikeinko, time):
             naytto.blit(lop2, (60, 310))             
             uusi = myfont.render("Any key = uusi peli", True, (120, 230, 130))
             naytto.blit(uusi, (120, 440)) 
-            nollaus()   # älä laita alkuun, jotta oikein-väärin tilasto ei ruinaannu
+            
 
         for tapahtuma in pygame.event.get():
             if tapahtuma.type == pygame.QUIT:
                 pygame.quit()    
                 
-            elif tapahtuma.type == pygame.KEYDOWN:                               
+            elif tapahtuma.type == pygame.KEYDOWN: 
+                if kierros == montako or oikeinko == None:     
+                    nollaus()   # älä laita True-looppiin, muuten oikein-teksti ei näy ekan tickin jälkeen                         
                 main()
 
 
@@ -226,5 +227,4 @@ myfont = pygame.font.SysFont('Comic Sans MS', 45)
 
 nollaus()
 alkukysely()
-print(montako)
 main()
