@@ -5,7 +5,7 @@ import pygame, random
 
 def open_file():
 
-    f = open("mots.txt", "r")  
+    f = open("mots_matkustus.txt", "r")  
     rivit= []
     for rivi in f:          
         rivit.append(rivi.strip())  
@@ -13,7 +13,7 @@ def open_file():
     d = {}
     for i in range(len(rivit) - 1):
         if  i % 2 == 0: 
-            d[rivit[i]] = rivit[i + 1]
+            d[rivit[i]] = rivit[i + 1]   # ranskaksi - suomeksi
     return d
 
 
@@ -63,14 +63,17 @@ def sanat_nakyviin(arvottu_sana, vaihtoehdot ) :
     naytto.blit(t, (130, 150))
 
 def lopetusko():
-    if len(dict) == 0:
+    def teksti(sec):
         naytto.fill(valkoinen)
         t = fontti_iso.render(f"Kaikki sanat kyselty. ", True, musta)
         naytto.blit(t, (90, 45))
-        t = fontti_iso.render(f"Uusi kierros alkaa 2 s kuluttua", True, musta)
+        t = fontti_iso.render(f"Uusi kierros alkaa {sec} s kuluttua", True, musta)
         naytto.blit(t, (90, 85))
         pygame.display.flip()
-        pygame.time.delay(2100)
+        pygame.time.delay(1100)
+    if len(dict) == 0:
+        teksti(2)
+        teksti(1)
         main()
 
 
@@ -151,7 +154,7 @@ naytto = pygame.display.set_mode((WIDTH, HEIGHT))
 kello = pygame.time.Clock()
 
 fontti_iso = pygame.font.SysFont("Arial", 36, bold = True)
-fontti_keski = pygame.font.SysFont("Arial", 26)
+fontti_keski = pygame.font.SysFont("Arial", 30)
 fontti_pieni_bold = pygame.font.SysFont("Arial", 16, bold = True)
 
 valkoinen = (255, 255, 255)

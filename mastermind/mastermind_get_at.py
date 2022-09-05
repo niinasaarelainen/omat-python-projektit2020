@@ -46,16 +46,18 @@ def piirra_valinta(x_valinta, y_valinta):
     pygame.draw.circle(naytto, (0, 0, 100), (x_valinta, y_valinta), P_KOKO) 
 
 
-def varivalikoima():
+def varivalikoima():     # oikealla:
     x = WIDTH - 55
     y = Y_ALOITUS
     for vari in varit:
-        pygame.draw.circle(naytto, (vari), (x, y), P_KOKO) 
+        if blokkaa_varit and vari not in voittorivi:  # jos on painettu V
+            pass
+        else:
+            pygame.draw.circle(naytto, (vari), (x, y), P_KOKO) 
         y += P_KOKO * 2 + VALI
 
 
-def  mika_vari(y):
-    
+def  mika_vari(y):    
     # värivalikoima oikealla:
     y = (y - Y_ALOITUS + P_KOKO) // (P_KOKO * 2 + VALI) 
     if y >= 0 and y <= len(varit) -1:
@@ -71,8 +73,7 @@ def mika_paikka(x):
     return None
 
 
-def piirra_lukitut_pallot(nykyinen_arvaus, y_kohdennettu) :       
-
+def piirra_lukitut_pallot(nykyinen_arvaus, y_kohdennettu) :   
     for i in range(len(nykyinen_arvaus)):
         x_kohdennettu = X_ALOITUS + i * (P_KOKO * 2 + VALI)
         pygame.draw.circle(naytto, (nykyinen_arvaus[i]), (x_kohdennettu, y_kohdennettu), P_KOKO) 
@@ -106,7 +107,7 @@ def rivi_ok():
     return oikealla_paikalla, oikea_vari_vaaralla_paikalla
 
 
-def piira_tuomiot():
+def piirra_tuomiot():
     x = 22
     y =  Y_ALOITUS
     for mustia, valkoisia in tuomiot:  # tuomio = tuple
@@ -152,16 +153,15 @@ def uusi_peli():
                     arvaukset = []
                     tuomiot = []      
                     silmukka()
-
-
   
 
 
 def silmukka(): 
-    global vari
+    global vari, blokkaa_varit
     y_kohdennettu = Y_ALOITUS + monesko_arvaus * (P_KOKO * 2 + VALI)  
     alateksti = True 
     kaikki_oikein = False
+    blokkaa_varit = False
     
     while monesko_arvaus <= 10:
         naytto.fill((val))
@@ -175,6 +175,8 @@ def silmukka():
                 elif tapahtuma.type == pygame.KEYDOWN:
                     if tapahtuma.key == pygame.K_SPACE:                         
                         alateksti = False    
+                    if tapahtuma.key == pygame.K_v:
+                        blokkaa_varit = True       
                 elif tapahtuma.type == pygame.MOUSEBUTTONDOWN:    
                     x = tapahtuma.pos[0]
                     y = tapahtuma.pos[1]  
@@ -209,12 +211,14 @@ def silmukka():
         else:
             tyhjat_pallot(y_kohdennettu)
         if alateksti:
-            teksti = fontti_pieni.render("Space = Näytä oikea vastaus", True, vih)
+            teksti = fontti_pieni.render("V = Näytä oikeat värit", True, vih)
             naytto.blit(teksti, (325, HEIGHT - 40))
+            teksti = fontti_pieni.render("Space = Näytä oikea vastaus", True, vih)
+            naytto.blit(teksti, (325, HEIGHT - 80))
         elif not kaikki_oikein:
             nayta_oikea_vastaus()  
         y_kohdennettu =  y_kohdennettu - (P_KOKO * 2 + VALI)
-        piira_tuomiot()  
+        piirra_tuomiot()  
         pygame.display.flip() 
         kello.tick(4000)   
 
@@ -232,4 +236,6 @@ nykyinen_arvaus = {0:val, 1:val, 2:val, 3:val, 4:val, 5:val}
 arvaukset = []
 tuomiot = []    
 vari = val  
+blokkaa_varit = False
+#blokattavat_varit = []
 silmukka()
