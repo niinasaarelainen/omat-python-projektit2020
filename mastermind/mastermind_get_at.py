@@ -32,6 +32,7 @@ def arvo_voittorivi(palloja):
     for i in range(palloja):
         monesko  = random.randint(0, len(varit) -1)
         rivi.append(varit[monesko])
+    
     return rivi
 
 
@@ -74,9 +75,14 @@ def mika_paikka(x):
 
 
 def piirra_lukitut_pallot(nykyinen_arvaus, y_kohdennettu) :   
+    for i in range(palloja_nakyvissa):
+        nykyinen_arvaus[i] = voittorivi[i]
     for i in range(len(nykyinen_arvaus)):
         x_kohdennettu = X_ALOITUS + i * (P_KOKO * 2 + VALI)
-        pygame.draw.circle(naytto, (nykyinen_arvaus[i]), (x_kohdennettu, y_kohdennettu), P_KOKO) 
+        if i < palloja_nakyvissa:
+            pygame.draw.circle(naytto, (voittorivi[i]), (x_kohdennettu, y_kohdennettu), P_KOKO) 
+        else:
+            pygame.draw.circle(naytto, (nykyinen_arvaus[i]), (x_kohdennettu, y_kohdennettu), P_KOKO) 
     y = Y_ALOITUS
     for arvaus in arvaukset:
         for i in range(len(arvaus)):
@@ -139,7 +145,7 @@ def lopputeksti():
     uusi_peli()
 
 def uusi_peli():
-    global palloja, voittorivi, monesko_arvaus, nykyinen_arvaus, arvaukset, tuomiot
+    global palloja, voittorivi, monesko_arvaus, nykyinen_arvaus, arvaukset, tuomiot, palloja_nakyvissa
     while True:
         for tapahtuma in pygame.event.get():
             if tapahtuma.type == pygame.QUIT:
@@ -149,6 +155,7 @@ def uusi_peli():
                     palloja = alkunaytto()
                     voittorivi = arvo_voittorivi(palloja)
                     monesko_arvaus = 0
+                    palloja_nakyvissa = 0
                     nykyinen_arvaus = {0:val, 1:val, 2:val, 3:val, 4:val, 5:val}
                     arvaukset = []
                     tuomiot = []      
@@ -157,7 +164,7 @@ def uusi_peli():
 
 
 def silmukka(): 
-    global vari, blokkaa_varit
+    global vari, blokkaa_varit, palloja_nakyvissa, nykyinen_arvaus
     y_kohdennettu = Y_ALOITUS + monesko_arvaus * (P_KOKO * 2 + VALI)  
     alateksti = True 
     kaikki_oikein = False
@@ -175,9 +182,13 @@ def silmukka():
                 elif tapahtuma.type == pygame.KEYDOWN:
                     if tapahtuma.key == pygame.K_SPACE:                         
                         alateksti = False    
-                    if tapahtuma.key == pygame.K_v:
-                        blokkaa_varit = True       
-                elif tapahtuma.type == pygame.MOUSEBUTTONDOWN:    
+                    elif tapahtuma.key == pygame.K_v:   # värit
+                        blokkaa_varit = True        
+                    elif tapahtuma.key == pygame.K_p:    # paljasta pallo
+                        palloja_nakyvissa += 1                            
+                elif tapahtuma.type == pygame.MOUSEBUTTONDOWN:   
+
+                    print(nykyinen_arvaus) 
                     x = tapahtuma.pos[0]
                     y = tapahtuma.pos[1]  
 
@@ -212,9 +223,11 @@ def silmukka():
             tyhjat_pallot(y_kohdennettu)
         if alateksti:
             teksti = fontti_pieni.render("V = Näytä oikeat värit", True, vih)
-            naytto.blit(teksti, (325, HEIGHT - 40))
+            naytto.blit(teksti, (325, HEIGHT - 90))
+            teksti = fontti_pieni.render("P = Näytä yksi pallo lisää", True, vih)
+            naytto.blit(teksti, (325, HEIGHT - 60))
             teksti = fontti_pieni.render("Space = Näytä oikea vastaus", True, vih)
-            naytto.blit(teksti, (325, HEIGHT - 80))
+            naytto.blit(teksti, (325, HEIGHT - 30))
         elif not kaikki_oikein:
             nayta_oikea_vastaus()  
         y_kohdennettu =  y_kohdennettu - (P_KOKO * 2 + VALI)
@@ -237,5 +250,5 @@ arvaukset = []
 tuomiot = []    
 vari = val  
 blokkaa_varit = False
-#blokattavat_varit = []
+palloja_nakyvissa = 0    # fusku
 silmukka()
