@@ -38,7 +38,8 @@ def alkuohjeet():
     ohjeet.append("  - täyskäsi")
     ohjeet.append("  - 4 samaa")
     ohjeet.append("  - 5 samaa")
-    ohjeet.append("  - suorat 1-5, 2-6, 3-7 ja 4-8")
+    ohjeet.append("  - parilliset, parittomat")
+    ohjeet.append("  - suorat 1-5,  2-6,  3-7 ja  4-8")
     ohjeet.append("  ")
     ohjeet.append("  klikkaa hiirtä aloittaaksesi")   
 
@@ -66,6 +67,6 @@ def valitse_5_randomia(nopat):
 
 
 def mitä_kerätään():
-    kerätään = ["kaksi paria", "kolmoset", "täyskäsi", "neloset",
-                "Y A Z Z Y ! ! !", "suora 1-5", "suora 2-6", "suora 3-7", "suora 4-8"]
+    kerätään = ["kaksi paria", "kolmoset", "täyskäsi", "neloset", "Y A Z Z Y ! ! !", 
+    "parilliset", "parittomat", "suora 1-5", "suora 2-6", "suora 3-7", "suora 4-8"]
     return kerätään

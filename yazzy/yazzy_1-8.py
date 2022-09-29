@@ -1,6 +1,6 @@
 from yazzy_apufunktiot import *
 from noppa import *
-import random, pygame
+import pygame
 
 
 def alkunaytto():
@@ -9,7 +9,7 @@ def alkunaytto():
     for rivi in alkuohjeet():
         teksti = fontti.render(rivi, True, (0, 20, 20))
         naytto.blit(teksti, (50, y))
-        y += 40
+        y += 35
     pygame.display.flip()
 
     while True:
@@ -20,7 +20,7 @@ def alkunaytto():
                  return
 
 def mitä_puuttuu(kerätään):
-    y = 150
+    y = 130
     teksti = fontti_pieni.render("Vielä puuttuu:", True, (0, 20, 20))
     naytto.blit(teksti, (540, y))
     for item in kerätään:
@@ -37,6 +37,20 @@ def tulos(heitto, kerätään):
         noppa.valittu = False
     setti = set(lista)    
 
+    parillinen = True
+    for noppa in setti:
+        if noppa % 2 != 0:
+            parillinen = False
+    if parillinen == True and  "parilliset" in kerätään:
+        mika_tuli = "parilliset"
+
+    parittomat = True
+    for noppa in setti:
+        if noppa % 2 != 1:
+            parittomat = False
+    if parittomat == True and  "parittomat" in kerätään:
+        mika_tuli = "parittomat"
+
     useita = {}
     for i in range(1,MAX_SILMALUKU + 1):   # lukemat 1-6 merkitään näin !!!! (muista 7-1 = 6)
         if lista.count(i) >= 2:
@@ -46,60 +60,49 @@ def tulos(heitto, kerätään):
         if 3 not in useita.values():
             if "kaksi paria" in kerätään:                
                 mika_tuli = "kaksi paria"
-                kerätään.remove("kaksi paria")
     if 3 in useita.values():
         if 2 in useita.values():
             if "täyskäsi" in kerätään:                
                 mika_tuli = "täyskäsi"
-                kerätään.remove("täyskäsi")
             elif "kolmoset" in kerätään:
-                mika_tuli = "kolmoset"
-                kerätään.remove("kolmoset")      
+                mika_tuli = "kolmoset"   
             elif "kaksi paria" in kerätään:
                 mika_tuli = "kaksi paria"
-                kerätään.remove("kaksi paria")   
         else:    
             if "kolmoset" in kerätään:
                 mika_tuli = "kolmoset"
-                kerätään.remove("kolmoset")
     if 4 in useita.values():
         if "neloset" in kerätään:            
             mika_tuli = "neloset"
-            kerätään.remove("neloset")
         elif "kolmoset" in kerätään:
-            mika_tuli = "kolmoset"
-            kerätään.remove("kolmoset")        
+            mika_tuli = "kolmoset"     
     if 5 in useita.values():
         if "Y A Z Z Y ! ! !" in kerätään:            
             mika_tuli = "Y A Z Z Y ! ! !"
-            kerätään.remove("Y A Z Z Y ! ! !")
         elif "neloset" in kerätään:
             mika_tuli = "neloset"
-            kerätään.remove("neloset")
         elif "kolmoset" in kerätään:
-            mika_tuli = "kolmoset"
-            kerätään.remove("kolmoset")            
+            mika_tuli = "kolmoset"         
 
     if {1,2,3,4,5}.issubset(setti):    
         if "suora 1-5" in kerätään:  
-            mika_tuli = "suora 1-5"
-            kerätään.remove("suora 1-5")               
+            mika_tuli = "suora 1-5"             
 
     if {2,3,4,5,6}.issubset(setti):   
         if "suora 2-6" in kerätään:  
-            mika_tuli = "suora 2-6"
-            kerätään.remove("suora 2-6")     
+            mika_tuli = "suora 2-6"  
 
     if {3,4,5,6,7}.issubset(setti):   
         if "suora 3-7" in kerätään:  
             mika_tuli = "suora 3-7"
-            kerätään.remove("suora 3-7")  
 
     if {4,5,6,7,8}.issubset(setti):   
         if "suora 4-8" in kerätään:  
             mika_tuli = "suora 4-8"
-            kerätään.remove("suora 4-8")  
-    
+
+    if mika_tuli in kerätään:       
+        kerätään.remove(mika_tuli) 
+        
     return mika_tuli
    
 
@@ -206,8 +209,9 @@ def silmukka():
     if win:
         teksti = fontti.render(" Voitit !!! ", True, (200, 0, 20))
     else:
-        teksti = fontti.render(" Hävisit. ", True, (200, 0, 20))
-    naytto.blit(teksti, (100, HEIGHT - 60))
+        montako_oikein = max_mita_kerataan - len(kerätään)
+        teksti = fontti.render(f" Hävisit. Sait kerättyä {montako_oikein}/{max_mita_kerataan}", True, (200, 0, 20))
+    naytto.blit(teksti, (66, HEIGHT - 60))
     pygame.display.flip()
     pygame.time.delay(2500)  
     silmukka()
@@ -219,7 +223,7 @@ pygame.init()
 WIDTH = 780
 HEIGHT = 410
 EKA_NOPPA_X = 80
-KIERROKSIA = 16
+KIERROKSIA = 22
 
 naytto = pygame.display.set_mode((WIDTH, HEIGHT))
 kello = pygame.time.Clock()
@@ -233,5 +237,6 @@ clap = pygame.transform.scale(clap, (100, 100) )
 alkunaytto()
 ei_valitut, valitut = nopat_listaan()
 nopat = muodosta_nopat(ei_valitut, valitut)   # 5 kpl Noppa-oliota
+max_mita_kerataan = len(mitä_kerätään())
       
 silmukka()

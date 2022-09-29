@@ -66,12 +66,13 @@ def luo_asteroidit():
             asteroidit.append(Asteroidi(rivissa * 50 + 77, riveja * 50, level))
 
 
-def game_over(status, pisteet):
+def game_over(status, ammuksia):
+    global level, pisteet
     fontti_iso = pygame.font.SysFont("Arial", 64)
     teksti = fontti_iso.render(status, True, (205, 205, 205))
     naytto.blit(teksti, (140, 140))
     
-    teksti = fontti.render(f"Score: {pisteet}", True, (205, 205, 205))
+    teksti = fontti.render(f"Score: {pisteet + ammuksia}", True, (205, 205, 205))
     naytto.blit(teksti, (215, 230))
 
     teksti = fontti.render(f"New Game: Arrows", True, (205, 205, 205))
@@ -84,6 +85,8 @@ def game_over(status, pisteet):
                 pygame.quit()
             if event.type == pygame.KEYDOWN:     
                 if event.key in [pygame.K_RIGHT, pygame.K_LEFT, pygame.K_UP, pygame.K_DOWN]:
+                    level = 1
+                    pisteet = 0
                     pelaa()
 
                
@@ -126,7 +129,7 @@ def pelaa():
     global asteroidit, level, pisteet
     asteroidit = []
     luo_asteroidit()
-    kierros_nro = 0
+    kierros_nro = 0    
     asteroidien_ammukset = []    
     r.nollaa()
     while True:
@@ -146,7 +149,7 @@ def pelaa():
             if kierros_nro % 20 == 0:                
                 asteroidi.liiku(liike)
                 if asteroidi.y + 15 <= r.y and asteroidi.y + 24 >= r.y:
-                    game_over("Game Over", pisteet)  
+                    game_over("Game Over", 0)  
                 rand = random.randint(0, int(len(asteroidit) * 1.7))
                 if  rand == 0:
                     asteroidien_ammukset.append([asteroidi.x +  ast.get_width() // 2, asteroidi.y + ast.get_height()])
@@ -159,7 +162,7 @@ def pelaa():
                     midi_play()
                     asteroidit.remove(asteroidi)
                     if len(asteroidit) == 0 and level == 2:
-                        game_over("Winner !!!", pisteet + r.ammuksia)                        
+                        game_over("Winner !!!", r.ammuksia)                        
                     elif len(asteroidit) == 0 and level == 1:
                         level = 2
                         r.ammuksia = 70
@@ -179,7 +182,7 @@ def pelaa():
         for ammus in asteroidien_ammukset:
             pygame.draw.circle(naytto, GREEN, (ammus),  3)  
             if ammus[1] <= r.y + 5 and ammus[1] >= r.y + 2 and ammus[0] >= r.x  and ammus[0] <= r.x + robo.get_width():
-                game_over("Game Over", pisteet)
+                game_over("Game Over", 0)
             ammus[1] += 2      
             
         
