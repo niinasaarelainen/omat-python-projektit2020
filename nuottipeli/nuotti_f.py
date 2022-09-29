@@ -23,7 +23,8 @@ class Nuotti:
         self.keycodet = {}
 
         for i in range(self.alin_nuotti, self.ylin_nuotti + 1):
-            if i == 0 or i == 7:   # a
+            if i == 0 or i == 7:   # a , huom! ei mustia
+                
                 self.keycodet[i] = 97
             elif i == 6: # h
                 self.keycodet[i] = 104

@@ -22,7 +22,7 @@ def pelitilan_tekstit(vaarin, pisteet, pallo):
     teksti = fontti_iso.render(f"Pisteet: {pisteet}", True, turkoosi)
     naytto.blit(teksti, (600, 30))
 
-    if vaarin:                          # chr(97) = 'a'
+    if vaarin:                                            # chr(97) = 'a'
         teksti = fontti_keski.render(f"Väärin. Nuotti on: { str(chr(pallo.nykyinen_keycode())) }", True, punainen)        
         naytto.blit(teksti, (200, 40))    
 
