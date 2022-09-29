@@ -1,14 +1,14 @@
-import pygame, pygame.midi, random
-from alkukyselyt import *
+import pygame, pygame.midi
+from alkukyselyt_f import *
 from yhteiset import *
-from nuotti import Nuotti
+from nuotti_f import Nuotti
 from gameover import *
 
     
 
 def midi_play(n, nykyinen_indeksi):
     #ei voi laskea systeemillä, esim. i+=2, koska välillä on puolisävelaskel välillä koko-
-    midi_numbers = {0:77, 1:76, 2:74, 3:72, 4:71, 5:69, 6:67, 7:65, 8:64, 9:62, 10:60 }    #60 = keski-c, 77 = ylä-f
+    midi_numbers = {0:57, 1:55, 2:53, 3:52, 4:50, 5:48, 6:47, 7:45, 8:43, 9:41, 10:40 }    #57 = a, 40 = ala-e
     midi_out.note_off(midi_numbers[nykyinen_indeksi], 110)
     midi_out.note_on(midi_numbers[n], 110)
     
@@ -35,7 +35,7 @@ pygame.display.set_caption("Tunnista nuotin nimi")
 pygame.midi.init()
 port = pygame.midi.get_default_output_id()
 midi_out = pygame.midi.Output(port, 0)
-midi_out.set_instrument(10)   # GM 10 = Glockenspiel
+midi_out.set_instrument(33)   # acoustic bass
 
 fontti_iso = pygame.font.SysFont("Arial", 36)
 fontti_keski = pygame.font.SysFont("Arial", 30)
@@ -47,7 +47,7 @@ def main():
     pisteet = 0
     vaarin = False
     vauhti = 120   # ticks
-    pallo = Nuotti(min(alin_ja_ylin), max(alin_ja_ylin))
+    pallo = Nuotti(min(alin_ja_ylin), max(alin_ja_ylin))  # koska f-avaimen f on g-avaimen d
     pallo.arvo_nuotti()    
     vari = pallo.arvo_vari()
     nykyinen_indeksi = pallo.arvottu_indeksi
@@ -83,11 +83,11 @@ def main():
                         vaarin = True         
             
         naytto.fill(valkoinen)
-        naytto.blit(g_avain, (11, 28))
+        naytto.blit(f_avain, (11, 68))
         
         # anaaliin fisti
         if not pallo.liiku():  
-            gameover(pisteet, fontti_iso, fontti_pieni)
+            gameover(pisteet, fontti_iso, fontti_pieni, "hiscore_nuotti_f.txt")
             main()
 
         pygame.draw.circle(naytto, vari, (pallo.x , pallo.y), PALLON_KOKO)

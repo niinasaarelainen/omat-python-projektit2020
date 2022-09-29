@@ -96,6 +96,7 @@ def main():
         # anaaliin fisti
         if not pallo.liiku():  
             gameover(pisteet, fontti_iso, fontti_pieni)
+            main()
 
         pygame.draw.circle(naytto, vari, (pallo.x , pallo.y), PALLON_KOKO)
         nuottiviivasto(WIDTH)        

@@ -13,6 +13,8 @@ kello = pygame.time.Clock()
 
 g_avain = pygame.image.load('img\g_avain.png').convert_alpha()
 g_avain= pygame.transform.scale(g_avain, (115, 355))            # resize = scale
+f_avain = pygame.image.load('img\e_avain.jpg').convert_alpha()
+f_avain= pygame.transform.scale(f_avain, (115, 240))            # resize = scale
 
 valkoinen = (255, 255, 255)
 musta = (0, 0, 0)

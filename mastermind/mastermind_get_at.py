@@ -188,7 +188,6 @@ def silmukka():
                         palloja_nakyvissa += 1                            
                 elif tapahtuma.type == pygame.MOUSEBUTTONDOWN:   
 
-                    print(nykyinen_arvaus) 
                     x = tapahtuma.pos[0]
                     y = tapahtuma.pos[1]  
 

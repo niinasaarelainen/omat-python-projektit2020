@@ -5,18 +5,18 @@ from yhteiset import *
 
 def nayta_alue(fontti_keski, fontti_pieni, fontti_pieni_b):
         
-    naytto.fill(valkoinen)
-    naytto.blit(g_avain, (11, 28))
+    naytto.fill(valkoinen)    
     nuottiviivasto(280)
+    naytto.blit(f_avain, (11, 68))
     pygame.draw.line(naytto, musta, (200 ,YLIN_VIIVA + 5 * VIIVOJEN_VALI), (280 ,YLIN_VIIVA + 5 * VIIVOJEN_VALI), 4)    
     teksti = "Klikkaa haluamaasi alinta ja ylintä nuotin paikkaa " 
     teksti = fontti_keski.render(teksti, True, musta)
     naytto.blit(teksti, (106, 25))
 
-    teksti = fontti_pieni_b.render("yläraja = ylä-f", True, turkoosi)
+    teksti = fontti_pieni_b.render("yläraja = a", True, turkoosi)
     naytto.blit(teksti, (280, YLIN_VIIVA - 16))
     teksti1 = fontti_pieni_b.render("alaraja =" , True, turkoosi)
-    teksti2 = fontti_pieni_b.render("keski-c" , True, turkoosi)
+    teksti2 = fontti_pieni_b.render("matala e" , True, turkoosi)
     naytto.blit(teksti1, (290, YLIN_VIIVA + 5 * VIIVOJEN_VALI-15))
     naytto.blit(teksti2, (290, YLIN_VIIVA + 5 * VIIVOJEN_VALI-15 + 20))   
         

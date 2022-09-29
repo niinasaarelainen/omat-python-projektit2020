@@ -2,8 +2,8 @@ import pygame
 from yhteiset import *
 
 
-def gameover(pisteet, fontti_iso, fontti_pieni):
-    hiscore(pisteet, fontti_iso, fontti_pieni)
+def gameover(pisteet, fontti_iso, fontti_pieni, file):
+    hiscore(pisteet, fontti_iso, fontti_pieni, file)
     pygame.display.update()
     pygame.time.delay(1000)  # sekunnin viive, jottei käyttäjän edellinen peli käynnistä tahattomasti uutta
     pygame.event.clear()
@@ -15,8 +15,8 @@ def gameover(pisteet, fontti_iso, fontti_pieni):
                pygame.quit()
                
 
-def hiscore(pisteet, fontti_iso, fontti_pieni):
-    f = open("hiscore_nuotti.txt", "r")
+def hiscore(pisteet, fontti_iso, fontti_pieni, file):
+    f = open(file, "r")
     uudestaan = fontti_pieni.render("uusi peli: mikä tahansa näppäin", 1, musta)   # uusi peli
     naytto.blit(uudestaan, (433, HEIGHT - 60))
 
@@ -41,11 +41,11 @@ def hiscore(pisteet, fontti_iso, fontti_pieni):
         naytto.blit(luku, (270, y))
         y += 40
         
-    write_file(top5[:5])
+    write_file(top5[:5], file)
     
 
-def write_file(lista):
-    with open("hiscore_nuotti.txt", "w") as tiedosto:
+def write_file(lista, file):
+    with open(file, "w") as tiedosto:
         for rivi in lista:
             tiedosto.write(str(rivi)+"\n")
 
