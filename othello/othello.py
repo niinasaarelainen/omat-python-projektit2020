@@ -6,6 +6,7 @@ class Othello:
     def __init__(self):
         pygame.init()
         self.uusi_peli()
+        self.ohjeet = True
         
         self.korkeus = len(self.kartta)  
         self.leveys = len(self.kartta[0])
@@ -18,11 +19,19 @@ class Othello:
         self.fontti_iso = pygame.font.SysFont("Arial", 25)
         self.fontti_pieni = pygame.font.SysFont("Arial", 22)
 
-        pygame.display.set_caption("Othello")
+        pygame.display.set_caption("Othello")        
         self.silmukka()    
 
+    def alkuohj(self):
+        ohjeet = alkuohjeet()
+        print()
+        y = 65
+        for rivi in ohjeet:
+            teksti = self.fontti_iso.render(f"{rivi}", True, PUNAINEN[0])
+            self.naytto.blit(teksti, (35, y))
+            y += 30
 
-    def uusi_peli(self):
+    def uusi_peli(self):        
         self.kartta = []
         self.vaihda_vari = []
         
@@ -111,6 +120,7 @@ class Othello:
     def tutki_tapahtumat(self):
         for tapahtuma in pygame.event.get():
             if tapahtuma.type == pygame.MOUSEBUTTONDOWN:
+                self.ohjeet = False
                 x = tapahtuma.pos[0]
                 y = tapahtuma.pos[1]
                 self.sarake  =  int(x // self.skaala)
@@ -163,7 +173,9 @@ class Othello:
    
 
     def piirra_naytto(self):
-        self.naytto.blit(lauta, (0,0))        
+        self.naytto.blit(lauta, (0,0))    
+        if self.ohjeet:  
+            self.alkuohj()  
 
         for y in range(self.korkeus):
             for x in range(self.leveys):

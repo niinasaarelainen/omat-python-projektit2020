@@ -44,7 +44,8 @@ class Kiipeilyreitti:
         self.grade =  self.sanakirja["grade"]
         self.ticks =  int(self.sanakirja["ticks"])      
         self.type = self.sanakirja["type"]
-        self.luontipvm = self.sanakirja["luontipvm"]   # yes / no        
+        self.luontipvm = self.sanakirja["luontipvm"]   # yes / no   
+        # tähän asti löytyy data.txt, tästä eteenpäin data_henkkoht.txt    
         self.tick = False
         self.sanakirja["tick"] = None
         self.tikkauspvm = None   
@@ -81,9 +82,20 @@ class Kiipeilyreitti:
         self.grade_opinion = grade
         self.sanakirja["grade_opinion"] = self.grade_opinion
 
+        f = open("data_henkkoht.txt", "a")
+        f.write(self.nimi+ "\n")
+        f.write("grade_opinion\n" +  self.grade_opinion + "\n")        
+        f.close
+
     def anna_rating (self, rating):
         self.rating = str(rating)    
         self.sanakirja["rating"] = self.rating
+        print(self.nimi, self.rating)
+
+        f = open("data_henkkoht.txt", "a")
+        f.write(self.nimi+ "\n")
+        f.write("rating\n" +  self.rating + "\n")        
+        f.close
 
     def tikkaa(self):
         self.tick = True

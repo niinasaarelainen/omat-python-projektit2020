@@ -1,4 +1,4 @@
-import pygame, random, copy 
+import pygame, random 
 from itertools import permutations
 
 # CTRL + F5  !!!!!!!!!!
@@ -66,9 +66,10 @@ class SanastaSanoja:
     
     def sanavarasto(self):             
         sanat_7 = ["MAALARI", "HAALARI", "HAITARI", "VADELMA"]
-        sanat_8 = ["MANSIKKA", "MUSTIKKA", "PENSSELI", "HARAKIRI", "ELOHIIRI"]   
+        
         sanat_8_eng = ["ATOMBOMB", "MONOPOLY"]    # 8kirj. = 40320 permutaatiota  (+2-7kirj)
-        löytyy_failista = ["STUDIOS", "VISUAL", "MATINEE", "RABBITS"]     
+        löytyy_failista = ["STUDIOS", "VISUAL", "MATINEE", "RABBITS", "GIANTS"]  
+        löytyy_failista = ["MANSIKKA", "MUSTIKKA", "PENSSELI", "HARAKIRI", "ELOHIIRI"]   
         return löytyy_failista
         
 
@@ -281,7 +282,7 @@ kaikki = LoydaKaikki(wordlist, arvottu_sana)
 kaikki.etsi()
 print(sorted(kaikki.uniikit))
 print(sorted(kaikki.loydetyt_sanat))
-print(len(kaikki.loydetyt_sanat))    """
+print(len(kaikki.loydetyt_sanat))   """ 
 
 sanat = scan_file(aiemmin_keksityt, arvottu_sana)
 main()

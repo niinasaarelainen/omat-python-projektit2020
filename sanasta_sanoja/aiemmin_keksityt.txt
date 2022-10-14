@@ -9,27 +9,24 @@ is
 a
 ail
 SEURAAVA SANA:
-MATINEE
-tine
-at
-mat
-tan
-nee
-tee
-ten
-teen
-mean
-man
+GIANTS
+ant
+ants
+anti
+tis
+is
+an
 a
+san
+tan
+it
+sit
+giant
+saint
 int
-mint
-tin
-in
-eat
-ante
-etna
-na
-ma
+nit
+sag
+gas
 SEURAAVA SANA:
 RABBITS
 rabbit
@@ -57,6 +54,7 @@ art
 arts
 bar
 bast
+sat
 SEURAAVA SANA:
 STUDIOS
 studio
@@ -77,6 +75,28 @@ dot
 dots
 sit
 sits
+SEURAAVA SANA:
+MATINEE
+tine
+at
+mat
+tan
+nee
+tee
+ten
+teen
+mean
+man
+a
+int
+mint
+tin
+in
+eat
+ante
+etna
+na
+ma
 SEURAAVA SANA:
 ATOMBOMB
 atom

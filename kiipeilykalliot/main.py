@@ -25,6 +25,15 @@ def openfile():
             reittilista = []        
     kallion_nimi = ""
 
+def openfile_henkkoht():
+    f = open("data_henkkoht.txt", "r")
+    for rivi in f:   
+        rivi = rivi.strip()
+        if reittilista != []:
+            reittilista.append(kallio_data)  
+            kalliot[kallion_nimi].lisaa_reitti(Kiipeilyreitti(reittilista)) 
+            reittilista = []        
+    kallion_nimi = ""
 
 
 def muodosta_kaikki_reitit():   # häviää tieto mihin kallioon liittyvät
@@ -153,7 +162,7 @@ def reittiValinnat(valinta):
                 print(reitti)
 
     # Tikkaa  (tikkaus tehdään myös valinnoissa 5 ja 6)
-    if valinta == "3":   
+    if valinta == "3":           
         reitin_nimi = input("\n Mikä reitti tikataan? Voit antaa osan reitin nimestä  ")        
         reitit = [reitti for reitti in kaikki_reitit if reitin_nimi.upper() in reitti.nimi.upper()]   
         for reitti in reitit:
@@ -171,11 +180,17 @@ def reittiValinnat(valinta):
     # Grade-mielipide
     if valinta == "5":
         tiedot = input("\n Anna reitin nimi (tai osanimi) ja greidiavio, esim. possu 6B  ")
-        nimi, grade = tiedot.split(" ")
-        reitit = [reitti for reitti in kaikki_reitit if nimi.upper() in reitti.nimi.upper()]
-        for reitti in reitit:
-            reitti.tikkaa()
-            reitti.grade_opinion = grade
+        if " " in tiedot:
+            nimi, grade = tiedot.split(" ")
+            reitit = [reitti for reitti in kaikki_reitit if nimi.upper() in reitti.nimi.upper()]
+            for reitti in reitit:
+                reitti.tikkaa()
+                reitti.anna_grade_opinion(grade)
+                print(grade)
+        else:
+            print("\n Huomaa välilyönti !!")
+            tiedot = input("Anna reitin nimi (tai osanimi) ja greidiavio, esim. possu 6B  ")
+
 
     # Arvostele reitti
     if valinta == "6":
@@ -184,7 +199,7 @@ def reittiValinnat(valinta):
         reitit = [reitti for reitti in kaikki_reitit if nimi.upper() in reitti.nimi.upper()]
         for reitti in reitit:
             reitti.tikkaa()
-            reitti.rating = arvosana
+            reitti.anna_rating(arvosana)
 
     # Näytä reitin henk.koht. tiedot
     if valinta == "7":
@@ -198,6 +213,7 @@ if __name__ == "__main__":
 
     kalliot = {}    
     openfile()
+    openfile_henkkoht()
     kaikki_reitit = muodosta_kaikki_reitit()
 
     k = Kayttoliittyma()
@@ -209,5 +225,6 @@ if __name__ == "__main__":
         elif kallio_vai_reitti == "2":        
             reittiValinnat(k.reittiValinnat())
             pass
+        #TODO tallenna muutos !! 
 
     

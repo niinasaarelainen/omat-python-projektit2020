@@ -151,7 +151,7 @@ def tutki_mouse(x, y, kirjain):
                     kirjaimet_yhdensiirronajalta.append(kirjain)
                     pel1_7.remove(kirjain)                   
                     print(sorted(edelliset_muuvit))         
-                else:
+                elif len(edelliset_muuvit) > 1:      
                     ruudukko = undo()  
                     ruudukko = undo()  
                     minne_kirjain(x, y, kirjain)
@@ -159,7 +159,8 @@ def tutki_mouse(x, y, kirjain):
             else:
                 for k in kirjaimet_yhdensiirronajalta:
                     pel1_7.append(k)
-                    ruudukko = undo() 
+                    if len(edelliset_muuvit) > 0:  
+                        ruudukko = undo() 
                 vuoro -= 2
     
     # pelaaja 2
@@ -174,7 +175,7 @@ def tutki_mouse(x, y, kirjain):
                     kirjaimet_yhdensiirronajalta.append(kirjain)
                     pel2_7.remove(kirjain)
                     print(sorted(edelliset_muuvit))    
-                else:
+                elif len(edelliset_muuvit) > 1:  
                     ruudukko = undo()  
                     ruudukko = undo()  
                     minne_kirjain(x, y, kirjain)   
@@ -182,7 +183,8 @@ def tutki_mouse(x, y, kirjain):
             else:
                 for k in kirjaimet_yhdensiirronajalta:
                     pel2_7.append(k)
-                    ruudukko = undo() 
+                    if len(edelliset_muuvit) > 0:  
+                        ruudukko = undo() 
                 vuoro -= 2      
 
     return kirjain, kirjain_ind
