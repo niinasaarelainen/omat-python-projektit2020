@@ -46,15 +46,13 @@ class Kiipeilyreitti:
         self.type = self.sanakirja["type"]
         self.luontipvm = self.sanakirja["luontipvm"]   # yes / no   
         # tähän asti löytyy data.txt, tästä eteenpäin data_henkkoht.txt    
-        self.tick = False
+        #self.tick = False
         self.sanakirja["tick"] = None
-        self.tikkauspvm = None   
+        #self.tikkauspvm = None   
         self.sanakirja["tikkauspvm"] = None
         self.projektina = False
         self.sanakirja["projektina"] = None
-        self.grade_opinion = "-"
         self.sanakirja["grade_opinion"] = "-"
-        self.rating = "-"
         self.sanakirja["rating"] = "-1"
 
     
@@ -79,37 +77,42 @@ class Kiipeilyreitti:
         return self.nimi > verrokki.nimi
 
     def anna_grade_opinion (self, grade):
-        self.grade_opinion = grade
-        self.sanakirja["grade_opinion"] = self.grade_opinion
+        self.sanakirja["grade_opinion"] = grade
 
         f = open("data_henkkoht.txt", "a")
-        f.write(self.nimi+ "\n")
-        f.write("grade_opinion\n" +  self.grade_opinion + "\n")        
+        f.write(self.nimi + " grade_opinion " + self.sanakirja["grade_opinion"] + "\n")
         f.close
 
     def anna_rating (self, rating):
-        self.rating = str(rating)    
-        self.sanakirja["rating"] = self.rating
-        print(self.nimi, self.rating)
+        self.sanakirja["rating"] = rating
+        print(self.nimi, self.sanakirja["rating"])
 
         f = open("data_henkkoht.txt", "a")
-        f.write(self.nimi+ "\n")
-        f.write("rating\n" +  self.rating + "\n")        
+        f.write(self.nimi+ " rating " + self.sanakirja["rating"] + "\n")
         f.close
 
     def tikkaa(self):
-        self.tick = True
-        self.tikkauspvm = datetime.datetime.today()
+        self.sanakirja["tick"] = "True"
+        self.sanakirja["tikkauspvm"] = datetime.datetime.today()
         self.ticks += 1
         self.projektina = False
 
+        f = open("data_henkkoht.txt", "a")
+        f.write(self.nimi+ " tick " + self.sanakirja["tick"] + "\n")
+        f.close
+
     def nayta_henk_koht_tiedot(self):
-        return f"{self.nimi}: {self.tikkausvuosi()}, {self.projekti()}, greidi noinniinku omasta mielestä: {self.grade_opinion}, arvosana: {self.rating}"
+        rating = self.sanakirja["rating"]
+        if rating == "-1":
+            rating = "-"
+        grade_opinion = self.sanakirja["grade_opinion"]
+        return f"{self.nimi}: {self.tikkausvuosi()}, {self.projekti()}, greidi noinniinku omasta mielestä: {grade_opinion}, arvosana: {rating}"
 
     def tikkausvuosi (self):
-        if self.tikkauspvm == None:
+        tikkauspvm = self.sanakirja["tikkauspvm"]
+        if tikkauspvm == None:
             return "Ei ole kiivetty"
-        return f"kiivetty {self.tikkauspvm.year}"
+        return f"kiivetty {tikkauspvm.year}"
 
     def projekti(self):
         if self.projektina == False:
@@ -117,13 +120,15 @@ class Kiipeilyreitti:
         return "projektina"
 
     def pvm(self):
-        if self.tikkauspvm == None:
+        tikkauspvm = self.sanakirja["tikkauspvm"]
+        if tikkauspvm == None:
             return "Ei ole kiivetty"
-        return f"  tikattu: {self.tikkauspvm.day}.{self.tikkauspvm.month}.{self.tikkauspvm.year}"
+        return f"  tikattu: {tikkauspvm.day}.{tikkauspvm.month}.{tikkauspvm.year}"
 
     def __str__(self):
-        if self.rating != "-":
-            return f"{self.nimi}, pituus {self.pituus} metriä, grade {self.grade}, ticks {self.ticks}, oma arvosana {self.rating} ({self.kallio})"
+        rating = self.sanakirja["rating"]
+        if self.sanakirja["rating"] != "-1":
+            return f"{self.nimi}, pituus {self.pituus} metriä, grade {self.grade}, ticks {self.ticks}, oma arvosana {rating} ({self.kallio})"
         return f"{self.nimi}, pituus {self.pituus} metriä, grade {self.grade}, ticks {self.ticks} ({self.kallio})"
 
 
@@ -176,7 +181,7 @@ class Kiipeilykallio:
         return len(self.reitit)  
 
     def kiivetty_lkm(self):
-        return len([reitti for reitti in self.reitit if reitti.sanakirja["tick"] == True])  
+        return len([reitti for reitti in self.reitit if reitti.sanakirja["tick"] == "True"])  
 
     def __str__(self):
         return f"\n{self.nimi} {self.reitteja()} reittiä, joista kiivetty {self.kiivetty_lkm()}\n{self.grade_statistics()}"

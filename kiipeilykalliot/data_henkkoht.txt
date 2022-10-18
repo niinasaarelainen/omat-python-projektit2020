@@ -1,6 +1,3 @@
-Ruotsalaistenreitti
-grade_opinion
-6A
-Ruotsalaistenreitti
-rating
-4
+Ruotsalaistenreitti rating 4
+Ruotsalaistenreitti grade_opinion 6i
+Possueipidä tick True

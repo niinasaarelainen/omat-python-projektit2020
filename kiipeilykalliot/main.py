@@ -26,20 +26,21 @@ def openfile():
     kallion_nimi = ""
 
 def openfile_henkkoht():
+    global henkkoht
     f = open("data_henkkoht.txt", "r")
     for rivi in f:   
-        rivi = rivi.strip()
-        if reittilista != []:
-            reittilista.append(kallio_data)  
-            kalliot[kallion_nimi].lisaa_reitti(Kiipeilyreitti(reittilista)) 
-            reittilista = []        
-    kallion_nimi = ""
+        henkkoht.append(rivi)
+        
 
 
 def muodosta_kaikki_reitit():   # häviää tieto mihin kallioon liittyvät
     kaikki_reitit = []
     for kallio in kalliot.values():
         for reitti in kallio.reitit:
+            for rivi in henkkoht:
+                if reitti.nimi in rivi:
+                    nimi, tunniste, arvo = rivi.split()
+                    reitti.sanakirja[tunniste] = arvo
             kaikki_reitit.append(reitti)
     return kaikki_reitit
 
@@ -211,10 +212,12 @@ def reittiValinnat(valinta):
 
 if __name__ == "__main__":
 
-    kalliot = {}    
+    kalliot = {}   
+    henkkoht = []
     openfile()
     openfile_henkkoht()
     kaikki_reitit = muodosta_kaikki_reitit()
+    
 
     k = Kayttoliittyma()
 
