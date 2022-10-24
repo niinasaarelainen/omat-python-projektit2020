@@ -1,3 +1,14 @@
 Ruotsalaistenreitti rating 4
 Ruotsalaistenreitti grade_opinion 6i
 Possueipidä tick True
+Possueipidä tick True
+Possueipidä tick True
+Possueipidä tick True
+Possueipidä tikkauspvm 2022-10-24
+Possueipidä tick True
+Possueipidä tikkauspvm 2022-10-24
+Possueipidä projektina False
+Possueipidä tick True
+Possueipidä tikkauspvm 2022-10-24
+Possueipidä projektina False
+Possueipidä rating 4

@@ -32,7 +32,7 @@ def openfile_henkkoht():
         henkkoht.append(rivi)
         
 
-
+# TODO PossueipidÃ¤: Ei ole kiivetty , vaikka lukee Possueipidä tick True
 def muodosta_kaikki_reitit():   # häviää tieto mihin kallioon liittyvät
     kaikki_reitit = []
     for kallio in kalliot.values():

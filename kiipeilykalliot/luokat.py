@@ -45,13 +45,10 @@ class Kiipeilyreitti:
         self.ticks =  int(self.sanakirja["ticks"])      
         self.type = self.sanakirja["type"]
         self.luontipvm = self.sanakirja["luontipvm"]   # yes / no   
-        # tähän asti löytyy data.txt, tästä eteenpäin data_henkkoht.txt    
-        #self.tick = False
-        self.sanakirja["tick"] = None
-        #self.tikkauspvm = None   
+        # tähän asti löytyy data.txt, tästä eteenpäin data_henkkoht.txt  
+        self.sanakirja["tick"] = "False"
         self.sanakirja["tikkauspvm"] = None
-        self.projektina = False
-        self.sanakirja["projektina"] = None
+        self.sanakirja["projektina"] = "False"
         self.sanakirja["grade_opinion"] = "-"
         self.sanakirja["rating"] = "-1"
 
@@ -92,13 +89,15 @@ class Kiipeilyreitti:
         f.close
 
     def tikkaa(self):
-        self.sanakirja["tick"] = "True"
-        self.sanakirja["tikkauspvm"] = datetime.datetime.today()
+        self.sanakirja["tick"] = "True"   # rwkarifailista luetaan tekstiä, ei boolean
+        self.sanakirja["tikkauspvm"] = str(datetime.datetime.today()).split(" ")[0]
         self.ticks += 1
-        self.projektina = False
+        self.projektina = "False"  
 
         f = open("data_henkkoht.txt", "a")
         f.write(self.nimi+ " tick " + self.sanakirja["tick"] + "\n")
+        f.write(self.nimi+ " tikkauspvm " + self.sanakirja["tikkauspvm"] + "\n")
+        f.write(self.nimi+ " projektina " + self.sanakirja["projektina"] + "\n")
         f.close
 
     def nayta_henk_koht_tiedot(self):
@@ -112,10 +111,10 @@ class Kiipeilyreitti:
         tikkauspvm = self.sanakirja["tikkauspvm"]
         if tikkauspvm == None:
             return "Ei ole kiivetty"
-        return f"kiivetty {tikkauspvm.year}"
+        return f"kiivetty {tikkauspvm}"
 
     def projekti(self):
-        if self.projektina == False:
+        if  self.sanakirja["projektina"] == "False":
             return "ei työn alla"
         return "projektina"
 
@@ -123,7 +122,7 @@ class Kiipeilyreitti:
         tikkauspvm = self.sanakirja["tikkauspvm"]
         if tikkauspvm == None:
             return "Ei ole kiivetty"
-        return f"  tikattu: {tikkauspvm.day}.{tikkauspvm.month}.{tikkauspvm.year}"
+        return f"  tikattu: {tikkauspvm}"
 
     def __str__(self):
         rating = self.sanakirja["rating"]
