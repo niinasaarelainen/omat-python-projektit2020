@@ -175,8 +175,8 @@ def reittiValinnat(valinta):
         reitin_nimi = input("\n Mikä reitti merkataan projektiksi? Voit antaa osan reitin nimestä  ")        
         reitit = [reitti for reitti in kaikki_reitit if reitin_nimi.upper() in reitti.nimi.upper()]   
         for reitti in reitit:
-            reitti.projektina = True
-            print(reitti.nimi + " on nyt projektisi")
+            reitti.projektina()
+            
 
     # Grade-mielipide
     if valinta == "5":

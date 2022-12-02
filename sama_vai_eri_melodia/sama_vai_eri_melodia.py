@@ -23,7 +23,7 @@ eka = ""
 toka = ""
 sama = False   
 montako_aanta = 4
-AANTEN_MAX = 6
+AANTEN_MAX = 7
 AANTEN_MIN = 3
 
 
@@ -55,10 +55,11 @@ def alkuohjeet(naytto):
 def muodosta_melodiat():
     global melodiat
     melodiat[3] = ["123", "357", "865",  "225", "876", "358", "576", "673", "512", "723", "442"] 
-    melodiat[4] = ["1188", "8878", "8181"]
-    #melodiat[4] = ["1235", "3576", "8657", "2256", "4876", "1358", "5762", "6573", "5612", "7323"] 
+    #melodiat[4] = ["1188", "8878", "8181"]
+    melodiat[4] = ["1235", "3576", "8657", "2256", "4876", "1358", "5762", "6573", "5612", "7323"] 
     melodiat[5] = ["12355", "35767", "86571", "22562", "48763", "13578", "45762", "65173", "56122", "37323"] 
     melodiat[6] = ["125578", "357672", "865271", "244562", "487563", "135787", "245762", "637378", "565122", "375678"] 
+    melodiat[7] = ["1255788", "3576722", "8652711", "2445622", "4875633", "1357877", "2457622", "6373788", "5651222", "3756788"] 
     
 
 def valitse_melodiat(montako_aanta):
@@ -89,10 +90,10 @@ def valitse_melodiat(montako_aanta):
 
 def midi_play(n, instrument):
     midi_out.set_instrument(instrument)  
-    midi_numbers = {"1":60, "2":62, "3":64, "4":65, "5":67, "6":69, "7":71 ,"8":72}    
-    midi_out.note_on(midi_numbers[n], 100)    
+    midi_numbers = {"0": 59, "1":60, "2":62, "3":64, "4":65, "5":67, "6":69, "7":71 ,"8":72, "9": 74}    
+    midi_out.note_on(midi_numbers[n], 96)    
     pygame.time.delay(300)
-    midi_out.note_off(midi_numbers[n], 100)
+    midi_out.note_off(midi_numbers[n], 96)
 
 
 def soita_melodiat(montako):
@@ -160,8 +161,7 @@ def main():
                         soita_melodiat(montako_aanta)
 
             if event.type == pygame.MOUSEBUTTONDOWN:  
-                x = event.pos[0]
-                y = event.pos[1]                 
+                x = event.pos[0]              
                 if x > x_aloitus + blockSize*3 :
                     if sama == False:
                         pisteet += 1
@@ -177,7 +177,6 @@ def main():
                     
         paivita_ruutu(pisteet, kysytty)
         kello.tick(50)
-
 
 
 muodosta_melodiat()

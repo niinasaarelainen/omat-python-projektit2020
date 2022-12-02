@@ -12,3 +12,7 @@ Possueipidä tick True
 Possueipidä tikkauspvm 2022-10-24
 Possueipidä projektina False
 Possueipidä rating 4
+Ruotsalaistenreitti tick True
+Ruotsalaistenreitti tikkauspvm 2022-10-30
+Ruotsalaistenreitti projektina False
+Suurileikkaus projektina True

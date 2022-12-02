@@ -10,7 +10,7 @@ class Robotti:   # ohjataan nuolinäppäimillä
 
     def nollaa(self):
         self.ammutut = []
-        self.ammuksia = 70
+        self.ammuksia = 80
         self.oikealle = False           
         self.vasemmalle = False
    
@@ -132,6 +132,8 @@ def pelaa():
     kierros_nro = 0    
     asteroidien_ammukset = []    
     r.nollaa()
+    kerroin = 1.0 - (0.1 * level)
+    print(kerroin)
     while True:
         kierros_nro += 1
         for tapahtuma in pygame.event.get():
@@ -144,9 +146,9 @@ def pelaa():
         r.liiku()      
         naytto.blit(robo, (r.x, r.y))
         
-        liike = asteroidien_liikerata[0]
+        liike = asteroidien_liikerata[0]        
         for asteroidi in asteroidit:            
-            if kierros_nro % 20 == 0:                
+            if kierros_nro % (35 * kerroin) == 0:                
                 asteroidi.liiku(liike)
                 if asteroidi.y + 15 <= r.y and asteroidi.y + 24 >= r.y:
                     game_over("Game Over", 0)  
@@ -161,10 +163,10 @@ def pelaa():
                     pisteet += 1
                     midi_play()
                     asteroidit.remove(asteroidi)
-                    if len(asteroidit) == 0 and level == 2:
+                    if len(asteroidit) == 0 and level == 3:
                         game_over("Winner !!!", r.ammuksia)                        
-                    elif len(asteroidit) == 0 and level == 1:
-                        level = 2
+                    elif len(asteroidit) == 0 :
+                        level += 1
                         r.ammuksia = 70
                         pelaa()
                     r.ammutut.remove(ammus)
@@ -193,6 +195,9 @@ def pelaa():
         amm = f"Ammuksia: {r.ammuksia}"
         teksti = fontti.render(amm, True, (255, 0, 0))
         naytto.blit(teksti, (480, 30))
+
+        teksti = fontti.render(f"Level {level}", True, (255, 0, 0))
+        naytto.blit(teksti, (480, 50))
 
         pygame.display.flip()     
         kello.tick(70)

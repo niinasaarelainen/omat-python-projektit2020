@@ -113,6 +113,14 @@ class Kiipeilyreitti:
             return "Ei ole kiivetty"
         return f"kiivetty {tikkauspvm}"
 
+    def projektina (self):
+        self.sanakirja["projektina"] = "True"
+        print(self.nimi + " on nyt projektisi")
+
+        f = open("data_henkkoht.txt", "a")
+        f.write(self.nimi+ " projektina " + self.sanakirja["projektina"] + "\n")
+        f.close
+
     def projekti(self):
         if  self.sanakirja["projektina"] == "False":
             return "ei työn alla"
