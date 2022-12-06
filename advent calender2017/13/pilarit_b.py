@@ -25,10 +25,9 @@ class Pilari:
 data = []
 dict = {}  # pilarin indeksi --> Pilari
 pilarit = []
-nrot = []
 
 def readfile():
-    f = open("data_a.txt", "r")  # e riviä
+    f = open("data.txt", "r")  # e riviä
     for rivi in f:
         data.append(rivi.strip())
 
@@ -40,32 +39,30 @@ def muodosta_dict_ja_pilarit():
         p  = Pilari(ind, depth)
         pilarit.append(p)
         dict[ind] = p
-        
-    #print([p.indeksi for p in pilarit])
 
 def move(irti):
-    global nrot
     sykli = 0 
-    print([p.positio for p in pilarit]) 
-    mina = 0
-    mina_irti = irti
-    while sykli <= pilareita + irti :   # joka pilarissa ollaan 2 vuoroa
-        if mina % pilareita in dict and mina >= mina_irti:
-            print("minairti")
+    mina = -1
+    while sykli <= pilareita + irti :  
+        if sykli >= irti:
+            mina += 1  
+        if mina % pilareita in dict and mina >= 0:
             if dict[mina % pilareita].positio == 0:
-                nrot.append(mina  % pilareita)
-                print("  N O  !!!!!!!!")
+                #print("kolari")
+                return
             
         for p in pilarit:
             p.seuraava_positio()
-        print([p.positio for p in pilarit])    
+        
         sykli += 1
-        mina += 1
+    print("success", irti)
         
 
 
 readfile()
 muodosta_dict_ja_pilarit()
-pilareita = max(dict.keys()) 
-move(5)
-print(sum([nro * dict[nro].depth for nro in nrot]))
+pilareita = max(dict.keys()) + 1
+for i in range(201, 400):
+    move(i)
+    muodosta_dict_ja_pilarit()
+print("end")
