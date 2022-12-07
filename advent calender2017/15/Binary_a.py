@@ -19,8 +19,12 @@ def find():
 
 readfile()
 find() 
-print(f'{430625591:32b}')   # loppurivi sama, alku ei !!!
-print(f'{1092455:32b}')
+ 
+a = f'{1092455:32b}'
+print(len(a), a)
+print(len(str(a)))
+b = f'{430625591:32b}' 
+print(len(b))
     
 
 

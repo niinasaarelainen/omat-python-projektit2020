@@ -4,10 +4,10 @@ dir a
 14848514 b.txt
 8504156 c.dat
 dir d
-dir f
 $ cd a
 $ ls
 dir e
+dir f
 29116 f
 2557 g
 62596 h.lst
@@ -16,7 +16,13 @@ $ ls
 584 i
 $ cd f
 $ ls
+dir g
 585 j
+$ cd g
+$ ls
+1000 tonnikateen.txt
+$ cd ..
+$ cd ..
 $ cd ..
 $ cd ..
 $ cd d
