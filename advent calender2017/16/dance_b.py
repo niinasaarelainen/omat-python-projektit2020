@@ -1,4 +1,3 @@
-stringi = "abcde"
 stringi = "abcdefghijklmnop"
 stringi = [char for char in stringi]
 pit = len(stringi)
@@ -35,20 +34,21 @@ def partner(name1, name2):  # programs named A and B swap places
 
 
 def find():
-    for rivi in data:
+    for i in range(1000000000):
+        for rivi in data:
 
-        if "s" in rivi:
-            rivi = rivi[1::]            
-            spin(int(rivi))
-        
-        if "x" in rivi:
-            rivi = rivi[1::]
-            sp = rivi.split("/")
-            exchange (int(sp[0]), int(sp[1])) 
-        if "p" in rivi:
-            rivi = rivi[1::]
-            sp = rivi.split("/")
-            partner (sp[0], sp[1])
+            if "s" in rivi:
+                rivi = rivi[1::]            
+                spin(int(rivi))
+            
+            if "x" in rivi:
+                rivi = rivi[1::]
+                sp = rivi.split("/")
+                exchange (int(sp[0]), int(sp[1])) 
+            if "p" in rivi:
+                rivi = rivi[1::]
+                sp = rivi.split("/")
+                partner (sp[0], sp[1])
 
 
 readfile()
