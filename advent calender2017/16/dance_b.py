@@ -1,5 +1,7 @@
 stringi = "abcdefghijklmnop"
+orig = stringi = "abcdefghijklmnop"
 stringi = [char for char in stringi]
+orig = [char for char in orig]
 pit = len(stringi)
 data = []  
 
@@ -16,25 +18,22 @@ def spin(maara):   # s3  abcde --> cdeab
     alku = stringi[:pit-maara]
     loppu = stringi[pit-maara:]
     stringi = loppu + alku
-    print(stringi)
 
 def exchange(pos1, pos2):  # at positions A and B swap places
     global stringi
     temp = stringi[pos1]
     stringi[pos1] = stringi[pos2]
     stringi[pos2] = temp
-    print(stringi)
 
 def partner(name1, name2):  # programs named A and B swap places
     ind1 = stringi.index(name1)
     ind2 = stringi.index(name2)
-    print("ind1, ind2", ind1, ind2)
     exchange(ind1, ind2)
 
 
 
 def find():
-    for i in range(1000000000):
+    for i in range(40):   
         for rivi in data:
 
             if "s" in rivi:
@@ -49,10 +48,12 @@ def find():
                 rivi = rivi[1::]
                 sp = rivi.split("/")
                 partner (sp[0], sp[1])
+        
 
 
 readfile()
-print(data)
+montako = 1000000000 % 60
+print(montako)
 find() 
 s = "".join(str(x) for x in stringi)
 print(s)
