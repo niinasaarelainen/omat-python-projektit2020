@@ -144,7 +144,7 @@ def silmukka():
     klikattu_ok = False
     win = False
     heitto_123 = 1  # max 3
-    kierros = 1   # max 12
+    kierros = 1   # max KIERROKSIA = 22
     heitto = valitse_5_randomia(nopat)
 
     while kierros <= KIERROKSIA and len(kerätään) > 0:       
