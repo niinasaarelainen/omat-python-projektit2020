@@ -1,6 +1,8 @@
 
 data = []
-eroja_min = 1000
+numerot = [1,2,3], [4,5,6], [7,8,9]
+koodit = []
+
 
 
 def readfile():
@@ -10,13 +12,29 @@ def readfile():
 
 
 def x():
-    sum = 0
-    for rivi in data:
-        pass
+    
+    rivi = 1
+    sarake = 1
 
-    return sum
+    for r in data:       
+        for kirjain in r:
+            if kirjain == "U":
+                rivi = max(0, rivi - 1)
+            if kirjain == "D":
+                rivi = min(2, rivi + 1)
+            if kirjain == "R":
+                sarake = min(2, sarake + 1)
+            if kirjain == "L":
+                sarake = max(0, sarake - 1)
+        print(rivi, sarake)
+        koodit.append(numerot[rivi][sarake])
+
+    
 
 
 readfile()
 print(x())
+
+a = map(str, koodit)    
+print(''.join(a))
  
