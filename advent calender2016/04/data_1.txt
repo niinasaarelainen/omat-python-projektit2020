@@ -1,3 +1,1 @@
-aa bb cc dd ee
-aa bb cc dd aa
-aa bb cc dd aaa
+aaaaa-bb-z-y-x-123[abxyz]
