@@ -33,10 +33,11 @@ def modify():
             for y in range(y_montako):
                 for x in range(x_montako):
                     kuva[y][x] = "#"
+            
 
         if 'rotate' in rivi:
             if 'column' in rivi:    # rotate column x=1 by 1 
-                x = int(rivi[2][2])
+                x = int(rivi[2].split('=')[1])   
                 amount = int(rivi[-1])
                 bu = copy.deepcopy(kuva)
                 for y in range(tall):
@@ -44,14 +45,14 @@ def modify():
                     bu[y_uusi][x] = kuva[y][x]
                 kuva = copy.deepcopy(bu)
             if 'row' in rivi:       # rotate row y=0 by 10
-                y = int(rivi[2][2])
+                y = int(rivi[2].split('=')[1])   
                 amount = int(rivi[-1])
                 bu = copy.deepcopy(kuva)
                 for x in range(wide):
                     x_uusi = (x + amount ) % wide
                     bu[y][x_uusi] = kuva[y][x]
                 kuva = copy.deepcopy(bu)
-        printtaaKuva(rivi)
+        
 
 def laskeValot():
     valoja = 0
@@ -64,4 +65,5 @@ def laskeValot():
 readfile()
 luoKuva()
 modify()
-print(laskeValot())   # 100 too low
+printtaaKuva("valmis")
+print(laskeValot())  
