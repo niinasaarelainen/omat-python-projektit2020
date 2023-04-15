@@ -75,10 +75,10 @@ def liiku():
             if x_erotus > 0:
                 mina_y += 1
                 mina_x = mina_x_vika2   # 2.vika arvo
-        #del reitti[-1]
-        reitti.append([mina_y, mina_x])
-    if len(reitti) == 0:
-        reitti.append([mina_y, mina_x])
+            del reitti[-1]  
+            liiku()
+            
+    reitti.append([mina_y, mina_x])
 
 
 ##   MAIN   ##
@@ -87,14 +87,14 @@ for y in range(40):
     for x in range(40):
         open_or_wall(y, x)
 
-for x in range(116):
+for x in range(216):
     liiku()
     kuva[mina_y][mina_x] = "M"
-    if mina_y == kohde_y and mina_x == kohde_x:  # 7,4
+    if mina_y == kohde_y and mina_x == kohde_x:  # 31,39
         print("HIT")
         break
 
 print(reitti)
 print_kuva()
 print("jumissa", jumissa)
-print(len(reitti) - jumissa)
+print(len(reitti))    # 116  too high

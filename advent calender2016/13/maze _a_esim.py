@@ -77,10 +77,10 @@ def liiku():
             if x_erotus > 0:
                 mina_y += 1
                 mina_x = mina_x_vika2   # 2.vika arvo
-        #del reitti[-1]   ?? miksei toimi reitti.pop(-1) ei myöskään  ?!?!?!?
-        reitti.append([mina_y, mina_x])
-    if len(reitti) == 0:
-        reitti.append([mina_y, mina_x])
+            del reitti[-1]  
+            liiku()
+            
+    reitti.append([mina_y, mina_x])
 
 
 ##   MAIN   ##
@@ -98,4 +98,4 @@ for x in range(16):
 
 print_kuva()
 print(reitti)
-print(len(reitti) - jumissa)
+print(len(reitti) )
