@@ -8,18 +8,18 @@ def readfile():
         data.append(rivi.strip())
 
 def tutkiKirjainparit(kirjainparit):
-    print(kirjainparit)
     for values in kirjainparit.values():
         if len(values) > 1:
-            values = sorted(values)
-            print(values)
-            for i in range(len(values) -1):
-                erotus = values[i +1] - values[i]
-                if erotus >= 1:  # 1= aaa = overlapping
-                    return True
+            for v1 in range(len(values) -1):
+                for v2 in range(len(values)):
+                    #print("v1", v1, "v2", v2)
+                    erotus = values[v2] - values[v1]
+                    if erotus > 1:  # 1= aaa = overlapping
+                        print("erotus", erotus)
+                        return True
+    return False
 
 def tutkiKirjaimet(kirjaimet):
-    print(kirjaimet)
     for values in kirjaimet.values():
         if len(values) > 1:
             for i in range(len(values) -1):
@@ -28,6 +28,7 @@ def tutkiKirjaimet(kirjaimet):
                     return True
                 if v - 2 in values:
                     return True
+    return False
     
 
 def action():
@@ -55,12 +56,14 @@ def action():
             ind += 1
 
         if tutkiKirjainparit(kirjainparit) and tutkiKirjaimet(kirjaimet):
+            print("\n", rivi, tutkiKirjainparit(kirjainparit) and tutkiKirjaimet(kirjaimet))
             nice += 1
+        else: 
+            print("\n",rivi, "  Falsetti")
 
     return nice
 
 
 
 readfile()
-print(data)
-print(action())   # 59 väärin, 77 väärin
+print(action())   # 59 väärin, 77 väärin, ei sanottu onko liian iso tai pieni
