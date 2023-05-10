@@ -42,8 +42,8 @@ def tutki():
         kilometrit.append(km)
 
     print(kilometrit)
-    pienin = sorted(kilometrit)[0]
-    print(pienin)
+    pisin = sorted(kilometrit)[-1]
+    print(pisin)
 
 
 
