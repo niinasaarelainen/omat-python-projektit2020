@@ -1,6 +1,4 @@
-Disc #1 has 7 positions; at time=0, it is at position 0.
-Disc #2 has 13 positions; at time=0, it is at position 0.
-Disc #3 has 3 positions; at time=0, it is at position 2.
-Disc #4 has 5 positions; at time=0, it is at position 2.
-Disc #5 has 17 positions; at time=0, it is at position 0.
-Disc #6 has 19 positions; at time=0, it is at position 7.
+Frosting: capacity 4, durability -2, flavor 0, texture 0, calories 5
+Candy: capacity 0, durability 5, flavor -1, texture 0, calories 8
+Butterscotch: capacity -1, durability 0, flavor 5, texture 0, calories 6
+Sugar: capacity 0, durability 0, flavor -2, texture 2, calories 1

@@ -1,5 +1,6 @@
 passw = "hepxcrrz"   # oikea
 passw = "abcdefgh"
+passw = "abcvvxyz"
 passw_uusi = ""
 data = []
 
@@ -40,16 +41,18 @@ def increment(str):
     l = list(str)
     for i in range(len(str)-1, 0, -1):
         vika = str[i]
-        while ord(vika) < 122:
+        while ord(vika) != 97:
             nro = ord(vika) + 1
             if nro == 123:
                 l[i-1] = chr(ord(str[i-1])+1)
+                l[i] = 'a' 
             else:
                 l[i] = chr(nro)
             str = "".join(l)
             tulos = increasing_straight(str) and kielletyt_kirjaimet(str) and double_letters(str)
+            print(str)
             if tulos:
-                print(str)
+                print(str, "jee")
             vika = str[i]
 
 
