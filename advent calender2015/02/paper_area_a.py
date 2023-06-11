@@ -1,8 +1,6 @@
 
 data = []
 
-
-
 def readfile():
     f = open("data.txt", "r")   # ULRD
     for rivi in f:

@@ -1,14 +1,11 @@
 
 data = []
 
-
-
 def readfile():
     f = open("data.txt", "r") 
     for rivi in f:
         rivi = rivi.strip()
         data.append(rivi)
-
 
 def laske():
 
@@ -22,7 +19,6 @@ def laske():
                 floor -= 1
 
     print(floor)
-
 
 
 readfile()
