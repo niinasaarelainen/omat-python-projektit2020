@@ -25,7 +25,7 @@ class Viisari:
         if pos not in self.historia:
             self.historia.append(pos)
         for p in self.historia:
-            pygame.draw.circle(naytto, BLUE, p, 2)
+            pygame.draw.circle(naytto, BLUE, p, 1)
 
 # END class Viisari     
 
@@ -39,10 +39,10 @@ naytto.fill(background_color)
 kello = pygame.time.Clock()
 
 viisarit = []
-viisarit.append(Viisari(13, -2 * math.pi / 4000, 1, 1, False))# pit, nopeus, alkuaika, paksuus, piirranko
-viisarit.append(Viisari(120, 2 * math.pi / 1000, 1, 1, False))   
-viisarit.append(Viisari(110, -2 * math.pi / 800, 1, 1, True))   # miinus =  vastapäivään
-viisarit.append(Viisari(40, -2 * math.pi / 500, 1, 1, True)) 
+viisarit.append(Viisari(13, -2 * math.pi / 1000, 1, 1, False))# pit, nopeus, alkuaika, paksuus, piirranko
+viisarit.append(Viisari(120, 2 * math.pi / 900, 1, 1, False))   
+viisarit.append(Viisari(110, -2 * math.pi / 400, 1, 1, True))   # miinus =  vastapäivään
+viisarit.append(Viisari(40, -2 * math.pi / 300, 1, 1, True)) 
 
 while True:
     for tapahtuma in pygame.event.get():
@@ -60,4 +60,4 @@ while True:
         alku_y = y
     
     pygame.display.flip()     
-    kello.tick(2000)
+    kello.tick(5000)
