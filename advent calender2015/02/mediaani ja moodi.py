@@ -29,6 +29,7 @@ def moodi_hash():
             montako_kutakin[n] = 1
     print(montako_kutakin)    
     montako_kutakin = sorted(montako_kutakin.items(), key=lambda x:x[1])
+    print("montako_kutakin", montako_kutakin)
     print("Yleisin luku on", montako_kutakin[-1][0])
 
     # EI NÄIN:

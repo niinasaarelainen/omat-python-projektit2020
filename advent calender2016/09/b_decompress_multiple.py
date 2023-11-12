@@ -32,8 +32,8 @@ def tutki(rivi):
             if "(" in rivi[uusi_alkoituskohta :]:                              
                 tutki(rivi[uusi_alkoituskohta :])
             else:
-                 print(rivi, len(rivi))
-                 print(decompressed)
+                print(rivi, len(rivi))
+                print(decompressed)
 
 readfile()
 tutki(data[0])

@@ -3,7 +3,7 @@ data = []
 
 
 def readfile():
-    f = open("data.txt", "r") 
+    f = open("data_1.txt", "r") 
     for rivi in f:
         data.append(rivi.strip())
 
@@ -17,6 +17,7 @@ def tutki():
         while True:
             if rivi[i] == ")":     # A(1x5)BC
                 ohje_alkanut = False
+                print("ohje", ohje)
                 montako_kirjainta, montako_kertaa = ohje.split("x")
                 kerataan_sanaa = ""
                 for montako in range(int(montako_kirjainta)):
@@ -37,7 +38,7 @@ def tutki():
             else:
                 break
 
-        print(decompressed, len(decompressed))
+        #print(decompressed, len(decompressed))
 
 
 readfile()
