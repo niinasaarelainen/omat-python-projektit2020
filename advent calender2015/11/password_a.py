@@ -1,6 +1,7 @@
 passw = "hepxcrrz"   # oikea
-passw = "abcdefgh"
-passw = "abcvvxyz"
+passw = "hepxxyzz"
+#passw = "vvxzzabc"   # ok
+#passw = "abbcegjk"
 passw_uusi = ""
 data = []
 
@@ -37,30 +38,51 @@ def double_letters(str):
     if pareja >= 2:
         return True
 
+ 
+
+
 def increment(str):
     l = list(str)
-    for i in range(len(str)-1, 0, -1):
-        vika = str[i]
-        while ord(vika) != 97:
-            nro = ord(vika) + 1
-            if nro == 123:
-                l[i-1] = chr(ord(str[i-1])+1)
-                l[i] = 'a' 
+    test_counter = 0
+    ind = len(str) - 1
+    while True:        
+        skrollataan = str[ind]        
+        while  test_counter < 11111970:
+            nro = ord(skrollataan) + 1
+            skrollataan = chr(nro)
+            ind_temp = ind
+            if  nro == 123:
+                while nro == 123:   # 122 = z  
+                    nro = ord(str[ind_temp-1])+1
+                    if nro == 123:
+                        l[ind_temp-1] = 'a' 
+                    else: 
+                        l[ind_temp-1] = chr(nro)
+                    l[ind_temp] = 'a' 
+                    skrollataan = "a"
+                    ind_temp -= 1
             else:
-                l[i] = chr(nro)
+                l[ind] = chr(nro)
             str = "".join(l)
             tulos = increasing_straight(str) and kielletyt_kirjaimet(str) and double_letters(str)
-            print(str)
+            #print(str)
             if tulos:
                 print(str, "jee")
-            vika = str[i]
+                return
+            test_counter += 1            
+            
+        ind -= 1
+            
+
 
 
 
 
 increment(passw)
+"""
 print(increasing_straight(passw))
 print(kielletyt_kirjaimet(passw))
 print(double_letters(passw))
 tulos = increasing_straight(passw) and kielletyt_kirjaimet(passw) and double_letters(passw)
-print(passw, tulos)
+print(passw, tulos) """
+print(chr(122))

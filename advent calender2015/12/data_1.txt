@@ -1,6 +1,4 @@
-cpy 41 a
-inc a
-inc a
-dec a
-jnz a 2
-dec a
+[1,2,3] 
+[1,{"c":"red","b":2},3]
+{"d":"red","e":[1,2,3,4],"f":5}
+[1,"red",5]

@@ -1,174 +1,300 @@
-rect 1x1
-rotate row y=0 by 10
-rect 1x1
-rotate row y=0 by 10
-rect 1x1
-rotate row y=0 by 5
-rect 1x1
-rotate row y=0 by 3
-rect 2x1
-rotate row y=0 by 4
-rect 1x1
-rotate row y=0 by 3
-rect 1x1
-rotate row y=0 by 2
-rect 1x1
-rotate row y=0 by 3
-rect 2x1
-rotate row y=0 by 2
-rect 1x1
-rotate row y=0 by 3
-rect 2x1
-rotate row y=0 by 5
-rotate column x=0 by 1
-rect 4x1
-rotate row y=1 by 12
-rotate row y=0 by 10
-rotate column x=0 by 1
-rect 9x1
-rotate column x=7 by 1
-rotate row y=1 by 3
-rotate row y=0 by 2
-rect 1x2
-rotate row y=1 by 3
-rotate row y=0 by 1
-rect 1x3
-rotate column x=35 by 1
-rotate column x=5 by 2
-rotate row y=2 by 5
-rotate row y=1 by 5
-rotate row y=0 by 2
-rect 1x3
-rotate row y=2 by 8
-rotate row y=1 by 10
-rotate row y=0 by 5
-rotate column x=5 by 1
-rotate column x=0 by 1
-rect 6x1
-rotate row y=2 by 7
-rotate row y=0 by 5
-rotate column x=0 by 1
-rect 4x1
-rotate column x=40 by 2
-rotate row y=2 by 10
-rotate row y=0 by 12
-rotate column x=5 by 1
-rotate column x=0 by 1
-rect 9x1
-rotate column x=43 by 1
-rotate column x=40 by 2
-rotate column x=38 by 1
-rotate column x=15 by 1
-rotate row y=3 by 35
-rotate row y=2 by 35
-rotate row y=1 by 32
-rotate row y=0 by 40
-rotate column x=32 by 1
-rotate column x=29 by 1
-rotate column x=27 by 1
-rotate column x=25 by 1
-rotate column x=23 by 2
-rotate column x=22 by 1
-rotate column x=21 by 3
-rotate column x=20 by 1
-rotate column x=18 by 3
-rotate column x=17 by 1
-rotate column x=15 by 1
-rotate column x=14 by 1
-rotate column x=12 by 1
-rotate column x=11 by 3
-rotate column x=10 by 1
-rotate column x=9 by 1
-rotate column x=8 by 2
-rotate column x=7 by 1
-rotate column x=4 by 1
-rotate column x=3 by 1
-rotate column x=2 by 1
-rotate column x=0 by 1
-rect 34x1
-rotate column x=44 by 1
-rotate column x=24 by 1
-rotate column x=19 by 1
-rotate row y=1 by 8
-rotate row y=0 by 10
-rotate column x=8 by 1
-rotate column x=7 by 1
-rotate column x=6 by 1
-rotate column x=5 by 2
-rotate column x=3 by 1
-rotate column x=2 by 1
-rotate column x=1 by 1
-rotate column x=0 by 1
-rect 9x1
-rotate row y=0 by 40
-rotate column x=43 by 1
-rotate row y=4 by 10
-rotate row y=3 by 10
-rotate row y=2 by 5
-rotate row y=1 by 10
-rotate row y=0 by 15
-rotate column x=7 by 2
-rotate column x=6 by 3
-rotate column x=5 by 2
-rotate column x=3 by 2
-rotate column x=2 by 4
-rotate column x=0 by 2
-rect 9x2
-rotate row y=3 by 47
-rotate row y=0 by 10
-rotate column x=42 by 3
-rotate column x=39 by 4
-rotate column x=34 by 3
-rotate column x=32 by 3
-rotate column x=29 by 3
-rotate column x=22 by 3
-rotate column x=19 by 3
-rotate column x=14 by 4
-rotate column x=4 by 3
-rotate row y=4 by 3
-rotate row y=3 by 8
-rotate row y=1 by 5
-rotate column x=2 by 3
-rotate column x=1 by 3
-rotate column x=0 by 2
-rect 3x2
-rotate row y=4 by 8
-rotate column x=45 by 1
-rotate column x=40 by 5
-rotate column x=26 by 3
-rotate column x=25 by 5
-rotate column x=15 by 5
-rotate column x=10 by 5
-rotate column x=7 by 5
-rotate row y=5 by 35
-rotate row y=4 by 42
-rotate row y=2 by 5
-rotate row y=1 by 20
-rotate row y=0 by 45
-rotate column x=48 by 5
-rotate column x=47 by 5
-rotate column x=46 by 5
-rotate column x=43 by 5
-rotate column x=41 by 5
-rotate column x=38 by 5
-rotate column x=37 by 5
-rotate column x=36 by 5
-rotate column x=33 by 1
-rotate column x=32 by 5
-rotate column x=31 by 5
-rotate column x=30 by 1
-rotate column x=28 by 5
-rotate column x=27 by 5
-rotate column x=26 by 5
-rotate column x=23 by 1
-rotate column x=22 by 5
-rotate column x=21 by 5
-rotate column x=20 by 1
-rotate column x=17 by 5
-rotate column x=16 by 5
-rotate column x=13 by 1
-rotate column x=12 by 3
-rotate column x=7 by 5
-rotate column x=6 by 5
-rotate column x=3 by 1
-rotate column x=2 by 3
+"qxfcsmh"
+"ffsfyxbyuhqkpwatkjgudo"
+"byc\x9dyxuafof\\\xa6uf\\axfozomj\\olh\x6a"
+"jtqvz"
+"uzezxa\"jgbmojtwyfbfguz"
+"vqsremfk\x8fxiknektafj"
+"wzntebpxnnt\"vqndz\"i\x47vvjqo\""
+"higvez\"k\"riewqk"
+"dlkrbhbrlfrp\\damiauyucwhty"
+"d\""
+"qlz"
+"ku"
+"yy\"\"uoao\"uripabop"
+"saduyrntuswlnlkuppdro\\sicxosted"
+"tj"
+"zzphopswlwdhebwkxeurvizdv"
+"xfoheirjoakrpofles\"nfu"
+"q\xb7oh\"p\xce\"n"
+"qeendp\"ercwgywdjeylxcv"
+"dcmem"
+"\"i\x13r\"l"
+"ikso\xdcbvqnbrjduh\"uqudzki\xderwk"
+"wfdsn"
+"pwynglklryhtsqbno"
+"hcoj\x63iccz\"v\"ttr"
+"zf\x23\\hlj\\kkce\\d\\asy\"yyfestwcdxyfj"
+"xs"
+"m\"tvltapxdvtrxiy"
+"bmud"
+"k\"a"
+"b\"oas"
+"\"yexnjjupoqsxyqnquy\"uzfdvetqrc"
+"vdw\xe3olxfgujaj"
+"qomcxdnd\"\\cfoe\""
+"fpul"
+"m\"avamefphkpv"
+"vvdnb\\x\\uhnxfw\"dpubfkxfmeuhnxisd"
+"hey\\"
+"ldaeigghlfey"
+"eure\"hoy\xa5iezjp\\tm"
+"yygb\"twbj\\r\"\x10gmxuhmp\""
+"weirebp\x39mqonbtmfmd"
+"ltuz\\hs\"e"
+"ysvmpc"
+"g\x8amjtt\"megl\"omsaihifwa"
+"yimmm"
+"iiyqfalh"
+"cwknlaaf"
+"q\x37feg\xc6s\"xx"
+"uayrgeurgyp\\oi"
+"xhug\"pt\"axugllbdiggzhvy"
+"kdaarqmsjfx\xc3d"
+"\"vkwla"
+"d\""
+"tmroz\"bvfinxoe\\mum\"wmm"
+"\"n\"bbswxne\\p\\yr\"qhwpdd"
+"skzlkietklkqovjhvj\xfe"
+"pbg\\pab\"bubqaf\"obzcwxwywbs\\dhtq"
+"xxjidvqh\"lx\\wu\"ij"
+"daef\x5fe\x5b\\kbeeb\x13qnydtboof"
+"ogvazaqy\"j\x73"
+"y"
+"n\"tibetedldy\\gsamm\"nwu"
+"wldkvgdtqulwkad"
+"dpmxnj"
+"twybw\"cdvf\"mjdajurokbce"
+"ru\"\\lasij\"i"
+"roc\\vra\\lhrm"
+"pbkt\x60booz\"fjlkc"
+"j\x4dytvjwrzt"
+"\\uiwjkniumxcs"
+"cbhm\"nexccior\"v\"j\"nazxilmfp\x47"
+"qdxngevzrlgoq"
+"\"lrzxftytpobsdfyrtdqpjbpuwmm\x9e"
+"mdag\x0asnck\xc2ggj\"slb\"fjy"
+"wyqkhjuazdtcgkcxvjkpnjdae"
+"aixfk\xc0iom\x21vueob"
+"dkiiakyjpkffqlluhaetires"
+"ysspv\"lysgkvnmwbbsy"
+"gy\"ryexcjjxdm\"xswssgtr"
+"s"
+"ddxv"
+"qwt\"\x27puilb\"pslmbrsxhrz"
+"qdg\xc9e\\qwtknlvkol\x54oqvmchn\\"
+"lvo"
+"b"
+"fk\"aa\"\"yenwch\\\\on"
+"srig\x63hpwaavs\\\x80qzk\"xa\"\xe6u\\wr"
+"yxjxuj\"ghyhhxfj\"\xa6qvatre"
+"yoktqxjxkzrklkoeroil"
+"\"jfmik\""
+"smgseztzdwldikbqrh\""
+"jftahgctf\"hoqy"
+"tcnhicr\"znpgckt\"ble"
+"vqktnkodh\"lo\"a\\bkmdjqqnsqr"
+"ztnirfzqq"
+"s"
+"xx"
+"iqj\"y\\hqgzflwrdsusasekyrxbp\\ad"
+"\\xzjhlaiynkioz\"\"bxepzimvgwt"
+"s\x36rbw"
+"mniieztwrisvdx"
+"atyfxioy\x2b\\"
+"irde\x85\x5cvbah\\jekw\"ia"
+"bdmftlhkwrprmpat\"prfaocvp"
+"w\\k"
+"umbpausy"
+"zfauhpsangy"
+"p\"zqyw"
+"wtztypyqvnnxzvlvipnq\"zu"
+"deicgwq\\oqvajpbov\\or\"kgplwu"
+"mbzlfgpi\\\\zqcidjpzqdzxityxa"
+"lfkxvhma"
+"\xf2yduqzqr\"\\fak\"p\"n"
+"mpajacfuxotonpadvng"
+"anb\\telzvcdu\\a\xf2flfq"
+"lrs\"ebethwpmuuc\"\x86ygr"
+"qmvdbhtumzc\"ci"
+"meet"
+"yopg\x0fdxdq\"h\\ugsu\xffmolxjv"
+"uhy"
+"fzgidrtzycsireghazscvmwcfmw\\t"
+"cqohkhpgvpru"
+"bihyigtnvmevx\"xx"
+"xz"
+"zofomwotzuxsjk\"q\"mc\"js\"dnmalhxd"
+"\\ktnddux\\fqvt\"ibnjntjcbn"
+"ia"
+"htjadnefwetyp\xd5kbrwfycbyy"
+"\"\\hkuxqddnao"
+"meqqsz\x83luecpgaem"
+"cvks\x87frvxo\"svqivqsdpgwhukmju"
+"sgmxiai\\o\"riufxwjfigr\xdf"
+"fgywdfecqufccpcdn"
+"faghjoq\x28abxnpxj"
+"zuppgzcfb\"dctvp\"elup\"zxkopx"
+"xqs\x45xxdqcihbwghmzoa"
+"anbnlp\\cgcvm\"hc"
+"xf\"fgrngwzys"
+"nrxsjduedcy\x24"
+"\x71sxl\"gj\"sds\"ulcruguz\\t\\ssvjcwhi"
+"jhj\"msch"
+"qpovolktfwyiuyicbfeeju\x01"
+"nkyxmb\"qyqultgt\"nmvzvvnxnb"
+"ycsrkbstgzqb\"uv\\cisn"
+"s"
+"ueptjnn\"\"sh"
+"lp\"z\"d\"mxtxiy"
+"yzjtvockdnvbubqabjourf\"k\"uoxwle"
+"\x82\"wqm\""
+"\xb5cwtuks\x5fpgh"
+"wd"
+"tbvf"
+"ttbmzdgn"
+"vfpiyfdejyrlbgcdtwzbnm"
+"uc"
+"otdcmhpjagqix"
+"\\\xb1qso\"s"
+"scowax"
+"behpstjdh\xccqlgnqjyz\"eesn"
+"r\xe1cbnjwzveoomkzlo\\kxlfouhm"
+"jgrl"
+"kzqs\\r"
+"ctscb\x7fthwkdyko\"\x62pkf\"d\xe6knmhurg"
+"tc\"kw\x3ftt"
+"bxb\x5ccl"
+"jyrmfbphsldwpq"
+"jylpvysl\"\"juducjg"
+"en\\m\"kxpq\"wpb\\\""
+"madouht\"bmdwvnyqvpnawiphgac\""
+"vuxpk\"ltucrw"
+"aae\x60arr"
+"ttitnne\"kilkrgssnr\xfdurzh"
+"oalw"
+"pc\"\"gktkdykzbdpkwigucqni\"nxiqx"
+"dbrsaj"
+"bgzsowyxcbrvhtvekhsh\"qgd"
+"kudfemvk\"\"\"hkbrbil\"chkqoa"
+"zjzgj\\ekbhyfzufy"
+"\\acos\"fqekuxqzxbmkbnn\x1ejzwrm"
+"elxahvudn\"txtmomotgw"
+"\x2eoxmwdhelpr\"cgi\xf7pzvb"
+"eapheklx"
+"hfvma\"mietvc\"tszbbm\"czex"
+"h\"iiockj\\\xc1et"
+"d\"rmjjftm"
+"qlvhdcbqtyrhlc\\"
+"yy\"rsucjtulm\"coryri\"eqjlbmk"
+"tv"
+"r\"bfuht\\jjgujp\""
+"kukxvuauamtdosngdjlkauylttaokaj"
+"srgost\"\"rbkcqtlccu\x65ohjptstrjkzy"
+"yxwxl\\yjilwwxffrjjuazmzjs"
+"dxlw\\fkstu\"hjrtiafhyuoh\"sewabne"
+"\x88sj\"v"
+"rfzprz\xec\"oxqclu\"krzefp\\q"
+"cfmhdbjuhrcymgxpylllyvpni"
+"ucrmjvmimmcq\x88\xd9\"lz"
+"lujtt\""
+"gvbqoixn\"pmledpjmo\"flydnwkfxllf"
+"dvxqlbshhmelsk\x8big\"l"
+"mx\x54lma\x8bbguxejg"
+"\x66jdati\xeceieo"
+"\"iyyupixei\x54ff"
+"xohzf\"rbxsoksxamiu"
+"vlhthspeshzbppa\x4drhqnohjop\"\"mfjd"
+"f\"tvxxla\"vurian\"\"idjq\x3aptm\xc3olep"
+"gzqz"
+"kbq\\wogye\\altvi\\hbvmodny"
+"j\xd8"
+"ofjozdhkblvndl"
+"hbitoupimbawimxlxqze"
+"ypeleimnme"
+"xfwdrzsc\\oxqamawyizvi\\y"
+"enoikppx\xa1ixe\"yo\"gumye"
+"fb"
+"vzf"
+"zxidr"
+"cu\x31beirsywtskq"
+"lxpjbvqzztafwezd"
+"\\jyxeuo\x18bv"
+"b\"vawc\"p\\\\giern\"b"
+"odizunx\"\"t\\yicdn\"x\"sdiz"
+"\"\"tebrtsi"
+"ctyzsxv\xa6pegfkwsi\"tgyltaakytccb"
+"htxwbofchvmzbppycccliyik\xe5a"
+"ggsslefamsklezqkrd"
+"rcep\"fnimwvvdx\"l"
+"zyrzlqmd\x12egvqs\\llqyie"
+"\x07gsqyrr\\rcyhyspsvn"
+"butg\""
+"gb"
+"gywkoxf\"jsg\\wtopxvumirqxlwz"
+"rj\"ir\"wldwveair\x2es\"dhjrdehbqnzl"
+"ru\"elktnsbxufk\\ejufjfjlevt\\lrzd"
+"\"widsvok"
+"oy\"\x81nuesvw"
+"ay"
+"syticfac\x1cfjsivwlmy\"pumsqlqqzx"
+"m"
+"rjjkfh\x78cf\x2brgceg\"jmdyas\"\\xlv\xb6p"
+"tmuvo\"\x3ffdqdovjmdmkgpstotojkv\"as"
+"jd\\ojvynhxllfzzxvbn\"wrpphcvx"
+"pz"
+"\"twr"
+"n\\hdzmxe\"mzjjeadlz"
+"fb\"rprxuagvahjnri"
+"rfmexmjjgh\\xrnmyvnatrvfruflaqjnd"
+"obbbde\"co\"qr\"qpiwjgqahqm\\jjp\""
+"vpbq\"\"y\"czk\\b\x52ed\"lnzepobp"
+"syzeajzfarplydipny\"y\"\xe8ad"
+"mpyodwb"
+"\x47rakphlqqptd"
+"wa\"oj\"aiy"
+"a"
+"ropozx"
+"q\x51nbtlwa"
+"etukvgx\\jqxlkq"
+"\"tp\"rah\"pg\"s\"bpdtes\\tkasdhqd"
+"dn\"qqpkikadowssb\xcah\"dzpsf\\ect\"jdh"
+"pxunovbbrrn\\vullyn\"bno\"\"\"myfxlp\""
+"qaixyazuryvkmoulhcqaotegfj\\mpzm"
+"bvfrbicutzbjwn\\oml\"cf\"d\"ezcpv\"j"
+"rmbrdtneudemigdhelmb"
+"aq\\aurmbhy"
+"wujqvzw"
+"gf\"tssmvm\"gm\"hu\x9a\xb7yjawsa"
+"hrhqqxow\xe2gsydtdspcfqy\"zw\\ou"
+"ianwwf\\yko\\tdujhhqdi"
+"xylz\"zpvpab"
+"lwuopbeeegp"
+"aoop\x49jhhcexdmdtun"
+"\\\\mouqqcsgmz"
+"tltuvwhveau\x43b\"ymxjlcgiymcynwt"
+"gsugerumpyuhtjljbhrdyoj"
+"lnjm\xb8wg\"ajh"
+"zmspue\"nfttdon\\b\"eww"
+"\"w\x67jwaq\x7ernmyvs\\rmdsuwydsd\"th"
+"ogtgvtlmcvgllyv"
+"z\"fqi\"rvddoehrciyl"
+"yustxxtot\"muec\"xvfdbzunzvveq"
+"mqslw"
+"txqnyvzmibqgjs\xb6xy\x86nfalfyx"
+"kzhehlmkholov"
+"plpmywcnirrjutjguosh\\"
+"pydbnqofv\"dn\\m"
+"aegqof"
+"eambmxt\\dxagoogl\\zapfwwlmk"
+"afbmqitxxqhddlozuxcpjxgh"
+"vgts"
+"bfdpqtoxzzhmzcilehnflna"
+"s\"idpz"
+"\xcfhgly\"nlmztwybx\"ecezmsxaqw"
+"aackfgndqcqiy"
+"\x22unqdlsrvgzfaohoffgxzfpir\"s"
+"abh\"ydv\"kbpdhrerl"
+"bdzpg"
+"ekwgkywtmzp"
+"wtoodejqmrrgslhvnk\"pi\"ldnogpth"
+"njro\x68qgbx\xe4af\"\\suan"
