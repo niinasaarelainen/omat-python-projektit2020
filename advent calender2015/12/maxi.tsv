@@ -1,0 +1,22 @@
+	metropolitan					atlantic 					central					pacific			
+	Parta	Hapan	Rudolf			Parta	Hapan	Rudolf			Parta	Hapan	Rudolf			Parta	Hapan	Rudolf	
+																			
+	NJD	NYR	Car	NYR		TOR	TOR	Tor	BOS		DAL	DAL	Col	COL		EDM	LV	LV	LV
+	CAR	CAR	NJD	WAS		TB	BOS	Flo	TOR		COL	COL	Dal	WIN		LA	EDM	Edm	VAN
+	NYR	NJD	NYR	CAR		FLO	FLO	Buf	FLO		MIN	MIN	Min	DAL		LV	SEA	Sea	LA
+	PIT	NYI	PIT	NYI		BUF	DET	Bos	DET		STL	NAS	Nas	STL		CAL	VAN	Cal	SEA
+	NYI	PIT	PHI	PHI		OTT	TB	TB	TB		WIN	WIN	Win	NAS		VAN	LA	LA	CAL
+	CBJ	PHI	NYI	PIT		BOS	BUF	Ott	BUF		ARI	STL	Chi	ARI		SEA	CAL	VAN	ANA
+	WAS	WAS	CBJ	NJD		DET	OTT	Det	MON		NAS	ARI	Ari	MIN		ANA	SJ	SJ	EDM
+	PHI	CBJ	Was	CBJ		MON	MON	Mon	OTT		CHI	CHI	STL	CHI		SJ	ANA	ANA	SJ
+																			
+oikein	0	3	1		oikein	1	4	1		oikein	3	1	1		oikein	1	1	1	
+yhden päässä	3	3	1		yhden päässä	2	4	3		yhden päässä	1	4	3		yhden päässä	3	3	3	
+																			
+	0	6	2			2	8	2			6	2	2			2	2	2	
+	3	3	1			2	4	3			1	4	3			3	3	3	
+	3	9	3			4	12	5			7	6	5			5	5	5	
+																			
+hapan	32																		
+rudolf	18																		
+parta	19																		
