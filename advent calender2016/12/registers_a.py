@@ -3,17 +3,17 @@ data = []
 regs = {}
 
 def readfile():
-    f = open("data.txt", "r") 
+    f = open("data_1.txt", "r") 
     for rivi in f:
         sp = rivi.strip().split(" ")
         data.append(sp)
 
 def lue():
-    f = open("output.txt", "w") 
+    #f = open("output.txt", "w") 
     i = 0
     while i < len(data):
         rivi = (data[i])
-        #print(rivi)
+        print(rivi)
         if "cpy" in rivi:
             x = rivi[1]
             if x.isdigit():
@@ -45,6 +45,7 @@ def lue():
         f.write(str(i)+", ")   # +1 vastaa .txt:n rivinumeroita suoraan """
 
 
+print("moi")
 readfile()
 lue()
-print(regs)
+print("regs", regs)

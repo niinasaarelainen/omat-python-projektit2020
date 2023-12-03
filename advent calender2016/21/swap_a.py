@@ -80,3 +80,4 @@ def lue():
 
 readfile()
 lue()     # ei cagbefdh   chaebgfd
+print(data)
