@@ -55,4 +55,3 @@ teeTietorakenteet()
 montakoOikein()
 kayLapi()
 print( sum([v for v in instances_of_cards.values()]))
-
