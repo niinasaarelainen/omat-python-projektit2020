@@ -53,18 +53,9 @@ def corresponds():
         kuinka_kauan_mennyt = 0
         print(seeds_nykyiset)
         seeds_uudet = []
-        for seed in seeds_nykyiset:
-            print("seed", seed)
-            seed_ja_source = source_rang_st + [seed]
-            print(sorted(seed_ja_source))
-            index = seed_ja_source.index(seed)
-            index = source_rang_st.index(seed_ja_source[index-1])
-            print(index)
-
-            #laske  onko yllä oleva voimassa, sitten erotus
-            # tai jos ei voimassa, seeds_uudet.append(seed)  
-
-            """
+        for nro in range(max(seeds_nykyiset)+1):
+            print(nro)
+            if nro in source_rang_st:
                 index = source_rang_st.index(nro)
                 vastaa = dest_rang_st[index]
                 kuinka_kauan = range_length[index]
@@ -78,7 +69,7 @@ def corresponds():
             elif nro in seeds_nykyiset:
                     seeds_uudet.append(nro)  
 
-        seeds_nykyiset = copy.deepcopy(seeds_uudet) """
+        seeds_nykyiset = copy.deepcopy(seeds_uudet)
 
 
 
