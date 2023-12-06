@@ -45,17 +45,16 @@ def kayLapi():
 def corresponds(): 
     global seeds_nykyiset
     for vaihe_nro in range(len(dest_rang_st_ALL)):
-        print(vaihe_nro)  
         dest_rang_st = dest_rang_st_ALL[vaihe_nro]      
         source_rang_st = source_rang_st_ALL[vaihe_nro]    # näihin 1 map kerrallaan
         range_length = range_length_ALL[vaihe_nro]
 
         kuinka_kauan = 0
         kuinka_kauan_mennyt = 0
-        #print(seeds_nykyiset)
+        print(seeds_nykyiset)
         seeds_uudet = []
-        for nro in range(min(min(seeds_nykyiset), min(source_rang_st)), max(seeds_nykyiset)+1):
-            
+        for nro in range(max(seeds_nykyiset)+1):
+            print(nro)
             if nro in source_rang_st:
                 index = source_rang_st.index(nro)
                 vastaa = dest_rang_st[index]

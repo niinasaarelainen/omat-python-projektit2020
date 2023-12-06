@@ -2,6 +2,7 @@ import copy
 
 data = []
 seeds_nykyiset = [79, 14, 55, 13]
+seeds_nykyiset = [81, 53, 57, 52]
 #seeds_nykyiset = [280775197,7535297,3229061264,27275209,77896732,178275214,2748861189,424413807,3663093536,130341162,613340959,352550713,1532286286,1115055792,1075412586,241030710,3430371306,138606714,412141395,146351614]
 dest_rang_st = []      
 source_rang_st = []    # näihin 1 map kerrallaan
@@ -42,6 +43,7 @@ def kayLapi():
     source_rang_st_ALL.append(source_rang_st)   # näihin 7 mappia, kukin oma list
     range_length_ALL.append(range_length)
 
+
 def corresponds(): 
     global seeds_nykyiset
     for vaihe_nro in range(len(dest_rang_st_ALL)):
@@ -50,35 +52,38 @@ def corresponds():
         range_length = range_length_ALL[vaihe_nro]
 
         kuinka_kauan = 0
-        kuinka_kauan_mennyt = 0
         print(seeds_nykyiset)
         seeds_uudet = []
         for seed in seeds_nykyiset:
-            print("seed", seed)
-            seed_ja_source = source_rang_st + [seed]
-            print(sorted(seed_ja_source))
-            index = seed_ja_source.index(seed)
-            index = source_rang_st.index(seed_ja_source[index-1])
-            print(index)
+            print()
+            # lähin edeltäjä:
+            etaisyydet = []
+            for s in source_rang_st:
+                if seed -s >= 0:
+                    etaisyydet.append(s)
+            print("max(etaisyydet))", max(etaisyydet))
+            tulos =  max(etaisyydet)
+
+            index = source_rang_st.index(tulos)
+            print("index", index)
 
             #laske  onko yllä oleva voimassa, sitten erotus
             # tai jos ei voimassa, seeds_uudet.append(seed)  
 
-            """
-                index = source_rang_st.index(nro)
-                vastaa = dest_rang_st[index]
-                kuinka_kauan = range_length[index]
-                kuinka_kauan_mennyt = 0
+           
+            alku = source_rang_st[index]
+            vastaa = dest_rang_st[index]
+            kuinka_kauan = range_length[index]
+            seedin_lopetusLuku = alku + kuinka_kauan + 1
+            print("seed", seed, ", seedin_lopetusLuku", seedin_lopetusLuku)
+            
+            if seed >= alku and seed < seedin_lopetusLuku:
+                seeds_uudet.append(seed + (vastaa - alku))
+            else:
+                seeds_uudet.append(seed)  
 
-            if kuinka_kauan - kuinka_kauan_mennyt > 0:
-                #print(nro, vastaa + kuinka_kauan_mennyt)                
-                if nro  in seeds_nykyiset:
-                    seeds_uudet.append(vastaa + kuinka_kauan_mennyt)
-                kuinka_kauan_mennyt += 1            
-            elif nro in seeds_nykyiset:
-                    seeds_uudet.append(nro)  
-
-        seeds_nykyiset = copy.deepcopy(seeds_uudet) """
+        seeds_nykyiset = copy.deepcopy(seeds_uudet) 
+        print("seeds_nykyiset", seeds_nykyiset)
 
 
 
