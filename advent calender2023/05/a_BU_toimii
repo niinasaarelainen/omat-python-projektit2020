@@ -16,7 +16,7 @@ range_length_ALL = []
 def readfile():
     #  50                98                2
     # dest rang st      source rang st     range length
-    f = open("data_1.txt", "r") 
+    f = open("data_1_small.txt", "r") 
     for rivi in f:
         data.append(rivi)   
 
@@ -56,6 +56,7 @@ def corresponds():
         seeds_uudet = []
         for nro in range(min(min(seeds_nykyiset), min(source_rang_st)), max(seeds_nykyiset)+1):
             
+            print(nro)
             if nro in source_rang_st:
                 index = source_rang_st.index(nro)
                 vastaa = dest_rang_st[index]
@@ -68,7 +69,9 @@ def corresponds():
                     seeds_uudet.append(vastaa + kuinka_kauan_mennyt)
                 kuinka_kauan_mennyt += 1            
             elif nro in seeds_nykyiset:
-                    seeds_uudet.append(nro)  
+                seeds_uudet.append(nro)  
+
+            #paljonko voidaan hypätä
 
         seeds_nykyiset = copy.deepcopy(seeds_uudet)
 
@@ -77,6 +80,7 @@ def corresponds():
 readfile()
 kayLapi()
 print(dest_rang_st, source_rang_st, range_length)
+print("seeds", seeds_nykyiset)
 corresponds()
 print(seeds_nykyiset)
 print("vastaus:", min(seeds_nykyiset))

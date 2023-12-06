@@ -2,6 +2,7 @@ import copy
 
 data = []
 seeds_nykyiset = [79, 14, 55, 13]
+seeds_nykyiset = [57, 81, 14, 13]
 #seeds_nykyiset = [280775197,7535297,3229061264,27275209,77896732,178275214,2748861189,424413807,3663093536,130341162,613340959,352550713,1532286286,1115055792,1075412586,241030710,3430371306,138606714,412141395,146351614]
 dest_rang_st = []      
 source_rang_st = []    # näihin 1 map kerrallaan
@@ -16,7 +17,7 @@ range_length_ALL = []
 def readfile():
     #  50                98                2
     # dest rang st      source rang st     range length
-    f = open("data_1.txt", "r") 
+    f = open("data_1_small.txt", "r") 
     for rivi in f:
         data.append(rivi)   
 
@@ -44,30 +45,52 @@ def kayLapi():
 
 def corresponds(): 
     global seeds_nykyiset
+    
     for vaihe_nro in range(len(dest_rang_st_ALL)):
+        seeds_kasitelty = []
         dest_rang_st = dest_rang_st_ALL[vaihe_nro]      
         source_rang_st = source_rang_st_ALL[vaihe_nro]    # näihin 1 map kerrallaan
         range_length = range_length_ALL[vaihe_nro]
 
         kuinka_kauan = 0
         kuinka_kauan_mennyt = 0
-        print(seeds_nykyiset)
+        #print(seeds_nykyiset)
         seeds_uudet = []
-        for nro in range(max(seeds_nykyiset)+1):
-            print(nro)
-            if nro in source_rang_st:
-                index = source_rang_st.index(nro)
-                vastaa = dest_rang_st[index]
-                kuinka_kauan = range_length[index]
-                kuinka_kauan_mennyt = 0
+        nro  = min(source_rang_st) # 50    [98, 50]
+        nro_source  = min(source_rang_st)
+        while  nro <= max(seeds_nykyiset)+1:
+            
+            print("nro", nro)
+            seeds = [seed for seed in seeds_nykyiset if seed > nro]
+            if seeds != []:
+                pienin_seed = min(seeds)  # pienin seuraaja
+                
+            print("pienin_seed", pienin_seed)  # 55
 
-            if kuinka_kauan - kuinka_kauan_mennyt > 0:
+            
+            index = source_rang_st.index(nro_source)
+            vastaa = dest_rang_st[index]
+            kuinka_kauan = range_length[index]
+            kuinka_kauan_mennyt = pienin_seed - nro_source
+
+            if kuinka_kauan - kuinka_kauan_mennyt >= 0:
                 #print(nro, vastaa + kuinka_kauan_mennyt)                
-                if nro  in seeds_nykyiset:
+                if pienin_seed in seeds_nykyiset:
                     seeds_uudet.append(vastaa + kuinka_kauan_mennyt)
-                kuinka_kauan_mennyt += 1            
-            elif nro in seeds_nykyiset:
-                    seeds_uudet.append(nro)  
+                    seeds_nykyiset.remove(pienin_seed)
+                    kuinka_kauan_mennyt += pienin_seed - nro - 1   
+                    seeds_kasitelty.append(nro)  
+                    nro = pienin_seed
+                     
+            
+            #kuinka_kauan_mennyt += 1    
+                      
+            
+
+        # lopuksi ne jotka muutos-alueen ulkopuolella
+        for seed in seeds_nykyiset:
+            if seed not in seeds_kasitelty:
+                seeds_uudet.append(seed)  
 
         seeds_nykyiset = copy.deepcopy(seeds_uudet)
 
@@ -76,6 +99,7 @@ def corresponds():
 readfile()
 kayLapi()
 print(dest_rang_st, source_rang_st, range_length)
+print("seeds", seeds_nykyiset)
 corresponds()
 print(seeds_nykyiset)
 print("vastaus:", min(seeds_nykyiset))
