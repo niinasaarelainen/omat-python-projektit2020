@@ -4,7 +4,7 @@ luvut = 0
 
 
 def readfile():
-    f = open("data.txt", "r") 
+    f = open("data_1.txt", "r") 
     for rivi in f:
         data.append(rivi)
 
@@ -20,6 +20,7 @@ def summat():
             if rivi[ind].isdigit():
                 digits.append(rivi[ind])
             elif rivi[ind] in aloituskirjaimet:
+                #alkaa oikealla kirjaimella:
                 hitit = [sana for sana in luvut_kirj if sana[0] == rivi[ind]]
                 for hit in hitit:
                     if hit == rivi[ind: min(ind + len(hit), len(rivi))]:

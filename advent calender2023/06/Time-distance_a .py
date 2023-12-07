@@ -26,8 +26,8 @@ class Race:
     def waysToWin(self):
         self.ways_to_win = len([tulos for tulos in self.traveled if tulos > self.dist_record])
 
-
 ####  END  CLASS  RACE   ##############
+
 
 def readfile():   
     f = open("data.txt", "r")         
