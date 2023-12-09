@@ -23,15 +23,10 @@ def koodaa(hand):
 
 
 def rank(hand):
-    global samoja_lkm, samoja_cards
+    global samoja_lkm
     samoja_lkm = {}
-    samoja_cards = {}
 
     for card in hand:
-        if card not in samoja_cards:
-            samoja_cards[card] = [card]
-        else:
-            samoja_cards[card].append(card)
 
         if card not in samoja_lkm:
             samoja_lkm[card] = 1
@@ -65,9 +60,6 @@ def rank(hand):
     else:
         rankings[rank].append(hand)
 
-    #samoja_cards_all.append(samoja_cards)
-
-
 
 def samat_kadet():
     print(rankings)
@@ -95,11 +87,10 @@ for hand in hands:
 print(hands)
 
 print("\nrankings", rankings)
-#print("samoja_cards_all", samoja_cards_all)
 samat_kadet()
 print("\nrankings_tulos", rankings_tulos)
 
 tulot = []
 for hand in hands:
     tulot.append(hands[hand] * rankings_tulos[hand])
-print(sum(tulot))
+print(sum(tulot))   # 251927063

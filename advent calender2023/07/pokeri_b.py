@@ -5,12 +5,11 @@ koodi = {"A":"A", "K":"B", "Q":"C", "T":"E", "9":"F", "8":"G", "7":"H", "6":"I",
 hands = {}   
 rankings = {}
 samoja_lkm = {}
-samoja_cards = {}
 rankings_tulos = {}
 #hand = "T55J5"
 
 def readfile():   
-    f = open("data_1.txt", "r")         
+    f = open("data.txt", "r")         
     for rivi in f:
         sp = rivi.strip().split(" ")
         koodattu_kasi = koodaa(sp[0])
@@ -24,7 +23,7 @@ def koodaa(hand):
 
 
 def rank(hand):
-    global samoja_lkm, samoja_cards
+    global samoja_lkm
     samoja_lkm = {}
     samoja_cards = {}
     jokerit = 0
@@ -32,32 +31,22 @@ def rank(hand):
     for card in hand:
         if card == "N": 
             jokerit += 1
-            continue
-            
-        if card not in samoja_cards:  # tänne ei jokereita
-            samoja_cards[card] = [card]
-        else:
-            samoja_cards[card].append(card)
+            continue  
 
-        if card not in samoja_lkm:   # eikä tänne
+        if card not in samoja_lkm:   # ei tänne jokereita
             samoja_lkm[card] = 1
         else:
             samoja_lkm[card] += 1
 
     montako = [v for v in samoja_lkm.values()]
-    
-    #print(montako)
+
     if jokerit == 5:
         montako.append(5)
     else:
         isoin = max(montako)
         montako.remove(isoin)
         montako.append(isoin + jokerit)
-
-    if hand == "NNNNG":
-        print("NNNNG", montako)
-
-
+    
     #alustava ranking, ei ota kantaa samojen käsien väliseen paremm.
     if 5 in montako:
         rank = 1
@@ -82,19 +71,14 @@ def rank(hand):
     else:
         rankings[rank].append(hand)
 
-    #samoja_cards_all.append(samoja_cards)
-
-
 
 def samat_kadet():
-    #print(rankings)
 
     for rank in rankings:
         if len(rankings[rank]) > 1:
             rankings[rank] = sorted(rankings[rank])
             
     s = sorted(rankings.items(), key=lambda x: x[0])
-    #print(s)
     the_lista = []
     for item in s:
         #print("item", item)
@@ -109,7 +93,6 @@ def samat_kadet():
 readfile()
 for hand in hands:
     rank(hand)
-#print(hands) 
 
 """
 koodattu_kasi = koodaa(hand)
@@ -117,7 +100,6 @@ print(koodattu_kasi)     # EJJDJ    D = jokeri
 rank(koodattu_kasi) """
 
 #print("\nrankings", rankings)
-#print("samoja_cards_all", samoja_cards_all)
 samat_kadet()
 #print("\nrankings_tulos", rankings_tulos)
 
