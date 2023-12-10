@@ -7,19 +7,22 @@ vastaukset = 0
 
 
 def readfile():   
-    f = open("data_1.txt", "r")         
+    f = open("data.txt", "r")         
     for rivi in f:
-        data.append(rivi.strip().split(" "))
-    
+        data.append(rivi.strip().split(" "))    
 
 
 def luo_seq():
+    global sequence_ALL
     for rivi in data:
         sequence = []
+        sequence_ALL = []
         for i in rivi:
             if i != "":
                 sequence.append(int(i.strip()))
-        sequences.append(sequence)
+        valimatkat(sequence)
+        sequence_ALL_kaylapi()
+        #sequences.append(sequence)
 
     
 def valimatkat(sequence):
@@ -35,33 +38,35 @@ def valimatkat(sequence):
         matkat.append(vali)
 
     if uusinta:
-        print(matkat, "REKURSOI")
+        #print(matkat, "REKURSOI")
         valimatkat(matkat)
     else:
-        print(matkat, "YES")
-        #break 
+        pass
+        #print(matkat, "YES")
 
 def sequence_ALL_kaylapi():
     global vastaukset
     lisataan_seuraavaan = 0
     for seq in reversed(sequence_ALL):
-        seq.append(lisataan_seuraavaan + seq[-1])
-        lisataan_seuraavaan = seq[-1]
+        seq.insert(0, seq[0]- lisataan_seuraavaan)
+        lisataan_seuraavaan = seq[0]
         print("seq", seq)
         print("lisataan_seuraavaan", lisataan_seuraavaan)
 
-    vastaukset += sequence_ALL[0][-1] 
+    print(sequence_ALL[0][0] )
+    vastaukset += sequence_ALL[0][0] 
         
 
 
 
 readfile()
 luo_seq()
+"""
 for seq in sequences:
     print(sequence)
     valimatkat(seq)
-print(sequence_ALL)
+    #valimatkat([0])    TODO joku merkki seq välille
+print(sequence_ALL) """
 
-sequence_ALL_kaylapi()
 
 print("vastaus:", vastaukset )
