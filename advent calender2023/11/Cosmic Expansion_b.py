@@ -6,7 +6,7 @@ data_expanded2 = []
 data_numerot = []
 coordinates = {}
 
-times = 1000000 -1
+times =  1000000 -1
 
 
 def readfile():   
@@ -58,9 +58,9 @@ def unique_number():
 def pairs():
     sum = 0
     for k1 in coordinates:
-        for k2 in coordinates:
-            if k1 < k2:
-                sum += abs(coordinates[k1][0] - coordinates[k2][0]) + abs(coordinates[k1][1] - coordinates[k2][1])
+        for k2 in range(k1+1, len(coordinates) +1):
+            print(k1, k2)
+            sum += abs(coordinates[k1][0] - coordinates[k2][0]) + abs(coordinates[k1][1] - coordinates[k2][1])
     print(sum)
 
 
@@ -78,6 +78,6 @@ print(len(data_expanded2[0]))
 
 unique_number()
 print()
-#print(coordinates)
+print(coordinates)
 
 pairs()
