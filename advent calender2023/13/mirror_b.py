@@ -1,4 +1,3 @@
-
 data = []
 kuva = []
 tulos = 0

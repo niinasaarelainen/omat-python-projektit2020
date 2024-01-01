@@ -8,6 +8,7 @@ x_min = 0
 y_min = 0
 kuva = []
 
+
 def readfile():   
     f = open("data.txt", "r")         
     for rivi in f:
