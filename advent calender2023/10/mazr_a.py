@@ -8,7 +8,7 @@ ohje = ""
 
 
 def readfile():  
-    f = open("data_2.txt", "r")       # data_2 oikein  (8)   
+    f = open("data_1.txt", "r")       # data_2 oikein  (8)   
     for rivi in f:
         data.append(rivi.strip())
 
