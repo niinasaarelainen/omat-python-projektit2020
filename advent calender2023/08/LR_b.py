@@ -9,7 +9,7 @@ class StartingNode:
         self.nyky = node
 
 
-def readfile():   # a-kohta
+def readfile():  
     f = open("data.txt", "r")  
     for rivi in f:
         data.append(rivi.strip()) 

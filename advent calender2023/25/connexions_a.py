@@ -39,7 +39,7 @@ def disconnect(eka, toka):
 def groups(montako):
     oli_jo = []
     for key, values in connexions.items():
-        oli_jo.append(key)
+        #oli_jo.append(key)
         for monesko in range(montako):    
             #print(monesko)   
             #print(oli_jo)   
@@ -54,10 +54,12 @@ def groups(montako):
 
 
 def groups2(montako, key):
-    oli_jo = []
+    oli_jo = []    
     
-    oli_jo.append(key)
-    for monesko in range(montako):    
+    
+    for monesko in range(montako):  
+        oli_jo.append(key)
+        key = connexions[key][monesko]  
         #print(monesko)   
         #print(oli_jo)   
         while key not in oli_jo:
@@ -78,8 +80,12 @@ print(connexions)
 print()
 rerun_hash()
 orig_len = len(connexions)
-print(connexions)
+#print(connexions)
 
+groups2(4, "jqt")
+print() 
+groups(4)
+print() 
 groups2(4, "hfx") 
 disconnect("hfx", "pzl")
 groups2(3, "hfx") 
