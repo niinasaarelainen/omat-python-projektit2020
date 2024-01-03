@@ -38,8 +38,14 @@ def print_paths(row=0, col=0, s=""):
         return
         
     #recursively search each node below and to the right, and concatenate the current node to the running total.
-    print_paths(row, col+1, s + str(m[row][col]))
-    print_paths(row+1, col, s + str(m[row][col]))
+    if m[row][col] != 9 and #TODO ylittää nykyisen minimin == return !!!!!!!!!!!:
+        print_paths(row, col+1, s + str(m[row][col]))
+    else:
+        return
+    if m[row][col] != 9 :
+        print_paths(row+1, col, s + str(m[row][col]))
+    else:
+        return
 
 
 
@@ -51,6 +57,7 @@ def print_paths_mutkittelee(row=0, col=0, s="", ind_str=""):
 
         s += str(m[row][col]) #concatenate the final node onto the running total
         vastaukset.append(s)
+        print(s)
         return
         
     #If we overshot, no big deal, just don't count it among the solutions and return without printing.
