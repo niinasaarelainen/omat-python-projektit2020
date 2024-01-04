@@ -1,0 +1,26 @@
+def count_unique_paths(n, m):
+    # Create a cache for memoization to avoid recalculating paths
+    paths_cache = [[0] * m for _ in range(n)]
+
+    # Define the recursive function to compute number of paths to (x, y)
+    def compute_paths_to_xy(x, y):
+        if x == y == 0:
+            return 1
+
+        if paths_cache[x][y] == 0:
+            ways_top = 0 if x == 0 else compute_paths_to_xy(x - 1, y)
+            ways_left = 0 if y == 0 else compute_paths_to_xy(x, y - 1)
+            paths_cache[x][y] = ways_top + ways_left
+
+        return paths_cache[x][y]
+
+    # Calculate the number of paths to the bottom-right corner
+    return compute_paths_to_xy(n - 1, m - 1)
+
+
+print(count_unique_paths(2, 2))
+print(count_unique_paths(3, 3))
+print(count_unique_paths(100, 100))
+print(count_unique_paths(10, 10))
+
+

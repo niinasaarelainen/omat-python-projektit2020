@@ -7,8 +7,32 @@ m = [[1, 1, 3],
      [1, 2, 6],
      [1, 1, 1]]
 
-
 vastaukset = []
+
+from typing import List
+
+def min_path_sum(grid: List[List[int]]) -> int:
+    if not grid:
+        return 0
+    
+    m, n = len(grid), len(grid[0])
+
+    # column's 0th row sum
+    for j in range(1, n):
+        grid[0][j] = grid[0][j-1] + grid[0][j]
+
+    # row's 0th column sum
+    for i in range(1, m):
+        grid[i][0] = grid[i-1][0] + grid[i][0]
+
+    # computing rest of the grid
+    for i in range(1, m):
+        for j in range(1, n):
+            grid[i][j] = min(grid[i-1][j], grid[i][j-1]) + grid[i][j]
+
+    
+    return grid[-1][-1]
+
 
 def print_paths(row=0, col=0, s=""):
     
@@ -58,8 +82,10 @@ def print_paths_mutkittelee(row=0, col=0, s="", ind_str=""):
         print_paths_mutkittelee(row, col+1, s + str(m[row][col]), ind_str + str(ind[row][col]))
 
 
-print_paths_mutkittelee()  # oletusarvoilla
-print_paths()
+#print_paths_mutkittelee()  # oletusarvoilla
+#print_paths()
+
+min_path_sum()
 
 sums = []
 for v in vastaukset:
