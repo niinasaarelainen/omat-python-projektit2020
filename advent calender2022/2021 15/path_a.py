@@ -6,7 +6,7 @@ min_summa = 900
 summa_liaaniso = 910
 
 def readfile():  
-    f = open("data.txt", "r")         
+    f = open("data_1.txt", "r")         
     for rivi in f:
         rivi = rivi.strip()
         r = []

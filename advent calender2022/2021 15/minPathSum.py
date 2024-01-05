@@ -3,7 +3,7 @@ from typing import List
 m = []
 
 def readfile():  
-    f = open("data.txt", "r")         
+    f = open("data_oma2.txt", "r")       # oikea vastaus 21, mennään myös ylös ja vas.   
     for rivi in f:
         rivi = rivi.strip()
         r = []
@@ -20,8 +20,8 @@ def helper_4suuntaa(x, y, grid, cost):
     elif cost[x][y] != -1:
         return cost[x][y]
     else:
-        right, down = helper(x,y+1,grid,cost), helper(x+1,y,grid,cost), helper(x,y-1,grid,cost), helper(x-1,y,grid,cost)
-        cost[x][y] = min(right, down) + grid[x][y]
+        right, down, up, left = helper(x,y+1,grid,cost), helper(x+1,y,grid,cost), helper(x,y-1,grid,cost), helper(x-1,y,grid,cost)
+        cost[x][y] = min(right, left, down, up) + grid[x][y]
     return cost[x][y]
 
 def helper(x, y, grid, cost):
@@ -43,7 +43,9 @@ def minPathSum(grid):
     M, N = len(grid), len(grid[0])
     cost = [[-1]*N for _ in range(M)]
     cost[M-1][N-1] = grid[M-1][N-1]
-    return helper(0, 0, grid, cost)
+    return helper_4suuntaa(0, 0, grid, cost)    # poista 4suuntaa ??
+
+
 
 
 readfile()
