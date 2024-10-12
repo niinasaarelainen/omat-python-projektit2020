@@ -1,10 +1,11 @@
 data = []
 erikoismerkit = {}    # ymparykset on value
 erikoismerkit_rev = {}  # erikoismerkki on value
+tulos = 0
 
 
 def readfile():
-    f = open("data.txt", "r")         
+    f = open("data_1.txt", "r")         
     for rivi in f:
         data.append(rivi.strip())    
 
@@ -12,7 +13,7 @@ def readfile():
 def erikoismerkit_muistiin():
     for y in range(len(data)):
         for x in range(len(data[y])):
-            if not data[y][x].isdigit() and not data[y][x] == '.':
+            if data[y][x] == '*':
                 erikoismerkit[y, x] = [] # tänne myöhemmin 9 ympäröijää
 
 
@@ -51,16 +52,16 @@ def tutki():
 
 
 
-
 readfile()
 erikoismerkit_muistiin()
 ymparykset_muistiin()
-print(erikoismerkit)
-tutki()
 
-tasan_kaksi = [v for k, v in erikoismerkit.items() if len(v) == 2]
-tulos = 0
+print("erikoismerkit_rev", erikoismerkit_rev)
+tutki()
+print("erikoismerkit", erikoismerkit)
+
+tasan_kaksi = [v for v in erikoismerkit.values() if len(v) == 2]
 for x1, x2 in tasan_kaksi:
     tulos += x1 * x2
 
-print(tulos)
+print(tulos)  #   467835  75220503

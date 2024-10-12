@@ -5,7 +5,7 @@ montako_oikein = {}
 instances_of_cards = {}
 
 def readfile():
-    f = open("data.txt", "r") 
+    f = open("data_1.txt", "r") 
     for rivi in f:
         alku, loppu = rivi.strip().split(": ")   # alku turha
         data.append(loppu.strip().split(" | "))  
@@ -32,22 +32,25 @@ def montakoOikein():   # tehdään aluksi kerran
         instances_of_cards[ind + 1] = 1
 
 
-def kayLapi():  # kortit läpi, täältä kutsutaan seuraavaan funktiota
+def kayLapi():  # kortit läpi, täältä kutsutaan seuraavaa funktiota
     global montako_oikein
-    for ind in range(len(montako_oikein)):
-        print("Card"+str(ind +1))
-        #print(instances_of_cards)
-        uudet_kortit = [i+ind + 2 for i in range(montako_oikein[ind + 1])]        
+    print("montako_oikein", montako_oikein)    #  {1: 4, 2: 2, 3: 2, 4: 1, 5: 0, 6: 0}
+    for ind in range(len(montako_oikein)):     # tehdään 6 kertaa
+        #print("Card"+str(ind +1))
+        print("instances_of_cards", instances_of_cards)
+        uudet_kortit = [i+ind + 2 for i in range(montako_oikein[ind + 1])]    
+        print("uudet_kortit", uudet_kortit)    
         montakoOikein_apu(uudet_kortit)
 
 
-def montakoOikein_apu(uudet_kortit):    # REKURSIO !!!
+def montakoOikein_apu(uudet_kortit):        # REKURSIO !!!
     if uudet_kortit == []:
         return
     for card in uudet_kortit:
         instances_of_cards[card] += 1        
         uudet_kortit = [i+card + 1 for i in range(montako_oikein[card])]  
-        montakoOikein_apu(uudet_kortit)  # REKURSIO !!!
+        print(uudet_kortit)
+        montakoOikein_apu(uudet_kortit)      # REKURSIO !!!
         
 
 readfile()

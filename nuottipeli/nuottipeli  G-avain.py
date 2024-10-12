@@ -50,11 +50,12 @@ def main():
     pallo = Nuotti(min(alin_ja_ylin), max(alin_ja_ylin))
     pallo.arvo_nuotti()    
     vari = pallo.arvo_vari()
-    nykyinen_indeksi = pallo.arvottu_indeksi
-    midi_play(pallo.arvottu_indeksi, nykyinen_indeksi)                                                           
+    nykyinen_indeksi = pallo.arvottu_indeksi                                                          
     muunna_nappaimia = {pygame.K_z:"c", pygame.K_x: "d",  pygame.K_c: "e", pygame.K_v: "f", pygame.K_b: "g", 
     pygame.K_n: "a", pygame.K_m: "h", pygame.K_COMMA : "c", pygame.K_PERIOD: "d", 47: "e", pygame.K_RSHIFT: "f",}
                                                                                 # TODO: miksei K_MINUS toimi? Keyb. Suomi-asetus ?!?!
+    muunna_nappaimia_ind = {pygame.K_z:10, pygame.K_x: 9,  pygame.K_c: 8, pygame.K_v: 7, pygame.K_b: 6, 
+    pygame.K_n: 5, pygame.K_m: 4, pygame.K_COMMA : 3, pygame.K_PERIOD: 2, 47: 1, pygame.K_RSHIFT: 0,}
          
     while True:
         for tapahtuma in pygame.event.get(): 
@@ -75,7 +76,7 @@ def main():
                         vauhti += lisataanko_vauhtia(pisteet)
                         vaarin = False
                         pallo.arvo_nuotti()                        
-                        midi_play(pallo.arvottu_indeksi, nykyinen_indeksi)        # MIDI täällä
+                        midi_play(muunna_nappaimia_ind[tapahtuma.key], nykyinen_indeksi)        # MIDI täällä
                         nykyinen_indeksi = pallo.arvottu_indeksi   
                         vari = pallo.arvo_vari()                      
                     else:

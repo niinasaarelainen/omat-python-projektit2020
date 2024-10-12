@@ -1,11 +1,11 @@
 data = []
-ei_vieressa = 0
+vieressa = 0
 erikoismerkit = []
 ymparykset = []
 
 
 def readfile():
-    f = open("data.txt", "r")         
+    f = open("data_1.txt", "r")         
     for rivi in f:
         data.append(rivi.strip())    
 
@@ -27,7 +27,7 @@ def ymparykset_muistiin():
 
 
 def tutki():
-    global ei_vieressa, ymparykset
+    global vieressa, ymparykset
     
     for y in range(len(data)):
         muistiin = False
@@ -43,7 +43,7 @@ def tutki():
 
             if muistiin and luku_meneillaan != "":
                 print(int(luku_meneillaan))
-                ei_vieressa += int(luku_meneillaan)
+                vieressa += int(luku_meneillaan)
                 luku_meneillaan = ""             
                 muistiin = False
 
@@ -57,4 +57,4 @@ readfile()
 erikoismerkit_muistiin()
 ymparykset_muistiin()
 tutki()
-print(ei_vieressa)    # 509115
+print(vieressa)    # 509115

@@ -4,17 +4,17 @@ from yhteiset import *
 from nuotti_f import Nuotti
 from gameover import *
 
-    
+                #57 = a, 40 = ala-e
+midi_numbers = {0:57, 1:55, 2:53, 3:52, 4:50, 5:48, 6:47, 7:45, 8:43, 9:41, 10:40 } 
 
-def midi_play(n, nykyinen_indeksi):
-    #ei voi laskea systeemillä, esim. i+=2, koska välillä on puolisävelaskel välillä koko-
-    midi_numbers = {0:57, 1:55, 2:53, 3:52, 4:50, 5:48, 6:47, 7:45, 8:43, 9:41, 10:40 }    #57 = a, 40 = ala-e
+
+def midi_play(n, nykyinen_indeksi):       
     midi_out.note_off(midi_numbers[nykyinen_indeksi], 110)
     midi_out.note_on(midi_numbers[n], 110)
     
 
 def lisataanko_vauhtia(pisteet):
-    if pisteet % 15 == 0 and pisteet > 0:  #  0%11 == 0  
+    if pisteet % 11 == 0 and pisteet > 0:  
         return 20
     return 0
 
@@ -50,8 +50,7 @@ def main():
     pallo = Nuotti(min(alin_ja_ylin), max(alin_ja_ylin))  # koska f-avaimen f on g-avaimen d
     pallo.arvo_nuotti()    
     vari = pallo.arvo_vari()
-    nykyinen_indeksi = pallo.arvottu_indeksi
-    midi_play(pallo.arvottu_indeksi, nykyinen_indeksi)                                                           
+    nykyinen_indeksi = pallo.arvottu_indeksi                                                       
     muunna_nappaimia = {pygame.K_z:"c", pygame.K_x: "d",  pygame.K_c: "e", pygame.K_v: "f", pygame.K_b: "g", 
     pygame.K_n: "a", pygame.K_m: "h", pygame.K_COMMA : "c", pygame.K_PERIOD: "d", 47: "e", pygame.K_RSHIFT: "f",}
                                                                                 # TODO: miksei K_MINUS toimi? Keyb. Suomi-asetus ?!?!
@@ -86,7 +85,8 @@ def main():
         naytto.blit(f_avain, (11, 68))
         
         # anaaliin fisti
-        if not pallo.liiku():  
+        if not pallo.liiku(): 
+            midi_out.note_off(midi_numbers[nykyinen_indeksi], 110) 
             gameover(pisteet, fontti_iso, fontti_pieni, "hiscore_nuotti_f.txt")
             main()
 

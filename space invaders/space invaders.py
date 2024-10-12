@@ -119,8 +119,8 @@ pisteet = 0
 
 
 def midi_play():
-    midi_out.set_instrument(14)
-    rand = random.randint(53, 61)
+    midi_out.set_instrument(127)
+    rand = random.randint(43, 51)
     midi_out.note_on(rand, 110)    
     pygame.time.delay(70)
     midi_out.note_off(rand, 110)

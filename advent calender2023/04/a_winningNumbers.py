@@ -29,13 +29,13 @@ def montakoOikein():
         
         if oikein > 0:
             print("oikein", oikein)
-            montako_oikein[ind + 1] = kerroKahdella(oikein -1)
+            montako_oikein[ind + 1] = kerroKahdella(oikein)
         else:
             montako_oikein[ind + 1] = 0
 
 
 def kerroKahdella(n ):
-    if (n == 0):
+    if (n == 1):
         return 1
     else:
         return 2* kerroKahdella(n - 1)
@@ -49,6 +49,6 @@ montakoOikein()
 print(montako_oikein)
 print( sum([v for v in montako_oikein.values()])) # 35585 too high
 
-#print(kerroKahdella(12-1))
-#print(kerroKahdella(10-1))   # 512 pitäisi olla max !!!
-#print(kerroKahdella(5-1))
+print(kerroKahdella(4))
+print(kerroKahdella(5))  
+print(kerroKahdella(6))
