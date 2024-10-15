@@ -4,7 +4,6 @@ from functools import reduce
 data = []
 time = 0
 dist= 0
-kilpailut = []
 ways_to_win = []
 
 
@@ -13,11 +12,9 @@ class Race:
     def __init__(self, time, dist) -> None:
         self.time = time
         self.dist_record = dist
-        self.current_dist = 0
         self.traveled = []
-        self.ways_to_win = 0
 
-    def etsiMax(self):
+    def muodostaAjat(self):
         for hold_button in range(self.time):
             kulje = self.time - hold_button
             self.traveled.append(hold_button * kulje)
@@ -55,7 +52,7 @@ tutki()
 print(time, dist)
 
 k = Race(time, dist)    
-k.etsiMax()
+k.muodostaAjat()
 k.waysToWin()
 ways_to_win.append(k.ways_to_win)
 print(ways_to_win)

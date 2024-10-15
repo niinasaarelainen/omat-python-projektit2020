@@ -4,7 +4,6 @@ from functools import reduce
 data = []
 times = []
 dists= []
-kilpailut = []
 ways_to_win = []
 
 
@@ -13,11 +12,9 @@ class Race:
     def __init__(self, time, dist) -> None:
         self.time = time
         self.dist_record = dist
-        self.current_dist = 0
         self.traveled = []
-        self.ways_to_win = 0
 
-    def etsiMax(self):
+    def muodostaAjat(self):
         for hold_button in range(self.time):
             kulje = self.time - hold_button
             self.traveled.append(hold_button * kulje)
@@ -30,7 +27,7 @@ class Race:
 
 
 def readfile():   
-    f = open("data.txt", "r")         
+    f = open("data_1.txt", "r")         
     for rivi in f:
         sp = rivi.split(":")
         data.append(sp[1].strip())
@@ -57,10 +54,10 @@ print(times, dists)
 
 for i in range(len(times)):
     k = Race(times[i], dists[i])    
-    k.etsiMax()
+    k.muodostaAjat()
     k.waysToWin()
     ways_to_win.append(k.ways_to_win)
-    print(ways_to_win)
-
+   
+print("ways_to_win", ways_to_win)
 mul = reduce((lambda x, y: x * y), ways_to_win)
 print(mul)

@@ -1,5 +1,7 @@
 import copy
 
+  # KAATAA KONEEN, ÄLÄ KÄYNNOSTÄ 
+
 data = []
 seeds_orig = [79, 14, 55, 13] # starts with seed number 79 and contains 14 values
 seeds_nykyiset = []

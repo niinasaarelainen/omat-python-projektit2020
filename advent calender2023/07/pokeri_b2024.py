@@ -2,6 +2,7 @@ import math
 
 data = []
 koodi = {"A":"A", "K":"B", "Q":"C", "T":"E", "9":"F", "8":"G", "7":"H", "6":"I", "5":"J", "4":"K", "3":"L", "2":"M", "J":"N" }
+koodi = "AKQT98765432J"
 hands = {}   
 rankings = {}
 samoja_lkm = {}
@@ -9,7 +10,7 @@ rankings_tulos = {}
 #hand = "T55J5"
 
 def readfile():   
-    f = open("data_1.txt", "r")         
+    f = open("data_1.txt", "r")          # data_1   5905
     for rivi in f:
         sp = rivi.strip().split(" ")
         koodattu_kasi = koodaa(sp[0])
@@ -18,18 +19,17 @@ def readfile():
 def koodaa(hand):
     k = ""
     for card in hand:
-        k += koodi[card]
+        k += chr(65 + koodi.index(card))      # ord("A") = 65   ASCII    chr(65) = "A"
+    print("k: ", k)
     return k
-
 
 def rank(hand):
     global samoja_lkm
     samoja_lkm = {}
-    samoja_cards = {}
     jokerit = 0
 
     for card in hand:
-        if card == "N": 
+        if card == "M": 
             jokerit += 1
             continue  
 
@@ -39,6 +39,7 @@ def rank(hand):
             samoja_lkm[card] += 1
 
     montako = [v for v in samoja_lkm.values()]
+    print("montako", montako)
 
     if jokerit == 5:
         montako.append(5)

@@ -9,7 +9,7 @@ samoja_cards = {}
 rankings_tulos = {}
 
 def readfile():   
-    f = open("data.txt", "r")         
+    f = open("data_1.txt", "r")         
     for rivi in f:
         sp = rivi.strip().split(" ")
         koodattu_kasi = koodaa(sp[0])
@@ -19,6 +19,7 @@ def koodaa(hand):
     k = ""
     for card in hand:
         k += koodi[card]
+    print("k: ", k)
     return k
 
 
