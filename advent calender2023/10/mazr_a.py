@@ -2,7 +2,7 @@ data = []
 koordinaatit = {}
 koordinaatit_etaisyydet = {}
 kielletyt = []
-start = (2, 0)
+start = (1, 1)
 olet_tassa = start
 ohje = ""
 
@@ -63,7 +63,7 @@ def liiku_myota(muuvi_nro):
     if koordinaatit[olet_tassa] == '.':
         return
     olet_tassa = koordinaatit[olet_tassa][0]
-    print("olet_tassa", olet_tassa)
+    print("\nolet_tassa", olet_tassa)
     if olet_tassa in kielletyt:
         olet_tassa = koordinaatit[edellinen][1]
     koordinaatit_etaisyydet[olet_tassa] = muuvi_nro + 1
@@ -76,7 +76,7 @@ def liiku_vasta(muuvi_nro):
     if koordinaatit[olet_tassa] == '.':
         return
     olet_tassa = koordinaatit[olet_tassa][1]
-    print("olet_tassa", olet_tassa)
+    print("\nolet_tassa", olet_tassa)
     if olet_tassa in kielletyt:
         olet_tassa = koordinaatit[edellinen][0]
     if olet_tassa in koordinaatit_etaisyydet and koordinaatit_etaisyydet[olet_tassa] > muuvi_nro:

@@ -48,7 +48,7 @@ def sequence_ALL_kaylapi():
     global vastaukset
     lisataan_seuraavaan = 0
     for seq in reversed(sequence_ALL):
-        seq.insert(0, seq[0]- lisataan_seuraavaan)
+        seq.insert(0, seq[0]- lisataan_seuraavaan)    # !! insert ja mihin, ei append
         lisataan_seuraavaan = seq[0]
         print("seq", seq)
         print("lisataan_seuraavaan", lisataan_seuraavaan)

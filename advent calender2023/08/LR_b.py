@@ -26,12 +26,14 @@ def kasittele_data():
 def lue_ohjeet():
     nodes = [StartingNode(node) for node in puu if node[-1] == "A"]
     montako_aata = len(nodes)
-    print(montako_aata)   # 6
+    print("montako_aata", montako_aata)   # 6
     sijainnit = 0
     osumia = 0
     
     while osumia != montako_aata:
         for kirjain in ohje:
+            if osumia > 1:
+                print(osumia)
             if osumia == montako_aata:
                 return sijainnit
 
@@ -45,7 +47,7 @@ def lue_ohjeet():
                 if node.nyky[-1] == "Z":
                     osumia += 1
 
-            if osumia > 3:
+            if osumia >= montako_aata:
                 print(node.nyky, osumia)
             sijainnit += 1
 

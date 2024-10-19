@@ -1,7 +1,6 @@
 import math
 
 data = []
-koodi = {"A":"A", "K":"B", "Q":"C", "T":"E", "9":"F", "8":"G", "7":"H", "6":"I", "5":"J", "4":"K", "3":"L", "2":"M", "J":"N" }
 koodi = "AKQT98765432J"
 hands = {}   
 rankings = {}
@@ -75,6 +74,7 @@ def rank(hand):
 
 def samat_kadet():
 
+    print("rankings", rankings)
     for rank in rankings:
         if len(rankings[rank]) > 1:
             rankings[rank] = sorted(rankings[rank])
@@ -82,7 +82,7 @@ def samat_kadet():
     s = sorted(rankings.items(), key=lambda x: x[0])
     the_lista = []
     for item in s:
-        #print("item", item)
+        print("item", item)
         the_lista += item[1]
 
     rank = len(the_lista)
@@ -92,13 +92,10 @@ def samat_kadet():
 
 
 readfile()
+print("hands", hands)
 for hand in hands:
     rank(hand)
 
-"""
-koodattu_kasi = koodaa(hand)
-print(koodattu_kasi)     # EJJDJ    D = jokeri
-rank(koodattu_kasi) """
 
 #print("\nrankings", rankings)
 samat_kadet()

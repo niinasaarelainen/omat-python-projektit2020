@@ -14,7 +14,7 @@ def kasittele_data():
     for rivi in data[2:]:
         node, lr = rivi.split(" = ")
         l, r = lr.split(", ")
-        puu[node] = [l[1:], r[:-1]]
+        puu[node] = [l[1:], r[:-1]]   # sulut pois
             
 
 def lue_ohjeet():
@@ -23,7 +23,8 @@ def lue_ohjeet():
     while olet_tassa != "ZZZ":
         for kirjain in ohje:
             if olet_tassa == "ZZZ":
-                return len(sijainnit)
+                #return len(sijainnit)
+                break
             if kirjain == "L":
                 olet_tassa = puu[olet_tassa][0]
             else:
