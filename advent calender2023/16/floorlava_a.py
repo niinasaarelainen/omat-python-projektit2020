@@ -30,8 +30,7 @@ class Beam:
             elif self.suunta == "alas":
                 self.suunta = "oik"
             elif self.suunta == "vas":
-                self.suunta = "ylos"
-                
+                self.suunta = "ylos"                
             elif self.suunta == "ylos":                
                 self.suunta = "vas"
 
@@ -64,10 +63,11 @@ data_orig = []
 beamit = []
 uudet_beamit = []
 id = 0
+kaytetyt = {}
 
 def readfile():   
     global y_max, x_max, data_orig, data
-    f = open("data.txt", "r")         
+    f = open("data_2.txt", "r")         
     for rivi in f:           
         rivi = rivi.strip()
         taul = []
@@ -87,29 +87,37 @@ def lue():
     print(len(uudet_beamit))
     for beam in uudet_beamit:
         beam.tuhoaMinut = False
-        while True:  
-            if beam.x >= 0 and beam.y >= 0 and beam.x < x_max and beam.y < y_max :  
-                uudet(data_orig[beam.y][beam.x], beam.edellinensuunta, beam.y, beam.x)       # edellinensuunta  !!!!!
-                data[beam.y][beam.x] = '#'
-            beam.liiku() 
-            if beam.x >= 0 and beam.y >= 0 and beam.x < x_max and beam.y < y_max :  
-                beam.kaanna(data_orig[beam.y][beam.x])                
-            else:
-                beam.tuhoaMinut = True  
-                break        
+        while True:
+            key = str(beam.y) + str(beam.x)
+            if key in kaytetyt and kaytetyt[key] != beam.suunta:  
+                if beam.x >= 0 and beam.y >= 0 and beam.x < x_max and beam.y < y_max :  
+                    beam.kaanna(data_orig[beam.y][beam.x])   
+                    uudet(data_orig[beam.y][beam.x], beam.edellinensuunta, beam.y, beam.x)       # edellinensuunta  !!!!!
+                    data[beam.y][beam.x] = '#'                    
+                    kaytetyt[key] = beam.suunta
+                beam.liiku() 
+                if beam.x >= 0 and beam.y >= 0 and beam.x < x_max and beam.y < y_max :  
+                    pass        
+                else:
+                    beam.tuhoaMinut = True  
+                    break      
+            piirra()  
 
 
 def uudet(merkki, suunta, y, x):
     global beamit, id
-    if '|' == merkki:        
+    if '|' == merkki:    
+        #print("|")    
         if suunta == "oik" or suunta == "vas" : 
             id += 1
             if y > 0:
                 beamit.append(Beam("ylos", y, x, id))  
                 #print(beamit)
 
-    if '-' == merkki:                 
+    if '-' == merkki:   
+                     
         if suunta == "ylos" or suunta == "alas" : 
+            #print("-", y, x)    
             id += 1
             if x > 0:
                 beamit.append(Beam("vas", y, x, id))  
@@ -119,19 +127,21 @@ def uudet(merkki, suunta, y, x):
 def piirra():
     print()
     montako = 0
-    for rivi in range(len(data_orig)): 
-        for sarake in range(len(data_orig[rivi])):   
+    for rivi in range(len(data)): 
+        for sarake in range(len(data[rivi])):   
             print(data[rivi][sarake], end="")
             if data[rivi][sarake] == '#':
                 montako += 1
+        print()
     print(montako)
   
 
 readfile()  
+print(y_max, x_max)
 
-beamit.append(Beam("oik", 0, 0, id))
-#while beamit != []:
-for i in range(18):
+beamit.append(Beam("oik", 2, 0, id))
+for i in range(2):
     lue()
     
 piirra()
+print(len(beamit))
