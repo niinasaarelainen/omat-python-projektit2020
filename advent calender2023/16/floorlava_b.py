@@ -64,6 +64,7 @@ beamit = []
 uudet_beamit = []
 id = 0
 kaytetyt = []     # {} ei hyvä, koska uusi suunta söi edellisen, tietty ois voinu olla key--> taulukko
+max_energized = []
 
 def readfile():   
     global y_max, x_max, data_orig, data
@@ -139,9 +140,21 @@ def piirra():
 readfile()  
 print(y_max, x_max)
 
-beamit.append(Beam("oik", 0, 0, id))
-while len(beamit) > 0:
-    lue()
+
+suunnat = ["alas", "vas", "ylos", "oik"]
+y = 0
+x = 0
+i = 0
+
+for xTimes in range(4):
+    beamit.append(Beam(suunnat[i], y, x, id))
+    while len(beamit) > 0:
+        lue()
+    i +=1
+    beamit = []
+    uudet_beamit = []
+
+
     
 piirra()
 print(len(beamit))
