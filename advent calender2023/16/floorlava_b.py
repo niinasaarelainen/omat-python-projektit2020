@@ -64,11 +64,11 @@ beamit = []
 uudet_beamit = []
 id = 0
 kaytetyt = []     # {} ei hyvä, koska uusi suunta söi edellisen, tietty ois voinu olla key--> taulukko
-max_energized = []
+
 
 def readfile():   
     global y_max, x_max, data_orig, data
-    f = open("data_1.txt", "r")         
+    f = open("data.txt", "r")         
     for rivi in f:           
         rivi = rivi.strip()
         taul = []
@@ -85,7 +85,7 @@ def lue():
     global beamit, uudet_beamit
     uudet_beamit = copy.deepcopy(beamit)
     beamit = []
-    print("len(uudet_beamit)", len(uudet_beamit))
+    #print("len(uudet_beamit)", len(uudet_beamit))
     for beam in uudet_beamit:
         while True:
             key = str(beam.y) + beam.suunta + str(beam.x) 
@@ -134,28 +134,57 @@ def piirra():
             if data[rivi][sarake] == '#':
                 montako += 1
         print()
+    max_energized.append(montako)
     print(montako)
+    print("len(max_energized)", len(max_energized))
+  
   
 
 readfile()  
 print(y_max, x_max)
 
 
-suunnat = ["alas", "vas", "ylos", "oik"]
+
+i = 0
+max_energized = []
+suunnat = ["alas", "ylos"]
 y = 0
+
+
+for xTimes in range(2):    
+    for x in range(len(data[0])):
+        beamit.append(Beam(suunnat[i], y, x, id))
+        while len(beamit) > 0:
+            lue()
+        piirra() 
+        data = copy.deepcopy(data_orig)
+        beamit = []
+        uudet_beamit = []      
+        kaytetyt = []   
+    i += 1
+    y = len(data) - 1   
+    print("len(max_energized)", len(max_energized))
+
+
 x = 0
 i = 0
-
-for xTimes in range(4):
-    beamit.append(Beam(suunnat[i], y, x, id))
-    while len(beamit) > 0:
-        lue()
-    i +=1
-    beamit = []
-    uudet_beamit = []
+suunnat = ["oik", "vas"]
+for xTimes in range(2):    
+    for y in range(len(data)):
+        beamit.append(Beam(suunnat[i], y, x, id))
+        while len(beamit) > 0:
+            lue()
+        piirra() 
+        data = copy.deepcopy(data_orig)
+        beamit = []
+        uudet_beamit = []      
+        kaytetyt = []   
+    i += 1
+    x = len(data[0]) - 1   
+    print("len(max_energized)", len(max_energized))
 
 
     
-piirra()
-print(len(beamit))
-#print(kaytetyt)    # 6567  too low    7884 oikein !!!!
+#piirra()
+print(max_energized)
+print(max(max_energized))   

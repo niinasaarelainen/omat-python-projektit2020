@@ -10,7 +10,7 @@ kuva = []
 
 
 def readfile():   
-    f = open("data.txt", "r")         
+    f = open("data_1.txt", "r")         
     for rivi in f:
         data.append(rivi.strip().split(" "))
 
