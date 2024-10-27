@@ -83,5 +83,3 @@ for rivi in uusiKuva:
 
 
 print(hashtageja)     # 5169 too low,   5232 too high
-
-
