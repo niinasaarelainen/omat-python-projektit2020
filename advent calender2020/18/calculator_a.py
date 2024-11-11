@@ -1,13 +1,5 @@
+
 data = []
-
-"""
-1 + (2 * 3) + (4 * (5 + 6))
-1 +    6    + (4 * (5 + 6))
-     7      + (4 * (5 + 6))
-     7      + (4 *   11   )
-     7      +     44
-            51    """
-
 
 def readfile():   # a-kohta
     global data
@@ -20,15 +12,15 @@ def readfile():   # a-kohta
     print(data)
 
 
-def calculate(tulos):
+def calculate():
     global data
-    eka_nro = data[0][0]
     
-    # sulkujen läpikäynti
-    alkusulut = []
-    loppusulut = []
-    suluton_data = []
+    vastaukset = []      # tänne aina uusi rivi
     for rivi in range(len(data)):
+        tulos = int(data[rivi][0])
+        alkusulut = []
+        loppusulut = []
+        suluton_data = []
         for i in range(len(data[rivi]) ):
             if "(" in data[rivi][i]:     
                 alkusulut.append(i)
@@ -37,32 +29,48 @@ def calculate(tulos):
             else: 
                 suluton_data.append(data[rivi][i])
 
-    print(alkusulut, loppusulut, suluton_data)   # sulkujen indeksit eivät päde suluton_data:an
+        print(alkusulut, loppusulut, suluton_data)   # sulkujen indeksit eivät päde suluton_data:an
+        
+        alkuind = -1
+        for loppusulku in loppusulut:
+            sulku_tulos = suluissa(data[rivi], alkusulut[alkuind], loppusulku)            
+            vastaukset.append(data[rivi][:alkusulut[alkuind]] + [sulku_tulos] + data[rivi][loppusulku:])
+            alkuind -= 1
+            print("vastaukset", vastaukset)
 
-    for rivi in data:
-        for i in range(len(rivi) - 1):
-            if rivi[i] == "+":
-                if tulos == 0:
-                    tulos = eka_nro + int(rivi[i + 1])  
-                else:
-                    tulos += int(rivi[i + 1])  
+        rivi = vastaukset[-1]
+        for i in range(len(rivi)-1):
+            if rivi[i + 1] in ["(", ")"]:
+                pass
+            elif rivi[i] == "+":
+                tulos += int(rivi[i + 1])  
             elif rivi[i] == "*":
-                if tulos == 0:
-                    tulos = eka_nro * int(rivi[i + 1])  
-                else:
-                    tulos *=  int(rivi[i + 1])  
-            elif rivi[i] == "(":     # TODO huom voi olla ((  ennen )
-                pass
-            elif rivi[i] == ")":
-                pass
-            """
-            elif tulos == 0:
-                tulos = int(rivi[i])   """
+                tulos *=  int(rivi[i + 1]) 
+            
 
-            print(tulos)
+        print("**tulos", tulos)
+
+
+
+def suluissa(rivi, alku, loppu):
+    while rivi[alku + 1]  in ["(", ")"]:
+        alku += 1
+
+    tulos = int(rivi[alku + 1])
+    for i in range(alku+1, loppu):
+        if rivi[i + 1] in ["(", ")"]:
+            break
+        elif rivi[i] == "+":
+            tulos += int(rivi[i + 1])  
+        elif rivi[i] == "*":
+            tulos *=  int(rivi[i + 1])  
+
+        print("  välitulos", tulos, rivi[i]) 
+
+    return tulos
 
 
 
 readfile()
-calculate(0)  # tulos aluksi 0
+calculate()  
 print()

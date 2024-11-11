@@ -6,7 +6,7 @@ tickets_sarakkeet = []
 tickets_sarakkeet_hash = {}
 your_ticket = {11 : "" , 12 : "" , 13 : "" }  # "" tulee rangen nimi myöhemmin
 #your_ticket = [107,157,197,181,71,113,179,109,97,163,73,53,101,193,173,151,167,191,127,103]
-              #  0      2       4       6      8      10     12     14  
+              #  0      2       4       6      8      10     12     14      16
 
 def readfile():  
     f = open("data_ranget.txt", "r")  
@@ -83,30 +83,17 @@ def positions():
                         ranget[nimi][-1].append(sarake_ind)
                     
 
-"""
-def loytyyko_rangeista():
-    #print(len(tickets_sarakkeet))    # 20 kpl, sama määrä kuin ranget
-    for nimi, v in ranget.items():
-        for sarake in tickets_sarakkeet:
-            #print(len(set(v[-1]) & set(sarake)), len(ranget))
-            if len(set(v[-1]) & set(sarake)) >= len(ranget):                              # set ja &   !!!!!!!
-                print(set(v[-1]), set(v[-1]) & set(sarake))
-                tickets_sarakkeet_hash[str(sarake)].append(nimi) 
+
+def tutki_sorted(s):
+    käytetyt = []
+    vastaus = {}
+    for nimi, data in s:
+        for nro in range(len(tickets_sarakkeet)):
+            if nro not in data[-1] and nro not in käytetyt:
+                vastaus[nimi] = nro
+                käytetyt.append(nro)
+    return vastaus
     
-
-def tutki_hashit():
-    s = sorted(tickets_sarakkeet_hash.items(), key=lambda item: len(item[1]))
-    vastaukset = []
-    vastausJarjestys = []
-    for sarake, nimilista in s:
-        print(tickets_sarakkeet_hash[sarake])   
-        for nimi in nimilista:         
-            if nimi not in vastaukset:
-                vastausJarjestys.append(nimi)
-                vastaukset.append(nimi)
-
-    print(vastausJarjestys)    """
-                        
 
 
 readfile()
@@ -118,10 +105,11 @@ muodosta_tickets_sarakkeet()
 muodosta_tickets_sarakkeet_hash()
 positions()
 #print(ranget.items())
-s = sorted(ranget.items(), key=lambda item: len(item[1][2]))
-print()
-for nro in range(len(s)):
-    a, b = s[nro]
-    if 'dep' in a:
-       print(s[nro], nro )
-       print(len(b[-1]))        # 673450903831   too low
+s = sorted(ranget.items(), key=lambda item: -len(item[1][2]))
+vastaus = tutki_sorted(s)
+
+for k, v in vastaus.items():    #3029180675981
+    if 'dep' in k:
+        print(v)
+
+
