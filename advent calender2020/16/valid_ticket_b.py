@@ -1,3 +1,4 @@
+
 data = []
 ranget = {}  
 tickets = []  
@@ -5,10 +6,10 @@ tickets_sarakkeet = []
 tickets_sarakkeet_hash = {}
 your_ticket = {11 : "" , 12 : "" , 13 : "" }  # "" tulee rangen nimi myöhemmin
 #your_ticket = [107,157,197,181,71,113,179,109,97,163,73,53,101,193,173,151,167,191,127,103]
-
+              #  0      2       4       6      8      10     12     14  
 
 def readfile():  
-    f = open("data_b_ranget.txt", "r")  
+    f = open("data_ranget.txt", "r")  
 
     for rivi in f:
         nimi, rivi = rivi.split(":")
@@ -22,9 +23,7 @@ def readfile():
                     ranget[nimi].append([int(min), int(max)])
         ranget[nimi].append([])
 
-    print(ranget)
-
-    f = open("data_b_tickets.txt", "r")  
+    f = open("data_tickets.txt", "r")  
 
     for rivi in f:
         sp = rivi.strip().split(",")
@@ -43,16 +42,15 @@ def muodosta_tickets_sarakkeet():
 
 def muodosta_tickets_sarakkeet_hash():
     for s in tickets_sarakkeet:
-        print(" s", s)
         tickets_sarakkeet_hash[str(s)] = []
     
     print(tickets_sarakkeet_hash)
 
-
+"""
 def onkoRangella():
     validit_luvut = []  
 
-    for t in tickets:
+    for t in tickets_sarakkeet:
         for luku in t:
             for min, max in ranget.values():
                 if luku >= min and luku <= max:
@@ -62,34 +60,46 @@ def onkoRangella():
 
     epävalidit = [t for t in tickets for luku in t if luku not in validit_luvut]
     validit = [t for t in tickets if t not in epävalidit]
-    return validit
+    return validit  """
 
 
 def positions():
-    ind = 1
-    for t in tickets:   # [3, 9, 18]
-        for luku in t:
+    for sarake_ind in range(len(tickets_sarakkeet)):   
+        for luku in tickets_sarakkeet[sarake_ind]:
             for nimi, values in ranget.items():
-                
-                for i in range(0, 2):
-                    min, max = values[i]
-                    if luku >= min and luku <= max:
-                        ranget[nimi][-1].append(luku)
+                min0, max0 = values[0]
+                min1, max1 = values[1]
+                if (luku >= min0 and luku <= max0) or (luku >= min1 and luku <= max1):
+                    pass
+                else:
+                    print(luku, min0, max0, min1, max1)
+                    if sarake_ind not in ranget[nimi][-1]:
+                        ranget[nimi][-1].append(sarake_ind)
+                    
 
+"""
 def loytyyko_rangeista():
+    #print(len(tickets_sarakkeet))    # 20 kpl, sama määrä kuin ranget
     for nimi, v in ranget.items():
         for sarake in tickets_sarakkeet:
-            if len(set(v[-1]) & set(sarake)) == len(ranget):                              # set ja &   !!!!!!!
-                tickets_sarakkeet_hash[str(sarake)].append(nimi)
-
+            #print(len(set(v[-1]) & set(sarake)), len(ranget))
+            if len(set(v[-1]) & set(sarake)) >= len(ranget):                              # set ja &   !!!!!!!
+                print(set(v[-1]), set(v[-1]) & set(sarake))
+                tickets_sarakkeet_hash[str(sarake)].append(nimi) 
+    
 
 def tutki_hashit():
-    s =sorted(tickets_sarakkeet_hash, key=lambda h: len(tickets_sarakkeet_hash[h]))
-    print(tickets_sarakkeet_hash)
+    s = sorted(tickets_sarakkeet_hash.items(), key=lambda item: len(item[1]))
+    vastaukset = []
+    vastausJarjestys = []
+    for sarake, nimilista in s:
+        print(tickets_sarakkeet_hash[sarake])   
+        for nimi in nimilista:         
+            if nimi not in vastaukset:
+                vastausJarjestys.append(nimi)
+                vastaukset.append(nimi)
 
-    #s = sorted(tulokset, key=lambda tulos: (-tulos.topit_lkm, tulos.topit_yritykset, -tulos.zonet_lkm, tulos.zonet_yritykset))  
-      
-        
+    print(vastausJarjestys)    """
                         
 
 
@@ -97,6 +107,12 @@ readfile()
 muodosta_tickets_sarakkeet()
 muodosta_tickets_sarakkeet_hash()
 positions()
-print(ranget)
-loytyyko_rangeista()
-tutki_hashit()
+print(ranget.items())
+s = sorted(ranget.items(), key=lambda item: len(item[1][2]))
+print(s)
+print()
+for nro in range(len(s)):
+    for data in s[nro]:
+        
+            print(data[-1])     # 661094006513  too low
+                              # 1070018134253  too low
