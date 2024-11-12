@@ -1,5 +1,6 @@
 data = []
 hash = {0: [1, 2], 1: ["a"], 2: [[1, 3],[3, 1]], 3: ["b"]}
+vastaukset = []
 
 
 def readfile():   # a-kohta
@@ -20,13 +21,18 @@ def readHash(ind, vastaus):
                 vastaus += readHash(nro, vastaus)
         elif isinstance(item, str):
             vastaus += item
-            return vastaus
+            print(vastaus)
+            if len(vastaus) == 4:
+                vastaukset.append(vastaus)
+                return ""
+            else:
+                return vastaus
         else:
             print(item, "**nro")
             vastaus += readHash(item, vastaus)
 
 
-    print(vastaus)
+    print(vastaukset)
 
 
 
