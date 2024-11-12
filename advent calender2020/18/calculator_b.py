@@ -1,9 +1,10 @@
 data = []
+vastaukset = []
 lopputulokset = []
 
 def readfile():   # a-kohta
     global data
-    f = open("data.txt", "r")         
+    f = open("data_sulut.txt", "r")         
     for rivi in f:
         rivi = rivi.replace("(", " ( ")
         rivi = rivi.replace(")", " ) ")
@@ -12,8 +13,7 @@ def readfile():   # a-kohta
     print(data)
 
 
-def maarita_alkusulut(rivi):
-    
+def maarita_alkusulut(rivi):    
     alkusulut = []
     for i in range(len(rivi) ):
         if "(" in rivi[i]:     
@@ -22,8 +22,9 @@ def maarita_alkusulut(rivi):
     return alkusulut
 
 
+
 def calculate():    
-    vastaukset = []      # tänne aina uusi rivi
+    global vastaukset 
     for rivi_ind in range(len(data)):
         vastaukset.append(data[rivi_ind])
         alkusulut = maarita_alkusulut(data[rivi_ind])  
@@ -36,26 +37,43 @@ def calculate():
             vastaukset.append(rivi[:alkusulku] + [sulku_tulos] + rivi[loppusulku + 1:])
             #print(" !!", rivi[loppusulku + 1:], loppusulku)
 
-        rivi = vastaukset[-1]
-        print(" rivi@after - sulku-for", rivi)
-        tulos = int(rivi[0])
-        for i in range(len(rivi)-1):
-            if rivi[i + 1] in ["(", ")"]:
-                pass
-            elif rivi[i] == "+":
-                tulos += int(rivi[i + 1])  
-            elif rivi[i] == "*":
-                tulos *=  int(rivi[i + 1]) 
+        plussaa(vastaukset[-1] )    
 
-            print(tulos)
+        tulos = tulo(vastaukset[-1])            
+
+        print("**tulos", tulos)    
+        #lopputulokset.append(tulos)
+
+
+def plussaa(rivi):
+    global vastaukset
+    while "+" in rivi:
+        #for times in range(3):
+            plussa_ind = rivi.index("+")
             
+            plussa_tulos = int(rivi[plussa_ind - 1]) + int(rivi[plussa_ind + 1])
+            loppuosa = []
+            if plussa_ind + 1 < len(rivi) - 1:
+                loppuosa = rivi[plussa_ind + 2:]
+            #print("plussa_tulos", plussa_tulos)
+            vastaukset.append(rivi[:max(0, plussa_ind - 1)] + [plussa_tulos] +loppuosa)
+            rivi = vastaukset[-1]
+            print(" plussssa", rivi, plussa_ind)
 
-        print("**tulos", tulos)     # 12240
-        lopputulokset.append(tulos)
+
+def tulo(rivi):
+    print(rivi)
+    vastaus = 1
+    for item in rivi:
+        if item != "*":
+            vastaus *= int(item)
+            print(vastaus)
+
+    return vastaus
 
 
 
-def suluissa(rivi, alku, loppu):
+def suluissa(rivi, alku, loppu):    # TODO  täältä kutsutaan  plussaa()
     print(" alku ", alku)
     while rivi[alku + 1]  in ["(", ")"]:
         alku += 1

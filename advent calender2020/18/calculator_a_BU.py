@@ -1,9 +1,9 @@
+
 data = []
-lopputulokset = []
 
 def readfile():   # a-kohta
     global data
-    f = open("data.txt", "r")         
+    f = open("data_sulut.txt", "r")         
     for rivi in f:
         rivi = rivi.replace("(", " ( ")
         rivi = rivi.replace(")", " ) ")
@@ -12,32 +12,36 @@ def readfile():   # a-kohta
     print(data)
 
 
-def maarita_alkusulut(rivi):
+def maarita_sulut(rivi):
     
+    tulos = int(rivi[0])
     alkusulut = []
+    loppusulut = []
     for i in range(len(rivi) ):
         if "(" in rivi[i]:     
             alkusulut.append(i)
+        elif ")" in  rivi[i]:
+            loppusulut.append(i)
 
-    return alkusulut
+    print(alkusulut, loppusulut)   # sulkujen indeksit eivät päde suluton_data:an
+    return (alkusulut, loppusulut)
 
-
-def calculate():    
+def calculate():
+    global data
+    
     vastaukset = []      # tänne aina uusi rivi
     for rivi_ind in range(len(data)):
         vastaukset.append(data[rivi_ind])
-        alkusulut = maarita_alkusulut(data[rivi_ind])  
-        for alkusulku in reversed(alkusulut):
+        alkusulut, loppusulut = maarita_sulut(data[rivi_ind])        
+        alkuind = -1
+        for loppusulku in loppusulut:   # toimii   5 * 9 * (7 * 3 * 3 + 9 * 3 + (8 + 6 * 4))
             rivi = vastaukset[-1]
-            #print("rivi@sulku-for", rivi)
-            loppusulku = (rivi[alkusulku:]).index(")") + alkusulku
-            #print("loppusulku", loppusulku)
-            sulku_tulos = suluissa(rivi, alkusulku, loppusulku)            
-            vastaukset.append(rivi[:alkusulku] + [sulku_tulos] + rivi[loppusulku + 1:])
-            #print(" !!", rivi[loppusulku + 1:], loppusulku)
+            sulku_tulos = suluissa(rivi, alkusulut[alkuind], loppusulku)            
+            vastaukset.append(rivi[:alkusulut[alkuind]] + [sulku_tulos] + rivi[loppusulku:])
+            alkuind -= 1
+            print("vastaukset", vastaukset)
 
         rivi = vastaukset[-1]
-        print(" rivi@after - sulku-for", rivi)
         tulos = int(rivi[0])
         for i in range(len(rivi)-1):
             if rivi[i + 1] in ["(", ")"]:
@@ -46,17 +50,13 @@ def calculate():
                 tulos += int(rivi[i + 1])  
             elif rivi[i] == "*":
                 tulos *=  int(rivi[i + 1]) 
-
-            print(tulos)
             
 
         print("**tulos", tulos)     # 12240
-        lopputulokset.append(tulos)
 
 
 
 def suluissa(rivi, alku, loppu):
-    print(" alku ", alku)
     while rivi[alku + 1]  in ["(", ")"]:
         alku += 1
 
@@ -69,7 +69,7 @@ def suluissa(rivi, alku, loppu):
         elif rivi[i] == "*":
             tulos *=  int(rivi[i + 1])  
 
-        #print("  välitulos", tulos) 
+        print("  välitulos", tulos, rivi[i]) 
 
     return tulos
 
@@ -78,6 +78,3 @@ def suluissa(rivi, alku, loppu):
 readfile()
 calculate()  
 print()
-print(len(lopputulokset))
-print(sum(lopputulokset))    # 25391626929  too low
-                             # 98621258158412
