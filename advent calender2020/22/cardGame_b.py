@@ -17,6 +17,20 @@ def readfile():
             pakka2.append(int(rivi.strip()))
     print(pakka1, pakka2)
 
+"""Before either player deals a card, if there was a previous round in this game that had 
+exactly the same cards in the same order in the same players' decks, the game instantly 
+ends in a win for player 1. Previous rounds from other games are not considered. 
+(This prevents infinite games of Recursive Combat, which everyone agrees is a bad idea.)
+
+Otherwise, this round's cards must be in a new configuration; the players begin the round by 
+each drawing the top card of their deck as normal.
+
+If both players have at least as many cards remaining in their deck as the value of the card 
+they just drew, the winner of the round is determined by playing a new game of Recursive Combat .
+
+Otherwise, at least one player must not have enough cards left in their deck to recurse; 
+the winner of the round is the player with the higher-value card."""
+
 
 def play():
     while pakka2 != [] and pakka1 != []:
@@ -30,14 +44,13 @@ def play():
             pakka2.append(p1)
         print(p1, p2, pakka1, pakka2)
 
+
 def score():
     kerroin = 1
     tulos = 0
 
-    if len(pakka2) > len(pakka1):
-        voittopakka = pakka2
-    else:
-        voittopakka = pakka1
+    voittopakka = max(sorted([pakka1, pakka2], key = lambda x: len(x)))
+
     for card in reversed(voittopakka):
         tulos += kerroin * card
         kerroin += 1
