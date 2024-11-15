@@ -1,4 +1,5 @@
 import re
+from functools import reduce 
 
 l = [('English', 88), ('Science', 90), ('Maths', 97), ('Social sciences', 82)]
 s = sorted(l, key = lambda x: x[1])
@@ -142,3 +143,45 @@ l = ['Red', 'Green', 'Blue', 'White', 'Black']
 
 print(list(map(lambda x: "".join(reversed(x)), l)))      # !!!! join    !!!!!!!!!!!
 print(list(map(lambda x: "*".join(reversed(x)), l)))    # ilman joinia reversed ei tee mitään
+
+l = (('233', 'ABCD', '33'), ('1416', 'EFGH', '55'), ('2345', 'WERT', '34'))
+
+result = tuple(map(lambda x: (int(x[0]), int(x[2])), l))   # malli : tässä numeroiden pakko olla samoilla paikoilla
+print("result", result)
+
+vast = []  # oma
+for item in l:
+    #vast.append(tuple(filter(lambda x: x.isnumeric(), item)))
+    vast.append(tuple(map(lambda x: int(x), filter(lambda x: x.isnumeric(), item)))) # mapin input on filtteröity otos
+
+print(tuple(vast))
+
+# TODO isoimman indeksi ?!?
+l1 = [12, 33, 23, 10.11, 67, 89, 45, 66.7, 23, 12, 11, 10.25, 54]
+isoin = l1[0]
+
+l = [3, 4, 5, 8, 0, 3, 8, 5, 0, 3, 1, 5, 2, 3, 4, 2]
+hashes = list(map(lambda x: {x: l.count(x)}, l))
+print(hashes)
+
+oikea_hash = {}
+for h in hashes:
+    print(h)
+    for k, v in h.items():
+        oikea_hash[k] = v
+
+print(oikea_hash)
+
+
+nums = [1, 2, 3, 4]
+ans = reduce(lambda x, y: x + y, nums)
+print(ans) 
+
+
+l = [12, 0, None, 23, None, -55, 234, 89, None, 0, 6, -12]
+print(list(filter(lambda x: x != None, l)))
+
+
+color = ['Red', 'Blue', 'Black', 'White', 'Pink']
+print(list(map(list, color)))
+print(list(map(tuple, color)))
