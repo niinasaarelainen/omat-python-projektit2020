@@ -1,8 +1,16 @@
-
 data = []
-hash = {}
-hash_toisinpain = {}
+oliot = []
 ore_summa = 0
+
+class Tarvitsen:
+
+    def __init__(self, symboli, maara, tarvitsen= []) -> None:
+        self.symboli = symboli
+        self.maara = maara
+        self.tarvitsen = tarvitsen
+
+    def __repr__(self) -> str:
+        return f"{self.symboli}, {self.maara}, {self.tarvitsen}"
 
 
 def readfile():
@@ -12,29 +20,32 @@ def readfile():
         data.append(rivi.strip())
 
 
-def tee_hash():
+def tee_oliot():
     for rivi in data:
         a, b = rivi.split(" => ")  # 7 A, 1 B => 1 C
+        print(a, b)
         maara, symboli = b.split(" ")
-        if "," in a:
-            l = tuple(a.split(", "))
-            hash[l] = b
-            hash_toisinpain[symboli] = [l, maara]
+        mita_tarvitsen = []
+        if "," in a:           
+            for item in a.split(", "):
+                m, s = item.split(" ")
+                mita_tarvitsen.append(Tarvitsen(s, int(m)))            
         else:
-            hash[a] = b
-            maara, kirjain = b.split(" ")
-            hash_toisinpain[symboli] = [a, maara]
+            m, s = a.split(" ")
+            mita_tarvitsen.append(Tarvitsen(s, int(m)))
+        oliot.append(Tarvitsen(symboli, int(maara), mita_tarvitsen))
     
 
 def kay_lapi(k):
     key_nyt = k
     value_nyt = hash_toisinpain[key_nyt]
 
-    if "ORE" not in value_nyt :
+    if "ORE" in value_nyt :
         return
-    value_nyt = hash_toisinpain[key_nyt]
-    print(value_nyt)
+    value_nyt = hash_toisinpain[key_nyt][0]
+    
     for item in value_nyt:
+        print("item", item)
         kay_lapi(item.split(" ")[1])
 
 
@@ -43,7 +54,6 @@ def kay_lapi(k):
 
 
 readfile()
-tee_hash()
-print("\nhash", hash)
-print("\nhash_toisinpain", hash_toisinpain)
-kay_lapi(hash_toisinpain["FUEL"])
+tee_oliot()
+print(oliot)
+#kay_lapi("FUEL")
