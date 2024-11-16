@@ -3,6 +3,7 @@ data = []
 hash = {}
 hash_toisinpain = {}
 oret = {}
+symbolit = {"FUEL" : 1}
 
 
 def readfile():
@@ -37,7 +38,7 @@ def tee_hash():
     
 
 
-"""  toimii data2:
+#toimii data1 ja data2:
 
 def tee_symbolit():
     for k, v in hash_toisinpain.items():
@@ -45,8 +46,9 @@ def tee_symbolit():
         if isinstance(v, tuple):
             for item in v:
                 maara, kirjain = item.split(" ")
-                symbolit[kirjain] += int(maara) * symbolit[k.split(" ")[1]]   """
+                symbolit[kirjain] += int(maara) * symbolit[k.split(" ")[1]]   
 
+"""
 def tee_symbolit():
     for k, v in hash_toisinpain.items():
         if isinstance(v, tuple):
@@ -60,7 +62,7 @@ def tee_symbolit():
                             kerroin_kandidaatti = int(item2.split(" ")[0])
                             print(kerroin_kandidaatti, kirjain)
 
-                symbolit[kirjain] += int(maara) * kerroin_kandidaatti
+                symbolit[kirjain] += int(maara) * kerroin_kandidaatti  """
 
 
 def selvita_oret():
