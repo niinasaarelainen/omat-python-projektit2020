@@ -120,3 +120,45 @@ kori.lisaa_alennuskoodi(tanaan, koodit)
 kori.nayta_alennuskoodit()
 kori.kerro_hinta()
 kori.maksa()
+
+h = {}    # oma
+s = "lkseropewdssafsdfafkpwe"
+for c in s:
+    h[c] = s.count(c)
+h = sorted(h.items(), key=lambda x:-x[1])
+print(h[:3])
+
+from collections import Counter     # toinen beta
+print(Counter(s).most_common(3))  
+print("most common letter: ", Counter(s).most_common(1)[0][0])
+print("least common letter: ", Counter(s).most_common(len(s))[-1][0])
+
+sp = "Input Subject name and marks: Bengali 58 Input Subject name and marks: English 62 Input Subject name and marks: Math 68 Input".split(" ")
+print(Counter(sp).most_common(10))  
+
+hyvaksytyt = []
+ehdokkaat = "the dumber of distinct words and the number of occurrences of dis distinct word according to their dumbness".split(" ")
+for e in ehdokkaat:
+    if e.startswith("d"):
+        hyvaksytyt.append(e)
+print(Counter(hyvaksytyt).most_common(10))  
+
+l = [['Avik Das ', 89.0], ['ayan Roy', 75.0], ['Sayan Dutta', 93.0]]
+print(sorted(l, key=lambda x:-x[1])[1])
+
+color1 = { "R": "Red", "B": "Black", "P": "Pink" }
+color2 = { "G": "Green", "W": "White" }
+
+import collections
+merged_dict = dict(collections.ChainMap({}, color1, color2))
+print(merged_dict)
+merged_dict = dict(collections.ChainMap({}, color2, color1))
+print(merged_dict)
+
+l = ['abcd', 'iabhef', 'dsalsdf', 'sdfsas', 'jlkdfgd']
+more_than_3 = [c for c in ''.join(l) if ''.join(l).count(c) > 3]
+print(list(set(more_than_3)))
+exactly_3 = [c for c in ''.join(l) if ''.join(l).count(c) == 3]
+print(list(set(exactly_3)))
+less_than_3 = [c for c in ''.join(l) if ''.join(l).count(c) < 3]
+print(list(set(less_than_3)))

@@ -7,7 +7,7 @@ max_x = 0
 mika_lahimpana = {}
 
 def readfile():
-    f = open("data.txt", "r") 
+    f = open("data_1.txt", "r") 
     for rivi in f:
         x, y = rivi.split(", ")
         x = int(x)
@@ -82,5 +82,5 @@ print(max_x, max_y)
 laskeManhattan()
 print(mika_lahimpana)
 #tutkiHash()
-#print(mika_lahimpana)
-piirraLopputilanne()
+print(mika_lahimpana)
+#piirraLopputilanne()

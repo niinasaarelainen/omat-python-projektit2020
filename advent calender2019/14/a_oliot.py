@@ -2,6 +2,7 @@ data = []
 oliot = []
 ore_summa = 0
 symbolit = {}
+alku_hash = {}
 
 class Tarvitsen:
 
@@ -30,7 +31,8 @@ def tee_oliot():
         if "," in a:           
             for item in a.split(", "):
                 m, s = item.split(" ")
-                mita_tarvitsen.append(Tarvitsen(s, int(m)))            
+                mita_tarvitsen.append(Tarvitsen(s, int(m)))    
+                alku_hash[s] = int(m)        
         else:
             m, s = a.split(" ")
             mita_tarvitsen.append(Tarvitsen(s, int(m)))
@@ -45,10 +47,10 @@ def kay_lapi():
         print(value_nyt)
         for tarvitsen in value_nyt:
             if tarvitsen.symboli != "ORE":
-                o2 = [olio for olio in oliot if olio.symboli == tarvitsen.symboli]
-                o2[0].maara *= tarvitsen.maara
-                print(o2[0].maara, tarvitsen.maara)
-                symbolit[tarvitsen.symboli] += tarvitsen.maara * olio.maara
+                #o2 = [olio for olio in oliot if olio.symboli == tarvitsen.symboli]
+                #o2[0].maara *= tarvitsen.maara
+                #print(o2[0].maara, tarvitsen.maara)
+                symbolit[tarvitsen.symboli] += tarvitsen.maara * olio.maara * alku_hash[tarvitsen.symboli]
                 print("tarvitsen", tarvitsen.symboli, tarvitsen.maara , olio.maara)
             print(oliot)
 
@@ -71,5 +73,6 @@ def kay_lapi():
 
 readfile()
 tee_oliot()
-print(oliot)
+print(alku_hash)
+#print(oliot)
 kay_lapi()   # data2: {'FUEL': 1, 'AB': 2, 'BC': 3, 'CA': 4, 'C': 37, 'A': 10, 'B': 23}

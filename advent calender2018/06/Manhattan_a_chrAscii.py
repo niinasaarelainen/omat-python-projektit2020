@@ -7,7 +7,7 @@ reunoissa = []
 potentiaaliset_vastaukset = []
 
 def readfile():
-    f = open("data_test.txt", "r") 
+    f = open("data_test2.txt", "r") 
     for rivi in f:
         x, y = rivi.split(", ")
         x = int(x)
@@ -34,7 +34,8 @@ def piirraLopputilanne():
                 reunoissa.append(mika_lahimpana[str(x)+str(y)][0])           
             else:
                 print(mika_lahimpana[str(x)+str(y)],  end="")
-        print(reunoissa)
+    print("reunoissa", reunoissa)
+    print("mika_lahimpana", mika_lahimpana)
 
 
 def laskeM_apu(x, y, pari):
@@ -46,13 +47,13 @@ def laskeManhattan():
     for y in range(max_y +1):    # +1 muuten vika jää näkymättä,        
         for x in range(max_x + 2): 
             
-                for pari in data:
-                    distanssi = laskeM_apu(x, y, pari)                    
-                    ind = data.index(pari)
-                    if str(x)+str(y) not in mika_lahimpana:
-                        mika_lahimpana[str(x)+str(y)] = [[chr(65 + ind), distanssi]]                  
-                    else:
-                        mika_lahimpana[str(x)+str(y)].append([chr(65 + ind), distanssi])
+            for pari in data:
+                distanssi = laskeM_apu(x, y, pari)                    
+                ind = data.index(pari)
+                if str(x)+str(y) not in mika_lahimpana:
+                    mika_lahimpana[str(x)+str(y)] = [[chr(65 + ind), distanssi]]                  
+                else:
+                    mika_lahimpana[str(x)+str(y)].append([chr(65 + ind), distanssi])
 
 def tutkiHash():
     for y in range(max_y +1):    # +1 muuten vika jää näkymättä,        
@@ -72,6 +73,7 @@ def vastaus():
         if v not in reunoissa:
             if list(mika_lahimpana.values()).count(v) + 1 > max:
                 max = list(mika_lahimpana.values()).count(v) + 1
+                print("  v", v)
     print(max)        
 
 
