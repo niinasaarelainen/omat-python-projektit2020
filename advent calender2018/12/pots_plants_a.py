@@ -16,6 +16,7 @@ def etsi():
     global next_state
     next_state = initial_state
     for rivi in data:
+        
         ind = 0
         ohje = rivi[0]
         print("ohje  ", ohje)
@@ -27,7 +28,7 @@ def etsi():
                 print("hep")
                 next_state = initial_state[:alkuind + 3] + "#" + initial_state[alkuind + 4:]    # 2 = C  (LLCRR) 
 
-            print(next_state)
+        print(next_state)
 
 
 """
@@ -40,4 +41,5 @@ def etsi():
 readfile()
 print(data)
 print(initial_state)
-etsi()
+for times in range(3):
+    etsi()

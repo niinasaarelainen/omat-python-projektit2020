@@ -2,7 +2,7 @@ pelitilanteet = [[0]]
 current_marble = 0
 last_index = 0
 players = 476
-last_round = 71657 
+last_round = 7165700 
 #last_round = 400
 h = {}
 
@@ -25,12 +25,10 @@ def uusi_tilanne():
             h[i % players] += current_marble
             h[i % players] += nro
             last_index = ind
-            print(current_marble, nro)
         else:
             last_index = (last_index + 1) % len(uusi_rivi) + 1
             uusi_rivi.insert(last_index, current_marble)
             last_index = uusi_rivi.index(current_marble)
-            #h[i % players] = current_marble
 
 
 
