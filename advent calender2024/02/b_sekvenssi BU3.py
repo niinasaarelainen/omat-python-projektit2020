@@ -7,7 +7,7 @@ safe = 0
 safe_or_uns = []
 
 def readfile():
-    f = open("data.txt", "r")  # data2 = 4,    data_oma1 = 4  data_oma2 = 3
+    f = open("data.txt", "r")  # data2 = 4,    data_oma1 = 4
     for rivi in f:
         data.append(rivi.strip())   
 
@@ -54,11 +54,11 @@ def vertaa2(luvut, pos):   # !!!!!!! korjaa kutsuu
                 safe_or_uns.append(luvut)
                 if ongelmat[0] > 0:
                     temp_luvut2.pop(ongelmat[0]- 1)
-                    if temp_luvut2 != safe_or_uns[-1]:
+                    if temp_luvut2 not in safe_or_uns:
                         safe_or_uns.append(temp_luvut2)   
             if len(ongelmat) >= 2:
                 temp_luvut.pop(ongelmat[1])
-                if temp_luvut != safe_or_uns[-1]:
+                if temp_luvut not in safe_or_uns:
                     safe_or_uns.append(temp_luvut)       
     
 
