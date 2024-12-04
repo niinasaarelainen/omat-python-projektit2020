@@ -1,8 +1,7 @@
 import copy
 
 data = []
-unsafe = []
-unsafe2 = []
+unsafe = []   # olisiko pärjännyt ilman tätä, safe laskettaisiin heti ?!?!
 safe = 0
 safe_or_uns = []
 
@@ -32,32 +31,33 @@ def vertaa(luvut, pos, listaanko):
 
 def vertaa2(luvut, pos):   # !!!!!!! korjaa kutsuu    
     global safe_or_uns, safe
-    ongelmat = []
+    ongelma_ind = -1
     for i in range(len(luvut) -1):
         
         if pos:
             if int(luvut[i]) - int(luvut[i+1]) not in [1,2,3]:
-                ongelmat.append(i)
+                ongelma_ind = i
+                break
         else:            
             if int(luvut[i]) - int(luvut[i+1]) not in [-1,-2,-3]:
-                ongelmat.append(i)
+                ongelma_ind = i
+                break
 
-    if len(ongelmat) >= 1:   
+    if ongelma_ind >= 0:   
+        ok = 0
         temp_luvut2 = copy.deepcopy(luvut)
         temp_luvut3 = copy.deepcopy(luvut)
-        print("ongelmat", ongelmat, luvut)
-        if len(ongelmat) >= 1:
-            luvut.pop(ongelmat[0])
-            if lue_array_tentative(luvut) == 0 :
-                temp_luvut3.pop(ongelmat[0]+ 1)
-                if lue_array_tentative(temp_luvut3) == 1:
-                    safe += 1
-                elif ongelmat[0] > 0:
-                    temp_luvut2.pop(ongelmat[0]- 1)
-                    if lue_array_tentative(temp_luvut2) == 1:
-                        safe += 1
-            else:
-                safe += 1
+        print("ongelmat", ongelma_ind, luvut)
+        luvut.pop(ongelma_ind)
+        ok += lue_array_tentative(luvut) 
+        temp_luvut3.pop(ongelma_ind+ 1)
+        ok += lue_array_tentative(temp_luvut3) 
+        if ongelma_ind > 0:
+            temp_luvut2.pop(ongelma_ind- 1)
+            ok += lue_array_tentative(temp_luvut2) 
+
+        if ok > 0:        
+            safe += 1
 
 
 
@@ -122,3 +122,4 @@ korjaa(unsafe)
 print("safe_or_uns", safe_or_uns)
 lue_array(safe_or_uns)
 print("safe jälkeen korjaa", safe)     #548, 558, 560 too low   , 568, 570, 572, 575, 593, 562, 573, 578, 576, 584, 580, 577 not right
+#577  !!
