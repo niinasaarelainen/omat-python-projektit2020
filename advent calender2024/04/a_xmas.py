@@ -1,8 +1,9 @@
 data = []
 montako = 0
+from collections import defaultdict
 
 def readfile():
-    f = open("data_diag2.txt", "r")   # data_1 = 18
+    f = open("data.txt", "r")   # data_1 = 18
     for rivi in f:
         data.append(rivi.strip())
 
@@ -23,51 +24,35 @@ def vertical():
         montako += rivi.count("XMAS")
         montako += rivi.count("SAMX")
 
-def diagonal_alas():  # \
-    global montako
-    pass
 
-
-def diagonal_ylos():  # /   liikaa duplikaatteja
+def  diag():
     global montako
 
-    """
-    # yläpuolisko: y muuttuu, x alkaa aina 0:sta 
-    for y in range(len(data)):
-        rivi = ""  
-        aloitus_x = 0
-        nykyinen_y = y
-        for x in range(y +1):
-            
-            if 0 <= y < len(data) and 0 <= x < len(data):     
-                rivi += data[nykyinen_y - x][x]
-        if rivi != "":    
-            print(rivi)
+    diagonal1 = defaultdict(list) # For the top right to bottom left
+    diagonal2 = defaultdict(list) # For the top left to bottom right
+    for i in range(len(data)):
+        for j in range(len(data)):
+            diagonal1[i-j].append(data[i][j])
+            diagonal2[i+j].append(data[i][j])
+
+    print("diagonal1", diagonal1)
+
+    v1 = ["".join(v) for v in diagonal1.values()]
+    v2 = ["".join(v) for v in diagonal2.values()]
+
+    for rivi in v1:
         montako += rivi.count("XMAS")
-        montako += rivi.count("SAMX")   """
+        montako += rivi.count("SAMX")  
 
-
-    # alapuolisko: y = alin rivi, x muuttuu
-    for x in range(len(data)):
-        rivi = ""  
-        aloitus_x = 0
-        nykyinen_x = x
-        for y in range(x +1):
-            
-            if 0 <= y < len(data) and 0 <= x < len(data):     
-                rivi += data[y - nykyinen_x][nykyinen_x]
-        if rivi != "":    
-            print(rivi)
+    for rivi in v2:
         montako += rivi.count("XMAS")
-        montako += rivi.count("SAMX")
-
-
+        montako += rivi.count("SAMX")  
     
 
 
 readfile()
-#horizontal()
-#vertical()
-#diagonal_alas()
-diagonal_ylos()
+horizontal()
+vertical()
+diag()
+
 print(montako)

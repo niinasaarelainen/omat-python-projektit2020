@@ -1,0 +1,67 @@
+import copy
+
+data = []
+after = {}
+before = {}
+jarj = []
+middle_pages = 0
+
+def readfile():
+    f = open("data_1_before.txt", "r") 
+    for rivi in f:
+        data.append(rivi.strip())   
+
+    f = open("data_1_jarj.txt", "r") 
+    for rivi in f:
+        jarj.append(rivi.strip())   
+
+def kayLapi():
+    global middle_pages
+
+    for rivi in jarj:
+        luvut = rivi.split(",")
+        print(luvut)
+        ok = True
+        for i in range(len(luvut)-1):
+            luku1 = int(luvut[i])
+            if luku1 not in after:
+                print(" NOOOOO1", luku1)
+                ok = False
+                break
+            luku2 = int(luvut[i+1])
+            if luku2 not in after[luku1]:
+                print(" NOOOOO2")
+                ok = False
+                break
+
+        if ok:
+            middle_pages += int(luvut[len(luvut)//2])
+            print(middle_pages)
+
+def muodostaHashes():
+
+    for rivi in data:
+        a, b  = rivi.split("|")
+        a = int(a)
+        b = int(b)
+
+        if a in after:
+            after[a].append(b)
+        if a not in after:
+            after[a] = [b]
+
+        if a in before:
+            before[b].append(a)
+        if a not in before:
+            before[b] = [a]
+
+
+#  75,47,61,53,29
+
+readfile()
+muodostaHashes()
+kayLapi()
+#print("after", after)
+#print()
+#print("before", before)
+print(middle_pages)
