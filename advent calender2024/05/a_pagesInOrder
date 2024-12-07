@@ -2,16 +2,16 @@ import copy
 
 data = []
 after = {}
-before = {}
+#before = {}
 jarj = []
 middle_pages = 0
 
 def readfile():
-    f = open("data_1_before.txt", "r") 
+    f = open("data_before.txt", "r") 
     for rivi in f:
         data.append(rivi.strip())   
 
-    f = open("data_1_jarj.txt", "r") 
+    f = open("data_jarj.txt", "r") 
     for rivi in f:
         jarj.append(rivi.strip())   
 
@@ -50,10 +50,11 @@ def muodostaHashes():
         if a not in after:
             after[a] = [b]
 
+        """
         if a in before:
             before[b].append(a)
         if a not in before:
-            before[b] = [a]
+            before[b] = [a] """
 
 
 #  75,47,61,53,29

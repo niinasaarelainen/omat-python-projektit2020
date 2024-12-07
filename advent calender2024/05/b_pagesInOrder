@@ -1,0 +1,99 @@
+import copy
+
+data = []
+after = {}
+before = {}
+jarj = []
+epajarj = []
+
+def readfile():
+    f = open("data_1_before.txt", "r") 
+    for rivi in f:
+        data.append(rivi.strip())   
+
+    f = open("data_1_jarj.txt", "r") 
+    for rivi in f:
+        jarj.append(rivi.strip())   
+
+def kayLapi():
+    global middle_pages
+
+    for rivi in jarj:
+        luvut = rivi.split(",")
+        ok = True
+        for i in range(len(luvut)-1):
+            luku1 = int(luvut[i])
+            if luku1 not in after:
+                epajarj.append(luvut)
+                break
+            luku2 = int(luvut[i+1])
+            if luku2 not in after[luku1]:
+                epajarj.append(luvut)
+                break
+        
+def kayLapi_epajarj():
+    global middle_pages
+
+    for luvut in epajarj:           # TODO 47: [53, 13, 61, 29]    <-- hash  jarj-->  [97, 13, 75, 29, 47]
+       
+        # vika paikalleen:   # TODO while = ikuinen luuppi
+        if set.intersection(set(luvut[:-2]), set(after[luvut[-1]]))!= set():  # yhteisiä alkioita
+            temp = luvut.pop(-1)    
+            luvut.insert(-1, temp)  
+            print("intersection", luvut)
+        
+        paastiin_maaliin = False
+        while paastiin_maaliin == False:
+            for i in range(len(luvut)-1):
+                luku1 = int(luvut[i])            
+                luku2 = int(luvut[i+1])
+                if luku1 not in after:     
+                    temp = luvut.pop(i+1)    
+                    luvut.insert(i, temp)  
+                    print(luvut)
+                    break
+                if luku2 not in after[luku1]:
+                    temp = luvut.pop(i+1)         
+                    luvut.insert(i, temp) 
+                    print(luvut)
+                    break           
+
+            paastiin_maaliin = True
+
+
+def muodostaHashes():
+
+    for rivi in data:
+        a, b  = rivi.split("|")
+        a = int(a)
+        b = int(b)
+
+        if a in after:
+            after[a].append(b)
+        if a not in after:
+            after[a] = [b]
+
+        
+        if a in before:
+            before[b].append(a)
+        if a not in before:
+            before[b] = [a]
+
+
+def epajarjToInt():
+    lista = []
+    for rivi in epajarj:
+        lista.append([int(l)  for l in rivi])
+
+    return lista
+    
+
+#  75,47,61,53,29
+
+readfile()
+muodostaHashes()
+kayLapi()
+epajarj = epajarjToInt()
+print(epajarj)
+kayLapi_epajarj()
+print("\n after", after)
