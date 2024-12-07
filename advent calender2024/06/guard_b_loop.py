@@ -58,7 +58,7 @@ def tutki():
 
 readfile()
 tutki()
-#print(esteet, guard_y, guard_x)
+print(esteet, guard_y, guard_x, len(data))
 
 
 loops = 0
@@ -66,7 +66,10 @@ loops = 0
 for y in range(len(data)):
     for x in range(len(data)):
         g = Guard(guard_y, guard_x, esteet)
-        esteet.append([y,x])        
+        if [y, x] not in esteet:
+            esteet.append([y,x])  
+        else:
+            print("JE", y, x)      
         loop = False
         while g.x >= 0 and g.x < len(data) and g.y >= 0 and g.y < len(data) and loop == False:
             loop = g.travel()
@@ -75,5 +78,5 @@ for y in range(len(data)):
         esteet.pop(-1)
 
 
-print(loops)
+print(loops)  # väärin: 5  ,  JE 63 74 viimeinen, miksi !?!?!?
 
