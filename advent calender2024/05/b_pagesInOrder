@@ -7,11 +7,11 @@ jarj = []
 epajarj = []
 
 def readfile():
-    f = open("data_1_before.txt", "r") 
+    f = open("data_before.txt", "r") 
     for rivi in f:
         data.append(rivi.strip())   
 
-    f = open("data_1_jarj.txt", "r") 
+    f = open("data_jarj.txt", "r") 
     for rivi in f:
         jarj.append(rivi.strip())   
 
@@ -37,10 +37,11 @@ def kayLapi_epajarj():
     for luvut in epajarj:           # TODO 47: [53, 13, 61, 29]    <-- hash  jarj-->  [97, 13, 75, 29, 47]
        
         # vika paikalleen:   # TODO while = ikuinen luuppi
-        if set.intersection(set(luvut[:-2]), set(after[luvut[-1]]))!= set():  # yhteisiä alkioita
-            temp = luvut.pop(-1)    
-            luvut.insert(-1, temp)  
-            print("intersection", luvut)
+        if luvut[-1] in after:
+            if set.intersection(set(luvut[:-2]), set(after[luvut[-1]]))!= set():  # yhteisiä alkioita
+                temp = luvut.pop(-1)    
+                luvut.insert(-1, temp)  
+                print("intersection", luvut)
         
         paastiin_maaliin = False
         while paastiin_maaliin == False:
@@ -73,11 +74,11 @@ def muodostaHashes():
         if a not in after:
             after[a] = [b]
 
-        
+        """
         if a in before:
             before[b].append(a)
         if a not in before:
-            before[b] = [a]
+            before[b] = [a] """
 
 
 def epajarjToInt():
@@ -94,6 +95,12 @@ readfile()
 muodostaHashes()
 kayLapi()
 epajarj = epajarjToInt()
-print(epajarj)
-kayLapi_epajarj()
-print("\n after", after)
+print(epajarj, len(max(epajarj)))
+for i in range(len(max(epajarj))*101):  # 101  =tarpeeksi iso luku :-> printistä näkee että ei enää muutu
+    kayLapi_epajarj()
+print(epajarj)  # 97,75,47,29,13
+
+middle_pages = 0
+for rivi in epajarj:
+    middle_pages += int(rivi[len(rivi)//2])
+print(middle_pages)  # 6307  too high
