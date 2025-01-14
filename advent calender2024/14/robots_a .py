@@ -5,8 +5,8 @@ y = 4
 suunta_x = 2
 suunta_y = -3
 kuva = []
-width = 11
-height = 7
+width = 101
+height = 103
 robotit = []
 
 class Robot:
@@ -26,14 +26,13 @@ class Robot:
         self.x = self.x % width
         self.y += self.suunta_y
         self.y = self.y % height
-        print(self.y, self.x)
         kuva[self.y][self.x] += 1
 
 ####  END  CLASS  Robot   ##############
 
 
 def readfile():   
-    f = open("data_1.txt", "r")         
+    f = open("data.txt", "r")         
     for rivi in f:
         data.append(rivi.strip())
 
@@ -62,7 +61,10 @@ def alustaMatriisi():
 def printtaa():
     for y in range(height):
         for x in range(width):
-            print(kuva[y][x], end= "")
+            if kuva[y][x] == 0:
+                print(".", end= "")
+            else:
+                print(kuva[y][x], end= "")
         print()
     print()
             
@@ -84,19 +86,16 @@ def quadrant():
 
     #2
     for y in range(semi_y):
-        print(kuva[y + semi_y + 1][:semi_x])
         quad2 += sum(kuva[y + semi_y + 1][:semi_x])
     print(quad2)
 
     #3
     for y in range(semi_y):
-        #print(kuva[y][semi_x + 1:])
         quad3 += sum(kuva[y][semi_x + 1:])
     print(quad3)
 
     #4
     for y in range(semi_y):
-        print(kuva[y + semi_y + 1][semi_x + 1:])
         quad4 += sum(kuva[y + semi_y +1][semi_x + 1:])
     print(quad4)
 
@@ -114,11 +113,13 @@ alustaMatriisi()
 muodostaSijainnit()
 printtaa()
 
-for i in range(100):
+for i in range(1500):
     for r in robotit:
         r.travel()
+    if i > 1300:
+        printtaa()
     
-printtaa()
+
 vastaus = quadrant()
 print(vastaus)
 
