@@ -1,100 +1,96 @@
 data = []
-koordinaatit = {}
-koordinaatit_etaisyydet = {}
-kielletyt = []
-start = (1, 1)
-olet_tassa = start
-ohje = ""
-
+numerot = []
+start_x = -1
+start_y = -1
+ends = []
+pituus = 0
+korkeus = 0
 
 def readfile():  
-    f = open("data_1.txt", "r")       # data_2 oikein  (8)   
+    f = open("data_1.txt", "r")      
     for rivi in f:
         data.append(rivi.strip())
+        
 
-def piirra():
-    global ohje
-    for y in range(len(data)): 
-        for x in range(len(data[y])): 
-            ohje = data[y][x] 
-            if y == olet_tassa[0] and x == olet_tassa[1]:
-                print("S", end="")
-            else:           
-                print(data[y][x], end="")
-        print()
-    
-
-
-def lue():
-    global start
-    for y in range(len(data)): 
-        for x in range(len(data[y])):  
-            if '.' == data[y][x]:      
-                koordinaatit[(y, x)] = '.'
-            if '-' == data[y][x]:      # myötäpäivään ensin
-                koordinaatit[(y, x)] = [(y, x+1), (y, x-1)]
-            if '7' == data[y][x]: 
-                koordinaatit[(y, x)] = [(y+1, x), (y, x-1)] 
-            if 'F' == data[y][x]:  
-                koordinaatit[(y, x)] = [(y, x+1), (y+1, x)] 
-            if 'L' == data[y][x]:  
-                koordinaatit[(y, x)] = [(y-1, x), (y, x+1)] 
-            if '|' == data[y][x]: 
-                koordinaatit[(y, x)] = [(y-1, x), (y+1, x)]  
-            if 'J' == data[y][x]:  
-                koordinaatit[(y, x)] = [(y, x-1), (y-1, x)] 
-            if 'S' == data[y][x]:    
-                koordinaatit[(y, x)] = []
-                if data[y][x+1] != "." and x + 1 < len(data[y]):    
-                    koordinaatit[(y, x)].append((y, x+1))
-                if data[y][x-1] != "." and x - 1 >= 0:    
-                    koordinaatit[(y, x)].append((y, x-1))
-                if data[y+1][x] != "." and y + 1 < len(data):    
-                    koordinaatit[(y, x)].append((y+1, x))
-                if data[y-1][x] != "." and y - 1 >= 0:    
-                    koordinaatit[(y, x)].append((y-1, x))
-                start = (y, x)
+def muunnaInteiksi():
+    global numerot, pituus, korkeus
+    for rivi in data:
+        r = []
+        for str in rivi:
+            r.append(int(str))            
+        numerot.append(r)
+        pituus = len(r)
+    korkeus = len(data)
 
 
-def liiku_myota(muuvi_nro):
-    global olet_tassa
-    kielletyt.append(olet_tassa)
-    edellinen = olet_tassa
-    if koordinaatit[olet_tassa] == '.':
-        return
-    olet_tassa = koordinaatit[olet_tassa][0]
-    print("\nolet_tassa", olet_tassa)
-    if olet_tassa in kielletyt:
-        olet_tassa = koordinaatit[edellinen][1]
-    koordinaatit_etaisyydet[olet_tassa] = muuvi_nro + 1
-    piirra()
+def start_and_ends():
+    global start_x, start_y, ends
+    for y in range(len(numerot)):
+        for x in range(len(numerot[y])):
+            if numerot[y][x] == 0:
+                start_y = y
+                start_x = x 
+            if numerot[y][x] == 9:
+                ends.append([y, x])
 
-def liiku_vasta(muuvi_nro):
-    global olet_tassa
-    kielletyt.append(olet_tassa)
-    edellinen = olet_tassa
-    if koordinaatit[olet_tassa] == '.':
-        return
-    olet_tassa = koordinaatit[olet_tassa][1]
-    print("\nolet_tassa", olet_tassa)
-    if olet_tassa in kielletyt:
-        olet_tassa = koordinaatit[edellinen][0]
-    if olet_tassa in koordinaatit_etaisyydet and koordinaatit_etaisyydet[olet_tassa] > muuvi_nro:
-        koordinaatit_etaisyydet[olet_tassa] = muuvi_nro + 1 
-    elif olet_tassa not in koordinaatit_etaisyydet:
-        koordinaatit_etaisyydet[olet_tassa] = muuvi_nro + 1 
-    piirra()
-    
+
+def reitti_rekursio(y, x, nro):    # 1= maali, 0 = tähän asti ok,   -1 = NO !
+    print(y, x, nro)
+    if numerot[y][x] == 0:
+        return -1
+
+    if numerot[y][x] == nro + 1:
+        return 1
+
+    return 0
+
+
+def ysistä_nollaan():
+    for end in ends:
+        reitti = 0
+        reitti_y = end[0]
+        reitti_x = end[1]
+
+        while reitti_y != start_y or reitti_x != start_x:
+            print(reitti)
+            #oik            
+            print("oik")                
+            while reitti >= 0:
+                if reitti_x + 1 < pituus:
+                    reitti_x += reitti_rekursio(reitti_y, reitti_x, numerot[reitti_y][reitti_x + 1])  
+                else:
+                    break  
+            #vas
+            print("vas")                
+            while reitti >= 0:
+                if reitti_x - 1 >= 0:
+                    reitti_x -= reitti_rekursio(reitti_y, reitti_x, numerot[reitti_y][reitti_x - 1])  
+                else:
+                    break  
+            #ylos            
+            print("ylos")                
+            while reitti >= 0:
+                if reitti_y - 1 >= 0:
+                    reitti_y -= 1
+                    reitti_y += reitti_rekursio(reitti_y, reitti_x, numerot[reitti_y - 1][reitti_x]) 
+                else:
+                    break     
+            #alas
+            print("alas")                
+            while reitti >= 0:
+                if reitti_y + 1 < pituus:
+                    reitti_y += 1
+                    reitti_y += reitti_rekursio(reitti_y, reitti_x, numerot[reitti_y + 1][reitti_x]) 
+                else:
+                    break     
+
+            if reitti == 1 or reitti == -1:
+                break
+
+
 
 readfile()
-lue()
-piirra()
-for muuvi_nro in range(16):
-    liiku_myota(muuvi_nro)
-olet_tassa = start
-print("  VASTA")
-kielletyt = []
-for muuvi_nro in range(8):
-    liiku_vasta(muuvi_nro)
-print(koordinaatit_etaisyydet)
-print(max(v for k, v in koordinaatit_etaisyydet.items()))
+muunnaInteiksi()
+print(numerot)
+start_and_ends()
+ysistä_nollaan()

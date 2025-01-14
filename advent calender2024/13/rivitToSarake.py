@@ -1,1 +1,0 @@
-sarake = list([data[y][ind] for y in range(len(data))])
